@@ -13,6 +13,8 @@ public:
 	float x;
 	float y;
 
+
+	Posicion();
 	Posicion(float pos_x, float pos_y);
 	float get_x();
 	float get_y();

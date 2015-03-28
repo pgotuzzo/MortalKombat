@@ -8,9 +8,8 @@
 #ifndef ACCION_H_
 #define ACCION_H_
 
-#include "../modelo/Estado.h"
 
-class Accion : public Estado{
+class Accion{
 public:
 	Accion();
 	bool puedoAccionar();

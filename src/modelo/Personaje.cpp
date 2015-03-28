@@ -15,14 +15,7 @@ const int Default_index_Z = 3;
 
 
 Personaje::Personaje() {
-	//if (p == null){
-		pos = Posicion(Default_pos_X,Default_pos_Y);
-
-	/*}else {
-	 * Valores pasados por el parser
-	 * }*/
-
-
+	pos = Posicion(Default_pos_X,Default_pos_Y);
 }
 
 Posicion Personaje::get_Posicion(){

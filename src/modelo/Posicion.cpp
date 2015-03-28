@@ -33,8 +33,9 @@ Posicion Posicion::operator-(Posicion p){
 }
 bool Posicion::operator==(Posicion p){
 	if ( (p.get_x() == x) && (p.get_y() == y) )
-		return true; return false; }
-};
+		return true;
+	return false;
+}
 
 
 void Posicion::set_x(float pos_x){
@@ -49,3 +50,6 @@ Posicion::~Posicion() {
 	// TODO Auto-generated destructor stub
 }
 
+Posicion::Posicion() {
+
+}

@@ -15,8 +15,10 @@ Caminar::Caminar() {
 }
 
 Posicion Caminar::dar_un_paso(Posicion pos, Direccion dir){
-	if (dir.get_Direccion() == true) return pos + ancho_paso;
-	return pos - ancho_paso;
+	Posicion p = Posicion(ancho_paso, 0);
+	if (dir.get_Direccion() == true)
+		return pos + p;
+	return pos - p;
 }
 
 Caminar::~Caminar() {
