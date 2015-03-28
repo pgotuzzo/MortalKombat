@@ -30,3 +30,8 @@
 # Clion
 .idea
 CMakeLists.txt
+
+#Eclipse
+.project
+.cproject
+.settings/
