@@ -8,7 +8,9 @@
 #ifndef SALTOOBLICUO_H_
 #define SALTOOBLICUO_H_
 
-class SaltoOblicuo {
+#include "../../modelo/Accion.h"
+
+class SaltoOblicuo : public Accion{
 public:
 	SaltoOblicuo();
 	virtual ~SaltoOblicuo();

@@ -26,10 +26,10 @@ Posicion Posicion::operator=(Posicion p){
 	return p;
 }
 Posicion Posicion::operator+(Posicion p){
-	return {x + p.get_x(), y + p.get_y()};
+	return Posicion(x + p.get_x(), y + p.get_y());
 }
 Posicion Posicion::operator-(Posicion p){
-	return {x - p.get_x(), y - p.get_y()};
+	return Posicion(x - p.get_x(), y - p.get_y());
 }
 bool Posicion::operator==(Posicion p){
 	if ( (p.get_x() == x) && (p.get_y() == y) )
@@ -50,6 +50,8 @@ Posicion::~Posicion() {
 	// TODO Auto-generated destructor stub
 }
 
-Posicion::Posicion() {
-
+Posicion::Posicion(){
+	x = 0;
+	y = 0;
 }
+

@@ -18,9 +18,47 @@ Personaje::Personaje() {
 	pos = Posicion(Default_pos_X,Default_pos_Y);
 }
 
+void Personaje::realizarAccion(int orden){
+
+	switch (orden){
+		case (1):
+				//Salto vertical
+				break;
+		case (2):
+				//Agacharse
+				break;
+		case (3):
+				//Caminar a la derecha
+				break;
+		case (4):
+				//Caminar a la izquierda
+				break;
+		case (5):
+				//Salto oblicuo a la derecha
+				break;
+		case (6):
+				//Salto oblicuo a la izquierda
+				break;
+
+		default:
+			break;
+
+	}
+
+
+
+
+
+}
+
+
+
+
 Posicion Personaje::get_Posicion(){
 	return pos;
 }
+
+
 
 
 Personaje::~Personaje() {

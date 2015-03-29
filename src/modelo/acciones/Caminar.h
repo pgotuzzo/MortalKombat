@@ -10,8 +10,9 @@
 
 #include "../../modelo/Direccion.h"
 #include "../../modelo/Posicion.h"
+#include "../../modelo/Accion.h"
 
-class Caminar {
+class Caminar : public Accion{
 public:
 
 	Caminar();

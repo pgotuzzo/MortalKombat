@@ -16,30 +16,33 @@ SaltoVertical::SaltoVertical() {
 	subiendo = true;
 }
 
-bool SaltoVertical::darUnSalto(float pos_x,float pos_y){
+bool SaltoVertical::darUnSalto(Posicion pos){
 	if (activado == true ) return false; //No puede saltar mientras esta saltando
-	ini_pos_x = pos_x;
-	ini_pos_y = pos_y;
+	pos_ini = pos;
+	//ini_pos_x = pos_x;
+	//ini_pos_y = pos_y;
 	activado = true;
 	subiendo = true;
 	return activado;
 }
 
-float SaltoVertical::get_posicion(float actual_pos_y){
+Posicion SaltoVertical::get_posicion(Posicion pos_actual){
+	float y_actual = pos_actual.get_y();
+	float y_ini = pos_ini.get_y();
 	if ( activado == true ){
-		if ( (actual_pos_y > ini_pos_y - altura_salto ) && (subiendo == true)){
-			return actual_pos_y - intervalo_salto;
+		if ( (y_actual > y_ini - altura_salto ) && (subiendo == true)){
+			return Posicion(pos_actual.get_x(),y_actual - intervalo_salto);
 		}
 		else{
 			subiendo = false;
-			if (actual_pos_y < ini_pos_y){
-				return actual_pos_y + intervalo_salto;
+			if (y_actual < y_ini){
+				return Posicion(pos_actual.get_x(),y_actual + intervalo_salto);
 			}
 
 		}
 	}
 	activado = false;
-	return actual_pos_y;
+	return Posicion(pos_actual.get_x(),y_actual);
 }
 
 SaltoVertical::~SaltoVertical() {

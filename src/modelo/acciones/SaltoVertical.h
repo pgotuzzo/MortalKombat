@@ -9,18 +9,18 @@
 #define SALTOVERTICAL_H_
 
 #include "../../modelo/Accion.h"
+#include "../../modelo/Posicion.h"
 
-class SaltoVertical{
+class SaltoVertical : public Accion{
 private:
 	bool subiendo;
 public:
-	float ini_pos_x;
-	float ini_pos_y;
+	Posicion pos_ini;
 	bool activado;
 
 	SaltoVertical();
-	bool darUnSalto(float pos_x,float pos_y);
-	float get_posicion(float actual_pos_y);
+	bool darUnSalto(Posicion pos);
+	Posicion get_posicion(Posicion pos_actual);
 	virtual ~SaltoVertical();
 };
 
