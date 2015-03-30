@@ -10,18 +10,23 @@
 const float ancho_paso = 2;
 
 Caminar::Caminar() {
-	// TODO Auto-generated constructor stub
-
+	estado = false;
+	//Orientacion true = orientacion derecha
+	orientacion = true;
 }
 
-Posicion Caminar::dar_un_paso(Posicion pos, Direccion dir){
+void Caminar::setEstado(bool nuevoEstado,bool nuevaOrtientacion){
+	orientacion = nuevaOrtientacion;
+	estado = nuevoEstado;
+}
+
+Posicion Caminar::darUnPaso(Posicion pos, Direccion dir){
 	Posicion p = Posicion(ancho_paso, 0);
-	if (dir.get_Direccion() == true)
+	if (dir.getDireccion() == true)
 		return pos + p;
 	return pos - p;
 }
 
 Caminar::~Caminar() {
-	// TODO Auto-generated destructor stub
 }
 

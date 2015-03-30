@@ -16,9 +16,10 @@ private:
 	bool subiendo;
 public:
 	Posicion pos_ini;
-	bool activado;
+	bool estado;
 
 	SaltoVertical();
+	bool getEstado();
 	bool darUnSalto(Posicion pos);
 	Posicion get_posicion(Posicion pos_actual);
 	virtual ~SaltoVertical();

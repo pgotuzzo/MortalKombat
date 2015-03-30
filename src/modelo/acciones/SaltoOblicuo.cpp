@@ -8,11 +8,19 @@
 #include "../../modelo/acciones/SaltoOblicuo.h"
 
 SaltoOblicuo::SaltoOblicuo() {
-	// TODO Auto-generated constructor stub
 
 }
 
+
+void SaltoOblicuo::setEstado(bool nuevoEstado, bool nuevaOrientacion) {
+    estado = nuevoEstado;
+    orientacion = nuevaOrientacion;
+}
+
+bool SaltoOblicuo::getEstado() {
+    return estado;
+}
+
 SaltoOblicuo::~SaltoOblicuo() {
-	// TODO Auto-generated destructor stub
 }
 

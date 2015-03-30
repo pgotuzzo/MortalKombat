@@ -12,7 +12,12 @@
 
 class SaltoOblicuo : public Accion{
 public:
+	bool estado;
+	bool orientacion;
 	SaltoOblicuo();
+
+	void setEstado(bool nuevoEstado, bool nuevaOrtientacion);
+	bool getEstado();
 	virtual ~SaltoOblicuo();
 };
 

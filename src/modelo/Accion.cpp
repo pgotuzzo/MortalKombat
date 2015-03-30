@@ -8,11 +8,20 @@
 #include "../modelo/Accion.h"
 
 Accion::Accion() {
-	// TODO Auto-generated constructor stub
 
 }
 
 Accion::~Accion() {
-	// TODO Auto-generated destructor stub
 }
 
+bool Accion::getEstado() {
+    return false;
+}
+
+void Accion::setEstado(bool nuevoEstado) {
+
+}
+
+void Accion::setEstado(bool nuevoEstado, bool orientacion) {
+
+}

@@ -16,14 +16,14 @@ public:
 
 	Posicion();
 	Posicion(float pos_x, float pos_y);
-	float get_x();
-	float get_y();
+	float getX();
+	float getY();
 	Posicion operator=(Posicion p);
 	Posicion operator+(Posicion p);
 	Posicion operator-(Posicion p);
 	bool operator==(Posicion p);
-	void set_x(float pos_x);
-	void set_y(float pos_y);
+	void setX(float pos_x);
+	void setY(float pos_y);
 
 	virtual ~Posicion();
 };

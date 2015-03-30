@@ -12,37 +12,37 @@ Posicion::Posicion(float pos_x,float pos_y) {
 	y = pos_y;
 }
 
-float Posicion::get_x(){
+float Posicion::getX(){
 	return x;
 }
 
-float Posicion::get_y(){
+float Posicion::getY(){
 	return y;
 }
 
 Posicion Posicion::operator=(Posicion p){
-	x = p.get_x();
-	y = p.get_y();
+	x = p.getX();
+	y = p.getY();
 	return p;
 }
 Posicion Posicion::operator+(Posicion p){
-	return Posicion(x + p.get_x(), y + p.get_y());
+	return Posicion(x + p.getX(), y + p.getY());
 }
 Posicion Posicion::operator-(Posicion p){
-	return Posicion(x - p.get_x(), y - p.get_y());
+	return Posicion(x - p.getX(), y - p.getY());
 }
 bool Posicion::operator==(Posicion p){
-	if ( (p.get_x() == x) && (p.get_y() == y) )
+	if ( (p.getX() == x) && (p.getY() == y) )
 		return true;
 	return false;
 }
 
 
-void Posicion::set_x(float pos_x){
+void Posicion::setX(float pos_x){
 	x = pos_x;
 }
 
-void Posicion::set_y(float pos_y){
+void Posicion::setY(float pos_y){
 	y = pos_y;
 }
 

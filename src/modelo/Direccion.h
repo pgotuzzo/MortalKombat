@@ -12,8 +12,8 @@ class Direccion {
 public:
 	bool derecha;
 	Direccion();
-	void set_Direccion(bool dir);
-	bool get_Direccion();
+	void setDireccion(bool dir);
+	bool getDireccion();
 	virtual ~Direccion();
 };
 

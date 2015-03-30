@@ -12,40 +12,43 @@ const float intervalo_salto = 5;
 
 
 SaltoVertical::SaltoVertical() {
-	activado = false;
+	estado = false;
 	subiendo = true;
 }
 
 bool SaltoVertical::darUnSalto(Posicion pos){
-	if (activado == true ) return false; //No puede saltar mientras esta saltando
+	if (estado) return false; //No puede saltar mientras esta saltando
 	pos_ini = pos;
 	//ini_pos_x = pos_x;
 	//ini_pos_y = pos_y;
-	activado = true;
+	estado = true;
 	subiendo = true;
-	return activado;
+	return estado;
 }
 
 Posicion SaltoVertical::get_posicion(Posicion pos_actual){
-	float y_actual = pos_actual.get_y();
-	float y_ini = pos_ini.get_y();
-	if ( activado == true ){
-		if ( (y_actual > y_ini - altura_salto ) && (subiendo == true)){
-			return Posicion(pos_actual.get_x(),y_actual - intervalo_salto);
+	float y_actual = pos_actual.getY();
+	float y_ini = pos_ini.getY();
+	if (estado){
+		if ( (y_actual > y_ini - altura_salto ) && (subiendo)){
+			return Posicion(pos_actual.getX(),y_actual - intervalo_salto);
 		}
 		else{
 			subiendo = false;
 			if (y_actual < y_ini){
-				return Posicion(pos_actual.get_x(),y_actual + intervalo_salto);
+				return Posicion(pos_actual.getX(),y_actual + intervalo_salto);
 			}
 
 		}
 	}
-	activado = false;
-	return Posicion(pos_actual.get_x(),y_actual);
+	estado = false;
+	return Posicion(pos_actual.getX(),y_actual);
 }
 
 SaltoVertical::~SaltoVertical() {
 	// TODO Auto-generated destructor stub
 }
 
+bool SaltoVertical::getEstado() {
+	return estado;
+}

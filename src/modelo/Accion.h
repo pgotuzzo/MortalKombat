@@ -16,8 +16,12 @@ public:
 	Posicion pos_inicial;
 
 	Accion();
-	bool puedoAccionar();
-	Posicion accionar(Posicion pos_ini);
+
+	virtual bool getEstado();
+
+	virtual void setEstado(bool nuevoEstado);
+
+	virtual void setEstado(bool nuevoEstado, bool orientacion);
 
 	virtual ~Accion();
 };

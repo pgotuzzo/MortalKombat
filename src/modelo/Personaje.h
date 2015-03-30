@@ -9,6 +9,7 @@
 #define PERSONAJE_H_
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <iostream>
 #include <list>
 #include <tr1/unordered_map>
@@ -17,6 +18,12 @@
 #include "../modelo/Posicion.h"
 #include "../modelo/Orientacion.h"
 #include "../modelo/Direccion.h"
+#include "../modelo/acciones/SaltoVertical.h"
+#include "../modelo/acciones/SaltoOblicuo.h"
+#include "../modelo/acciones/Caminar.h"
+#include "../modelo/acciones/Agachar.h"
+
+
 
 using namespace std;
 
@@ -26,14 +33,14 @@ public:
 	Orientacion orientacion;
 	Direccion dir;
 	Accion accion;
+	Accion accionesEnCurso[4];
 
 	Personaje();
-	bool puedoRealizarAccion(Accion accion);
 	void realizarAccion(int orden);
-	void p_saltar();
-	Posicion get_Posicion();
+	//void ejecutarAcionesActivadas(accionesEnCurso[]);
+	//void terminarAcciones(accionesEnCurso[]);
+	Posicion getPosicion();
 
 	virtual ~Personaje();
 };
-
 #endif /* PERSONAJE_H_ */

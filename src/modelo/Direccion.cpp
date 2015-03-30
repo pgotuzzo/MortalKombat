@@ -15,11 +15,11 @@ Direccion::Direccion() {
 
 // True = derecha
 // False = izquierda
-void Direccion::set_Direccion(bool dir){
+void Direccion::setDireccion(bool dir){
 	derecha = dir;
 }
 
-bool Direccion::get_Direccion(){
+bool Direccion::getDireccion(){
 	return derecha;
 }
 
