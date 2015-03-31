@@ -20,9 +20,9 @@ void Caminar::setEstado(bool nuevoEstado,bool nuevaOrtientacion){
 	estado = nuevoEstado;
 }
 
-Posicion Caminar::realizarAccion(Posicion pos, Direccion dir){
+Posicion Caminar::realizarAccion(Posicion pos, bool dir){
 	Posicion p = Posicion(ancho_paso, 0);
-	if (dir.getDireccion()){
+	if (dir){
 		estado = false;
 		return pos + p;
 	}

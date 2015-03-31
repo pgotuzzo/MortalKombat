@@ -33,11 +33,11 @@ void Personaje::ejecutarAcionesActivadas(Accion accionesEnCurso[]) {
 	}
 	if (accionesEnCurso[2].getEstado()){
 		cout<<"ejecutando accion de caminar"<<endl;
-		pos = accionesEnCurso[1].realizarAccion(pos,dir);
+		pos = accionesEnCurso[2].realizarAccion(pos,dir);
 	}
 	if (accionesEnCurso[3].getEstado()){
 		cout<<"Ejecutando accion de salto oblicuo"<<endl;
-		pos = accionesEnCurso[1].realizarAccion(pos,dir);
+		pos = accionesEnCurso[3].realizarAccion(pos);
 	}
 }
 

@@ -16,8 +16,6 @@
 
 #include "../modelo/Accion.h"
 #include "../modelo/Posicion.h"
-#include "../modelo/Orientacion.h"
-#include "../modelo/Direccion.h"
 #include "../modelo/acciones/SaltoVertical.h"
 #include "../modelo/acciones/SaltoOblicuo.h"
 #include "../modelo/acciones/Caminar.h"
@@ -30,8 +28,8 @@ using namespace std;
 class Personaje {
 public:
 	Posicion pos;
-	Orientacion orientacion;
-	Direccion dir;
+	bool orientacion;
+	bool dir;
 	Accion accion;
 	Accion accionesEnCurso[4];
 

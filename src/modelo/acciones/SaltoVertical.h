@@ -14,7 +14,6 @@
 class SaltoVertical : public Accion{
 public:
 	Posicion posIni;
-	bool estado;
 	bool subiendo;
 
 

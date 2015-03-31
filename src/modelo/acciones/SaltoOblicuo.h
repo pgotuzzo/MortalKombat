@@ -9,15 +9,22 @@
 #define SALTOOBLICUO_H_
 
 #include "../../modelo/Accion.h"
+#include <math.h>
+
 
 class SaltoOblicuo : public Accion{
 public:
 	bool estado;
 	bool orientacion;
+	float a;
+	Posicion posInicial;
+	Posicion posFinal;
+	float coeficiente; // Segun este coeficiente sumara o restara x para avanzar y retroceder
+
 	SaltoOblicuo();
 
-	void setEstado(bool nuevoEstado, bool nuevaOrtientacion);
-	Posicion realizarAccion(Posicion pos,Direccion dir);
+	void setEstado(bool nuevoEstado, Posicion nuevaPosicion,bool direccionSalto);
+	Posicion realizarAccion(Posicion pos);
 	bool getEstado();
 	virtual ~SaltoOblicuo();
 };

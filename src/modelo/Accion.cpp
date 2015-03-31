@@ -15,7 +15,7 @@ Accion::~Accion() {
 }
 
 bool Accion::getEstado() {
-    return false;
+    return estado;
 }
 
 void Accion::setEstado(bool nuevoEstado) {
@@ -26,7 +26,7 @@ void Accion::setEstado(bool nuevoEstado, bool orientacion) {
 
 }
 
-Posicion Accion::realizarAccion(Posicion pos, Direccion dir) {
+Posicion Accion::realizarAccion(Posicion pos, bool dir) {
     return Posicion();
 }
 

@@ -8,7 +8,6 @@
 #ifndef ACCIONES_CAMINAR_H_
 #define ACCIONES_CAMINAR_H_
 
-#include "../../modelo/Direccion.h"
 #include "../../modelo/Posicion.h"
 #include "../../modelo/Accion.h"
 
@@ -19,7 +18,7 @@ public:
 	//Orientacion true = orientacion derecha
 	Caminar();
 	void setEstado(bool nuevoEstado, bool NuevaOrientacion);
-	Posicion realizarAccion(Posicion pos,Direccion dir);
+	Posicion realizarAccion(Posicion pos,bool dir);
 	virtual ~Caminar();
 };
 
