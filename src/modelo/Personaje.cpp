@@ -11,7 +11,6 @@
 const float Default_pos_Y = 50.0;
 const float Default_pos_X = 50.0;
 const bool activado = true;
-const int Default_index_Z = 3;
 
 
 Personaje::Personaje() {
@@ -22,14 +21,27 @@ Personaje::Personaje() {
 	accionesEnCurso[2] = Caminar();
 	accionesEnCurso[3] = SaltoOblicuo();
 	}
-/*
-void Personaje::ejecutarAcionesActivadas(accionesEnCurso[]){
 
+void Personaje::ejecutarAcionesActivadas(Accion accionesEnCurso[]) {
+	if (accionesEnCurso[0].getEstado()){
+		pos = accionesEnCurso[0].realizarAccion(pos);
+		cout<<"Ejecuto accion de salto vertical"<<endl;
+	}
+	if (accionesEnCurso[1].getEstado()){
+		cout<<"ejecutando accion de agarse"<<endl;
+		pos = accionesEnCurso[1].realizarAccion(pos);
+	}
+	if (accionesEnCurso[2].getEstado()){
+		cout<<"ejecutando accion de caminar"<<endl;
+		pos = accionesEnCurso[1].realizarAccion(pos,dir);
+	}
+	if (accionesEnCurso[3].getEstado()){
+		cout<<"Ejecutando accion de salto oblicuo"<<endl;
+		pos = accionesEnCurso[1].realizarAccion(pos,dir);
+	}
 }
 
-void Personaje::terminarAcciones(accionesEnCurso[]){
 
-}*/
 void Personaje::realizarAccion(int orden){
 
 	switch (orden){
@@ -41,7 +53,7 @@ void Personaje::realizarAccion(int orden){
 					//No puede saltar si esta agachado oblicuamente
 						if(!accionesEnCurso[1].getEstado()){
 							//Activo el estado de saltar verticalmente
-							accionesEnCurso[0].setEstado(activado);
+							accionesEnCurso[0].setEstado(activado,pos);
 							cout<< "SALTA"<<endl;
 						}
 					}
@@ -70,7 +82,7 @@ void Personaje::realizarAccion(int orden){
 					if(!accionesEnCurso[1].getEstado()) {
 						//activo el estado avanzar
 						//orientacion false = izquierda
-						accionesEnCurso[2].setEstado(activado, true);
+						accionesEnCurso[2].setEstado(activado,true);
 						cout << "CAMINA A LA DERECHA!" << endl;
 					}
 				}
@@ -85,7 +97,7 @@ void Personaje::realizarAccion(int orden){
 					if(!accionesEnCurso[1].getEstado()) {
 						//activo el estado avanzar
 						//orientacion false = izquierda
-						accionesEnCurso[2].setEstado(activado, false);
+						accionesEnCurso[2].setEstado(activado,false);
 						cout << "CAMINA A LA IZQUIERDA!"<<endl;
 					}
 				}
@@ -100,7 +112,7 @@ void Personaje::realizarAccion(int orden){
 					if(!accionesEnCurso[1].getEstado()){
 						//Activo el estado de saltar oblicuamente
 						//ortientacion true = ortientacion derecha
-						accionesEnCurso[3].setEstado(activado, true);
+						accionesEnCurso[3].setEstado(activado, pos,true);
 						cout << "SALTO OBLICUAMENTE PARA LA DERECHA!"<<endl;
 					}
 				}
@@ -117,7 +129,7 @@ void Personaje::realizarAccion(int orden){
 					if(!accionesEnCurso[1].getEstado()){
 						//Activo el estado de saltar oblicuamente
 						//ortientacion true = ortientacion derecha
-						accionesEnCurso[3].setEstado(activado, false);
+						accionesEnCurso[3].setEstado(activado, pos, false);
 						cout << "SALTO OBLICUAMENTE PARA LA IZQUIERDA!"<<endl;
 					}
 				}
@@ -126,9 +138,10 @@ void Personaje::realizarAccion(int orden){
 		default:
 			break;
 	}
-	//ejecutarAcionesActivadas(accionesEnCurso[]);
-
-	//terminarAcciones(accionesEnCurso[]);
+	ejecutarAcionesActivadas(accionesEnCurso);
+	//Este metodo va a ejecutar las acciones que este listas para ejecutarse
+	//Cada accion se desactiva cuando termina.
+	cout<<"Ya se ejecutaron las accion durante un game loop";
 }
 
 

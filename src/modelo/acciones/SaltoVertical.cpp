@@ -15,40 +15,39 @@ SaltoVertical::SaltoVertical() {
 	estado = false;
 	subiendo = true;
 }
-
-bool SaltoVertical::darUnSalto(Posicion pos){
-	if (estado) return false; //No puede saltar mientras esta saltando
-	pos_ini = pos;
-	//ini_pos_x = pos_x;
-	//ini_pos_y = pos_y;
-	estado = true;
-	subiendo = true;
-	return estado;
-}
-
-Posicion SaltoVertical::get_posicion(Posicion pos_actual){
-	float y_actual = pos_actual.getY();
-	float y_ini = pos_ini.getY();
-	if (estado){
-		if ( (y_actual > y_ini - altura_salto ) && (subiendo)){
-			return Posicion(pos_actual.getX(),y_actual - intervalo_salto);
-		}
-		else{
-			subiendo = false;
-			if (y_actual < y_ini){
-				return Posicion(pos_actual.getX(),y_actual + intervalo_salto);
-			}
-
-		}
-	}
-	estado = false;
-	return Posicion(pos_actual.getX(),y_actual);
-}
-
-SaltoVertical::~SaltoVertical() {
-	// TODO Auto-generated destructor stub
-}
-
 bool SaltoVertical::getEstado() {
 	return estado;
 }
+
+void SaltoVertical::setEstado(bool nuevoEstado, Posicion nuevaPosicion) {
+
+	estado = nuevoEstado;
+	subiendo = nuevoEstado;
+	posIni = nuevaPosicion;
+
+}
+
+
+
+Posicion SaltoVertical::realizarAccion(Posicion posActual){
+	float yActual = posActual.getY();
+	float yIni = posIni.getY();
+	if (estado){
+		if ( (yActual > yIni - altura_salto ) && (subiendo)){
+			return Posicion(posActual.getX(),yActual - intervalo_salto);
+		}
+		else{
+			subiendo = false;
+			if (yActual < yIni){
+				return Posicion(posActual.getX(),yActual + intervalo_salto);
+			}
+		}
+	}
+	estado = false;
+	return Posicion(posActual.getX(),yActual);
+}
+
+SaltoVertical::~SaltoVertical() {
+}
+
+

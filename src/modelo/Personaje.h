@@ -37,8 +37,7 @@ public:
 
 	Personaje();
 	void realizarAccion(int orden);
-	//void ejecutarAcionesActivadas(accionesEnCurso[]);
-	//void terminarAcciones(accionesEnCurso[]);
+	void ejecutarAcionesActivadas(Accion accionesEnCurso[]);
 	Posicion getPosicion();
 
 	virtual ~Personaje();

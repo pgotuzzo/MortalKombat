@@ -19,7 +19,7 @@ public:
 	//Orientacion true = orientacion derecha
 	Caminar();
 	void setEstado(bool nuevoEstado, bool NuevaOrientacion);
-	Posicion darUnPaso(Posicion pos,Direccion dir);
+	Posicion realizarAccion(Posicion pos,Direccion dir);
 	virtual ~Caminar();
 };
 

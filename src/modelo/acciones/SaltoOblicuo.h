@@ -17,6 +17,7 @@ public:
 	SaltoOblicuo();
 
 	void setEstado(bool nuevoEstado, bool nuevaOrtientacion);
+	Posicion realizarAccion(Posicion pos,Direccion dir);
 	bool getEstado();
 	virtual ~SaltoOblicuo();
 };

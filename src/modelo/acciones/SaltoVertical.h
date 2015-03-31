@@ -12,16 +12,17 @@
 #include "../../modelo/Posicion.h"
 
 class SaltoVertical : public Accion{
-private:
-	bool subiendo;
 public:
-	Posicion pos_ini;
+	Posicion posIni;
 	bool estado;
+	bool subiendo;
+
 
 	SaltoVertical();
 	bool getEstado();
-	bool darUnSalto(Posicion pos);
-	Posicion get_posicion(Posicion pos_actual);
+	void setEstado(bool nuevoEstado, Posicion nuevaPosicion);
+
+	Posicion realizarAccion(Posicion pos_actual);
 	virtual ~SaltoVertical();
 };
 

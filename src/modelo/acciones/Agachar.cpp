@@ -19,3 +19,10 @@ Agachar::~Agachar(){
 }
 
 
+Posicion Agachar::realizarAccion(Posicion posActual) {
+    Posicion nuevaPosicion;
+    nuevaPosicion.setX(posActual.getX()/2);
+    nuevaPosicion.setY(posActual.getY()/2);
+    estado = false;
+    return nuevaPosicion;
+}

@@ -9,6 +9,7 @@
 #define ACCION_H_
 
 #include "../modelo/Posicion.h"
+#include "../modelo/Direccion.h"
 
 class Accion{
 public:
@@ -20,8 +21,12 @@ public:
 	virtual bool getEstado();
 
 	virtual void setEstado(bool nuevoEstado);
-
 	virtual void setEstado(bool nuevoEstado, bool orientacion);
+	virtual void setEstado(bool nuevoEstado, Posicion nuevaPosicion);
+	virtual void setEstado(bool nuevoEstado, Posicion nuevaPosicion, bool orientacionSalto);
+
+	virtual Posicion realizarAccion(Posicion posActual);
+	virtual Posicion realizarAccion(Posicion pos,Direccion dir);
 
 	virtual ~Accion();
 };

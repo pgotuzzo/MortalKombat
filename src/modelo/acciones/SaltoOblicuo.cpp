@@ -20,7 +20,9 @@ void SaltoOblicuo::setEstado(bool nuevoEstado, bool nuevaOrientacion) {
 bool SaltoOblicuo::getEstado() {
     return estado;
 }
-
+Posicion SaltoOblicuo::realizarAccion(Posicion pos,Direccion dir){
+    return pos;
+}
 SaltoOblicuo::~SaltoOblicuo() {
 }
 
