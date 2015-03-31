@@ -14,7 +14,7 @@ class Agachar : public Accion {
 
     Agachar();
     Posicion realizarAccion(Posicion posActual);
-    bool getEstado();
+    bool    getEstado();
     void setEstado(bool nuevoEstado);
     virtual~Agachar();
 };

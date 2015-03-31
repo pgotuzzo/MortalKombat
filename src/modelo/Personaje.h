@@ -30,12 +30,11 @@ public:
 	Posicion pos;
 	bool orientacion;
 	bool dir;
-	Accion accion;
-	Accion accionesEnCurso[4];
+	Accion* accionesEnCurso[4];
 
 	Personaje();
 	void realizarAccion(int orden);
-	void ejecutarAcionesActivadas(Accion accionesEnCurso[]);
+	void ejecutarAcionesActivadas(Accion **accionesEnCurso);
 	Posicion getPosicion();
 
 	virtual ~Personaje();

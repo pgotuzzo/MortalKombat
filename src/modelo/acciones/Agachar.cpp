@@ -8,20 +8,22 @@
 Agachar::Agachar(){
     estado = false;
     }
-bool Agachar::getEstado(){
-    return estado;
-}
+
 void Agachar::setEstado(bool nuevoEstado) {
     estado = nuevoEstado;
 }
-Agachar::~Agachar(){
-
-}
-
 
 Posicion Agachar::realizarAccion(Posicion posActual) {
     Posicion nuevaPosicion;
     nuevaPosicion.setY(posActual.getY()/2);
     estado = false;
     return nuevaPosicion;
+}
+
+bool Agachar::getEstado() {
+    return estado;
+}
+
+Agachar::~Agachar(){
+
 }
