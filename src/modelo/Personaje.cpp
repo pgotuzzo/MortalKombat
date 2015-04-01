@@ -8,8 +8,8 @@
 #include "../modelo/Personaje.h"
 
 
-const float Default_pos_Y = 50.0;
-const float Default_pos_X = 50.0;
+const float Default_pos_Y = 200.0;
+const float Default_pos_X = 100.0;
 const bool activado = true;
 
 

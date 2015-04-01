@@ -18,8 +18,8 @@ int main(int argc, char** argv){
 
 	Personaje subcero = Personaje();
 	Posicion nuevaPosicion = Posicion();
-	while (i <= 100) {
-		subcero.realizarAccion((i%5 + 1));
+	while (i <= 50) {
+		subcero.realizarAccion((5));
 		cout<<"posicion de SUBCERO en el loop"<<endl;
 		cout<<"ESTA ES LA POSICION pos:"<<subcero.getPosicion().getX()<<"-"<<subcero.getPosicion().getY()<<endl;
 		i++;

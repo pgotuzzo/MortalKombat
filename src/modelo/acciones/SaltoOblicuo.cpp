@@ -6,8 +6,10 @@
  */
 
 #include "../../modelo/acciones/SaltoOblicuo.h"
+#include <iostream>
+using namespace std;
 
-const float alturaSalto = 50;
+const float alturaSalto = 30;
 const float longitudSalto = 20;
 const float intervaloSalto = 1;
 
@@ -45,8 +47,9 @@ Posicion SaltoOblicuo::realizarAccion(Posicion pos){
 	float x = pos.getX() + (coeficiente * intervaloSalto);
 	float y = -a * (x - posInicial.getX()) * (x - posFinal.getX());
 	pos.setX(x);
-	pos.setY(y);
-	if (pos.getY() <= posInicial.getY()){
+	pos.setY(200-y);
+
+	if (pos.getY() >= posInicial.getY()){
 			estado = false;
 			return posFinal;
 		}
