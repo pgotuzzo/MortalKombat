@@ -11,11 +11,12 @@
 class Agachar : public Accion {
     public:
     bool estado;
+    Posicion posInicial;
 
     Agachar();
     Posicion realizarAccion(Posicion posActual);
     bool    getEstado();
-    void setEstado(bool nuevoEstado);
+    void setEstado(bool nuevoEstado,Posicion pos);
     virtual~Agachar();
 };
 

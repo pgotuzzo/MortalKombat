@@ -9,14 +9,20 @@ Agachar::Agachar(){
     estado = false;
     }
 
-void Agachar::setEstado(bool nuevoEstado) {
+void Agachar::setEstado(bool nuevoEstado,Posicion pos) {
     estado = nuevoEstado;
+    posInicial = pos;
 }
 
 Posicion Agachar::realizarAccion(Posicion posActual) {
+	if ( posActual.getY() == posInicial.getY()/2){
+		estado = false;
+		return posInicial;
+	}
     Posicion nuevaPosicion;
     nuevaPosicion.setY(posActual.getY()/2);
-    estado = false;
+    nuevaPosicion.setX(posActual.getX());
+    //estado = false;
     return nuevaPosicion;
 }
 

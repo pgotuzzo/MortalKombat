@@ -66,7 +66,7 @@ void Personaje::realizarAccion(int orden){
 				//No te podes agachar mientras estas saltando oblicuamente
 				if(!accionesEnCurso[3]->getEstado()){
 					//activo el estado de agachar
-					accionesEnCurso[1]->setEstado(activado);
+					accionesEnCurso[1]->setEstado(activado,pos);
 					cout << "SE AGACHA!"<<endl;
 				}
 			}

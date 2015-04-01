@@ -1,6 +1,4 @@
-#include "SDL2/SDL.h"
 #include <iostream>
-#include <tr1/unordered_map>
 #include "../modelo/Personaje.h"
 #include "../modelo/Posicion.h"
 
@@ -20,7 +18,7 @@ int main(int argc, char** argv){
 
 	Personaje subcero = Personaje();
 	Posicion nuevaPosicion = Posicion();
-	while (i <= 10) {
+	while (i <= 100) {
 		subcero.realizarAccion((i%5+1));
 		cout<<"posicion de SUBCERO en el loop"<<endl;
 		cout <<subcero.getPosicion().getX()<<endl;

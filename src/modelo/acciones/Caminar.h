@@ -17,6 +17,7 @@ public:
 	bool orientacion;
 	//Orientacion true = orientacion derecha
 	Caminar();
+	bool getEstado();
 	void setEstado(bool nuevoEstado, bool NuevaOrientacion);
 	Posicion realizarAccion(Posicion pos,bool dir);
 	virtual ~Caminar();
