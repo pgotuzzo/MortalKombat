@@ -14,12 +14,12 @@
 class Caminar : public Accion{
 public:
 	bool estado;
-	bool orientacion;
+	bool direccion;
 	//Orientacion true = orientacion derecha
 	Caminar();
 	bool getEstado();
 	void setEstado(bool nuevoEstado, bool NuevaOrientacion);
-	Posicion realizarAccion(Posicion pos,bool dir);
+	Posicion realizarAccion(Posicion pos);
 	virtual ~Caminar();
 };
 

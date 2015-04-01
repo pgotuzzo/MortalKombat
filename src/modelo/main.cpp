@@ -19,10 +19,9 @@ int main(int argc, char** argv){
 	Personaje subcero = Personaje();
 	Posicion nuevaPosicion = Posicion();
 	while (i <= 100) {
-		subcero.realizarAccion((i%5+1));
+		subcero.realizarAccion((i%5 + 1));
 		cout<<"posicion de SUBCERO en el loop"<<endl;
-		cout <<subcero.getPosicion().getX()<<endl;
-		cout << subcero.getPosicion().getY()<<endl;
+		cout<<"ESTA ES LA POSICION pos:"<<subcero.getPosicion().getX()<<"-"<<subcero.getPosicion().getY()<<endl;
 		i++;
 	}
 	return 0;
