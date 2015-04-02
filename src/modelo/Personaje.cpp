@@ -7,30 +7,33 @@
 
 #include "../modelo/Personaje.h"
 
-
-const float Default_pos_Y = 200.0;
+//Suponemos al par ordenado (x,y) como un punto sobre la cabeza de nuestro personaje.
+//Por ende este tendria una altura de: (alto de la pantalla - default_pos_Y)
+const float Default_pos_Y = 180.0;
 const float Default_pos_X = 100.0;
+const float Default_Altura_PJ = (200 - Default_pos_Y);
 const bool activado = true;
 
 
 Personaje::Personaje() {
 	pos = Posicion(Default_pos_X,Default_pos_Y);
+	alturaDelPersonaje = Default_Altura_PJ;
 	//inicializo el vector de acciones
 	accionesEnCurso[0] = new SaltoVertical();
-	accionesEnCurso[1] = new Agachar();
+	accionesEnCurso[1] = new Agachar(alturaDelPersonaje);
 	accionesEnCurso[2] = new Caminar();
 	accionesEnCurso[3] = new SaltoOblicuo();
 	}
 
 void Personaje::ejecutarAcionesActivadas(Accion **accionesEnCurso) {
+
+	pos = accionesEnCurso[1]->realizarAccion(pos);
+
 	if (accionesEnCurso[0]->getEstado()){
 		pos = accionesEnCurso[0]->realizarAccion(pos);
 		cout<<"Ejecuto accion de salto vertical"<<endl;
 	}
-	if (accionesEnCurso[1]->getEstado()){
-		cout<<"ejecuto accion de agacharse"<<endl;
-		pos = accionesEnCurso[1]->realizarAccion(pos);
-	}
+
 	if (accionesEnCurso[2]->getEstado()){
 		cout<<"ejecuto accion de caminar"<<endl;
 		pos = accionesEnCurso[2]->realizarAccion(pos);

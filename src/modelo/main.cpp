@@ -1,7 +1,5 @@
 #include <iostream>
 #include "../modelo/Personaje.h"
-#include "../modelo/Posicion.h"
-
 
 using namespace std;
 
@@ -17,11 +15,13 @@ int main(int argc, char** argv){
 	int i = 0;
 
 	Personaje subcero = Personaje();
-	Posicion nuevaPosicion = Posicion();
+	cout<<"posicion Inicial de SUBCERO"<<endl;
+	subcero.getPosicion().mostrarPar();
 	while (i <= 50) {
-		subcero.realizarAccion((5));
+
+		subcero.realizarAccion((6));
 		cout<<"posicion de SUBCERO en el loop"<<endl;
-		cout<<"ESTA ES LA POSICION pos:"<<subcero.getPosicion().getX()<<"-"<<subcero.getPosicion().getY()<<endl;
+		subcero.getPosicion().mostrarPar();
 		i++;
 	}
 	return 0;

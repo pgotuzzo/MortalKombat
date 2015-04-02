@@ -10,7 +10,7 @@
 using namespace std;
 
 const float alturaSalto = 30;
-const float longitudSalto = 20;
+const float longitudSalto = 30;
 const float intervaloSalto = 1;
 
 
@@ -32,7 +32,7 @@ void SaltoOblicuo::setEstado(bool nuevoEstado,Posicion nuevaPosicion,bool direcc
     }
     float b = pow(posInicial.getX()+posFinal.getX(),2) / 4;
     float c = posInicial.getX() * posFinal.getX();
-    a = alturaSalto / (b - c);
+    a = alturaSalto/ (b - c);
 }
 
 bool SaltoOblicuo::getEstado() {
@@ -45,10 +45,11 @@ bool SaltoOblicuo::getEstado() {
  */
 Posicion SaltoOblicuo::realizarAccion(Posicion pos){
 	float x = pos.getX() + (coeficiente * intervaloSalto);
-	float y = -a * (x - posInicial.getX()) * (x - posFinal.getX());
+	//ese 20 representa la altura del pj
+	// dado que ahora tomamos su cabeza como referencia.
+	float y = 20+(-a * (x - posInicial.getX()) * (x - posFinal.getX()));
 	pos.setX(x);
 	pos.setY(200-y);
-
 	if (pos.getY() >= posInicial.getY()){
 			estado = false;
 			return posFinal;

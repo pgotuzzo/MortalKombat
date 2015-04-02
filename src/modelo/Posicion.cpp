@@ -6,6 +6,9 @@
  */
 
 #include "../modelo/Posicion.h"
+#include <iostream>
+
+using namespace std;
 
 Posicion::Posicion(float pos_x,float pos_y) {
 	x = pos_x;
@@ -53,5 +56,9 @@ Posicion::~Posicion() {
 Posicion::Posicion(){
 	x = 0;
 	y = 0;
+}
+void Posicion::mostrarPar(){
+	cout<<"ESTA ES LA POSICION"<<endl;
+	cout<<"X: "<<x<<" - "<<"Y: "<<y<<endl;
 }
 

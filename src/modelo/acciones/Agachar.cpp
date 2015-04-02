@@ -3,9 +3,11 @@
 //
 
 #include "Agachar.h"
+#include <iostream>
+using namespace std;
 
-
-Agachar::Agachar(){
+Agachar::Agachar(float altura){
+    alturaPJ = altura;
     estado = false;
     }
 
@@ -15,21 +17,39 @@ void Agachar::setEstado(bool nuevoEstado,Posicion pos) {
 }
 
 Posicion Agachar::realizarAccion(Posicion posActual) {
-	if ( posActual.getY() == posInicial.getY()/2){
-		estado = false;
-		return posInicial;
+    //Si el estado agachar esta desactivado y sigue en posicion de agachado, lo paro
+
+
+    if((200-posActual.getY() == alturaPJ/2) && (!estado)){
+
+        Posicion nuevaPosicion;
+        nuevaPosicion.setY(200-alturaPJ);
+        nuevaPosicion.setX(posActual.getX());
+        return nuevaPosicion;
+    }
+
+    //ese 200 representa la altura de la pantalla
+	if ( (200-posActual.getY() == alturaPJ) &&(estado)){
+        Posicion nuevaPosicion;
+        nuevaPosicion.setY(200-alturaPJ/2);
+        nuevaPosicion.setX(posActual.getX());
+        estado = false;
+        return nuevaPosicion;
 	}
-    Posicion nuevaPosicion;
-    nuevaPosicion.setY(posActual.getY()/2);
-    nuevaPosicion.setX(posActual.getX());
-    //estado = false;
-    return nuevaPosicion;
+    if ((200-posActual.getY() == alturaPJ/2) && (estado)) {
+        estado = false;
+        return posActual;
+    }
+
+    return posActual;
+}
+
+
+
+Agachar::~Agachar(){
+
 }
 
 bool Agachar::getEstado() {
     return estado;
-}
-
-Agachar::~Agachar(){
-
 }

@@ -24,6 +24,7 @@ public:
 	bool operator==(Posicion p);
 	void setX(float pos_x);
 	void setY(float pos_y);
+	void mostrarPar();
 
 	virtual ~Posicion();
 };

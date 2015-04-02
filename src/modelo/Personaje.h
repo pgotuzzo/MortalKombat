@@ -30,6 +30,7 @@ public:
 	Posicion pos;
 	bool orientacion;
 	bool dir;
+	float alturaDelPersonaje;
 	Accion* accionesEnCurso[4];
 
 	Personaje();

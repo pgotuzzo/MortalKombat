@@ -19,7 +19,7 @@ public:
 
 	virtual bool getEstado();
 
-	virtual void setEstado(bool nuevoEstado) ;
+	virtual void setEstado(bool nuevoEstado);
 
 	virtual void setEstado(bool nuevoEstado, bool orientacion);
 

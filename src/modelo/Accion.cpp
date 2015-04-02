@@ -41,3 +41,4 @@ Posicion Accion::realizarAccion(Posicion posActual) {
 Posicion Accion::realizarAccion(Posicion pos, bool dir) {
 	return pos;
 }
+
