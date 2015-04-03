@@ -23,10 +23,10 @@ int main(int argc, char** argv){
 
 	cout<<"posicion Inicial de SUBCERO"<<endl;
 	subcero->getPosicion().mostrarPar();
-	while (i <= 600) {
+	while (i <= 10) {
 		cout<<"Iteracion: "<<i<<endl;
 
-		subcero->realizarAccion(i%6+1,anchoEscenario);
+		subcero->realizarAccion((i%5)+2,anchoEscenario);
 		cout<<"posicion de SUBCERO en el loop"<<endl;
 		subcero->getPosicion().mostrarPar();
 		cout<<"---------------------------------------------"<<endl;
@@ -34,5 +34,7 @@ int main(int argc, char** argv){
 		i++;
 	}
 
+	subcero->realizarAccion(1,anchoEscenario);
+	subcero->getPosicion().mostrarPar();
 	return 0;
 }

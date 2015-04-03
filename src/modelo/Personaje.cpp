@@ -18,7 +18,7 @@ Personaje::Personaje(Posicion posInicial,float alto,float ancho,float nuevoAltoE
 	alturaDelPersonaje = alto;
 	anchoDelPersonaje = ancho;
 	accionesEnCurso[0] = new SaltoVertical();
-	accionesEnCurso[1] = new Agachar(alturaDelPersonaje, pos.getY() + alturaDelPersonaje);
+	accionesEnCurso[1] = new Agachar(&alturaDelPersonaje, pos.getY() + alturaDelPersonaje);
 	accionesEnCurso[2] = new Caminar();
 	accionesEnCurso[3] = new SaltoOblicuo(alturaDelPersonaje);
 }

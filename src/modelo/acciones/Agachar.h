@@ -14,8 +14,9 @@ class Agachar : public Accion {
     Posicion posInicial;
     float alturaPJ;
     float yPiso;
+    float* pAlturaPJ;
 
-    Agachar(float alturaPJ,float yPiso);
+    Agachar(float* alturaPJ,float yPiso);
     Posicion realizarAccion(Posicion posActual);
     bool getEstado();
     void setEstado(bool nuevoEstado,Posicion pos);
