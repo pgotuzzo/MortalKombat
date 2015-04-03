@@ -66,4 +66,15 @@ static const std::string TREE = IMAGES_PATH + "tree.png";
 
 static const std::string SPRITES_FORMAT = ".png";
 
+enum estado {caminando,parado}
+struct cambios{
+    Posicion p;
+    estado e;
+};
+
+cambios c;
+
+c.e = estado::caminando;
+
 #endif //_MORTALKOMBAT_CONSTANTS_H_
+
