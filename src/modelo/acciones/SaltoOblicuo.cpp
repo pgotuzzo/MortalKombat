@@ -14,8 +14,9 @@ const float longitudSalto = 30;
 const float intervaloSalto = 1;
 
 
-SaltoOblicuo::SaltoOblicuo() {
+SaltoOblicuo::SaltoOblicuo(float altura) {
 	estado = false;
+	alturaPJ = altura;
 }
 
 
@@ -45,11 +46,12 @@ bool SaltoOblicuo::getEstado() {
  */
 Posicion SaltoOblicuo::realizarAccion(Posicion pos){
 	float x = pos.getX() + (coeficiente * intervaloSalto);
-	//ese 20 representa la altura del pj
+	//Representa la altura del pj
 	// dado que ahora tomamos su cabeza como referencia.
-	float y = 20+(-a * (x - posInicial.getX()) * (x - posFinal.getX()));
+	float y = posInicial.getY() - (-a * (x - posInicial.getX()) * (x - posFinal.getX()));
 	pos.setX(x);
-	pos.setY(200-y);
+	pos.setY(y);
+	//pos.setY(y- ((altoPantalla - yPiso)- alturaPJ));
 	if (pos.getY() >= posInicial.getY()){
 			estado = false;
 			return posFinal;

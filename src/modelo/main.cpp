@@ -1,5 +1,5 @@
 #include <iostream>
-#include "../modelo/Personaje.h"
+#include "../modelo/Mundo.h"
 
 using namespace std;
 
@@ -12,17 +12,23 @@ int main(int argc, char** argv){
 	string valor = mymap["hola"];
 	cout<<valor<<endl;
 */
-	int i = 0;
+	int i = 1;
+	Mundo nuevoMundo = Mundo();
+	Personaje* subcero = nuevoMundo.getPersonaje();
 
-	Personaje subcero = Personaje();
 	cout<<"posicion Inicial de SUBCERO"<<endl;
-	subcero.getPosicion().mostrarPar();
-	while (i <= 50) {
+	subcero->getPosicion().mostrarPar();
+	while (i <= 200) {
+		cout<<"Iteracion: "<<i<<endl;
 
-		subcero.realizarAccion((6));
+		subcero->realizarAccion((6));
 		cout<<"posicion de SUBCERO en el loop"<<endl;
-		subcero.getPosicion().mostrarPar();
+		subcero->getPosicion().mostrarPar();
+		cout<<"---------------------------------------------"<<endl;
+
 		i++;
 	}
+	subcero->realizarAccion((3));
+	subcero->getPosicion().mostrarPar();
 	return 0;
 }

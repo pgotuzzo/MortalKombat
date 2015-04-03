@@ -31,9 +31,10 @@ public:
 	bool orientacion;
 	bool dir;
 	float alturaDelPersonaje;
+	float anchoDelPersonaje;
 	Accion* accionesEnCurso[4];
 
-	Personaje();
+	Personaje(Posicion posInicial,float alto,float ancho,float nuevoAltoPantalla);
 	void realizarAccion(int orden);
 	void ejecutarAcionesActivadas(Accion **accionesEnCurso);
 	Posicion getPosicion();

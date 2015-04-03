@@ -20,8 +20,11 @@ public:
 	Posicion posInicial;
 	Posicion posFinal;
 	float coeficiente; // Segun este coeficiente sumara o restara x para avanzar y retroceder
+	float alturaPJ;
+	float yPiso;
+	float altoPantalla;
 
-	SaltoOblicuo();
+	SaltoOblicuo(float altura);
 
 	void setEstado(bool nuevoEstado, Posicion nuevaPosicion,bool direccionSalto);
 	Posicion realizarAccion(Posicion pos);

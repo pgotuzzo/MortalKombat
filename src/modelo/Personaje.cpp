@@ -15,7 +15,17 @@ const float Default_Altura_PJ = (200 - Default_pos_Y);
 const bool activado = true;
 
 
-Personaje::Personaje() {
+Personaje::Personaje(Posicion posInicial,float alto,float ancho,float nuevoAltoPantalla){
+	pos = posInicial;
+	alturaDelPersonaje = alto;
+	anchoDelPersonaje = ancho;
+	accionesEnCurso[0] = new SaltoVertical();
+	accionesEnCurso[1] = new Agachar(alturaDelPersonaje, pos.getY() + alturaDelPersonaje);
+	accionesEnCurso[2] = new Caminar();
+	accionesEnCurso[3] = new SaltoOblicuo(alturaDelPersonaje);
+}
+
+/*Personaje::Personaje() {
 	pos = Posicion(Default_pos_X,Default_pos_Y);
 	alturaDelPersonaje = Default_Altura_PJ;
 	//inicializo el vector de acciones
@@ -23,7 +33,7 @@ Personaje::Personaje() {
 	accionesEnCurso[1] = new Agachar(alturaDelPersonaje);
 	accionesEnCurso[2] = new Caminar();
 	accionesEnCurso[3] = new SaltoOblicuo();
-	}
+	}*/
 
 void Personaje::ejecutarAcionesActivadas(Accion **accionesEnCurso) {
 
@@ -46,103 +56,67 @@ void Personaje::ejecutarAcionesActivadas(Accion **accionesEnCurso) {
 
 
 void Personaje::realizarAccion(int orden){
-
-	switch (orden){
-		//Saltar
-		case (1):
-				//No puede saltar mientras esta saltando verticalmente
-				if (!accionesEnCurso[0]->getEstado()){
-					if(!accionesEnCurso[3]->getEstado()){
-					//No puede saltar si esta agachado oblicuamente
-						if(!accionesEnCurso[1]->getEstado()){
-							//Activo el estado de saltar verticalmente
-							accionesEnCurso[0]->setEstado(activado,pos);
-							cout<< "SALTA"<<endl;
-						}
+	if (!accionesEnCurso[0]->getEstado()){
+		if(!accionesEnCurso[3]->getEstado()){
+			switch (orden){
+				//Saltar
+				case (1):
+					if(!accionesEnCurso[1]->getEstado()){
+						//Activo el estado de saltar verticalmente
+						accionesEnCurso[0]->setEstado(activado,pos);
+						cout<< "SALTA"<<endl;
 					}
-				}
-				break;
-		//Agachar
-		case (2):
-			//No te podes agachar mientras estas saltando verticalmente
-			if (!accionesEnCurso[0]->getEstado()){
-				//No te podes agachar mientras estas saltando oblicuamente
-				if(!accionesEnCurso[3]->getEstado()){
+					break;
+				//Agachar
+				case (2):
 					//activo el estado de agachar
 					accionesEnCurso[1]->setEstado(activado,pos);
 					cout << "SE AGACHA!"<<endl;
-				}
-			}
-				break;
+					break;
 
-		//Caminar a la derecha
-		case (3):
-			//No podes avanzar mientras estas saltando verticalmente
-			if (!accionesEnCurso[0]->getEstado()){
-				//No podes avanzar mientras estas saltando oblicuamente
-				if(!accionesEnCurso[3]->getEstado()){
-					//No puede avanzar si esta agachado
+				//Caminar a la derecha
+				case (3):
 					if(!accionesEnCurso[1]->getEstado()) {
 						//activo el estado avanzar
 						//orientacion false = izquierda
 						accionesEnCurso[2]->setEstado(activado,true);
 						cout << "CAMINA A LA DERECHA!" << endl;
-					}
-				}
-			}
-			break;
-		case (4):
+						}
+					break;
 				//Caminar a la izquierda
-			//No podes avanzar mientras estas saltando verticalmente
-			if (!accionesEnCurso[0]->getEstado()){
-				//No podes avanzar mientras estas saltando oblicuamente
-				if(!accionesEnCurso[3]->getEstado()){
+				case (4):
 					if(!accionesEnCurso[1]->getEstado()) {
 						//activo el estado avanzar
 						//orientacion false = izquierda
 						accionesEnCurso[2]->setEstado(activado,false);
 						cout << "CAMINA A LA IZQUIERDA!"<<endl;
-					}
-				}
-			}
-			break;
-
-		case (5):
-			//No puede saltar oblicuamente mientras esta saltando verticalmente
-			if (!accionesEnCurso[0]->getEstado()){
-				//No puede saltar oblicuamente si esta saltando oblicuamente
-				if(!accionesEnCurso[3]->getEstado()){
-					//No se puede saltar oblicuamente mientras se esta agachado
+						}
+					break;
+				//Salto oblicuo a la derecha
+				case (5):
 					if(!accionesEnCurso[1]->getEstado()){
 						//Activo el estado de saltar oblicuamente
 						//ortientacion true = ortientacion derecha
 						accionesEnCurso[3]->setEstado(activado, pos,true);
 						cout << "SALTO OBLICUAMENTE PARA LA DERECHA!"<<endl;
-					}
-				}
-			}
-			break;
+						}
+					break;
 
-		//Salto oblicuo a la izquierda
-		case (6):
-			//No puede saltar oblicuamente mientras esta saltando verticalmente
-			if (!accionesEnCurso[0]->getEstado()){
-				//No puede saltar oblicuamente si esta saltando oblicuamente
-				if(!accionesEnCurso[3]->getEstado()){
-					//No se puede saltar oblicuamente mientras se esta agachado
+				//Salto oblicuo a la izquierda
+				case (6):
 					if(!accionesEnCurso[1]->getEstado()){
 						//Activo el estado de saltar oblicuamente
 						//ortientacion true = ortientacion derecha
 						accionesEnCurso[3]->setEstado(activado, pos, false);
 						cout << "SALTO OBLICUAMENTE PARA LA IZQUIERDA!"<<endl;
 					}
-				}
+					break;
+				default:
+					break;
 			}
-			break;
-
-		default:
-			break;
+		}
 	}
+
 	ejecutarAcionesActivadas(accionesEnCurso);
 	//Este metodo va a ejecutar las acciones que este listas para ejecutarse
 	//Cada accion se desactiva cuando termina.
