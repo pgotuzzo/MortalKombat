@@ -8,10 +8,8 @@
 #include "../modelo/Personaje.h"
 
 //Suponemos al par ordenado (x,y) como un punto sobre la cabeza de nuestro personaje.
-//Por ende este tendria una altura de: (alto de la pantalla - default_pos_Y)
-const float Default_pos_Y = 180.0;
-const float Default_pos_X = 100.0;
-const float Default_Altura_PJ = (200 - Default_pos_Y);
+
+
 const bool activado = true;
 
 
@@ -25,15 +23,6 @@ Personaje::Personaje(Posicion posInicial,float alto,float ancho,float nuevoAltoE
 	accionesEnCurso[3] = new SaltoOblicuo(alturaDelPersonaje);
 }
 
-/*Personaje::Personaje() {
-	pos = Posicion(Default_pos_X,Default_pos_Y);
-	alturaDelPersonaje = Default_Altura_PJ;
-	//inicializo el vector de acciones
-	accionesEnCurso[0] = new SaltoVertical();
-	accionesEnCurso[1] = new Agachar(alturaDelPersonaje);
-	accionesEnCurso[2] = new Caminar();
-	accionesEnCurso[3] = new SaltoOblicuo();
-	}*/
 
 Posicion Personaje::verificarPunto(Posicion posicionActual,float anchoEscenario){
 	if (posicionActual.getX() > anchoEscenario){

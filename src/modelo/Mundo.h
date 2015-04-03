@@ -9,16 +9,22 @@
 #define SRC_MODELO_MUNDO_H_
 
 #include "../modelo/Personaje.h"
+#include "../parser/config.h"
+
+using namespace configuracion;
 
 class Mundo {
 public:
-	float ancho_ventana;
-	float alto_ventana;
-	float alto_piso;
+	float anchoEscenario;
+	float altoEscenario;
+	float altoPiso;
 	Personaje* personaje1;
 
-	Mundo();
+	Mundo(config configur);
 	Personaje* getPersonaje();
+	float getAncho();
+	float getAlto();
+	float getAltoPiso();
 	Posicion actualizarMundo(int orden);
 	virtual ~Mundo();
 };

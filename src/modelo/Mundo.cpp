@@ -6,31 +6,46 @@
  */
 
 #include "Mundo.h"
+#include "../parser/config.h"
 
-const float Default_ancho_escenario = 1000;
-const float Default_alto_escenario = 150;
-const float Default_alto_piso = 20;
-const float Default_Altura_PJ = 35;
-const float Default_Ancho_PJ = 20;
+using namespace configuracion;
 
+Mundo::Mundo(config configur) {
+	config::Tescenario escenario = configur.getEscenario();
+	config::Tpersonaje pj = configur.getPersonaje();
 
-const float Default_pos_Y = Default_alto_escenario - Default_alto_piso - Default_Altura_PJ;
-const float Default_pos_X = Default_ancho_escenario/2;
+	anchoEscenario = escenario.ancho;
+	altoEscenario = escenario.alto;
+	altoPiso = escenario.yPiso;
 
+	float altoPJ = pj.alto;
+	float anchoPJ = pj.ancho;
 
-Mundo::Mundo() {
-	personaje1 = new Personaje(Posicion(Default_pos_X,Default_pos_Y),Default_Altura_PJ,Default_Ancho_PJ, Default_alto_escenario);
-	ancho_ventana = Default_ancho_escenario;
-	alto_ventana = Default_alto_escenario;
-	alto_piso = Default_alto_piso;
+	float pos_x = anchoEscenario/2;
+	float pos_y = altoEscenario - altoPiso - altoPJ;
+
+	personaje1 = new Personaje(Posicion(pos_x,pos_y),altoPJ,anchoPJ, altoEscenario);
+
 }
 
 Personaje* Mundo::getPersonaje(){
 	return personaje1;
 }
 
+float Mundo::getAlto(){
+	return altoEscenario;
+}
+
+float Mundo::getAncho(){
+	return anchoEscenario;
+}
+
+float Mundo::getAltoPiso(){
+	return altoPiso;
+}
+
 Posicion Mundo::actualizarMundo(int orden){
-	personaje1->realizarAccion(orden,Default_ancho_escenario);
+	personaje1->realizarAccion(orden,anchoEscenario);
 	return personaje1->getPosicion();
 }
 
