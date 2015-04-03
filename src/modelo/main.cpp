@@ -18,17 +18,17 @@ int main(int argc, char** argv){
 
 	cout<<"posicion Inicial de SUBCERO"<<endl;
 	subcero->getPosicion().mostrarPar();
-	while (i <= 200) {
+	while (i <= 600) {
 		cout<<"Iteracion: "<<i<<endl;
 
-		subcero->realizarAccion((6));
+		subcero->realizarAccion(3,1000);
 		cout<<"posicion de SUBCERO en el loop"<<endl;
 		subcero->getPosicion().mostrarPar();
 		cout<<"---------------------------------------------"<<endl;
 
 		i++;
 	}
-	subcero->realizarAccion((3));
+	subcero->realizarAccion(3,1000);
 	subcero->getPosicion().mostrarPar();
 	return 0;
 }

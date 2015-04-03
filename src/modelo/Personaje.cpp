@@ -15,7 +15,7 @@ const float Default_Altura_PJ = (200 - Default_pos_Y);
 const bool activado = true;
 
 
-Personaje::Personaje(Posicion posInicial,float alto,float ancho,float nuevoAltoPantalla){
+Personaje::Personaje(Posicion posInicial,float alto,float ancho,float nuevoAltoEscenario){
 	pos = posInicial;
 	alturaDelPersonaje = alto;
 	anchoDelPersonaje = ancho;
@@ -35,7 +35,18 @@ Personaje::Personaje(Posicion posInicial,float alto,float ancho,float nuevoAltoP
 	accionesEnCurso[3] = new SaltoOblicuo();
 	}*/
 
-void Personaje::ejecutarAcionesActivadas(Accion **accionesEnCurso) {
+Posicion Personaje::verificarPunto(Posicion posicionActual,float anchoEscenario){
+	if (posicionActual.getX() > anchoEscenario){
+		return Posicion(anchoEscenario, posicionActual.getY());
+	}
+	if (posicionActual.getX() < 0){
+		return Posicion(0,posicionActual.getY());
+	}
+	else return posicionActual;
+}
+
+
+void Personaje::ejecutarAcionesActivadas(Accion **accionesEnCurso,float anchoEscenario) {
 
 	pos = accionesEnCurso[1]->realizarAccion(pos);
 
@@ -46,16 +57,18 @@ void Personaje::ejecutarAcionesActivadas(Accion **accionesEnCurso) {
 
 	if (accionesEnCurso[2]->getEstado()){
 		cout<<"ejecuto accion de caminar"<<endl;
-		pos = accionesEnCurso[2]->realizarAccion(pos);
+		pos = verificarPunto(accionesEnCurso[2]->realizarAccion(pos),anchoEscenario);
+
+
 	}
 	if (accionesEnCurso[3]->getEstado()){
 		cout<<"Ejecuto accion de salto oblicuo"<<endl;
-		pos = accionesEnCurso[3]->realizarAccion(pos);
+		pos = verificarPunto(accionesEnCurso[3]->realizarAccion(pos),anchoEscenario);
 	}
 }
 
 
-void Personaje::realizarAccion(int orden){
+void Personaje::realizarAccion(int orden,float anchoEscenario){
 	if (!accionesEnCurso[0]->getEstado()){
 		if(!accionesEnCurso[3]->getEstado()){
 			switch (orden){
@@ -117,7 +130,7 @@ void Personaje::realizarAccion(int orden){
 		}
 	}
 
-	ejecutarAcionesActivadas(accionesEnCurso);
+	ejecutarAcionesActivadas(accionesEnCurso,anchoEscenario);
 	//Este metodo va a ejecutar las acciones que este listas para ejecutarse
 	//Cada accion se desactiva cuando termina.
 

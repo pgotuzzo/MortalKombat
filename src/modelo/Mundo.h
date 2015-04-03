@@ -19,6 +19,7 @@ public:
 
 	Mundo();
 	Personaje* getPersonaje();
+	Posicion actualizarMundo(int orden);
 	virtual ~Mundo();
 };
 

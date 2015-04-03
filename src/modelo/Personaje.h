@@ -34,9 +34,10 @@ public:
 	float anchoDelPersonaje;
 	Accion* accionesEnCurso[4];
 
-	Personaje(Posicion posInicial,float alto,float ancho,float nuevoAltoPantalla);
-	void realizarAccion(int orden);
-	void ejecutarAcionesActivadas(Accion **accionesEnCurso);
+	Personaje(Posicion posInicial,float alto,float ancho,float nuevoAltoEscenario);
+	void realizarAccion(int orden,float anchoEscenario);
+	Posicion verificarPunto(Posicion posicionActual,float anchoEscenario);
+	void ejecutarAcionesActivadas(Accion **accionesEnCurso,float anchoEscenario);
 	Posicion getPosicion();
 
 	virtual ~Personaje();
