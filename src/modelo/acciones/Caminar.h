@@ -1,15 +1,7 @@
-/*
- * Caminar.h
- *
- *  Created on: 28/3/2015
- *      Author: miguel
- */
-
 #ifndef ACCIONES_CAMINAR_H_
 #define ACCIONES_CAMINAR_H_
 
-#include "../../modelo/Posicion.h"
-#include "../../modelo/Accion.h"
+#include "../Accion.h"
 
 class Caminar : public Accion{
 public:

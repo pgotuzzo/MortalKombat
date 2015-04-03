@@ -1,12 +1,6 @@
-/*
- * SaltoOblicuo.cpp
- *
- *  Created on: 28/3/2015
- *      Author: miguel
- */
-
-#include "../../modelo/acciones/SaltoOblicuo.h"
 #include <iostream>
+#include "SaltoOblicuo.h"
+
 using namespace std;
 
 const float alturaSalto = 30;

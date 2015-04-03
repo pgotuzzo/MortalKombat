@@ -1,11 +1,4 @@
-/*
- * Accion.cpp
- *
- *  Created on: 28/3/2015
- *      Author: miguel
- */
-
-#include "../modelo/Accion.h"
+#include "Accion.h"
 
 Accion::Accion() {
 

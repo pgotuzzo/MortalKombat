@@ -1,6 +1,4 @@
 #include <iostream>
-#include "../modelo/Mundo.h"
-#include "../parser/config.h"
 
 using namespace std;
 using namespace configuracion;

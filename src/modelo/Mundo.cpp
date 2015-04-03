@@ -1,12 +1,5 @@
-/*
- * Mundo.cpp
- *
- *  Created on: 3/4/2015
- *      Author: miguel
- */
-
-#include "Mundo.h"
 #include "../parser/config.h"
+#include "Mundo.h"
 
 using namespace configuracion;
 

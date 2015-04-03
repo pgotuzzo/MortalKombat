@@ -1,12 +1,7 @@
-//
-// Created by ven on 29/03/15.
-//
-
 #ifndef MORTALKOMBAT_AGACHAR_H
 #define MORTALKOMBAT_AGACHAR_H
 
-#include "../../modelo/Accion.h"
-#include "../../modelo/Posicion.h"
+#include "../Accion.h"
 
 class Agachar : public Accion {
     public:

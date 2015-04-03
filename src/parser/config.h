@@ -1,10 +1,3 @@
-/*
- * config.h
- *
- *  Created on: 26/3/2015
- *      Author: sebastian
- */
-
 #ifndef CONFIG_H_
 #define CONFIG_H_
 #include <string>

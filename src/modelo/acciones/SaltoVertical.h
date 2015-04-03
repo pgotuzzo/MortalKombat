@@ -1,15 +1,7 @@
-/*
- * SaltoVertical.h
- *
- *  Created on: 26/3/2015
- *      Author: miguel
- */
-
 #ifndef SALTOVERTICAL_H_
 #define SALTOVERTICAL_H_
 
-#include "../../modelo/Accion.h"
-#include "../../modelo/Posicion.h"
+#include "../Accion.h"
 
 class SaltoVertical : public Accion{
 public:

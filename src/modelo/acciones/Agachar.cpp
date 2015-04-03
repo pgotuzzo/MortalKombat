@@ -1,7 +1,3 @@
-//
-// Created by ven on 29/03/15.
-//
-
 #include "Agachar.h"
 #include <iostream>
 using namespace std;

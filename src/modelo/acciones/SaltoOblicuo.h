@@ -1,15 +1,8 @@
-/*
- * SaltoOblicuo.h
- *
- *  Created on: 28/3/2015
- *      Author: miguel
- */
-
 #ifndef SALTOOBLICUO_H_
 #define SALTOOBLICUO_H_
 
-#include "../../modelo/Accion.h"
 #include <math.h>
+#include "../Accion.h"
 
 
 class SaltoOblicuo : public Accion{

@@ -1,10 +1,3 @@
-/*
- * config.cpp
- *
- *  Created on: 26/3/2015
- *      Author: sebastian
- */
-
 #include "config.h"
 
 #include <fstream>

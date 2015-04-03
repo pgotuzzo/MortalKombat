@@ -1,15 +1,8 @@
-/*
- * Mundo.h
- *
- *  Created on: 3/4/2015
- *      Author: miguel
- */
-
 #ifndef SRC_MODELO_MUNDO_H_
 #define SRC_MODELO_MUNDO_H_
 
-#include "../modelo/Personaje.h"
 #include "../parser/config.h"
+#include "Personaje.h"
 
 using namespace configuracion;
 

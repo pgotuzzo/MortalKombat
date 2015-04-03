@@ -1,11 +1,4 @@
-/*
- * SaltoVertical.cpp
- *
- *  Created on: 26/3/2015
- *      Author: miguel
- */
-
-#include "../../modelo/acciones/SaltoVertical.h"
+#include "SaltoVertical.h"
 
 const float altura_salto = 50;
 const float intervalo_salto = 5;

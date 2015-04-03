@@ -1,14 +1,13 @@
-/*
- * Personaje.cpp
- *
- *  Created on: 26/3/2015
- *      Author: miguel
- */
-
-#include "../modelo/Personaje.h"
 
 //Suponemos al par ordenado (x,y) como un punto sobre la cabeza de nuestro personaje.
 
+
+#include "../Posicion.h"
+#include "Personaje.h"
+#include "acciones/SaltoVertical.h"
+#include "acciones/Agachar.h"
+#include "acciones/Caminar.h"
+#include "acciones/SaltoOblicuo.h"
 
 const bool activado = true;
 

@@ -5,7 +5,7 @@
  *      Author: miguel
  */
 
-#include "../../modelo/acciones/Caminar.h"
+#include "Caminar.h"
 #include <iostream>
 
 using namespace std;

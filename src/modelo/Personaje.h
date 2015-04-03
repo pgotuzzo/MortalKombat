@@ -13,14 +13,8 @@
 #include <iostream>
 #include <list>
 #include <tr1/unordered_map>
-
-#include "../modelo/Accion.h"
-#include "../modelo/Posicion.h"
-#include "../modelo/acciones/SaltoVertical.h"
-#include "../modelo/acciones/SaltoOblicuo.h"
-#include "../modelo/acciones/Caminar.h"
-#include "../modelo/acciones/Agachar.h"
-
+#include "../Posicion.h"
+#include "Accion.h"
 
 
 using namespace std;
