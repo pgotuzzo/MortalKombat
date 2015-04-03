@@ -54,6 +54,8 @@ static const int SCREEN_WIDHT = 1000;
 static const int SCREEN_HEIGHT = 500;
 
 //Personaje
+static const int PERSONAJE_ALTO = 50;
+static const int PERSONAJE_ANCHO = 20;
 
 //Escenario (z != 0)
 //capa
@@ -61,5 +63,7 @@ static const std::string WALLPAPER = IMAGES_PATH + "test_wallpaper.jpeg";
 
 //elementos del fondo de pantalla
 static const std::string TREE = IMAGES_PATH + "tree.png";
+
+static const std::string SPRITES_FORMAT = ".png";
 
 #endif //_MORTALKOMBAT_CONSTANTS_H_

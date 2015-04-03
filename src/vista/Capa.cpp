@@ -1,6 +1,9 @@
 #include <SDL2/SDL_image.h>
+#include <iostream>
 #include "Capa.h"
-#include "../Posicion.h"
+#include "VistaUtils.h"
+
+float Capa::distTope = 0;
 
 /*
 *  Crea una capa.
@@ -11,7 +14,8 @@
 */
 Capa::Capa(SDL_Renderer *renderer, std::string dirPath, SDL_Rect rectPantalla) {
     mRenderer = renderer;
-    mTexture = IMG_LoadTexture(mRenderer, dirPath.c_str());
+    mTexture = VistaUtils::loadTexture(mRenderer, dirPath, VistaUtils::COLORKEY::BLANCO);
+//    mTexture = IMG_LoadTexture(mRenderer, dirPath.c_str());
     mRect = rectPantalla;
     posX = mRect.x;
 }
@@ -23,11 +27,13 @@ Capa::Capa(SDL_Renderer *renderer, std::string dirPath, SDL_Rect rectPantalla) {
 *  a mover las capas
 *  relacionCapa : relacion de tamaño entre la capa con respecto al escenario
  */
-void Capa::setValores(float anchoCapa, float distTope, float relacionCapa) {
+void Capa::setValores(float anchoCapa, float altoCapa, float distanciaTope, float relacionCapa) {
     mAnchoCapa = anchoCapa;
-    topeIzquierda = distTope;
-    topeDerecha = mRect.w-distTope;
+    Capa::distTope = distanciaTope;
     mRelacionCapa = relacionCapa;
+    SDL_Texture * t = SDL_CreateTexture(mRenderer, SDL_PIXELFORMAT_UNKNOWN, SDL_TEXTUREACCESS_TARGET, mAnchoCapa, altoCapa);
+    VistaUtils::copyTexture(mRenderer, mTexture, t);
+    mTexture = t;
 }
 
 /*
@@ -35,21 +41,29 @@ void Capa::setValores(float anchoCapa, float distTope, float relacionCapa) {
 *  texture : puntero a una textura del tamaño de la pantalla
 */
 void Capa::getTexture(SDL_Texture *texture) {
-    SDL_Texture *originalTarget = SDL_GetRenderTarget(mRenderer);
-    SDL_SetRenderTarget(mRenderer, texture);
-    SDL_RenderCopy(mRenderer, mTexture, &mRect, NULL);
-    SDL_SetRenderTarget(mRenderer, originalTarget);
+    VistaUtils::copyTexture(mRenderer, mTexture, texture, &mRect, NULL);
 }
+
+float Capa::getPosCapa(float posPersonajeX,float mRelacionCapa,float posCapa, float anchoPantalla,float  anchoCapa, float anchoPersonaje) {
+    float topeDerecha = posCapa+anchoPantalla-Capa::distTope;
+    float topeIzquierda = posCapa+Capa::distTope;
+    float newPos = posCapa;
+    if (topeIzquierda > posPersonajeX && posPersonajeX-Capa::distTope >= 0) {
+        newPos = posCapa - ((posCapa - (posPersonajeX - Capa::distTope))/mRelacionCapa);
+    } else if (posPersonajeX+anchoPersonaje > topeDerecha && posPersonajeX+Capa::distTope+anchoPersonaje <= anchoCapa) {
+        float nuevaPosicionEscenario = posPersonajeX +anchoPersonaje + Capa::distTope - anchoPantalla;
+        float deltaCrecimiento =  nuevaPosicionEscenario - posCapa;
+        newPos = posCapa + deltaCrecimiento/mRelacionCapa;
+    }
+    return newPos;
+}
+
 /*
 *  Cambia el trozo de pantalla que se va a mostrar.
 *  posPersonaje : posicion actual del personaje
 */
-void Capa::cambiar(Posicion posPersonaje) {
-    if (topeIzquierda < posPersonaje.get_x() && posPersonaje.get_x() > 0) {
-        posX = posX - ((posX - (posPersonaje.get_x() - topeIzquierda))/mRelacionCapa);
-        mRect.x = posX;
-    } else if (posPersonaje.get_x() < topeDerecha && posPersonaje.get_x() < mAnchoCapa) {
-        posX = posX + (((posPersonaje.get_x() + topeIzquierda - mRect.w)- posX)/mRelacionCapa);
-        mRect.x = posX;
-    }
+void Capa::cambiar(Pos posPersonaje, float anchoPersonaje) {
+    posX = getPosCapa(posPersonaje.x,mRelacionCapa,posX, mRect.w,mAnchoCapa,anchoPersonaje);
+    mRect.x = posX;
+    std::cout<< "pos capa"<< posX<<std::endl;
 }

@@ -2,11 +2,11 @@
 #define _MORTALKOMBAT_PERSONAJE_H_
 
 #include "../../Constants.h"
-#include "../Sprite.h"
+#include "Sprite.h"
 #include <SDL2/SDL_render.h>
 #include <array>
 
-class Personaje {
+class PersonajeVista {
 
 public:
 
@@ -21,13 +21,18 @@ public:
     static std::string stateToString(State s);
 
 private:
-    Pos mPosition;
     State mCurrentState;
+    SDL_Rect mRect;
 
     std::array <Sprite, STATE_COUNT> mSprites;
 
+    SDL_Renderer* mRenderer;
+
+    void crearSprites(std::string path);
+
 public:
-    Personaje(std::array<Sprite, STATE_COUNT> sprites);
+    PersonajeVista();
+    PersonajeVista(SDL_Renderer* renderer, std::string spritesPath, int ancho, int alto);
 
     Pos getPosition();
     void setPosition(Pos p);
@@ -36,6 +41,8 @@ public:
     void setState(State state);
 
     SDL_Texture* getTexture();
+
+    SDL_Rect getRect();
 };
 
 

@@ -10,11 +10,12 @@ private:
     SDL_Renderer* mRenderer;
     std::vector<SDL_Texture *> mTextures;
     int mCurrent;
+    bool mRepeat;
 
 public:
     Sprite(){};
-    Sprite(SDL_Renderer* renderer, std::string dirPath);
-    int getCount();
+    Sprite(SDL_Renderer* renderer, std::string dirPath, bool repeat);
+    long getCount();
     void getFirst(SDL_Texture* texture);
     int getNext(SDL_Texture* texture);
 };
