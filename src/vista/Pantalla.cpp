@@ -3,7 +3,7 @@
 #include <iostream>
 
 // TODO - Agregar al config.cpp y luego Eliminar!!!!
-const string SPRITES_PATH_POSTA = "/home/pablo/Projects/MortalKombat/resources/sprites/zub_zero";
+const string SPRITES_PATH_POSTA = "/home/miguel/ClionProjects/MortalKombat/resources/sprites/zub_zero";
 
 // TODO - Eliminar si no sirve mas
 //Pantalla::Pantalla(vector<string> dirPaths, vector<float> anchosCapas, Dimensiones dimensiones, int zInd) {

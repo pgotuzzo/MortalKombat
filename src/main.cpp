@@ -47,10 +47,10 @@ int main(int argc, char** argv) {
     cout << "Camina a la derecha" << endl;
     for( int i = 0; i < 100; i++ ){
         Tcambio c;
-        c.posicion = mundo.actualizarMundo(3);
-        c.estado = CAMINANDO;
-        c.direccion = IZQUIERDA;
-        c.sentido = ATRAS;
+        c = mundo.actualizarMundo(c,3);
+        //c.estado = CAMINANDO;
+        //c.direccion = IZQUIERDA;
+        //c.sentido = ATRAS;
         pantalla.update(c);
         pantalla.dibujar();
         SDL_Delay(50);
@@ -58,10 +58,10 @@ int main(int argc, char** argv) {
     cout << "Camina a la izquierda" << endl;
     for( int i = 0; i < 100; i++ ){
         Tcambio c;
-        c.posicion = mundo.actualizarMundo(4);
-        c.estado = CAMINANDO;
-        c.direccion = IZQUIERDA;
-        c.sentido = ADELANTE;
+        c = mundo.actualizarMundo(c,4);
+        //c.estado = CAMINANDO;
+        //c.direccion = IZQUIERDA;
+        //c.sentido = ADELANTE;
         pantalla.update(c);
         pantalla.dibujar();
         SDL_Delay(50);

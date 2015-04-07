@@ -15,7 +15,9 @@ Mundo::Mundo(config configur) {
 	float pos_x = anchoEscenario/2;
 	float pos_y = altoEscenario - altoPiso - altoPJ;
 
-	personaje1 = new Personaje(Posicion(pos_x,pos_y),altoPJ,anchoPJ, altoEscenario);
+	bool orientacion = true; // agregar en el parser el get orientacion y cambiar esto
+
+	personaje1 = new Personaje(orientacion,Posicion(pos_x,pos_y),altoPJ,anchoPJ, altoEscenario);
 
 }
 
@@ -35,9 +37,15 @@ float Mundo::getAltoPiso(){
 	return altoPiso;
 }
 
-Posicion Mundo::actualizarMundo(int orden){
+Tcambio Mundo::actualizarMundo(Tcambio c,int orden){
 	personaje1->realizarAccion(orden,anchoEscenario);
-	return personaje1->getPosicion();
+	c.posicion = personaje1->getPosicion();
+	if(personaje1->getOrientacion()) c.direccion = DERECHA;
+	else c.direccion = IZQUIERDA;
+	if(personaje1->getDireccion()) c.sentido = ADELANTE;
+	else c.sentido = ATRAS;
+	c.estado = personaje1->getEstado();
+	return c;
 }
 
 Mundo::~Mundo() {

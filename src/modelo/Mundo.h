@@ -3,6 +3,7 @@
 
 #include "../parser/config.h"
 #include "Personaje.h"
+#include "../Common.h"
 
 class Mundo {
 public:
@@ -16,7 +17,7 @@ public:
 	float getAncho();
 	float getAlto();
 	float getAltoPiso();
-	Posicion actualizarMundo(int orden);
+	Tcambio actualizarMundo(Tcambio c,int orden);
 	virtual ~Mundo();
 };
 

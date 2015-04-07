@@ -5,17 +5,17 @@
         "ancho": 200 
     }, 
     "escenario": { 
-        "ancho": 1000.5, 
+        "ancho": 1000, 
         "alto": 150, 
         "y-piso": 20 
     }, 
     "capas": [ 
         { 
-            "imagen_fondo": "fondo1.png", 
+            "imagen_fondo": "/home/miguel/ClionProjects/MortalKombat/resources/capas/capa1.jpeg", 
             "ancho": 500 
         }, 
         { 
-            "imagen_fondo": "fondo2.png", 
+            "imagen_fondo": "/home/miguel/ClionProjects/MortalKombat/resources/capas/capa2.jpeg", 
             "ancho": 1000 
         } 
     ], 

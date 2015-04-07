@@ -11,7 +11,10 @@
 const bool activado = true;
 
 
-Personaje::Personaje(Posicion posInicial,float alto,float ancho,float nuevoAltoEscenario){
+Personaje::Personaje(bool orientacion,Posicion posInicial,float alto,float ancho,float nuevoAltoEscenario){
+	this->orientacion = orientacion;
+	this->direccion = true;
+	estado = PARADO;
 	pos = posInicial;
 	alturaDelPersonaje = alto;
 	anchoDelPersonaje = ancho;
@@ -19,6 +22,14 @@ Personaje::Personaje(Posicion posInicial,float alto,float ancho,float nuevoAltoE
 	accionesEnCurso[1] = new Agachar(&alturaDelPersonaje, pos.getY() + alturaDelPersonaje);
 	accionesEnCurso[2] = new Caminar();
 	accionesEnCurso[3] = new SaltoOblicuo(alturaDelPersonaje);
+}
+
+bool Personaje::getDireccion() {
+	return direccion;
+}
+
+bool Personaje::getOrientacion() {
+	return orientacion;
 }
 
 
@@ -36,21 +47,25 @@ Posicion Personaje::verificarPunto(Posicion posicionActual,float anchoEscenario)
 void Personaje::ejecutarAcionesActivadas(Accion **accionesEnCurso,float anchoEscenario) {
 
 	pos = accionesEnCurso[1]->realizarAccion(pos);
+	estado = AGACHADO;
 
 	if (accionesEnCurso[0]->getEstado()){
 		pos = accionesEnCurso[0]->realizarAccion(pos);
+		estado = SALTANDO_VERTICAL;
 		cout<<"Ejecuto accion de salto vertical"<<endl;
 	}
 
 	if (accionesEnCurso[2]->getEstado()){
 		cout<<"ejecuto accion de caminar"<<endl;
 		pos = verificarPunto(accionesEnCurso[2]->realizarAccion(pos),anchoEscenario);
+		estado = CAMINANDO;
 
 
 	}
 	if (accionesEnCurso[3]->getEstado()){
 		cout<<"Ejecuto accion de salto oblicuo"<<endl;
 		pos = verificarPunto(accionesEnCurso[3]->realizarAccion(pos),anchoEscenario);
+		estado = SALTANDO_OBLICUO;
 	}
 }
 
@@ -79,6 +94,7 @@ void Personaje::realizarAccion(int orden,float anchoEscenario){
 					if(!accionesEnCurso[1]->getEstado()) {
 						//activo el estado avanzar
 						//orientacion false = izquierda
+						direccion = true;
 						accionesEnCurso[2]->setEstado(activado,true);
 						cout << "CAMINA A LA DERECHA!" << endl;
 						}
@@ -88,6 +104,7 @@ void Personaje::realizarAccion(int orden,float anchoEscenario){
 					if(!accionesEnCurso[1]->getEstado()) {
 						//activo el estado avanzar
 						//orientacion false = izquierda
+						direccion = false;
 						accionesEnCurso[2]->setEstado(activado,false);
 						cout << "CAMINA A LA IZQUIERDA!"<<endl;
 						}
@@ -97,6 +114,7 @@ void Personaje::realizarAccion(int orden,float anchoEscenario){
 					if(!accionesEnCurso[1]->getEstado()){
 						//Activo el estado de saltar oblicuamente
 						//ortientacion true = ortientacion derecha
+						direccion = true;
 						accionesEnCurso[3]->setEstado(activado, pos,true);
 						cout << "SALTO OBLICUAMENTE PARA LA DERECHA!"<<endl;
 						}
@@ -107,6 +125,7 @@ void Personaje::realizarAccion(int orden,float anchoEscenario){
 					if(!accionesEnCurso[1]->getEstado()){
 						//Activo el estado de saltar oblicuamente
 						//ortientacion true = ortientacion derecha
+						direccion = false;
 						accionesEnCurso[3]->setEstado(activado, pos, false);
 						cout << "SALTO OBLICUAMENTE PARA LA IZQUIERDA!"<<endl;
 					}
@@ -125,6 +144,18 @@ void Personaje::realizarAccion(int orden,float anchoEscenario){
 }
 
 
+TestadoPersonaje Personaje::getEstado() {
+	/*bool activadoSaltoVertical = accionesEnCurso[0]->getEstado();
+	bool activadoAgachar = accionesEnCurso[1]->getEstado();
+	bool activadoCaminar = accionesEnCurso[2]->getEstado();
+	bool activadoSaltoOblicuo = accionesEnCurso[3]->getEstado();
+
+	if ( (!activadoSaltoVertical) && (!activadoAgachar) && (!activadoCaminar) && (!activadoSaltoOblicuo)){
+		estado = PARADO;
+	}*/
+	return estado;
+}
+
 
 
 Posicion Personaje::getPosicion(){
@@ -135,6 +166,10 @@ Posicion Personaje::getPosicion(){
 
 
 Personaje::~Personaje() {
+	int i;
+	for (i = 0;i<4;i++){
+		delete accionesEnCurso[i];
+	}
 
 }
 

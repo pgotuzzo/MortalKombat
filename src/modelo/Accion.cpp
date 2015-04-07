@@ -8,7 +8,7 @@ Accion::~Accion() {
 }
 
 bool Accion::getEstado() {
-	return false;
+	return estado;
 }
 
 void Accion::setEstado(bool nuevoEstado) {

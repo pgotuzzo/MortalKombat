@@ -6,6 +6,9 @@
 
 class Controlador {
 public:
+
+    const Uint8* keyWord;
+    Controlador();
     Tinput getEvent();
 };
 

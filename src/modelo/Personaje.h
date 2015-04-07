@@ -7,6 +7,7 @@
 #include <list>
 #include <tr1/unordered_map>
 #include "Accion.h"
+#include "../Common.h"
 
 
 using namespace std;
@@ -15,16 +16,20 @@ class Personaje {
 public:
 	Posicion pos;
 	bool orientacion;
-	bool dir;
+	bool direccion;
 	float alturaDelPersonaje;
 	float anchoDelPersonaje;
+	TestadoPersonaje estado;
 	Accion* accionesEnCurso[4];
 
-	Personaje(Posicion posInicial,float alto,float ancho,float nuevoAltoEscenario);
+	Personaje(bool Orientacion,Posicion posInicial,float alto,float ancho,float nuevoAltoEscenario);
 	void realizarAccion(int orden,float anchoEscenario);
 	Posicion verificarPunto(Posicion posicionActual,float anchoEscenario);
 	void ejecutarAcionesActivadas(Accion **accionesEnCurso,float anchoEscenario);
 	Posicion getPosicion();
+	TestadoPersonaje getEstado();
+	bool getOrientacion();
+	bool getDireccion();
 
 	virtual ~Personaje();
 };
