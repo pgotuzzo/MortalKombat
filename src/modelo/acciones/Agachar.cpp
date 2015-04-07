@@ -1,5 +1,5 @@
 #include "Agachar.h"
-#include <iostream>
+
 using namespace std;
 
 Agachar::Agachar(float* altura,float nuevoYPiso){

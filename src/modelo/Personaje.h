@@ -1,10 +1,3 @@
-/*
- * Personaje.h
- *
- *  Created on: 26/3/2015
- *      Author: miguel
- */
-
 #ifndef PERSONAJE_H_
 #define PERSONAJE_H_
 
@@ -13,7 +6,6 @@
 #include <iostream>
 #include <list>
 #include <tr1/unordered_map>
-#include "../Posicion.h"
 #include "Accion.h"
 
 

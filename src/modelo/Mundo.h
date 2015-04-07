@@ -4,8 +4,6 @@
 #include "../parser/config.h"
 #include "Personaje.h"
 
-using namespace configuracion;
-
 class Mundo {
 public:
 	float anchoEscenario;

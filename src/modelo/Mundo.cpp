@@ -1,11 +1,9 @@
 #include "../parser/config.h"
 #include "Mundo.h"
 
-using namespace configuracion;
-
 Mundo::Mundo(config configur) {
-	config::Tescenario escenario = configur.getEscenario();
-	config::Tpersonaje pj = configur.getPersonaje();
+	Tescenario escenario = configur.getEscenario();
+	Tpersonaje pj = configur.getPersonaje();
 
 	anchoEscenario = escenario.ancho;
 	altoEscenario = escenario.alto;

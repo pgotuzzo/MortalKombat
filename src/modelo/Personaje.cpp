@@ -2,7 +2,6 @@
 //Suponemos al par ordenado (x,y) como un punto sobre la cabeza de nuestro personaje.
 
 
-#include "../Posicion.h"
 #include "Personaje.h"
 #include "acciones/SaltoVertical.h"
 #include "acciones/Agachar.h"

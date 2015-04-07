@@ -1,7 +1,7 @@
 #ifndef ACCION_H_
 #define ACCION_H_
 
-#include "../Posicion.h"
+#include "../Common.h"
 
 class Accion {
 public:

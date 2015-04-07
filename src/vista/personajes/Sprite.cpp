@@ -1,7 +1,7 @@
 #include <SDL2/SDL_image.h>
 #include "Sprite.h"
-#include "../../Constants.h"
 #include "../VistaUtils.h"
+#include "../../Common.h"
 
 Sprite::Sprite(SDL_Renderer* renderer, std::string dirPath, bool repeat) {
     mCurrent = 0;
@@ -34,25 +34,24 @@ long Sprite::getCount() {
     return mTextures.size();
 }
 
-void Sprite::getFirst(SDL_Texture* texture) {
+void Sprite::getFirst(SDL_Texture* texture, bool flip) {
     VistaUtils::copyTexture(mRenderer, mTextures[0], texture);
 }
 
-/**
-* return    0 si hay un elemento siguiente
-*           -1 si no hay un elemento siguiente
-*/
-int Sprite::getNext(SDL_Texture* texture) {
+void Sprite::getNext(SDL_Texture* texture, bool flip) {
     if ((mCurrent == getCount() - 1) && (mRepeat)){
         mCurrent = 0;
     }else if(mCurrent < getCount() - 1){
         mCurrent++;
     }
-    if (mCurrent < getCount()) {
-        VistaUtils::copyTexture(mRenderer, mTextures[mCurrent], texture);
-        return 0;
-    }else{
-        return -1;
-    }
+    VistaUtils::copyTexture(mRenderer, mTextures[mCurrent], texture, flip);
 }
 
+void Sprite::getBefore(SDL_Texture *texture, bool flip) {
+    if ((mCurrent == 0) && (mRepeat)){
+        mCurrent = (int) mTextures.size() - 1;
+    }else if(mCurrent > 0){
+        mCurrent--;
+    }
+    VistaUtils::copyTexture(mRenderer, mTextures[mCurrent], texture, flip);
+}

@@ -3,8 +3,7 @@
 
 #include <string>
 #include <SDL2/SDL_render.h>
-#include "../Posicion.h"
-#include "../Constants.h"
+#include "../Common.h"
 
 class Capa {
 private:
@@ -19,8 +18,8 @@ public:
     Capa(SDL_Renderer *renderer, std::string dirPath, SDL_Rect rectPantalla);
     void setValores(float anchoCapa, float altoCapa, float distanciaTope, float relacionCapa);
     void getTexture(SDL_Texture *texture);
-    void cambiar(Pos posPersonaje, float anchoPersonaje);
-    static float getPosCapa(float posPersonajeX,float mRelacionCapa,float posCapa, float anchoPantalla,float  anchoCapa, float anchoPersonaje);
+    void cambiar(Posicion posPersonaje, float anchoPersonaje);
+    static float getPosCapa(float posPersonajeX, float mRelacionCapa, float posCapa, float anchoPantalla, float  anchoCapa, float anchoPersonaje);
 };
 
 

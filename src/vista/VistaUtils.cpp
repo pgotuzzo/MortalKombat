@@ -6,10 +6,6 @@ void VistaUtils::cleanTexture(SDL_Renderer* r){
     SDL_RenderClear(r);
 }
 
-void VistaUtils::copyTexture(SDL_Renderer* r, SDL_Texture *src, SDL_Texture *dst) {
-    VistaUtils::copyTexture(r, src, dst, NULL, NULL);
-}
-
 Uint32 VistaUtils::getColorKeyValue(VistaUtils::COLORKEY color, SDL_Surface* s) {
     switch (color){
         case VistaUtils::BLANCO: return SDL_MapRGB(s->format, 255, 255, 255);
@@ -30,7 +26,19 @@ SDL_Texture* VistaUtils::loadTexture(SDL_Renderer *r, std::string path, VistaUti
     }
 }
 
+void VistaUtils::copyTexture(SDL_Renderer* r, SDL_Texture *src, SDL_Texture *dst) {
+    VistaUtils::copyTexture(r, src, dst, NULL, NULL);
+}
+
+void VistaUtils::copyTexture(SDL_Renderer* r, SDL_Texture *src, SDL_Texture *dst, bool flip) {
+    VistaUtils::copyTexture(r, src, dst, NULL, NULL, flip);
+}
+
 void VistaUtils::copyTexture(SDL_Renderer* r, SDL_Texture *src, SDL_Texture *dst, SDL_Rect* rectSrc, SDL_Rect* rectDst) {
+    copyTexture(r, src, dst, rectSrc, rectDst, false);
+}
+
+void VistaUtils::copyTexture(SDL_Renderer *r, SDL_Texture *src, SDL_Texture *dst, SDL_Rect *rectSrc, SDL_Rect *rectDst, bool flip) {
     SDL_Texture *originalTarget = SDL_GetRenderTarget(r);
 
     SDL_SetRenderTarget(r, dst);
@@ -40,7 +48,10 @@ void VistaUtils::copyTexture(SDL_Renderer* r, SDL_Texture *src, SDL_Texture *dst
     // Importante para que se generen las transparencias si se usa colorkey.
     SDL_SetTextureBlendMode(dst, SDL_BLENDMODE_BLEND);
 
-    SDL_RenderCopy(r, src, rectSrc, rectDst);
+    if (flip)
+        SDL_RenderCopyEx(r, src, rectSrc, rectDst, 0, NULL, SDL_FLIP_HORIZONTAL);
+    else
+        SDL_RenderCopyEx(r, src, rectSrc, rectDst, 0, NULL, SDL_FLIP_NONE);
 
     SDL_SetRenderTarget(r, originalTarget);
 }

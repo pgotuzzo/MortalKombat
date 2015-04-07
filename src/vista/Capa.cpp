@@ -45,15 +45,15 @@ void Capa::getTexture(SDL_Texture *texture) {
 }
 
 float Capa::getPosCapa(float posPersonajeX,float mRelacionCapa,float posCapa, float anchoPantalla,float  anchoCapa, float anchoPersonaje) {
-    float topeDerecha = posCapa+anchoPantalla-Capa::distTope;
-    float topeIzquierda = posCapa+Capa::distTope;
+    float topeDerecha = posCapa+anchoPantalla - Capa::distTope;
+    float topeIzquierda = posCapa + Capa::distTope;
     float newPos = posCapa;
-    if (topeIzquierda > posPersonajeX && posPersonajeX-Capa::distTope >= 0) {
+    if (topeIzquierda > posPersonajeX && posPersonajeX - Capa::distTope >= 0) {
         newPos = posCapa - ((posCapa - (posPersonajeX - Capa::distTope))/mRelacionCapa);
-    } else if (posPersonajeX+anchoPersonaje > topeDerecha && posPersonajeX+Capa::distTope+anchoPersonaje <= anchoCapa) {
-        float nuevaPosicionEscenario = posPersonajeX +anchoPersonaje + Capa::distTope - anchoPantalla;
+    } else if (posPersonajeX + anchoPersonaje > topeDerecha && posPersonajeX + Capa::distTope+anchoPersonaje <= anchoCapa) {
+        float nuevaPosicionEscenario = posPersonajeX + anchoPersonaje + Capa::distTope - anchoPantalla;
         float deltaCrecimiento =  nuevaPosicionEscenario - posCapa;
-        newPos = posCapa + deltaCrecimiento/mRelacionCapa;
+        newPos = posCapa + deltaCrecimiento / mRelacionCapa;
     }
     return newPos;
 }
@@ -62,8 +62,10 @@ float Capa::getPosCapa(float posPersonajeX,float mRelacionCapa,float posCapa, fl
 *  Cambia el trozo de pantalla que se va a mostrar.
 *  posPersonaje : posicion actual del personaje
 */
-void Capa::cambiar(Pos posPersonaje, float anchoPersonaje) {
-    posX = getPosCapa(posPersonaje.x,mRelacionCapa,posX, mRect.w,mAnchoCapa,anchoPersonaje);
+void Capa::cambiar(Posicion posPersonaje, float anchoPersonaje) {
+    posX = getPosCapa(posPersonaje.x, mRelacionCapa, posX, mRect.w, mAnchoCapa, anchoPersonaje);
     mRect.x = posX;
-    std::cout<< "pos capa"<< posX<<std::endl;
+    std::cout << "pos capa"<< posX << std::endl;
 }
+
+// TODO - HAY UN PROBLEMA DE REDONDEO QUE HACE QUE PARA CIERTOS VALORES LA CAPA NO SE MUEVA

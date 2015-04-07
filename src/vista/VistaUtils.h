@@ -1,7 +1,6 @@
 #ifndef MORTALKOMBAT_VISTAUTILS_H
 #define MORTALKOMBAT_VISTAUTILS_H
 
-
 #include <SDL2/SDL_render.h>
 #include <string>
 
@@ -18,7 +17,11 @@ public:
 
     static void copyTexture(SDL_Renderer* r, SDL_Texture* src, SDL_Texture* dst);
 
+    static void copyTexture(SDL_Renderer* r, SDL_Texture* src, SDL_Texture* dst, bool flip);
+
     static void copyTexture(SDL_Renderer* r, SDL_Texture *src, SDL_Texture *dst, SDL_Rect* rectSrc, SDL_Rect* rectDst);
+
+    static void copyTexture(SDL_Renderer* r, SDL_Texture *src, SDL_Texture *dst, SDL_Rect* rectSrc, SDL_Rect* rectDst, bool flip);
 
 private:
 

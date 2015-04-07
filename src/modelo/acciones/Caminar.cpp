@@ -1,12 +1,4 @@
-/*
- * Caminar.cpp
- *
- *  Created on: 28/3/2015
- *      Author: miguel
- */
-
 #include "Caminar.h"
-#include <iostream>
 
 using namespace std;
 

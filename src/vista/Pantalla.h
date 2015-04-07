@@ -26,9 +26,11 @@ private:
     void Inicializar(Dimensiones dimensiones);
 
 public:
-    Pantalla(vector<string> dirPaths, vector<float> anchosCapas, Dimensiones dimensiones, int zInd);
+    //TODO - ELiminar si ya no sirve
+//    Pantalla(vector<string> dirPaths, vector<float> anchosCapas, Dimensiones dimensiones, int zInd);
+    Pantalla(vector<Tcapa> capas, Tventana ventana, Tescenario escenario, Tpersonaje personaje);
     void dibujar();
-    void update(Pos p, PersonajeVista::State state);
+    void update(Tcambio change);
 };
 
 

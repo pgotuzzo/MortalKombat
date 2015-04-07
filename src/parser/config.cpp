@@ -1,18 +1,10 @@
 #include "config.h"
 
 #include <fstream>
-#include <sstream>
-#include <string>
-#include <iostream>
-#include <string.h>
 
 using namespace Json;
 
-
-namespace configuracion {
-
 config::config(string path) {
-	// TODO Auto-generated constructor stub
 	//Inicio el Reader para leer el archivo.
 	Value partes;
 	Reader reader(Features::strictMode());
@@ -65,33 +57,30 @@ config::config(string path) {
 	}
 }
 
-config::~config() {
-	// TODO Auto-generated destructor stub
-}
-
-bool config::obtieneBool(string ori){
+Tdireccion config::obtieneBool(string ori){
 	if(ori=="derecha")
-		return true;
+		return Tdireccion::DERECHA;
 	else
-		return false;
+		return Tdireccion::IZQUIERDA;
 }
 
-configuracion::config::Tventana config::getVentana(){
+Tventana config::getVentana(){
 	return this->ventana;
 }
 
-configuracion::config::Tescenario config::getEscenario(){
+Tescenario config::getEscenario(){
 	return this->escenario;
 }
 
-configuracion::config::Tpersonaje config::getPersonaje(){
+Tpersonaje config::getPersonaje(){
 	return this->personaje;
 }
 
-vector<configuracion::config::Tcapa> config::getCapas(){
+vector<Tcapa> config::getCapas(){
 	return this->vectorCapas;
 }
 
-
-} /* namespace config */
+config::~config() {
+	// TODO Auto-generated destructor stub
+}
 

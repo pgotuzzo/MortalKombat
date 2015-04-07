@@ -1,57 +1,75 @@
 #include <iostream>
 #include <SDL2/SDL.h>
 #include "vista/Pantalla.h"
+#include "parser/config.h"
+#include "modelo/Mundo.h"
 
-using namespace std;
+int main(int argc, char** argv) {
 
-const string WALLPAPER_PATH = "/home/pablo/Projects/MortalKombat/resources/img/test_wallpaper.jpeg";
-const string SPRITES_PATH_POSTA = "/home/pablo/Projects/MortalKombat/resources/sprites/zub_zero";
-const string CAPA1 = "/home/pablo/Projects/MortalKombat/resources/capas/capa1.jpeg";
-const string CAPA2 = "/home/pablo/Projects/MortalKombat/resources/capas/capa2.jpeg";
-
-int main() {
-    Pantalla::Dimensiones dimensiones;
-    dimensiones.altoPantalla = 600;
-    dimensiones.altoPx = 678;
-    dimensiones.anchoEscenario = 1500;
-    dimensiones.anchoPantalla = 800;
-    dimensiones.anchoPx = 1024;
-    dimensiones.distTope = 100;
-    vector<string> dirPaths;
-    vector<float> anchosCapas;
-    dirPaths.push_back(CAPA1);
-    dirPaths.push_back(CAPA2);
-    anchosCapas.push_back(1000);
-    anchosCapas.push_back(1500);
-    Pantalla pantalla = Pantalla(dirPaths,anchosCapas,dimensiones,0);
+    cout << "------------------------------------------------------------" << endl;
+    cout << "------------------INICIO DEL JUEGO--------------------------" << endl;
+    cout << "------------------------------------------------------------" << endl;
 
 
-    Pos p;
-    p.x = 750;
-    p.y = 400;
-    PersonajeVista::State state = PersonajeVista::State::walking;
-    for (int i = 0; i < 100; i++){
-        cout << "Ciclo " << i << endl;
+    cout << "------------------------------------------------------------" << endl;
+    cout << "-------------- Cargando la configuracion -------------------" << endl;
+    cout << "------------------------------------------------------------" << endl;
 
-        if (p.x>0)
-            p.x = p.x - 10;
+    config configuracion = config(argv[1]);
 
-        pantalla.update(p,state);
+    cout << "------------------------------------------------------------" << endl;
+    cout << "Inicia la creacion de la pantalla" << endl;
+
+    Tventana tventana = configuracion.getVentana();
+    std::vector<Tcapa> vectorTcapa = configuracion.getCapas();
+    Tescenario tescenario = configuracion.getEscenario();
+    Tpersonaje tpersonaje = configuracion.getPersonaje();
+
+
+    //vector<string> dirPaths, vector<float> anchosCapas, Dimensiones dimensiones, int zInd
+    Pantalla pantalla = Pantalla(vectorTcapa, tventana, tescenario, tpersonaje);
+
+    cout << "Finaliza la creacion de la pantalla" << endl;
+    cout << "------------------------------------------------------------" << endl;
+
+
+    cout << "------------------------------------------------------------" << endl;
+    cout << "Inicia la creacion del mundo" << endl;
+
+    Mundo mundo = Mundo(configuracion);
+
+    cout << "Finaliza la creacion del mundo" << endl;
+    cout << "------------------------------------------------------------" << endl;
+
+    cout << "------------------------------------------------------------" << endl;
+    cout << "-------------- Game Loop Finito ----------------------------" << endl;
+    cout << "------------------------------------------------------------" << endl;
+    cout << "Camina a la derecha" << endl;
+    for( int i = 0; i < 100; i++ ){
+        Tcambio c;
+        c.posicion = mundo.actualizarMundo(3);
+        c.estado = CAMINANDO;
+        c.direccion = IZQUIERDA;
+        c.sentido = ATRAS;
+        pantalla.update(c);
         pantalla.dibujar();
-        SDL_Delay(100);
+        SDL_Delay(50);
     }
-    for (int i = 0; i < 200; i++){
-        cout << "Ciclo " << i << endl;
-
-        if (p.x<1500-50)
-            p.x = p.x + 10;
-
-        pantalla.update(p,state);
+    cout << "Camina a la izquierda" << endl;
+    for( int i = 0; i < 100; i++ ){
+        Tcambio c;
+        c.posicion = mundo.actualizarMundo(4);
+        c.estado = CAMINANDO;
+        c.direccion = IZQUIERDA;
+        c.sentido = ADELANTE;
+        pantalla.update(c);
         pantalla.dibujar();
         SDL_Delay(50);
     }
 
-    cout << "Termino." << endl;
+    cout << "------------------------------------------------------------" << endl;
+    cout << "---------------------FIN DEL JUEGO--------------------------" << endl;
+    cout << "------------------------------------------------------------" << endl;
 
     return 0;
 }
