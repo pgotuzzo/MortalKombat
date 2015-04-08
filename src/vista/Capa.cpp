@@ -65,7 +65,7 @@ float Capa::getPosCapa(float posPersonajeX,float mRelacionCapa,float posCapa, fl
 void Capa::cambiar(Posicion posPersonaje, float anchoPersonaje) {
     posX = getPosCapa(posPersonaje.x, mRelacionCapa, posX, mRect.w, mAnchoCapa, anchoPersonaje);
     mRect.x = posX;
-    std::cout << "pos capa"<< posX << std::endl;
+//    std::cout << "pos capa"<< posX << std::endl;
 }
 
 // TODO - HAY UN PROBLEMA DE REDONDEO QUE HACE QUE PARA CIERTOS VALORES LA CAPA NO SE MUEVA

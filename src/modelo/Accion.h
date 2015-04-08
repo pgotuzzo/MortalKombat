@@ -19,7 +19,7 @@ public:
 
 	virtual void setEstado(bool nuevoEstado, Posicion nuevaPosicion);
 
-	virtual void setEstado(bool nuevoEstado, Posicion nuevaPosicion, bool orientacionSalto, float anchoPantalla);
+	virtual void setEstado(bool nuevoEstado, Posicion nuevaPosicion, bool orientacionSalto);
 
 	virtual Posicion realizarAccion(Posicion posActual);
 

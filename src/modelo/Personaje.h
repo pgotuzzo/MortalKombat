@@ -20,6 +20,7 @@ public:
 	bool direccion;
 	float alturaDelPersonaje;
 	float anchoDelPersonaje;
+	float altoEscenario;
 	TestadoPersonaje estado;
 	Accion* accionesEnCurso[4];
 

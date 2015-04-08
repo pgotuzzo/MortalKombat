@@ -23,7 +23,7 @@ void Accion::setEstado(bool nuevoEstado, Posicion nuevaPosicion) {
 
 }
 
-void Accion::setEstado(bool nuevoEstado, Posicion nuevaPosicion, bool orientacionSalto,float anchoPantalla) {
+void Accion::setEstado(bool nuevoEstado, Posicion nuevaPosicion, bool orientacionSalto) {
 
 }
 

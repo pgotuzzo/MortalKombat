@@ -3,7 +3,7 @@
 #include <iostream>
 
 // TODO - Agregar al config.cpp y luego Eliminar!!!!
-const string SPRITES_PATH_POSTA = "/home/miguel/ClionProjects/MortalKombat/resources/sprites/zub_zero";
+const string SPRITES_PATH_POSTA = "/home/venesio/ClionProjects/MortalKombat/resources/sprites/zub_zero";
 
 // TODO - Eliminar si no sirve mas
 //Pantalla::Pantalla(vector<string> dirPaths, vector<float> anchosCapas, Dimensiones dimensiones, int zInd) {
@@ -45,7 +45,7 @@ Pantalla::Pantalla(vector<Tcapa> tcapas, Tventana ventana, Tescenario escenario,
     posPantalla = (mDimensiones.anchoEscenario - mDimensiones.anchoPantalla)/2;
 
     // TODO - Loguear si se quiere
-    cout << "Posicion de la pantalla = " << posPantalla << std::endl;
+   // cout << "Posicion de la pantalla = " << posPantalla << std::endl;
 
     // TODO - Eliminar SPRITES_PATH_POSTA
     personaje = PersonajeVista(mRenderer, SPRITES_PATH_POSTA, tpersonaje.ancho, tpersonaje.alto, tpersonaje.orientacion);

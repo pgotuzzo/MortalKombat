@@ -14,10 +14,10 @@ SaltoOblicuo::SaltoOblicuo(float altura) {
 }
 
 
-void SaltoOblicuo::setEstado(bool nuevoEstado,Posicion nuevaPosicion,bool direccionSalto,float anchoPantalla) {
+void SaltoOblicuo::setEstado(bool nuevoEstado,Posicion nuevaPosicion,bool direccionSalto) {
     estado = nuevoEstado;
-	this->anchoPantalla = anchoPantalla;
     posInicial = nuevaPosicion;
+	posImg = nuevaPosicion;
     if (direccionSalto) {
     	posFinal = posInicial + Posicion(longitudSalto,0);
     	coeficiente = 1.0;
@@ -40,17 +40,18 @@ bool SaltoOblicuo::getEstado() {
  * False---> izquierda
  */
 Posicion SaltoOblicuo::realizarAccion(Posicion pos){
-	float x = pos.getX() + (coeficiente * intervaloSalto);
+
+	float x = posImg.getX() + (coeficiente * intervaloSalto);
 	//Representa la altura del pj
 	// dado que ahora tomamos su cabeza como referencia.
 	float y = posInicial.getY() - (-a * (x - posInicial.getX()) * (x - posFinal.getX()));
-	pos.setX(x);
-	pos.setY(y);
-	if (pos.getY() >= posInicial.getY()){
+	posImg.setX(x);
+	posImg.setY(y);
+	if (posImg.getY() >= posInicial.getY()){
 			estado = false;
 			return posFinal;
 		}
-	return pos;
+	return posImg;
 }
 
 

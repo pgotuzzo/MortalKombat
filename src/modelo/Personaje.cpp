@@ -19,6 +19,7 @@ Personaje::Personaje(bool orientacion,Posicion posInicial,float alto,float ancho
 	pos = posInicial;
 	alturaDelPersonaje = alto;
 	anchoDelPersonaje = ancho;
+	altoEscenario = nuevoAltoEscenario;
 	accionesEnCurso[0] = new SaltoVertical();
 	accionesEnCurso[1] = new Agachar(&alturaDelPersonaje, pos.getY() + alturaDelPersonaje);
 	accionesEnCurso[2] = new Caminar();
@@ -126,7 +127,7 @@ void Personaje::realizarAccion(int orden,float anchoEscenario){
 						//Activo el estado de saltar oblicuamente
 						//ortientacion true = ortientacion derecha
 						direccion = true;
-						accionesEnCurso[3]->setEstado(activado, pos,true,anchoEscenario);
+						accionesEnCurso[3]->setEstado(activado, pos,true);
 						parado=false;
 						cout << "SALTO OBLICUAMENTE PARA LA DERECHA!"<<endl;
 						}
@@ -138,7 +139,7 @@ void Personaje::realizarAccion(int orden,float anchoEscenario){
 						//Activo el estado de saltar oblicuamente
 						//ortientacion true = ortientacion derecha
 						direccion = false;
-						accionesEnCurso[3]->setEstado(activado, pos, false,anchoEscenario);
+						accionesEnCurso[3]->setEstado(activado, pos, false);
 						parado=false;
 						cout << "SALTO OBLICUAMENTE PARA LA IZQUIERDA!"<<endl;
 					}
@@ -152,8 +153,6 @@ void Personaje::realizarAccion(int orden,float anchoEscenario){
 	ejecutarAcionesActivadas(accionesEnCurso,anchoEscenario);
 	//Este metodo va a ejecutar las acciones que este listas para ejecutarse
 	//Cada accion se desactiva cuando termina.
-
-	cout<<"Ya se ejecutaron las accion durante un game loop"<<endl;
 }
 
 

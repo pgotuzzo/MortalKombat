@@ -11,11 +11,11 @@
     }, 
     "capas": [ 
         { 
-            "imagen_fondo": "/home/miguel/ClionProjects/MortalKombat/resources/capas/capa1.jpeg", 
+            "imagen_fondo": "/home/venesio/ClionProjects/MortalKombat/resources/capas/capa1.jpeg",
             "ancho": 500 
         }, 
         { 
-            "imagen_fondo": "/home/miguel/ClionProjects/MortalKombat/resources/capas/capa2.jpeg", 
+            "imagen_fondo": "/home/venesio/ClionProjects/MortalKombat/resources/capas/capa2.jpeg",
             "ancho": 1000 
         } 
     ], 

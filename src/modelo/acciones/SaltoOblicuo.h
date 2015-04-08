@@ -16,10 +16,13 @@ public:
 	float alturaPJ;
 	float yPiso;
 	float anchoPantalla;
+	float altoPantalla;
+
+	Posicion posImg;
 
 	SaltoOblicuo(float altura);
 
-	void setEstado(bool nuevoEstado, Posicion nuevaPosicion,bool direccionSalto,float anchoPantalla);
+	void setEstado(bool nuevoEstado, Posicion nuevaPosicion,bool direccionSalto);
 	Posicion realizarAccion(Posicion pos);
 	bool getEstado();
 	virtual ~SaltoOblicuo();
