@@ -62,7 +62,6 @@ int main(int argc, char** argv) {
     //6 Salto oblicuo a la izquierda
 
     bool end = false;
-    bool firstTime = true;
     while(!end){
         std::vector<Tinput> inputs = controlador.getInputs();
         if (!inputs.empty()) {
@@ -88,13 +87,12 @@ int main(int argc, char** argv) {
                 }
             }
         }
-        if (firstTime) {
+        else{
             Tcambio c = mundo.actualizarMundo(c, 0);
             pantalla.update(c);
             pantalla.dibujar();
-            firstTime = false;
         }
-        SDL_Delay(50);
+        SDL_Delay(40);
     }
 
     cout << "------------------------------------------------------------" << endl;

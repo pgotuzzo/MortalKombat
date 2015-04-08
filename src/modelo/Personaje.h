@@ -14,6 +14,7 @@ using namespace std;
 
 class Personaje {
 public:
+	bool parado;
 	Posicion pos;
 	bool orientacion;
 	bool direccion;

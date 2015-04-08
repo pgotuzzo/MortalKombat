@@ -23,7 +23,7 @@ void Accion::setEstado(bool nuevoEstado, Posicion nuevaPosicion) {
 
 }
 
-void Accion::setEstado(bool nuevoEstado, Posicion nuevaPosicion, bool orientacionSalto) {
+void Accion::setEstado(bool nuevoEstado, Posicion nuevaPosicion, bool orientacionSalto,float anchoPantalla) {
 
 }
 
@@ -34,4 +34,5 @@ Posicion Accion::realizarAccion(Posicion posActual) {
 Posicion Accion::realizarAccion(Posicion pos, bool dir) {
 	return pos;
 }
+
 

@@ -3,9 +3,9 @@
 
 using namespace std;
 
-const float alturaSalto = 30;
-const float longitudSalto = 30;
-const float intervaloSalto = 1;
+const float alturaSalto = 60;
+const float longitudSalto = 60;
+const float intervaloSalto = 3;
 
 
 SaltoOblicuo::SaltoOblicuo(float altura) {
@@ -14,8 +14,9 @@ SaltoOblicuo::SaltoOblicuo(float altura) {
 }
 
 
-void SaltoOblicuo::setEstado(bool nuevoEstado,Posicion nuevaPosicion,bool direccionSalto) {
+void SaltoOblicuo::setEstado(bool nuevoEstado,Posicion nuevaPosicion,bool direccionSalto,float anchoPantalla) {
     estado = nuevoEstado;
+	this->anchoPantalla = anchoPantalla;
     posInicial = nuevaPosicion;
     if (direccionSalto) {
     	posFinal = posInicial + Posicion(longitudSalto,0);
@@ -45,7 +46,6 @@ Posicion SaltoOblicuo::realizarAccion(Posicion pos){
 	float y = posInicial.getY() - (-a * (x - posInicial.getX()) * (x - posFinal.getX()));
 	pos.setX(x);
 	pos.setY(y);
-	//pos.setY(y- ((altoPantalla - yPiso)- alturaPJ));
 	if (pos.getY() >= posInicial.getY()){
 			estado = false;
 			return posFinal;

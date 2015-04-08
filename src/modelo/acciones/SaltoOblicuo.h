@@ -15,11 +15,11 @@ public:
 	float coeficiente; // Segun este coeficiente sumara o restara x para avanzar y retroceder
 	float alturaPJ;
 	float yPiso;
-	float altoPantalla;
+	float anchoPantalla;
 
 	SaltoOblicuo(float altura);
 
-	void setEstado(bool nuevoEstado, Posicion nuevaPosicion,bool direccionSalto);
+	void setEstado(bool nuevoEstado, Posicion nuevaPosicion,bool direccionSalto,float anchoPantalla);
 	Posicion realizarAccion(Posicion pos);
 	bool getEstado();
 	virtual ~SaltoOblicuo();

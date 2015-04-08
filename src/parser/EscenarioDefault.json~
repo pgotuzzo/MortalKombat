@@ -1,7 +1,7 @@
 { 
     "ventana": { 
-        "ancho-px": 800, 
-        "alto-px": 600, 
+        "ancho-px": 500, 
+        "alto-px": 300, 
         "ancho": 200 
     }, 
     "escenario": { 
@@ -23,7 +23,7 @@
         "ancho": 20, 
         "alto": 35, 
         "z-index": 1,
-		"orientacion": "izquierda", 
+	"orientacion": "izquierda", 
         "sprites": ? 
     } 
 } 

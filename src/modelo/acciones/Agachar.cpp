@@ -28,7 +28,7 @@ Posicion Agachar::realizarAccion(Posicion posActual) {
     //ese 200 representa la altura de la pantalla
 	if ( (yPiso-posActual.getY() == alturaPJ) &&(estado)){
         Posicion nuevaPosicion;
-        nuevaPosicion.setY(yPiso-alturaPJ/2);
+        nuevaPosicion.setY(yPiso-alturaPJ);
         nuevaPosicion.setX(posActual.getX());
         *pAlturaPJ = alturaPJ/2;
         estado = false;
