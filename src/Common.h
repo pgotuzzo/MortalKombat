@@ -154,12 +154,20 @@ struct Tcambio{
  *  juego debe ser capaz de manejar.
  */
 enum Tinput{
+    // Teclas no utilizadas
+    KEY_NADA,
+
+    // Movimientos Basicos
     KEY_ARRIBA,
     KEY_ABAJO,
     KEY_DERECHA,
     KEY_IZQUIERDA,
     KEY_ARRIBA_DERECHA,
-    KEY_ARRIBA_IZQUIERDA
+    KEY_ARRIBA_IZQUIERDA,
+
+    // Cierre o reinicio del juego
+    KEY_RESTART,
+    KEY_EXIT
 };
 
 /**

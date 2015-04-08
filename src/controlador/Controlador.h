@@ -2,14 +2,16 @@
 #define MORTALKOMBAT_CONTROLADOR_H
 
 
+#include <vector>
 #include "../Common.h"
 
 class Controlador {
-public:
+private:
+    Tinput getKeyBoardInput(SDL_Keycode key);
 
-    const Uint8* keyWord;
+public:
     Controlador();
-    Tinput getEvent();
+    std::vector<Tinput> getInputs();
 };
 
 
