@@ -3,6 +3,7 @@
 #include "vista/Pantalla.h"
 #include "parser/config.h"
 #include "modelo/Mundo.h"
+#include "controlador/Controlador.h"
 
 int main(int argc, char** argv) {
 
@@ -42,28 +43,57 @@ int main(int argc, char** argv) {
     cout << "------------------------------------------------------------" << endl;
 
     cout << "------------------------------------------------------------" << endl;
+    cout << "Inicia la creacion del controlador" << endl;
+
+    Controlador controlador= Controlador();
+
+    cout << "Finaliza la creacion del controlador" << endl;
+    cout << "------------------------------------------------------------" << endl;
+
+    cout << "------------------------------------------------------------" << endl;
     cout << "-------------- Game Loop Finito ----------------------------" << endl;
     cout << "------------------------------------------------------------" << endl;
-    cout << "Camina a la derecha" << endl;
-    for( int i = 0; i < 100; i++ ){
-        Tcambio c;
-        c = mundo.actualizarMundo(c,3);
-        //c.estado = CAMINANDO;
-        //c.direccion = IZQUIERDA;
-        //c.sentido = ATRAS;
-        pantalla.update(c);
-        pantalla.dibujar();
-        SDL_Delay(50);
-    }
-    cout << "Camina a la izquierda" << endl;
-    for( int i = 0; i < 100; i++ ){
-        Tcambio c;
-        c = mundo.actualizarMundo(c,4);
-        //c.estado = CAMINANDO;
-        //c.direccion = IZQUIERDA;
-        //c.sentido = ADELANTE;
-        pantalla.update(c);
-        pantalla.dibujar();
+
+    //1 SALTAR
+    //2 AGACHAR
+    //3 Caminar a la derecha
+    //4 Caminar a la izquierda
+    //5 Salto oblicuo a la derecha
+    //6 Salto oblicuo a la izquierda
+
+    bool end = false;
+    bool firstTime = true;
+    while(!end){
+        std::vector<Tinput> inputs = controlador.getInputs();
+        if (!inputs.empty()) {
+            if (inputs[0] == KEY_EXIT)
+                end = true;
+            else {
+                for (Tinput input : inputs) {
+                    int k;
+                    switch (input) {
+                        case KEY_ARRIBA: {k = 1; break;};
+                        case KEY_ABAJO: {k = 2; break;};
+                        case KEY_DERECHA: {k = 3; break;};
+                        case KEY_IZQUIERDA: {k = 4; break;};
+                        case KEY_ARRIBA_DERECHA: {k = 5; break;};
+                        case KEY_ARRIBA_IZQUIERDA: {k = 6; break;};
+                        default:
+                            k = 0;
+                    }
+                    Tcambio c;
+                    c = mundo.actualizarMundo(c, k);
+                    pantalla.update(c);
+                    pantalla.dibujar();
+                }
+            }
+        }
+        if (firstTime) {
+            Tcambio c = mundo.actualizarMundo(c, 0);
+            pantalla.update(c);
+            pantalla.dibujar();
+            firstTime = false;
+        }
         SDL_Delay(50);
     }
 
