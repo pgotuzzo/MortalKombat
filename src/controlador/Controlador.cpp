@@ -22,15 +22,16 @@ std::vector<Tinput> Controlador::getInputs() {
 					case KEY_RESTART: return std::vector<Tinput >({KEY_RESTART});
 					case KEY_ARRIBA: {
 						if (state[SDL_SCANCODE_RIGHT])
-							inputs.push_back(KEY_ARRIBA_DERECHA);
+							return std::vector<Tinput >({KEY_ARRIBA_DERECHA});
 						else if (state[SDL_SCANCODE_LEFT])
-							inputs.push_back(KEY_ARRIBA_IZQUIERDA);
+							return std::vector<Tinput >({KEY_ARRIBA_IZQUIERDA});
 					}
 				}
-				inputs.push_back(input);
+				inputs = std::vector<Tinput >({input});
 			}
 		};
 	}
+	if(inputs.empty()) return std::vector<Tinput>({KEY_NADA});
 	return inputs;
 }
 

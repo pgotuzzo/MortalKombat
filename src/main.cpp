@@ -54,44 +54,49 @@ int main(int argc, char** argv) {
     cout << "-------------- Game Loop Finito ----------------------------" << endl;
     cout << "------------------------------------------------------------" << endl;
 
+    //0 PARADO
     //1 SALTAR
     //2 AGACHAR
     //3 Caminar a la derecha
     //4 Caminar a la izquierda
     //5 Salto oblicuo a la derecha
     //6 Salto oblicuo a la izquierda
+    //7 Restart
+    //8 Exit
 
+
+    //Declaracion de variables necesarias para el gameloop
     bool end = false;
+    Tcambio c;
+    int k;
+    Tinput estado;
+    std::vector<Tinput> inputs;
+
+
     while(!end){
-        std::vector<Tinput> inputs = controlador.getInputs();
-        if (!inputs.empty()) {
-            if (inputs[0] == KEY_EXIT)
-                end = true;
-            else {
-                for (Tinput input : inputs) {
-                    int k;
-                    switch (input) {
-                        case KEY_ARRIBA: {k = 1; break;};
-                        case KEY_ABAJO: {k = 2; break;};
-                        case KEY_DERECHA: {k = 3; break;};
-                        case KEY_IZQUIERDA: {k = 4; break;};
-                        case KEY_ARRIBA_DERECHA: {k = 5; break;};
-                        case KEY_ARRIBA_IZQUIERDA: {k = 6; break;};
-                        default:
-                            k = 0;
-                    }
-                    Tcambio c;
-                    c = mundo.actualizarMundo(c, k);
-                    pantalla.update(c);
-                    pantalla.dibujar();
-                }
-            }
+
+        // INPUT
+        inputs = controlador.getInputs();
+        estado = inputs[0];
+
+        //SI SE DESEA SALIR DEL JUEGO
+        if (estado == KEY_EXIT)
+            end = true;
+
+        //PARA RESTABLECER EL JUEGO
+        if (estado == KEY_RESTART){
+            // Aca iria para el recargar el json
         }
-        else{
-            Tcambio c = mundo.actualizarMundo(c, 0);
+
+        //DEMAS ACCIONES
+        else {
+            k = static_cast<int>(estado); // k tiene la posicion del estado en el enum
+            cout << "Valor de orden: " << k << endl << endl;
+            c = mundo.actualizarMundo(c, k);
             pantalla.update(c);
             pantalla.dibujar();
         }
+
         SDL_Delay(40);
     }
 
