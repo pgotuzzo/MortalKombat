@@ -5,31 +5,6 @@
 // TODO - Agregar al config.cpp y luego Eliminar!!!!
 const string SPRITES_PATH_POSTA = "/home/miguel/ClionProjects/MortalKombat/resources/sprites/zub_zero";
 
-// TODO - Eliminar si no sirve mas
-//Pantalla::Pantalla(vector<string> dirPaths, vector<float> anchosCapas, Dimensiones dimensiones, int zInd) {
-//    Inicializar(dimensiones);
-//    zIndex = zInd;
-//    posPantalla = (dimensiones.anchoEscenario - dimensiones.anchoPantalla)/2;
-//    cout<<"pos pantalla"<<posPantalla<<std::endl;
-//
-//    personaje = PersonajeVista(mRenderer, SPRITES_PATH_POSTA, 50, 80);
-//
-//    personaje.setPosition({750,400});
-//
-//    for (int i=0;i<dirPaths.size();i++) {
-//        SDL_Rect rect;
-//        rect.h = (int)dimensiones.altoPantalla;
-//        rect.w = (int)dimensiones.anchoPantalla;
-//        rect.x = (int)(anchosCapas[i] - dimensiones.anchoPantalla)/2;
-//        rect.y = 0;
-//        Capa capa = Capa(mRenderer, dirPaths[i],rect);
-//        float relacionCapa = (dimensiones.anchoEscenario-dimensiones.anchoPantalla)/(anchosCapas[i]-dimensiones.anchoPantalla);
-//        capa.setValores(anchosCapas[i], dimensiones.altoPantalla, dimensiones.distTope,relacionCapa);
-//        capas.push_back(capa);
-//    }
-//    mDimensiones = dimensiones;
-//}
-
 Pantalla::Pantalla(vector<Tcapa> tcapas, Tventana ventana, Tescenario escenario, Tpersonaje tpersonaje) {
     mDimensiones.anchoPantalla = ventana.ancho;
     mDimensiones.altoPantalla = escenario.alto;
@@ -58,9 +33,10 @@ Pantalla::Pantalla(vector<Tcapa> tcapas, Tventana ventana, Tescenario escenario,
         rect.y = 0;
         Capa capa = Capa(mRenderer, tcapa.dirCapa, rect);
         float relacionCapa = (mDimensiones.anchoEscenario - mDimensiones.anchoPantalla)/(tcapa.ancho - mDimensiones.anchoPantalla);
-        capa.setValores(tcapa.ancho, mDimensiones.altoPantalla, mDimensiones.distTope, relacionCapa);
+        capa.setValores(tcapa.ancho, mDimensiones.altoPantalla, relacionCapa);
         capas.push_back(capa);
     }
+    Capa::setStatics(mDimensiones.distTope, tpersonaje.ancho, mDimensiones.anchoEscenario, mDimensiones.anchoPantalla);
 }
 
 void Pantalla::Inicializar(Dimensiones dimensiones) {
@@ -86,7 +62,7 @@ void Pantalla::dibujar() {
             //TODO - Eliminar si no sirve mas o agregar al loguer - Fran?
 //            cout<< "pos personaje"<< r.x<<"pos pantalla"<<posPantalla<<std::endl;
 
-            r.x = r.x - (int) posPantalla;
+            r.x = r.x - (int) Capa::getPosPantalla();
             SDL_RenderCopy(mRenderer, texture, NULL, &r);
         }
     }
@@ -100,10 +76,10 @@ void Pantalla::dibujar() {
 void Pantalla::update(Tcambio change) {
     SDL_Rect rect = personaje.getRect();
     personaje.update(change);
+    Capa::cambiarEscenario(change.posicion);
     for (int i = 0; i < capas.size(); i++) {
-        capas[i].cambiar(change.posicion, rect.w);
+        capas[i].ajustar();
     }
-    posPantalla = Capa::getPosCapa(change.posicion.x, 1, posPantalla, mDimensiones.anchoPantalla, mDimensiones.anchoEscenario, rect.w);
 }
 
 
