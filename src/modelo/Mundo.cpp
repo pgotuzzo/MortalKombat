@@ -48,7 +48,5 @@ Tcambio Mundo::actualizarMundo(Tcambio c,int orden){
 	return c;
 }
 
-Mundo::~Mundo() {
-	// TODO Auto-generated destructor stub
-}
+Mundo::~Mundo() {}
 

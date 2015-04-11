@@ -4,6 +4,11 @@
 #include "VistaUtils.h"
 
 float Capa::distTope = 0;
+float Capa::mAnchoPersonaje = 0;
+float Capa::mAnchoPantalla = 0;
+float Capa::mAnchoEscenario = 0;
+float Capa::posEscenario = 0;
+
 
 /*
 *  Crea una capa.
@@ -16,23 +21,35 @@ Capa::Capa(SDL_Renderer *renderer, std::string dirPath, VistaUtils::Trect rectPa
     mRenderer = renderer;
     mTexture = VistaUtils::loadTexture(mRenderer, dirPath, VistaUtils::COLORKEY::BLANCO);
     mRect = rectPantalla;
-    posX = mRect.p.x;
 }
 
 /*
-*  Setea los valores de la capa.
-*  anchoCapa : ancho total de la capa en unidades
+*  Setea los valores de la capa y genera su textura.
+*  anchoCapa : ancho total de la capa en unidades.
 *  distTope : distancia limite en relacion al borde de la pantalla para que se empiecen
-*  a mover las capas
-*  relacionCapa : relacion de tamaño entre la capa con respecto al escenario
+*  a mover las capas.
+*  relacionCapa : relacion de tamaño entre la capa con respecto al escenario.
  */
-void Capa::setValores(float anchoCapa, float altoCapa, float distanciaTope, float relacionCapa) {
-    mAnchoCapa = anchoCapa;
-    Capa::distTope = distanciaTope;
+void Capa::setValores(float anchoCapa, float altoCapa, float relacionCapa) {
     mRelacionCapa = relacionCapa;
-    SDL_Texture * t = VistaUtils::createTexture(mRenderer, mAnchoCapa, altoCapa);
+    SDL_Texture * t = VistaUtils::createTexture(mRenderer, anchoCapa, altoCapa);
     VistaUtils::copyTexture(mRenderer, mTexture, t);
     mTexture = t;
+}
+
+/*
+*  Setea los valores de clase.
+*  distanciaTope : distancia tope desde los bordes para que la capa se mueva.
+*  anchoPersonaje : ancho del personaje.
+*  anchoEscenario : ancho del escenario.
+*  anchoPantalla : ancho de la pantalla.
+ */
+void Capa::setStatics(float distanciaTope, float anchoPersonaje, float anchoEscenario, float anchoPantalla) {
+    Capa::mAnchoPantalla = anchoPantalla;
+    Capa::distTope = distanciaTope;
+    Capa::mAnchoPersonaje = anchoPersonaje;
+    Capa::mAnchoEscenario = anchoEscenario;
+    Capa::posEscenario = (anchoPantalla-anchoEscenario)/2;
 }
 
 /*
@@ -43,27 +60,32 @@ void Capa::getTexture(SDL_Texture *texture) {
     VistaUtils::copyTexture(mRenderer, mTexture, texture, &mRect, NULL);
 }
 
-float Capa::getPosCapa(float posPersonajeX, float mRelacionCapa, float posCapa, float anchoPantalla, float anchoCapa, float anchoPersonaje) {
-    float topeDerecha = posCapa + anchoPantalla - Capa::distTope;
-    float topeIzquierda = posCapa + Capa::distTope;
-    float newPos = posCapa;
-    if (topeIzquierda > posPersonajeX && posPersonajeX - Capa::distTope >= 0) {
-        newPos = posCapa - ((posCapa - (posPersonajeX - Capa::distTope))/mRelacionCapa);
-    } else if (posPersonajeX + anchoPersonaje > topeDerecha && posPersonajeX + Capa::distTope+anchoPersonaje <= anchoCapa) {
-        float nuevaPosicionEscenario = posPersonajeX + anchoPersonaje + Capa::distTope - anchoPantalla;
-        float deltaCrecimiento =  nuevaPosicionEscenario - posCapa;
-        newPos = posCapa + deltaCrecimiento / mRelacionCapa;
+/*
+ * Cambia la posicion del escenario segun donde se encuentra el personaje.
+ * posPersonaje: posicion del personaje.
+ */
+void Capa::cambiarEscenario(Posicion posPersonaje) {
+    float topeDerecha = posEscenario + mAnchoPantalla - Capa::distTope;
+    float topeIzquierda = posEscenario + Capa::distTope;
+    if (topeIzquierda > posPersonaje.x && posPersonaje.x - Capa::distTope> 0) {
+        posEscenario = posPersonaje.x - Capa::distTope;
+    } else if (posPersonaje.x + mAnchoPersonaje > topeDerecha && posPersonaje.x + mAnchoPersonaje + Capa::distTope < mAnchoEscenario) {
+        posEscenario = posPersonaje.x + mAnchoPersonaje + Capa::distTope - mAnchoPantalla;
     }
-    return newPos;
 }
 
 /*
-*  Cambia el trozo de pantalla que se va a mostrar.
-*  posPersonaje : posicion actual del personaje
-*/
-void Capa::cambiar(Posicion posPersonaje, float anchoPersonaje) {
-    posX = getPosCapa(posPersonaje.x, mRelacionCapa, posX, mRect.w, mAnchoCapa, anchoPersonaje);
-    mRect.p.x = posX;
+ * Cambia la posicion de la capa ajustandola a la posicion del escenario
+ */
+void Capa::ajustar() {
+    mRect.p.x = posEscenario / mRelacionCapa;
 }
 
-// TODO - HAY UN PROBLEMA DE REDONDEO QUE HACE QUE PARA CIERTOS VALORES LA CAPA NO SE MUEVA
+/*
+ * Devuelve la posicion de la pantalla en el escenario.
+ */
+float Capa::getPosPantalla() {
+    return posEscenario;
+}
+
+Capa::Capa() {}

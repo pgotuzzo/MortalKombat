@@ -1,7 +1,7 @@
 #include "SaltoVertical.h"
 
-const float altura_salto = 50;
-const float intervalo_salto =10;
+const float altura_salto = 60;
+const float intervalo_salto =5;
 
 
 SaltoVertical::SaltoVertical() {

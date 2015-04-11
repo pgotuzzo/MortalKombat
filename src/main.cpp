@@ -71,6 +71,7 @@ int main(int argc, char** argv) {
     int k;
     Tinput estado;
 
+    int framerate = 0;
 
     while(!end){
 
@@ -91,8 +92,12 @@ int main(int argc, char** argv) {
             k = static_cast<int>(estado); // k tiene la posicion del estado en el enum
 //            cout << "Valor de orden: " << k << endl << endl;
             c = mundo.actualizarMundo(c, k);
-            pantalla.update(c);
-            pantalla.dibujar();
+            framerate++;
+            if  (framerate == 2) {
+                framerate = 0;
+                pantalla.update(c);
+                pantalla.dibujar();
+            }
         }
 
         SDL_Delay(30);

@@ -24,6 +24,7 @@ private:
     int zIndex;
     float posPantalla;
     void Inicializar(Dimensiones dimensiones);
+    Capa mEscenario;
 
 public:
     //TODO - ELiminar si ya no sirve

@@ -1,10 +1,6 @@
 #include "Pantalla.h"
-#include "VistaUtils.h"
 #include <SDL2/SDL.h>
 #include <iostream>
-
-// TODO - Agregar al config.cpp y luego Eliminar!!!!
-const string SPRITES_PATH_POSTA = "/home/pablo/Projects/MortalKombat/resources/sprites/zub_zero";
 
 Pantalla::Pantalla(vector<Tcapa> tcapas, Tventana ventana, Tescenario escenario, Tpersonaje tpersonaje) {
     mDimensiones.anchoPantalla = ventana.ancho;
@@ -24,7 +20,7 @@ Pantalla::Pantalla(vector<Tcapa> tcapas, Tventana ventana, Tescenario escenario,
     posPantalla = (mDimensiones.anchoEscenario - mDimensiones.anchoPantalla)/2;
 
     // TODO - Eliminar SPRITES_PATH_POSTA
-    personaje = PersonajeVista(mRenderer, SPRITES_PATH_POSTA, tpersonaje.ancho, tpersonaje.alto, tpersonaje.orientacion);
+    personaje = PersonajeVista(mRenderer, tpersonaje.sprites, tpersonaje.ancho, tpersonaje.alto, tpersonaje.orientacion);
 
     for (Tcapa tcapa : tcapas){
         VistaUtils::Trect rect;
@@ -34,9 +30,10 @@ Pantalla::Pantalla(vector<Tcapa> tcapas, Tventana ventana, Tescenario escenario,
         rect.p.y = 0;
         Capa capa = Capa(mRenderer, tcapa.dirCapa, rect);
         float relacionCapa = (mDimensiones.anchoEscenario - mDimensiones.anchoPantalla)/(tcapa.ancho - mDimensiones.anchoPantalla);
-        capa.setValores(tcapa.ancho, mDimensiones.altoPantalla, mDimensiones.distTope, relacionCapa);
+        capa.setValores(tcapa.ancho, mDimensiones.altoPantalla, relacionCapa);
         capas.push_back(capa);
     }
+    Capa::setStatics(mDimensiones.distTope, tpersonaje.ancho, mDimensiones.anchoEscenario, mDimensiones.anchoPantalla);
 }
 
 void Pantalla::Inicializar(Dimensiones dimensiones) {
@@ -56,7 +53,7 @@ void Pantalla::dibujar() {
             SDL_Texture* texturePersonaje = personaje.getTexture();
             VistaUtils::Trect r = personaje.getRect();
 
-            r.p.x = r.p.x - posPantalla;
+            r.p.x = r.p.x - Capa::getPosPantalla();
             VistaUtils::copyTexture(mRenderer, texturePersonaje, texture , NULL, &r);
         }
         VistaUtils::copyTexture(mRenderer, texture, NULL, NULL, NULL);
@@ -68,10 +65,10 @@ void Pantalla::dibujar() {
 void Pantalla::update(Tcambio change) {
     VistaUtils::Trect rect = personaje.getRect();
     personaje.update(change);
+    Capa::cambiarEscenario(change.posicion);
     for (int i = 0; i < capas.size(); i++) {
-        capas[i].cambiar(change.posicion, rect.w);
+        capas[i].ajustar();
     }
-    posPantalla = Capa::getPosCapa(change.posicion.x, 1, posPantalla, mDimensiones.anchoPantalla, mDimensiones.anchoEscenario, rect.w);
 }
 
 
