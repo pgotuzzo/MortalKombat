@@ -1,7 +1,6 @@
 #include <SDL2/SDL_image.h>
 #include <iostream>
 #include "Capa.h"
-#include "VistaUtils.h"
 
 float Capa::distTope = 0;
 float Capa::mAnchoPersonaje = 0;
@@ -20,6 +19,11 @@ float Capa::posEscenario = 0;
 Capa::Capa(SDL_Renderer *renderer, std::string dirPath, VistaUtils::Trect rectPantalla) {
     mRenderer = renderer;
     mTexture = VistaUtils::loadTexture(mRenderer, dirPath, VistaUtils::COLORKEY::BLANCO);
+    if (mTexture == NULL) {
+        string mensaje = "La textura de la direccion: ";
+        mensaje = mensaje + dirPath + " no se cargo correctamente.";
+        loguerWar->loguear(mensaje.c_str(), Log::Tlog::LOG_ERR);
+    }
     mRect = rectPantalla;
 }
 
@@ -34,6 +38,9 @@ void Capa::setValores(float anchoCapa, float altoCapa, float relacionCapa) {
     mRelacionCapa = relacionCapa;
     SDL_Texture * t = VistaUtils::createTexture(mRenderer, anchoCapa, altoCapa);
     VistaUtils::copyTexture(mRenderer, mTexture, t);
+    if (t == NULL) {
+        loguerWar->loguear("Fallo la generacion de la textura", Log::Tlog::LOG_ERR);
+    }
     mTexture = t;
 }
 
@@ -58,6 +65,9 @@ void Capa::setStatics(float distanciaTope, float anchoPersonaje, float anchoEsce
 */
 void Capa::getTexture(SDL_Texture *texture) {
     VistaUtils::copyTexture(mRenderer, mTexture, texture, &mRect, NULL);
+    if (texture == NULL) {
+        loguerWar->loguear("Fallo la copia de la textura", Log::Tlog::LOG_ERR);
+    }
 }
 
 /*
