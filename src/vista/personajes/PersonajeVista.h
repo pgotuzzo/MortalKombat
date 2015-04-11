@@ -5,6 +5,7 @@
 #include <SDL2/SDL_render.h>
 #include "Sprite.h"
 #include "../../Common.h"
+#include "../VistaUtils.h"
 
 class PersonajeVista {
 
@@ -13,7 +14,7 @@ private:
     Tsentido mTarget;
     Tdireccion mDirection;
 
-    SDL_Rect mRect;
+    VistaUtils::Trect mRect;
     std::array <Sprite, TestadoPersonajeCount> mSprites;
     SDL_Renderer* mRenderer;
 
@@ -21,11 +22,11 @@ private:
 
 public:
     PersonajeVista();
-    PersonajeVista(SDL_Renderer* renderer, std::string spritesPath, int ancho, int alto, Tdireccion direction);
+    PersonajeVista(SDL_Renderer* renderer, std::string spritesPath, float ancho, float alto, Tdireccion direction);
 
     void update(Tcambio);
     SDL_Texture* getTexture();
-    SDL_Rect getRect();
+    VistaUtils::Trect getRect();
 };
 
 

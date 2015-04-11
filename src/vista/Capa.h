@@ -4,6 +4,7 @@
 #include <string>
 #include <SDL2/SDL_render.h>
 #include "../Common.h"
+#include "VistaUtils.h"
 
 class Capa {
 private:
@@ -11,11 +12,11 @@ private:
     SDL_Texture * mTexture;
     float posX, mAnchoCapa,mRelacionCapa;
     static float distTope;
-    SDL_Rect mRect;
+    VistaUtils::Trect mRect;
 
 public:
     Capa();
-    Capa(SDL_Renderer *renderer, std::string dirPath, SDL_Rect rectPantalla);
+    Capa(SDL_Renderer *renderer, std::string dirPath, VistaUtils::Trect rectPantalla);
     void setValores(float anchoCapa, float altoCapa, float distanciaTope, float relacionCapa);
     void getTexture(SDL_Texture *texture);
     void cambiar(Posicion posPersonaje, float anchoPersonaje);

@@ -70,14 +70,12 @@ int main(int argc, char** argv) {
     Tcambio c;
     int k;
     Tinput estado;
-    std::vector<Tinput> inputs;
 
 
     while(!end){
 
         // INPUT
-        inputs = controlador.getInputs();
-        estado = inputs[0];
+        estado = controlador.getInputs();
 
         //SI SE DESEA SALIR DEL JUEGO
         if (estado == KEY_EXIT)
@@ -91,13 +89,13 @@ int main(int argc, char** argv) {
         //DEMAS ACCIONES
         else {
             k = static_cast<int>(estado); // k tiene la posicion del estado en el enum
-            cout << "Valor de orden: " << k << endl << endl;
+//            cout << "Valor de orden: " << k << endl << endl;
             c = mundo.actualizarMundo(c, k);
             pantalla.update(c);
             pantalla.dibujar();
         }
 
-        SDL_Delay(40);
+        SDL_Delay(30);
     }
 
     cout << "------------------------------------------------------------" << endl;

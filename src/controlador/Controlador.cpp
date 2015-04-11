@@ -4,35 +4,36 @@
 
 Controlador::Controlador() {}
 
-std::vector<Tinput> Controlador::getInputs() {
-
-	std::vector<Tinput> inputs = std::vector<Tinput>();
+Tinput Controlador::getInputs() {
 
 	const Uint8 *state = SDL_GetKeyboardState(NULL);
 
 	SDL_Event event;
-	while (SDL_PollEvent(&event)) {
-		switch (event.type) {
-			case SDL_QUIT:
-				return std::vector<Tinput >({KEY_EXIT});
+	SDL_PollEvent(&event);
+	switch (event.type) {
+		case SDL_QUIT:
+			return KEY_EXIT;
 
-			case SDL_KEYDOWN: {
-				Tinput input = getKeyBoardInput(event.key.keysym.sym);
-				switch (input) {
-					case KEY_RESTART: return std::vector<Tinput >({KEY_RESTART});
-					case KEY_ARRIBA: {
-						if (state[SDL_SCANCODE_RIGHT])
-							return std::vector<Tinput >({KEY_ARRIBA_DERECHA});
-						else if (state[SDL_SCANCODE_LEFT])
-							return std::vector<Tinput >({KEY_ARRIBA_IZQUIERDA});
-					}
+		case SDL_KEYDOWN: {
+			Tinput input = getKeyBoardInput(event.key.keysym.sym);
+			switch (input) {
+				case KEY_IZQUIERDA: {
+					return (state[SDL_SCANCODE_UP]) ? KEY_ARRIBA_IZQUIERDA : KEY_IZQUIERDA;
+				};
+				case KEY_DERECHA:{
+					return (state[SDL_SCANCODE_UP]) ? KEY_ARRIBA_DERECHA : KEY_DERECHA;
+				};
+				case KEY_ARRIBA: {
+					if (state[SDL_SCANCODE_RIGHT])
+						return KEY_ARRIBA_DERECHA;
+					else if (state[SDL_SCANCODE_LEFT])
+						return KEY_ARRIBA_IZQUIERDA;
 				}
-				inputs = std::vector<Tinput >({input});
+				default: return input;
 			}
-		};
+		}
 	}
-	if(inputs.empty()) return std::vector<Tinput>({KEY_NADA});
-	return inputs;
+	return KEY_NADA;
 }
 
 Tinput Controlador::getKeyBoardInput(SDL_Keycode key){

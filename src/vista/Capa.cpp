@@ -12,12 +12,11 @@ float Capa::distTope = 0;
 *  rectPantalla : contiene el tamaño de la pantalla y la posicion inicial de la
 *  capa en relacion a su tamaño total de la imagen
 */
-Capa::Capa(SDL_Renderer *renderer, std::string dirPath, SDL_Rect rectPantalla) {
+Capa::Capa(SDL_Renderer *renderer, std::string dirPath, VistaUtils::Trect rectPantalla) {
     mRenderer = renderer;
     mTexture = VistaUtils::loadTexture(mRenderer, dirPath, VistaUtils::COLORKEY::BLANCO);
-//    mTexture = IMG_LoadTexture(mRenderer, dirPath.c_str());
     mRect = rectPantalla;
-    posX = mRect.x;
+    posX = mRect.p.x;
 }
 
 /*
@@ -31,7 +30,7 @@ void Capa::setValores(float anchoCapa, float altoCapa, float distanciaTope, floa
     mAnchoCapa = anchoCapa;
     Capa::distTope = distanciaTope;
     mRelacionCapa = relacionCapa;
-    SDL_Texture * t = SDL_CreateTexture(mRenderer, SDL_PIXELFORMAT_UNKNOWN, SDL_TEXTUREACCESS_TARGET, mAnchoCapa, altoCapa);
+    SDL_Texture * t = VistaUtils::createTexture(mRenderer, mAnchoCapa, altoCapa);
     VistaUtils::copyTexture(mRenderer, mTexture, t);
     mTexture = t;
 }
@@ -44,8 +43,8 @@ void Capa::getTexture(SDL_Texture *texture) {
     VistaUtils::copyTexture(mRenderer, mTexture, texture, &mRect, NULL);
 }
 
-float Capa::getPosCapa(float posPersonajeX,float mRelacionCapa,float posCapa, float anchoPantalla,float  anchoCapa, float anchoPersonaje) {
-    float topeDerecha = posCapa+anchoPantalla - Capa::distTope;
+float Capa::getPosCapa(float posPersonajeX, float mRelacionCapa, float posCapa, float anchoPantalla, float anchoCapa, float anchoPersonaje) {
+    float topeDerecha = posCapa + anchoPantalla - Capa::distTope;
     float topeIzquierda = posCapa + Capa::distTope;
     float newPos = posCapa;
     if (topeIzquierda > posPersonajeX && posPersonajeX - Capa::distTope >= 0) {
@@ -64,8 +63,7 @@ float Capa::getPosCapa(float posPersonajeX,float mRelacionCapa,float posCapa, fl
 */
 void Capa::cambiar(Posicion posPersonaje, float anchoPersonaje) {
     posX = getPosCapa(posPersonaje.x, mRelacionCapa, posX, mRect.w, mAnchoCapa, anchoPersonaje);
-    mRect.x = posX;
-//    std::cout << "pos capa"<< posX << std::endl;
+    mRect.p.x = posX;
 }
 
 // TODO - HAY UN PROBLEMA DE REDONDEO QUE HACE QUE PARA CIERTOS VALORES LA CAPA NO SE MUEVA

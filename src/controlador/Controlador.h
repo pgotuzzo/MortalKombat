@@ -11,7 +11,7 @@ private:
 
 public:
     Controlador();
-    std::vector<Tinput> getInputs();
+    Tinput getInputs();
 };
 
 

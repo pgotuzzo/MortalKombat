@@ -1,6 +1,6 @@
 #include "PersonajeVista.h"
 
-PersonajeVista::PersonajeVista(SDL_Renderer* renderer, std::string spritesPath, int ancho, int alto, Tdireccion direction) {
+PersonajeVista::PersonajeVista(SDL_Renderer* renderer, std::string spritesPath, float ancho, float alto, Tdireccion direction) {
     mRenderer = renderer;
     crearSprites(spritesPath);
     mRect.w = ancho;
@@ -15,20 +15,21 @@ void PersonajeVista::crearSprites(std::string path) {
         TestadoPersonaje state = TestadoPersonaje(s);
         std::string spritesPath = path + "/" + TestadoPersonajeToString(state) + "/";
 
+//        TODO - Agregar logica
         mSprites[s] = Sprite(mRenderer, spritesPath, true);
     }
 }
 
 void PersonajeVista::update(Tcambio tcambio) {
-    mRect.x = (int) tcambio.posicion.x;
-    mRect.y = (int) tcambio.posicion.y;
+    mRect.p.x = tcambio.posicion.x;
+    mRect.p.y = tcambio.posicion.y;
     mCurrentState = tcambio.estado;
     mDirection = tcambio.direccion;
     mTarget = tcambio.sentido;
 }
 
 SDL_Texture* PersonajeVista::getTexture() {
-    SDL_Texture* texture = SDL_CreateTexture(mRenderer, SDL_PIXELFORMAT_UNKNOWN, SDL_TEXTUREACCESS_TARGET, mRect.w, mRect.h);
+    SDL_Texture* texture = VistaUtils::createTexture(mRenderer, mRect.w, mRect.h);
     bool flip = (mDirection != Tdireccion::DERECHA);
     if(mTarget == Tsentido::ADELANTE) {
         mSprites[mCurrentState].getNext(texture, flip);
@@ -38,7 +39,7 @@ SDL_Texture* PersonajeVista::getTexture() {
     return texture;
 }
 
-SDL_Rect PersonajeVista::getRect() {
+VistaUtils::Trect PersonajeVista::getRect() {
     return mRect;
 }
 

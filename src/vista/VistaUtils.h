@@ -3,15 +3,27 @@
 
 #include <SDL2/SDL_render.h>
 #include <string>
+#include "../Common.h"
 
 class VistaUtils {
 
 public:
 
+    struct Trect {
+        float w;
+        float h;
+        Posicion p;
+    };
+
     enum COLORKEY{
         BLANCO,
         NEGRO
     };
+
+    static float SCALE_X;
+    static float SCALE_Y;
+
+    static SDL_Texture* createTexture(SDL_Renderer* renderer, float width, float height);
 
     static SDL_Texture* loadTexture(SDL_Renderer* r, std::string path, COLORKEY);
 
@@ -19,9 +31,9 @@ public:
 
     static void copyTexture(SDL_Renderer* r, SDL_Texture* src, SDL_Texture* dst, bool flip);
 
-    static void copyTexture(SDL_Renderer* r, SDL_Texture *src, SDL_Texture *dst, SDL_Rect* rectSrc, SDL_Rect* rectDst);
+    static void copyTexture(SDL_Renderer* r, SDL_Texture *src, SDL_Texture *dst, Trect* rectSrc, Trect* rectDst);
 
-    static void copyTexture(SDL_Renderer* r, SDL_Texture *src, SDL_Texture *dst, SDL_Rect* rectSrc, SDL_Rect* rectDst, bool flip);
+    static void copyTexture(SDL_Renderer* r, SDL_Texture *src, SDL_Texture *dst, Trect* rectSrc, Trect* rectDst, bool flip);
 
 private:
 
