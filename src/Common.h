@@ -11,6 +11,9 @@
 
 #include <string>
 #include <iostream>
+#include "parser/log/WarningLog.h"
+#include "parser/log/DebugLog.h"
+#include "parser/log/ErrorLog.h"
 
 /**
  * Esta estructura, pseudo-clase cruza toda
@@ -69,6 +72,13 @@ struct Posicion{
     }
 
 };
+
+/**
+ * Loguer
+ */
+static Log* loguerErr = (Log*) ErrorLog::getInstance();
+static Log* loguerDebug = (Log*) DebugLog::getInstance();
+static Log* loguerWar = (Log*) WarningLog::getInstance();
 
 /**
  * Estructuras que se utilizan para
@@ -133,6 +143,7 @@ struct Tpersonaje {
     float alto;
     int zIndex;
     Tdireccion orientacion;
+    std::string sprites;
 };
 
 
