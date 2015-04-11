@@ -169,6 +169,7 @@ void config::validacionPath(string path){
 				char buffer_out[LEN];
 				char buffer_in[LEN];
 				if (LEN) {
+
 				    aux.rdbuf()->pubsetbuf(buffer_in, LEN );
 				    arch.rdbuf()->pubsetbuf(buffer_out, LEN);
 				} else {

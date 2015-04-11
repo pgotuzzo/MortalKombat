@@ -2,7 +2,9 @@
 #include <SDL2/SDL_events.h>
 #include "Controlador.h"
 
-Controlador::Controlador() {}
+Controlador::Controlador() {
+
+}
 
 Tinput Controlador::getInputs() {
 
@@ -20,7 +22,7 @@ Tinput Controlador::getInputs() {
 				case KEY_IZQUIERDA: {
 					return (state[SDL_SCANCODE_UP]) ? KEY_ARRIBA_IZQUIERDA : KEY_IZQUIERDA;
 				};
-				case KEY_DERECHA:{
+				case KEY_DERECHA: {
 					return (state[SDL_SCANCODE_UP]) ? KEY_ARRIBA_DERECHA : KEY_DERECHA;
 				};
 				case KEY_ARRIBA: {
@@ -28,11 +30,19 @@ Tinput Controlador::getInputs() {
 						return KEY_ARRIBA_DERECHA;
 					else if (state[SDL_SCANCODE_LEFT])
 						return KEY_ARRIBA_IZQUIERDA;
+					return KEY_ARRIBA;
 				}
-				default: return input;
+				default:
+					return input;
 			}
 		}
+		default:
+			if (state[SDL_SCANCODE_RIGHT]) return KEY_DERECHA;
+			else if (state[SDL_SCANCODE_LEFT]) return KEY_IZQUIERDA;
+			else if (state[SDL_SCANCODE_UP]) return KEY_ARRIBA;
+			else if (state[SDL_SCANCODE_DOWN]) return KEY_ABAJO;
 	}
+
 	return KEY_NADA;
 }
 
