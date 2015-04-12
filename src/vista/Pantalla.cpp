@@ -1,6 +1,5 @@
 #include "Pantalla.h"
 #include <SDL2/SDL.h>
-#include <iostream>
 
 /*
  * Se inicia la ventana y el renderer.
@@ -43,9 +42,10 @@ Pantalla::Pantalla(vector<Tcapa> tcapas, Tventana ventana, Tescenario escenario,
         rect.w = anchoPantalla;
         rect.p.x = (tcapa.ancho - anchoPantalla)/2;
         rect.p.y = 0;
-        Capa capa = Capa(mRenderer, tcapa.dirCapa, rect);
-        capa.setValores(tcapa.ancho, altoPantalla);
-        capas.push_back(capa);
+        Capa* capa = new Capa(mRenderer, tcapa.dirCapa, rect);
+        capa->setValores(tcapa.ancho, altoPantalla);
+        capas.push_back(*capa);
+        delete(capa);
     }
 }
 
@@ -53,19 +53,14 @@ Pantalla::Pantalla(vector<Tcapa> tcapas, Tventana ventana, Tescenario escenario,
  * Dibuja todos los objetos en pantalla.
  */
 void Pantalla::dibujar() {
-    // TODO - Aca no toque nada pq pense q lo ibas a modificar vos ahora
-    SDL_Texture* texture = VistaUtils::createTexture(mRenderer, anchoPantalla, altoPantalla);
+
+    SDL_Texture* ventana = SDL_GetRenderTarget(mRenderer);
 
     for (int i = 0; i < capas.size(); i++) {
-        capas[i].getTexture(texture);
+        capas[i].getTexture(ventana);
         if (i == zIndex) {
-            SDL_Texture* texturePersonaje = personaje.getTexture();
-            VistaUtils::Trect r = personaje.getRect();
-
-            r.p.x = r.p.x - Capa::getPosPantalla();
-            VistaUtils::copyTexture(mRenderer, texturePersonaje, texture , NULL, &r);
+            personaje.getTexture(ventana, Capa::getPosPantalla());
         }
-        VistaUtils::copyTexture(mRenderer, texture, NULL, NULL, NULL);
     }
     SDL_RenderPresent(mRenderer);
 
@@ -84,3 +79,10 @@ void Pantalla::update(Tcambio change) {
 }
 
 
+Pantalla::~Pantalla() {
+    for (Capa c : capas)
+        c.freeTextures();
+    personaje.freeTextures();
+    SDL_DestroyRenderer(mRenderer);
+    SDL_DestroyWindow(mWindow);
+}

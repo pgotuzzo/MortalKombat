@@ -19,6 +19,9 @@ public:
     void getFirst(SDL_Texture* texture, bool flip);
     void getNext(SDL_Texture* texture, bool flip);
     void getBefore(SDL_Texture* texture, bool flip);
+
+    void freeTextures();
+    virtual ~Sprite();
 };
 
 

@@ -87,3 +87,9 @@ float Capa::getPosPantalla() {
 }
 
 Capa::Capa() {}
+
+void Capa::freeTextures() {
+    SDL_DestroyTexture(mTexture);
+}
+
+Capa::~Capa() {}

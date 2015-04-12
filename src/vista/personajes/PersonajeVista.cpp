@@ -6,6 +6,7 @@ PersonajeVista::PersonajeVista(SDL_Renderer* renderer, std::string spritesPath, 
     mRect.w = ancho;
     mRect.h = alto;
     mDirection = direction;
+    mTexture = VistaUtils::createTexture(mRenderer, ancho, alto);
 }
 
 void PersonajeVista::crearSprites(std::string path) {
@@ -29,15 +30,17 @@ void PersonajeVista::update(Tcambio tcambio) {
     mRect.h = tcambio.alturaPJ;
 }
 
-SDL_Texture* PersonajeVista::getTexture() {
-    SDL_Texture* texture = VistaUtils::createTexture(mRenderer, mRect.w, mRect.h);
+void PersonajeVista::getTexture(SDL_Texture* ventana, float x) {
+    VistaUtils::cleanTexture(mRenderer, mTexture);
     bool flip = (mDirection != Tdireccion::DERECHA);
     if(mTarget == Tsentido::ADELANTE) {
-        mSprites[mCurrentState].getNext(texture, flip);
+        mSprites[mCurrentState].getNext(mTexture, flip);
     }else{
-        mSprites[mCurrentState].getBefore(texture, flip);
+        mSprites[mCurrentState].getBefore(mTexture, flip);
     }
-    return texture;
+    VistaUtils::Trect r = mRect;
+    r.p.x = mRect.p.x - x;
+    VistaUtils::copyTexture(mRenderer, mTexture, ventana, NULL, &r);
 }
 
 VistaUtils::Trect PersonajeVista::getRect() {
@@ -46,5 +49,13 @@ VistaUtils::Trect PersonajeVista::getRect() {
 
 PersonajeVista::PersonajeVista() {}
 
+
+void PersonajeVista::freeTextures() {
+    for (Sprite s : mSprites)
+        s.freeTextures();
+    SDL_DestroyTexture(mTexture);
+}
+
+PersonajeVista::~PersonajeVista() {}
 
 

@@ -41,6 +41,8 @@ public:
      * change : contiene los cambios a realizar.
      */
     void update(Tcambio change);
+
+    virtual ~Pantalla();
 };
 
 

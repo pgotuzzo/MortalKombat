@@ -1,7 +1,6 @@
 #include <SDL2/SDL_image.h>
 #include "Sprite.h"
 #include "../VistaUtils.h"
-#include "../../Common.h"
 
 Sprite::Sprite(SDL_Renderer* renderer, std::string dirPath, bool repeat) {
     mCurrent = 0;
@@ -55,3 +54,10 @@ void Sprite::getBefore(SDL_Texture *texture, bool flip) {
     }
     VistaUtils::copyTexture(mRenderer, mTextures[mCurrent], texture, flip);
 }
+
+void Sprite::freeTextures() {
+    for(SDL_Texture* t : mTextures)
+        SDL_DestroyTexture(t);
+}
+
+Sprite::~Sprite() {}

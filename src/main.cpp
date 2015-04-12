@@ -75,7 +75,6 @@ int main(int argc, char **argv) {
                 c = mundo.actualizarMundo(c, k);
                 pantalla.update(c);
                 pantalla.dibujar();
-                //}
             }
         }
     }

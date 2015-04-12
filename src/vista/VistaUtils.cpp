@@ -4,11 +4,6 @@
 float VistaUtils::SCALE_X = 1;
 float VistaUtils::SCALE_Y = 1;
 
-void VistaUtils::cleanTexture(SDL_Renderer* r){
-    SDL_SetRenderDrawColor(r, 0, 0, 0, 0);
-    SDL_RenderClear(r);
-}
-
 Uint32 VistaUtils::getColorKeyValue(VistaUtils::COLORKEY color, SDL_Surface* s) {
     switch (color){
         case VistaUtils::BLANCO: return SDL_MapRGB(s->format, 255, 255, 255);
@@ -52,8 +47,6 @@ void VistaUtils::copyTexture(SDL_Renderer *r, SDL_Texture *src, SDL_Texture *dst
 
     SDL_SetRenderTarget(r, dst);
 
-//    VistaUtils::cleanTexture(r);
-
     // Importante para que se generen las transparencias si se usa colorkey.
     SDL_SetTextureBlendMode(dst, SDL_BLENDMODE_BLEND);
 
@@ -88,4 +81,12 @@ void VistaUtils::copyTexture(SDL_Renderer *r, SDL_Texture *src, SDL_Texture *dst
     delete(scaledRectDst);
 }
 
+void VistaUtils::cleanTexture(SDL_Renderer* r, SDL_Texture* t){
+    SDL_Texture *originalTarget = SDL_GetRenderTarget(r);
+    SDL_SetRenderTarget(r, t);
 
+    SDL_SetRenderDrawColor(r, 0, 0, 0, 0);
+    SDL_RenderClear(r);
+
+    SDL_SetRenderTarget(r, originalTarget);
+}

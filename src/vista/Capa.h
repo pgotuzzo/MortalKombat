@@ -70,6 +70,10 @@ public:
      * Devuelve la posicion de la pantalla en el escenario.
      */
     static float getPosPantalla();
+
+    void freeTextures();
+
+    virtual ~Capa();
 };
 
 

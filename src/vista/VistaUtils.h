@@ -35,14 +35,14 @@ public:
 
     static void copyTexture(SDL_Renderer* r, SDL_Texture *src, SDL_Texture *dst, Trect* rectSrc, Trect* rectDst, bool flip);
 
-private:
-
-    static Uint32 getColorKeyValue(COLORKEY color, SDL_Surface* s);
-
     /**
      * Limpia la textura
      */
-    static void cleanTexture(SDL_Renderer* r);
+    static void cleanTexture(SDL_Renderer* r, SDL_Texture* t);
+
+private:
+
+    static Uint32 getColorKeyValue(COLORKEY color, SDL_Surface* s);
 };
 
 
