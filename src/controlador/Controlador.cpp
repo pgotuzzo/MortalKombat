@@ -3,7 +3,7 @@
 #include "Controlador.h"
 
 Controlador::Controlador() {
-
+	inputAnterior = KEY_NADA;
 }
 
 Tinput Controlador::getInputs() {
@@ -17,47 +17,133 @@ Tinput Controlador::getInputs() {
 			return KEY_EXIT;
 
 		case SDL_KEYDOWN: {
-			Tinput input = getKeyBoardInput(event.key.keysym.sym);
-			switch (input) {
+			switch (inputAnterior) {
 				case KEY_IZQUIERDA: {
-					return (state[SDL_SCANCODE_UP]) ? KEY_ARRIBA_IZQUIERDA : KEY_IZQUIERDA;
+					if (state[SDL_SCANCODE_UP] && state[SDL_SCANCODE_LEFT])
+						return KEY_ARRIBA_IZQUIERDA;
+					else if (state[SDL_SCANCODE_LEFT])
+						return KEY_IZQUIERDA;
+					break;
 				};
 				case KEY_DERECHA: {
-					return (state[SDL_SCANCODE_UP]) ? KEY_ARRIBA_DERECHA : KEY_DERECHA;
+					if (state[SDL_SCANCODE_UP] && state[SDL_SCANCODE_RIGHT])
+						return KEY_ARRIBA_DERECHA;
+					else if (state[SDL_SCANCODE_RIGHT])
+						return KEY_DERECHA;
+					break;
 				};
 				case KEY_ARRIBA: {
-					if (state[SDL_SCANCODE_RIGHT])
+					if (state[SDL_SCANCODE_UP] && state[SDL_SCANCODE_RIGHT])
 						return KEY_ARRIBA_DERECHA;
-					else if (state[SDL_SCANCODE_LEFT])
+					else if (state[SDL_SCANCODE_UP] && state[SDL_SCANCODE_LEFT])
 						return KEY_ARRIBA_IZQUIERDA;
+					else if (state[SDL_SCANCODE_UP])
+						return KEY_ARRIBA;
+					break;
+				};
+				case KEY_ABAJO: {
+					if (state[SDL_SCANCODE_DOWN])
+						return KEY_ABAJO;
+					break;
+				};
+				case KEY_ARRIBA_DERECHA: {
+					if (state[SDL_SCANCODE_UP] && state[SDL_SCANCODE_RIGHT])
+						return KEY_ARRIBA_DERECHA;
+					else if (state[SDL_SCANCODE_RIGHT])
+						return KEY_DERECHA;
+					break;
+				};
+				case KEY_ARRIBA_IZQUIERDA: {
+					if (state[SDL_SCANCODE_UP] && state[SDL_SCANCODE_LEFT])
+						return KEY_ARRIBA_IZQUIERDA;
+					else if (state[SDL_SCANCODE_LEFT])
+						return KEY_IZQUIERDA;
+					break;
+				};
+			}
+			switch (event.key.keysym.sym) {
+				case SDLK_LEFT: {
+					if (state[SDL_SCANCODE_UP]) {
+						inputAnterior = KEY_ARRIBA_IZQUIERDA;
+						return KEY_ARRIBA_IZQUIERDA;
+					}
+					inputAnterior = KEY_IZQUIERDA;
+					return KEY_IZQUIERDA;
+				};
+				case SDLK_RIGHT: {
+					if (state[SDL_SCANCODE_UP]) {
+						inputAnterior = KEY_ARRIBA_DERECHA;
+						return KEY_ARRIBA_DERECHA;
+					}
+					inputAnterior = KEY_DERECHA;
+					return KEY_DERECHA;
+				};
+				case SDLK_UP: {
+					if (state[SDL_SCANCODE_RIGHT]) {
+						inputAnterior = KEY_ARRIBA_DERECHA;
+						return KEY_ARRIBA_DERECHA;
+					}
+					else if (state[SDL_SCANCODE_LEFT]) {
+						inputAnterior = KEY_ARRIBA_IZQUIERDA;
+						return KEY_ARRIBA_IZQUIERDA;
+					}
+					inputAnterior = KEY_ARRIBA;
 					return KEY_ARRIBA;
-				}
-				default:
-					return input;
+				};
+				case SDLK_DOWN: {
+					inputAnterior = KEY_ABAJO;
+					return KEY_ABAJO;
+				};
+				case SDLK_r: {
+					return KEY_RESTART;
+				};
 			}
 		}
 		default:
+			switch (inputAnterior) {
+				case KEY_IZQUIERDA: {
+					if (state[SDL_SCANCODE_UP] && state[SDL_SCANCODE_LEFT])
+						return KEY_ARRIBA_IZQUIERDA;
+					else if (state[SDL_SCANCODE_LEFT])
+						return KEY_IZQUIERDA;
+					break;
+				};
+				case KEY_DERECHA: {
+					if (state[SDL_SCANCODE_UP] && state[SDL_SCANCODE_RIGHT])
+						return KEY_ARRIBA_DERECHA;
+					else if (state[SDL_SCANCODE_RIGHT])
+						return KEY_DERECHA;
+					break;
+				};
+				case KEY_ARRIBA: {
+					if (state[SDL_SCANCODE_UP] && state[SDL_SCANCODE_RIGHT])
+						return KEY_ARRIBA_DERECHA;
+					else if (state[SDL_SCANCODE_UP] && state[SDL_SCANCODE_LEFT])
+						return KEY_ARRIBA_IZQUIERDA;
+					else if (state[SDL_SCANCODE_UP])
+						return KEY_ARRIBA;
+					break;
+				};
+				case KEY_ABAJO: {
+					if (state[SDL_SCANCODE_DOWN])
+						return KEY_ABAJO;
+					break;
+				};
+				case KEY_ARRIBA_DERECHA: {
+					if (state[SDL_SCANCODE_UP] && state[SDL_SCANCODE_RIGHT])
+						return KEY_ARRIBA_DERECHA;
+					else if (state[SDL_SCANCODE_RIGHT])
+						return KEY_DERECHA;
+					break;
+				};
+			}
 			if (state[SDL_SCANCODE_RIGHT]) return KEY_DERECHA;
 			else if (state[SDL_SCANCODE_LEFT]) return KEY_IZQUIERDA;
 			else if (state[SDL_SCANCODE_UP]) return KEY_ARRIBA;
 			else if (state[SDL_SCANCODE_DOWN]) return KEY_ABAJO;
+			else if (state[SDL_SCANCODE_UP] && state[SDL_SCANCODE_RIGHT]) return KEY_ARRIBA_DERECHA;
+			else if (state[SDL_SCANCODE_UP] && state[SDL_SCANCODE_LEFT]) return KEY_ARRIBA_IZQUIERDA;
 	}
 
-	return KEY_NADA;
-}
-
-Tinput Controlador::getKeyBoardInput(SDL_Keycode key){
-	switch (key){
-		case SDLK_LEFT:
-			return KEY_IZQUIERDA;
-		case SDLK_RIGHT:
-			return KEY_DERECHA;
-		case SDLK_UP:
-			return KEY_ARRIBA;
-		case SDLK_DOWN:
-			return KEY_ABAJO;
-		case SDLK_r:
-			return KEY_RESTART;
-	}
 	return KEY_NADA;
 }
