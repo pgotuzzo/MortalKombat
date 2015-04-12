@@ -158,6 +158,8 @@ struct Tcambio{
     TestadoPersonaje estado;
     Tdireccion direccion;
     Tsentido sentido;
+    float alturaPJ;
+    float anchoPJ;
 };
 
 /**

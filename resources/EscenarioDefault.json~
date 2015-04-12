@@ -1,6 +1,6 @@
 {
     "ventana": { 
-        "ancho-px": 800, 
+        "ancho-px": 200, 
         "alto-px": 600, 
         "ancho": 200 
     }, 

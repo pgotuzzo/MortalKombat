@@ -37,13 +37,15 @@ int main(int argc, char** argv) {
     cout << "------------------------------------------------------------" << endl;
     cout << "Inicia la creacion del mundo" << endl;
 
-    Mundo mundo = Mundo(configuracion);
+    Mundo* mundo = new Mundo(configuracion);
 
     cout << "Finaliza la creacion del mundo" << endl;
     cout << "------------------------------------------------------------" << endl;
 
     cout << "------------------------------------------------------------" << endl;
     cout << "Inicia la creacion del controlador" << endl;
+
+
 
     Controlador controlador= Controlador();
 
@@ -71,7 +73,7 @@ int main(int argc, char** argv) {
     int k;
     Tinput estado;
 
-    int framerate = 0;
+    //int framerate = 0;
 
     while(!end){
 
@@ -84,25 +86,40 @@ int main(int argc, char** argv) {
 
         //PARA RESTABLECER EL JUEGO
         if (estado == KEY_RESTART){
-            // Aca iria para el recargar el json
+            configuracion = config(argv[1]);
+
+            tventana = configuracion.getVentana();
+            vectorTcapa = configuracion.getCapas();
+            tescenario = configuracion.getEscenario();
+            tpersonaje = configuracion.getPersonaje();
+
+            delete mundo;
+            // delete pantalla;
+            //vector<string> dirPaths, vector<float> anchosCapas, Dimensiones dimensiones, int zInd
+            pantalla = Pantalla(vectorTcapa, tventana, tescenario, tpersonaje);
+
+            mundo = new Mundo(configuracion);
+
+            controlador= Controlador();
         }
 
         //DEMAS ACCIONES
         else {
             k = static_cast<int>(estado); // k tiene la posicion del estado en el enum
 //            cout << "Valor de orden: " << k << endl << endl;
-            c = mundo.actualizarMundo(c, k);
-            framerate++;
-            if  (framerate == 2) {
-                framerate = 0;
+            c = mundo->actualizarMundo(c, k);
+            /*framerate++;
+            if  (framerate == 1) {*/
+                //framerate = 0;
                 pantalla.update(c);
                 pantalla.dibujar();
-            }
+            //}
         }
 
-        SDL_Delay(30);
+        SDL_Delay(40);
     }
 
+    delete mundo;
     cout << "------------------------------------------------------------" << endl;
     cout << "---------------------FIN DEL JUEGO--------------------------" << endl;
     cout << "------------------------------------------------------------" << endl;
