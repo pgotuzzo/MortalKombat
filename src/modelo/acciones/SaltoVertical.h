@@ -6,6 +6,7 @@
 class SaltoVertical : public Accion{
 public:
 	Posicion posIni;
+	Posicion posImg;
 	bool subiendo;
 
 

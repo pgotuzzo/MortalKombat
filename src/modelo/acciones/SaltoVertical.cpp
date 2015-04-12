@@ -5,7 +5,7 @@ const float intervalo_salto =5;
 
 
 SaltoVertical::SaltoVertical() {
-	estado = false;
+ 	estado = false;
 	subiendo = true;
 }
 bool SaltoVertical::getEstado() {
@@ -16,28 +16,32 @@ void SaltoVertical::setEstado(bool nuevoEstado, Posicion nuevaPosicion) {
 
 	estado = nuevoEstado;
 	subiendo = nuevoEstado;
+	cout<<"ENTRA CON   "<<nuevaPosicion.getY()<<endl;
 	posIni = nuevaPosicion;
+	posImg = nuevaPosicion;
 
 }
 
-
-
 Posicion SaltoVertical::realizarAccion(Posicion posActual){
-	float yActual = posActual.getY();
-	float yIni = posIni.getY();
+
 	if (estado){
-		if ( (yActual > yIni - altura_salto ) && (subiendo)){
-			return Posicion(posActual.getX(),yActual - intervalo_salto);
+		if ((posImg.getY() > posIni.getY() - altura_salto ) && (subiendo)){
+			posImg.setY(posImg.getY() - intervalo_salto);
+			cout<<"SUBIENDO  "<<posImg.getY()<<endl;
+			return posImg;
 		}
 		else{
 			subiendo = false;
-			if (yActual < yIni){
-				return Posicion(posActual.getX(),yActual + intervalo_salto);
+			if (posImg.getY() < posIni.getY()){
+				posImg.setY(posImg.getY() + intervalo_salto);
+				cout<<"BAJANDO  "<<posImg.getY()<<endl;
+				return posImg;
 			}
 		}
 	}
 	estado = false;
-	return Posicion(posActual.getX(),yActual);
+	cout<<"TERMINO  "<<posImg.getY()<<endl;
+	return posImg;
 }
 
 SaltoVertical::~SaltoVertical() {

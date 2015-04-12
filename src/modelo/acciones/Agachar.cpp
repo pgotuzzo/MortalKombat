@@ -23,6 +23,8 @@ Posicion Agachar::realizarAccion(Posicion posActual) {
         nuevaPosicion.setY(yPiso-alturaPJ);
         *pAlturaPJ = alturaPJ;
         nuevaPosicion.setX(posActual.getX());
+        nuevaPosicion.mostrarPar();
+        cout<<endl<<"NO SE AGACHA MAS  "<<nuevaPosicion.getY()<<endl;
         return nuevaPosicion;
     }
 
@@ -33,14 +35,18 @@ Posicion Agachar::realizarAccion(Posicion posActual) {
         nuevaPosicion.setX(posActual.getX());
         *pAlturaPJ = alturaAgachado;
         estado = false;
+        cout<<endl<<"SE AGACHA  "<<nuevaPosicion.getY()<<endl;
         return nuevaPosicion;
 	}
     //entra cuando el personaje esta agachado y debe permanecer agachado
     if (( floor(yPiso - posActual.getY()) == floor(alturaAgachado) && (estado))) {
         estado = false;
         *pAlturaPJ = alturaAgachado;
+        cout<<endl<<"SE SIGUE AGACHANDO  "<<posActual.getY()<<endl;
         return posActual;
     }
+
+    estado = false;
     return posActual;
 }
 

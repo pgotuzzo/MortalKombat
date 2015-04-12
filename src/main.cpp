@@ -55,7 +55,7 @@ int main(int argc, char **argv) {
             int k;
             Tinput estado;
 
-            SDL_Delay(40);
+            SDL_Delay(30);
 
             // INPUT
             estado = controlador.getInputs();

@@ -20,6 +20,7 @@ Personaje::Personaje(bool orientacion,Posicion posInicial,float alto,float ancho
 	alturaDelPersonaje = alto;
 	anchoDelPersonaje = ancho;
 	altoEscenario = nuevoAltoEscenario;
+	yPiso = alturaDelPersonaje + pos.getY();
 	accionesEnCurso[0] = new SaltoVertical();
 	accionesEnCurso[1] = new Agachar(&alturaDelPersonaje, pos.getY() + alturaDelPersonaje);
 	accionesEnCurso[2] = new Caminar();
@@ -33,9 +34,16 @@ bool Personaje::getDireccion() {
 bool Personaje::getOrientacion() {
 	return orientacion;
 }
+Posicion Personaje::verificarPuntoEnY(Posicion posicionActual){
+	cout<<yPiso<<endl;
+	if(posicionActual.getY()+alturaDelPersonaje >= yPiso){
+		return Posicion(posicionActual.getX(),yPiso-alturaDelPersonaje);
+	}
+	return posicionActual;
 
+}
 
-Posicion Personaje::verificarPunto(Posicion posicionActual,float anchoEscenario){
+Posicion Personaje::verificarPuntoEnX(Posicion posicionActual,float anchoEscenario){
 	if (posicionActual.getX() > anchoEscenario - anchoDelPersonaje){
 		return Posicion(anchoEscenario - anchoDelPersonaje, posicionActual.getY());
 	}
@@ -50,25 +58,18 @@ void Personaje::ejecutarAcionesActivadas(Accion **accionesEnCurso,float anchoEsc
 
 	pos = accionesEnCurso[1]->realizarAccion(pos);
 
-	estado = AGACHADO;
-
 	if (accionesEnCurso[0]->getEstado()){
-		pos = accionesEnCurso[0]->realizarAccion(pos);
-		estado = SALTANDO_VERTICAL;
-		//cout<<"Ejecuto accion de salto vertical"<<endl;
+		pos = verificarPuntoEnY(accionesEnCurso[0]->realizarAccion(pos));
 	}
 
 	if (accionesEnCurso[2]->getEstado()){
 		//cout<<"ejecuto accion de caminar"<<endl;
-		pos = verificarPunto(accionesEnCurso[2]->realizarAccion(pos),anchoEscenario);
-		estado = CAMINANDO;
-
+		pos = verificarPuntoEnX(accionesEnCurso[2]->realizarAccion(pos),anchoEscenario);
 
 	}
 	if (accionesEnCurso[3]->getEstado()){
 		//cout<<"Ejecuto accion de salto oblicuo"<<endl;
-		pos = verificarPunto(accionesEnCurso[3]->realizarAccion(pos),anchoEscenario);
-		estado = SALTANDO_OBLICUO;
+		pos = verificarPuntoEnX(accionesEnCurso[3]->realizarAccion(pos),anchoEscenario);
 	}
 }
 
@@ -81,6 +82,7 @@ void Personaje::realizarAccion(int orden,float anchoEscenario){
 				case(0):
 					if(!accionesEnCurso[1]->getEstado()){
 						parado=true;
+						estado = PARADO;
 					}
 					break;
 				//Saltar
@@ -88,6 +90,7 @@ void Personaje::realizarAccion(int orden,float anchoEscenario){
 					if(!accionesEnCurso[1]->getEstado()){
 						//Activo el estado de saltar verticalmente
 						accionesEnCurso[0]->setEstado(activado,pos);
+						estado = SALTANDO_VERTICAL;
 						parado=false;
 						//cout<< "SALTA"<<endl;
 					}
@@ -96,6 +99,7 @@ void Personaje::realizarAccion(int orden,float anchoEscenario){
 				case (2):
 					//activo el estado de agachar
 					accionesEnCurso[1]->setEstado(activado,pos);
+					estado = AGACHADO;
 					parado=false;
 					//cout << "SE AGACHA!"<<endl;
 					break;
@@ -107,6 +111,7 @@ void Personaje::realizarAccion(int orden,float anchoEscenario){
 						//orientacion false = izquierda
 						direccion = true;
 						accionesEnCurso[2]->setEstado(activado,true);
+						estado = CAMINANDO;
 						parado=false;
 						//cout << "CAMINA A LA DERECHA!" << endl;
 						}
@@ -118,6 +123,7 @@ void Personaje::realizarAccion(int orden,float anchoEscenario){
 						//orientacion false = izquierda
 						direccion = false;
 						accionesEnCurso[2]->setEstado(activado,false);
+						estado = CAMINANDO;
 						parado=false;
 						//cout << "CAMINA A LA IZQUIERDA!"<<endl;
 						}
@@ -129,6 +135,7 @@ void Personaje::realizarAccion(int orden,float anchoEscenario){
 						//ortientacion true = ortientacion derecha
 						direccion = true;
 						accionesEnCurso[3]->setEstado(activado, pos,true);
+						estado = SALTANDO_OBLICUO;
 						parado=false;
 						//cout << "SALTO OBLICUAMENTE PARA LA DERECHA!"<<endl;
 						}
@@ -141,11 +148,13 @@ void Personaje::realizarAccion(int orden,float anchoEscenario){
 						//ortientacion true = ortientacion derecha
 						direccion = false;
 						accionesEnCurso[3]->setEstado(activado, pos, false);
+						estado = SALTANDO_OBLICUO;
 						parado=false;
 						//cout << "SALTO OBLICUAMENTE PARA LA IZQUIERDA!"<<endl;
 					}
 					break;
 				default:
+					estado = PARADO;
 					break;
 			}
 		}

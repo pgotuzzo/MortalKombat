@@ -21,12 +21,14 @@ public:
 	float alturaDelPersonaje;
 	float anchoDelPersonaje;
 	float altoEscenario;
+	float yPiso;
 	TestadoPersonaje estado;
 	Accion* accionesEnCurso[4];
 
 	Personaje(bool Orientacion,Posicion posInicial,float alto,float ancho,float nuevoAltoEscenario);
 	void realizarAccion(int orden,float anchoEscenario);
-	Posicion verificarPunto(Posicion posicionActual,float anchoEscenario);
+	Posicion verificarPuntoEnX(Posicion posicionActual,float anchoEscenario);
+	Posicion verificarPuntoEnY(Posicion posicionActual);
 	void ejecutarAcionesActivadas(Accion **accionesEnCurso,float anchoEscenario);
 	Posicion getPosicion();
 	TestadoPersonaje getEstado();
