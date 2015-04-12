@@ -188,9 +188,10 @@ enum Tinput{
  * Se define esta constante por si se llega a
  *  necesitar cambiar la extension de las imagenes
  *  que se utilizan para los sprites.
- * TODO - Revisar si vale la pena mantener esta constante
  */
 static const std::string SPRITES_FORMAT = ".png";
+
+static const float MIN_DISTANCE_FROM_BOUND = 50;
 
 #endif //_MORTALKOMBAT_COMMON_H_
 
