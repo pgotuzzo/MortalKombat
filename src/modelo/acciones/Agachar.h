@@ -10,6 +10,7 @@ class Agachar : public Accion {
     float alturaPJ;
     float yPiso;
     float* pAlturaPJ;
+    float alturaAgachado;
 
     Agachar(float* alturaPJ,float yPiso);
     Posicion realizarAccion(Posicion posActual);

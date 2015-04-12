@@ -6,10 +6,8 @@
 #include "../Common.h"
 
 class Controlador {
-private:
-    Tinput getKeyBoardInput(SDL_Keycode key);
-
 public:
+    Tinput inputAnterior;
     Controlador();
     Tinput getInputs();
 };

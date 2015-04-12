@@ -1,4 +1,5 @@
 #include "Agachar.h"
+#include <cmath>
 
 using namespace std;
 
@@ -6,6 +7,7 @@ Agachar::Agachar(float* altura,float nuevoYPiso){
 	alturaPJ = *altura;
 	pAlturaPJ = altura;
     yPiso = nuevoYPiso;
+    alturaAgachado = (2 * alturaPJ)/3;
     estado = false;
     }
 
@@ -16,8 +18,7 @@ void Agachar::setEstado(bool nuevoEstado,Posicion pos) {
 
 Posicion Agachar::realizarAccion(Posicion posActual) {
     //Si el estado agachar esta desactivado y sigue en posicion de agachado, lo paro
-
-	if(( yPiso - posActual.getY()  == alturaPJ/2) && (!estado)){
+    if(( floor(yPiso - posActual.getY()) == floor(alturaAgachado)) && (!estado)){
         Posicion nuevaPosicion;
         nuevaPosicion.setY(yPiso-alturaPJ);
         *pAlturaPJ = alturaPJ;
@@ -25,19 +26,19 @@ Posicion Agachar::realizarAccion(Posicion posActual) {
         return nuevaPosicion;
     }
 
-    //ese 200 representa la altura de la pantalla
+    //entra cuando el personaje no esta agachado y debe agacharse
 	if ( (yPiso-posActual.getY() == alturaPJ) &&(estado)){
         Posicion nuevaPosicion;
-        nuevaPosicion.setY(yPiso-(alturaPJ/2));
+        nuevaPosicion.setY(yPiso-alturaAgachado);
         nuevaPosicion.setX(posActual.getX());
-        *pAlturaPJ = alturaPJ/2;
+        *pAlturaPJ = alturaAgachado;
         estado = false;
         return nuevaPosicion;
 	}
-
-    if ((yPiso-posActual.getY() == alturaPJ/2) && (estado)) {
+    //entra cuando el personaje esta agachado y debe permanecer agachado
+    if (( floor(yPiso - posActual.getY()) == floor(alturaAgachado) && (estado))) {
         estado = false;
-        *pAlturaPJ = alturaPJ/2;
+        *pAlturaPJ = alturaAgachado;
         return posActual;
     }
     return posActual;
