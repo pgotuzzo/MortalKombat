@@ -16,8 +16,15 @@ void PersonajeVista::crearSprites(std::string path) {
         TestadoPersonaje state = TestadoPersonaje(s);
         std::string spritesPath = path + "/" + TestadoPersonajeToString(state) + "/";
 
-//        TODO - Agregar logica
-        mSprites[s] = Sprite(mRenderer, spritesPath, true);
+        switch (s){
+            case AGACHADO:
+            case SALTANDO_VERTICAL:{
+                mSprites[s] = Sprite(mRenderer, spritesPath, false);
+                break;
+            };
+            default:
+                mSprites[s] = Sprite(mRenderer, spritesPath, true);
+        }
     }
 }
 

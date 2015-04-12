@@ -258,7 +258,7 @@ int config::cantSprites(TestadoPersonaje e){
 	int cant=0;
 	switch ( e ) {
 	case PARADO:
-		cant=7;
+		cant=12;
 		break;
 	case AGACHADO:
 		cant=3;
