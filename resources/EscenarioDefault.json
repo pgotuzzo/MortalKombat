@@ -21,7 +21,7 @@
     ], 
     "personaje": { 
         "ancho": 20, 
-        "alto": 35, 
+        "alto": 35,
         "z-index": 1,
 	"orientacion": "izquierda",
         "sprites": "/home/miguel/ClionProjects/MortalKombat/resources/sprites"

@@ -48,8 +48,6 @@ Posicion Personaje::verificarPunto(Posicion posicionActual,float anchoEscenario)
 
 void Personaje::ejecutarAcionesActivadas(Accion **accionesEnCurso,float anchoEscenario) {
 
-	cout<<endl<<"ALTURA CAPO: "<<alturaDelPersonaje<<endl;
-
 	pos = accionesEnCurso[1]->realizarAccion(pos);
 
 	estado = AGACHADO;
