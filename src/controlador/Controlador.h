@@ -6,6 +6,8 @@
 #include "../Common.h"
 
 class Controlador {
+private:
+    Tinput esAnterior(const Uint8 *state);
 public:
     Tinput inputAnterior;
     Controlador();
