@@ -9,6 +9,7 @@ public:
 	bool subiendo;
 
 
+
 	SaltoVertical();
 	bool getEstado();
 	void setEstado(bool nuevoEstado, Posicion nuevaPosicion);

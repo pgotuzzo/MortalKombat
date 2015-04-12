@@ -26,6 +26,7 @@ void PersonajeVista::update(Tcambio tcambio) {
     mCurrentState = tcambio.estado;
     mDirection = tcambio.direccion;
     mTarget = tcambio.sentido;
+    mRect.h = tcambio.alturaPJ;
 }
 
 SDL_Texture* PersonajeVista::getTexture() {

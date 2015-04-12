@@ -170,7 +170,14 @@ Posicion Personaje::getPosicion(){
 	return pos;
 }
 
+float Personaje::getAlturaPersonaje() {
+	if (accionesEnCurso[3]->getEstado()) return alturaDelPersonaje/2;
+	return alturaDelPersonaje;
+}
 
+float Personaje::getAnchoPersonaje() {
+	return anchoDelPersonaje;
+}
 
 
 Personaje::~Personaje() {

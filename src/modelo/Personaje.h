@@ -30,6 +30,8 @@ public:
 	void ejecutarAcionesActivadas(Accion **accionesEnCurso,float anchoEscenario);
 	Posicion getPosicion();
 	TestadoPersonaje getEstado();
+	float getAlturaPersonaje();
+	float getAnchoPersonaje();
 	bool getOrientacion();
 	bool getDireccion();
 

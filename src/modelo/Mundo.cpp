@@ -45,8 +45,8 @@ Tcambio Mundo::actualizarMundo(Tcambio c,int orden){
 	if(personaje1->getDireccion()) c.sentido = ADELANTE;
 	else c.sentido = ATRAS;
 	c.estado = personaje1->getEstado();
-	c.alturaPJ = personaje1->alturaDelPersonaje;
-	c.anchoPJ = personaje1->anchoDelPersonaje;
+	c.alturaPJ = personaje1->getAlturaPersonaje();
+	c.anchoPJ = personaje1->getAnchoPersonaje();
 
 	return c;
 }
