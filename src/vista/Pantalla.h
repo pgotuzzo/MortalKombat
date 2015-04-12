@@ -9,28 +9,37 @@
 using namespace std;
 
 class Pantalla {
-public:
-    struct Dimensiones {
-        float anchoPantalla, altoPantalla, anchoEscenario, distTope;
-        int anchoPx,altoPx;
-    };
-
 private:
     SDL_Window *mWindow;
     SDL_Renderer *mRenderer;
     vector<Capa> capas;
-    Dimensiones mDimensiones;
     PersonajeVista personaje;
     int zIndex;
-    float posPantalla;
-    void Inicializar(Dimensiones dimensiones);
-    Capa mEscenario;
+    float anchoPantalla, altoPantalla;
+    /*
+     * Se inicia la ventana y el renderer.
+     */
+    void Inicializar(int anchoPx,int altoPx);
 
 public:
-    //TODO - ELiminar si ya no sirve
-//    Pantalla(vector<string> dirPaths, vector<float> anchosCapas, Dimensiones dimensiones, int zInd);
+    /*
+     * Crea una pantalla.
+     * capas : formato de cada capa.
+     * ventana : formato de ventana.
+     * escenario : formato del escenario.
+     * personaje : formato del personaje.
+     */
     Pantalla(vector<Tcapa> capas, Tventana ventana, Tescenario escenario, Tpersonaje personaje);
+
+    /*
+     * Dibuja todos los objetos en pantalla.
+     */
     void dibujar();
+
+    /*
+     * Actualiza todos los objetos de pantalla.
+     * change : contiene los cambios a realizar.
+     */
     void update(Tcambio change);
 };
 

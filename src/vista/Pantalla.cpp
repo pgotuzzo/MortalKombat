@@ -2,50 +2,59 @@
 #include <SDL2/SDL.h>
 #include <iostream>
 
-Pantalla::Pantalla(vector<Tcapa> tcapas, Tventana ventana, Tescenario escenario, Tpersonaje tpersonaje) {
-    mDimensiones.anchoPantalla = ventana.ancho;
-    mDimensiones.altoPantalla = escenario.alto;
-    mDimensiones.anchoPx = ventana.anchopx;
-    mDimensiones.altoPx = ventana.altopx;
-    mDimensiones.anchoEscenario = escenario.ancho;
-
-    VistaUtils::SCALE_X = ventana.anchopx / ventana.ancho;
-    VistaUtils::SCALE_Y = ventana.altopx / escenario.alto;
-
-    // TODO - Reimplementar
-    mDimensiones.distTope = 50;
-
-    Inicializar(mDimensiones);
-    zIndex = tpersonaje.zIndex;
-    posPantalla = (mDimensiones.anchoEscenario - mDimensiones.anchoPantalla)/2;
-
-    // TODO - Eliminar SPRITES_PATH_POSTA
-    personaje = PersonajeVista(mRenderer, tpersonaje.sprites, tpersonaje.ancho, tpersonaje.alto, tpersonaje.orientacion);
-
-    for (Tcapa tcapa : tcapas){
-        VistaUtils::Trect rect;
-        rect.h = mDimensiones.altoPantalla;
-        rect.w = mDimensiones.anchoPantalla;
-        rect.p.x = (tcapa.ancho - mDimensiones.anchoPantalla)/2;
-        rect.p.y = 0;
-        Capa capa = Capa(mRenderer, tcapa.dirCapa, rect);
-        float relacionCapa = (mDimensiones.anchoEscenario - mDimensiones.anchoPantalla)/(tcapa.ancho - mDimensiones.anchoPantalla);
-        capa.setValores(tcapa.ancho, mDimensiones.altoPantalla, relacionCapa);
-        capas.push_back(capa);
-    }
-    Capa::setStatics(mDimensiones.distTope, tpersonaje.ancho, mDimensiones.anchoEscenario, mDimensiones.anchoPantalla);
-}
-
-void Pantalla::Inicializar(Dimensiones dimensiones) {
+/*
+ * Se inicia la ventana y el renderer.
+ */
+void Pantalla::Inicializar(int anchoPx,int altoPx) {
     if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
         cout << "Fallo la inicializacion de SDL." << endl;
 
-    mWindow = SDL_CreateWindow("TEST", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, dimensiones.anchoPx, dimensiones.altoPx, SDL_WINDOW_SHOWN);
+    mWindow = SDL_CreateWindow("TEST", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, anchoPx, altoPx, SDL_WINDOW_SHOWN);
     mRenderer = SDL_CreateRenderer(mWindow, -1, SDL_RENDERER_ACCELERATED);
 }
 
+/*
+ * Crea una pantalla.
+ * capas : formato de cada capa.
+ * ventana : formato de ventana.
+ * escenario : formato del escenario.
+ * personaje : formato del personaje.
+ */
+Pantalla::Pantalla(vector<Tcapa> tcapas, Tventana ventana, Tescenario escenario, Tpersonaje tpersonaje) {
+    // Setea los parametros de la pantalla
+	anchoPantalla = ventana.ancho;
+    altoPantalla = escenario.alto;
+
+    // Setea las escalas de relacion entre unidades y pixeles
+    VistaUtils::SCALE_X = ventana.anchopx / ventana.ancho;
+    VistaUtils::SCALE_Y = ventana.altopx / escenario.alto;
+
+    // Inicia la ventana y el renderer
+    Inicializar(ventana.anchopx,ventana.altopx);
+    zIndex = tpersonaje.zIndex;
+    personaje = PersonajeVista(mRenderer, tpersonaje.sprites, tpersonaje.ancho, tpersonaje.alto, tpersonaje.orientacion);
+
+    // Primero se setean las variables de clase.
+    Capa::setStatics(ventana.distTope, tpersonaje.ancho, escenario.ancho, anchoPantalla);
+    // Crea las capas.
+    for (Tcapa tcapa : tcapas){
+        VistaUtils::Trect rect;
+        rect.h = altoPantalla;
+        rect.w = anchoPantalla;
+        rect.p.x = (tcapa.ancho - anchoPantalla)/2;
+        rect.p.y = 0;
+        Capa capa = Capa(mRenderer, tcapa.dirCapa, rect);
+        capa.setValores(tcapa.ancho, altoPantalla);
+        capas.push_back(capa);
+    }
+}
+
+/*
+ * Dibuja todos los objetos en pantalla.
+ */
 void Pantalla::dibujar() {
-    SDL_Texture* texture = VistaUtils::createTexture(mRenderer, mDimensiones.anchoPantalla, mDimensiones.altoPantalla);
+    // TODO - Aca no toque nada pq pense q lo ibas a modificar vos ahora
+    SDL_Texture* texture = VistaUtils::createTexture(mRenderer, anchoPantalla, altoPantalla);
 
     for (int i = 0; i < capas.size(); i++) {
         capas[i].getTexture(texture);
@@ -62,10 +71,13 @@ void Pantalla::dibujar() {
 
 }
 
+/*
+ * Actualiza todos los objetos de pantalla.
+ * change : contiene los cambios a realizar.
+ */
 void Pantalla::update(Tcambio change) {
-    VistaUtils::Trect rect = personaje.getRect();
     personaje.update(change);
-    Capa::cambiarEscenario(change.posicion);
+    Capa::cambiarEscenario(change.posicion.x);
     for (int i = 0; i < capas.size(); i++) {
         capas[i].ajustar();
     }

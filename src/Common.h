@@ -89,6 +89,7 @@ struct Tventana {
     int altopx;
     int anchopx;
     float ancho;
+    float distTope;
 };
 
 struct Tescenario {

@@ -34,9 +34,8 @@ public:
     *  anchoCapa : ancho total de la capa en unidades
     *  distTope : distancia limite en relacion al borde de la pantalla para que se empiecen
     *  a mover las capas
-    *  relacionCapa : relacion de tamaño entre la capa con respecto al escenario
      */
-    void setValores(float anchoCapa, float altoCapa, float relacionCapa);
+    void setValores(float anchoCapa, float altoCapa);
 
 
     /*
@@ -56,9 +55,9 @@ public:
 
     /*
      * Cambia la posicion del escenario segun donde se encuentra el personaje.
-     * posPersonaje: posicion del personaje.
-     */
-    static  void cambiarEscenario(Posicion posPersonaje);
+	 * posPersonajeX: posicion x del personaje.
+	 */
+	static void cambiarEscenario(float posPersonajeX);
 
 
     /*

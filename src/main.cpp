@@ -26,6 +26,8 @@ int main(int argc, char** argv) {
     Tescenario tescenario = configuracion.getEscenario();
     Tpersonaje tpersonaje = configuracion.getPersonaje();
 
+    // TODO - meter esto en el parser o qda aca para q sea facil de tocar por lo menos
+    tventana.distTope = 50;
 
     //vector<string> dirPaths, vector<float> anchosCapas, Dimensiones dimensiones, int zInd
     Pantalla pantalla = Pantalla(vectorTcapa, tventana, tescenario, tpersonaje);

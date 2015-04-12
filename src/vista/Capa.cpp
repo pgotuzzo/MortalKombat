@@ -19,11 +19,6 @@ float Capa::posEscenario = 0;
 Capa::Capa(SDL_Renderer *renderer, std::string dirPath, VistaUtils::Trect rectPantalla) {
     mRenderer = renderer;
     mTexture = VistaUtils::loadTexture(mRenderer, dirPath, VistaUtils::COLORKEY::BLANCO);
-    if (mTexture == NULL) {
-        string mensaje = "La textura de la direccion: ";
-        mensaje = mensaje + dirPath + " no se cargo correctamente.";
-        loguerWar->loguear(mensaje.c_str(), Log::Tlog::LOG_ERR);
-    }
     mRect = rectPantalla;
 }
 
@@ -32,15 +27,11 @@ Capa::Capa(SDL_Renderer *renderer, std::string dirPath, VistaUtils::Trect rectPa
 *  anchoCapa : ancho total de la capa en unidades.
 *  distTope : distancia limite en relacion al borde de la pantalla para que se empiecen
 *  a mover las capas.
-*  relacionCapa : relacion de tamaño entre la capa con respecto al escenario.
  */
-void Capa::setValores(float anchoCapa, float altoCapa, float relacionCapa) {
-    mRelacionCapa = relacionCapa;
+void Capa::setValores(float anchoCapa, float altoCapa) {
+    mRelacionCapa = (Capa::mAnchoEscenario - Capa::mAnchoPantalla)/(anchoCapa - Capa::mAnchoPantalla);
     SDL_Texture * t = VistaUtils::createTexture(mRenderer, anchoCapa, altoCapa);
     VistaUtils::copyTexture(mRenderer, mTexture, t);
-    if (t == NULL) {
-        loguerWar->loguear("Fallo la generacion de la textura", Log::Tlog::LOG_ERR);
-    }
     mTexture = t;
 }
 
@@ -65,22 +56,19 @@ void Capa::setStatics(float distanciaTope, float anchoPersonaje, float anchoEsce
 */
 void Capa::getTexture(SDL_Texture *texture) {
     VistaUtils::copyTexture(mRenderer, mTexture, texture, &mRect, NULL);
-    if (texture == NULL) {
-        loguerWar->loguear("Fallo la copia de la textura", Log::Tlog::LOG_ERR);
-    }
 }
 
 /*
  * Cambia la posicion del escenario segun donde se encuentra el personaje.
- * posPersonaje: posicion del personaje.
+ * posPersonajeX: posicion x del personaje.
  */
-void Capa::cambiarEscenario(Posicion posPersonaje) {
+void Capa::cambiarEscenario(float posPersonajeX) {
     float topeDerecha = posEscenario + mAnchoPantalla - Capa::distTope;
     float topeIzquierda = posEscenario + Capa::distTope;
-    if (topeIzquierda > posPersonaje.x && posPersonaje.x - Capa::distTope> 0) {
-        posEscenario = posPersonaje.x - Capa::distTope;
-    } else if (posPersonaje.x + mAnchoPersonaje > topeDerecha && posPersonaje.x + mAnchoPersonaje + Capa::distTope < mAnchoEscenario) {
-        posEscenario = posPersonaje.x + mAnchoPersonaje + Capa::distTope - mAnchoPantalla;
+    if (topeIzquierda > posPersonajeX && posPersonajeX - Capa::distTope> 0) {
+        posEscenario = posPersonajeX - Capa::distTope;
+    } else if (posPersonajeX + mAnchoPersonaje > topeDerecha && posPersonajeX + mAnchoPersonaje + Capa::distTope < mAnchoEscenario) {
+        posEscenario = posPersonajeX + mAnchoPersonaje + Capa::distTope - mAnchoPantalla;
     }
 }
 
