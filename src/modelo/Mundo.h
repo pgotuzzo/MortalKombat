@@ -6,18 +6,22 @@
 #include "../Common.h"
 
 class Mundo {
-public:
+private:
 	float anchoEscenario;
 	float altoEscenario;
 	float altoPiso;
 	Personaje* personaje1;
 
-	Mundo(config configur);
+public:
+	Mundo(config configuracion);
+
 	Personaje* getPersonaje();
 	float getAncho();
 	float getAlto();
 	float getAltoPiso();
-	Tcambio actualizarMundo(Tcambio c,int orden);
+
+	Tcambio actualizarMundo(Tcambio c,Tinput input);
+
 	virtual ~Mundo();
 };
 

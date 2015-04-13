@@ -4,14 +4,19 @@
 #include "../Accion.h"
 
 class Caminar : public Accion{
-public:
+
+private:
 	bool estado;
 	bool direccion;
-	//Orientacion true = orientacion derecha
+
+public:
 	Caminar();
+
 	bool getEstado();
 	void setEstado(bool nuevoEstado, bool NuevaOrientacion);
+
 	Posicion realizarAccion(Posicion pos);
+
 	virtual ~Caminar();
 };
 

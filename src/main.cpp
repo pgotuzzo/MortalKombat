@@ -53,26 +53,25 @@ int main(int argc, char **argv) {
 
             Tcambio c;
             int k;
-            Tinput estado;
+            Tinput input;
 
-            SDL_Delay(30);
+            SDL_Delay(40);
 
             // INPUT
-            estado = controlador.getInputs();
+            input = controlador.getInputs();
 
             //SI SE DESEA SALIR DEL JUEGO
-            if (estado == KEY_EXIT)
+            if (input == KEY_EXIT)
                 endGame = true;
 
             //PARA RESTABLECER EL JUEGO
-            if (estado == KEY_RESTART) {
+            if (input == KEY_RESTART) {
                 restart = true;
             }
 
                 //DEMAS ACCIONES
             else {
-                k = static_cast<int>(estado); // k tiene la posicion del estado en el enum
-                c = mundo.actualizarMundo(c, k);
+                c = mundo.actualizarMundo(c, input);
                 pantalla.update(c);
                 pantalla.dibujar();
             }

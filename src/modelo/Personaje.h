@@ -13,7 +13,9 @@
 using namespace std;
 
 class Personaje {
-public:
+
+private:
+
 	bool parado;
 	Posicion pos;
 	bool orientacion;
@@ -25,11 +27,16 @@ public:
 	TestadoPersonaje estado;
 	Accion* accionesEnCurso[4];
 
-	Personaje(bool Orientacion,Posicion posInicial,float alto,float ancho,float nuevoAltoEscenario);
-	void realizarAccion(int orden,float anchoEscenario);
 	Posicion verificarPuntoEnX(Posicion posicionActual,float anchoEscenario);
 	Posicion verificarPuntoEnY(Posicion posicionActual);
+
 	void ejecutarAcionesActivadas(Accion **accionesEnCurso,float anchoEscenario);
+
+public:
+
+	Personaje(bool Orientacion,Posicion posInicial,float alto,float ancho,float nuevoAltoEscenario);
+	void realizarAccion(Tinput orden,float anchoEscenario);
+
 	Posicion getPosicion();
 	TestadoPersonaje getEstado();
 	float getAlturaPersonaje();
@@ -38,5 +45,6 @@ public:
 	bool getDireccion();
 
 	virtual ~Personaje();
+
 };
 #endif /* PERSONAJE_H_ */

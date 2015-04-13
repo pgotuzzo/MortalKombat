@@ -1,46 +1,52 @@
 #include "SaltoVertical.h"
 
+// Constantes para que se regule el salto vertical
 const float altura_salto = 60;
-const float intervalo_salto =5;
+const float intervalo_salto =5; // altura_salto / intervalo_salto = numero de loops
 
 
 SaltoVertical::SaltoVertical() {
  	estado = false;
-	subiendo = true;
+	subiendo = true; // Cuando se comienza a hacer el salto tiene que subir
 }
+
 bool SaltoVertical::getEstado() {
 	return estado;
 }
 
+/*
+ * Se activan el estado del salto y se setea la posicion del personaje antes de realizar el salto.
+ */
 void SaltoVertical::setEstado(bool nuevoEstado, Posicion nuevaPosicion) {
 
 	estado = nuevoEstado;
 	subiendo = nuevoEstado;
-	cout<<"ENTRA CON   "<<nuevaPosicion.getY()<<endl;
 	posIni = nuevaPosicion;
-	posImg = nuevaPosicion;
+	posImg = nuevaPosicion; // Para que no se pase del piso.
 
 }
 
+/*
+ * Devuelve la posicion del personaje luego de un intervalo de salto hecho.
+ */
 Posicion SaltoVertical::realizarAccion(Posicion posActual){
-
+	// Se fija si el salto esta activado para realizarlo.
 	if (estado){
+		// Condicion para que siga subiendo. La idea es que no se pase del y maximo.
 		if ((posImg.getY() > posIni.getY() - altura_salto ) && (subiendo)){
 			posImg.setY(posImg.getY() - intervalo_salto);
-			cout<<"SUBIENDO  "<<posImg.getY()<<endl;
 			return posImg;
 		}
+		// Condicion para que empieze a bajar.
 		else{
-			subiendo = false;
+			subiendo = false; // Esta bajando
 			if (posImg.getY() < posIni.getY()){
 				posImg.setY(posImg.getY() + intervalo_salto);
-				cout<<"BAJANDO  "<<posImg.getY()<<endl;
 				return posImg;
 			}
 		}
 	}
-	estado = false;
-	cout<<"TERMINO  "<<posImg.getY()<<endl;
+	estado = false; // se termino con el salto vertical.
 	return posImg;
 }
 

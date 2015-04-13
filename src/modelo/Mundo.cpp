@@ -1,9 +1,16 @@
 #include "../parser/config.h"
 #include "Mundo.h"
 
-Mundo::Mundo(config configur) {
-	Tescenario escenario = configur.getEscenario();
-	Tpersonaje pj = configur.getPersonaje();
+
+/* Constructor de Mundo.
+ * Recibe la configuracion que se devuelve del parser.
+ * Crea un personaje e inicializa su posicion, altura y ancho.
+ * Tambien se inicializa el alto, ancho y yPiso del escenario.
+
+ */
+Mundo::Mundo(config configuracion) {
+	Tescenario escenario = configuracion.getEscenario();
+	Tpersonaje pj = configuracion.getPersonaje();
 
 	anchoEscenario = escenario.ancho;
 	altoEscenario = escenario.alto;
@@ -15,11 +22,12 @@ Mundo::Mundo(config configur) {
 	float pos_x = anchoEscenario/2;
 	float pos_y = altoEscenario - altoPiso - altoPJ;
 
-	bool orientacion = true; // agregar en el parser el get orientacion y cambiar esto
+	bool orientacion = true;
 
 	personaje1 = new Personaje(orientacion,Posicion(pos_x,pos_y),altoPJ,anchoPJ, altoEscenario);
 
 }
+
 
 Personaje* Mundo::getPersonaje(){
 	return personaje1;
@@ -37,8 +45,12 @@ float Mundo::getAltoPiso(){
 	return altoPiso;
 }
 
-Tcambio Mundo::actualizarMundo(Tcambio c,int orden){
-	personaje1->realizarAccion(orden,anchoEscenario);
+/* Devuelve la actualizacion del struct Tcambio recibido junto con el numero de accion que debe realizar
+ * Personaje realiza su respectiva accion.
+ * Se asigna todos los datos pertinentes de personaje a Tcambio.
+ */
+Tcambio Mundo::actualizarMundo(Tcambio c,Tinput input){
+	personaje1->realizarAccion(input,anchoEscenario);
 	c.posicion = personaje1->getPosicion();
 	if(personaje1->getOrientacion()) c.direccion = DERECHA;
 	else c.direccion = IZQUIERDA;

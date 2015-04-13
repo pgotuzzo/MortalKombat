@@ -3,6 +3,8 @@
 
 #include "../Common.h"
 
+// Clase madre de todas las acciones. Es una clase abstracta.
+
 class Accion {
 public:
 	bool accion_activada;

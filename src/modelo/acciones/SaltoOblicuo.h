@@ -6,7 +6,8 @@
 
 
 class SaltoOblicuo : public Accion{
-public:
+
+private:
 	bool estado;
 	bool orientacion;
 	float a;
@@ -20,11 +21,15 @@ public:
 
 	Posicion posImg;
 
+public:
+
 	SaltoOblicuo(float altura);
 
-	void setEstado(bool nuevoEstado, Posicion nuevaPosicion,bool direccionSalto);
-	Posicion realizarAccion(Posicion pos);
 	bool getEstado();
+	void setEstado(bool nuevoEstado, Posicion nuevaPosicion,bool direccionSalto);
+
+	Posicion realizarAccion(Posicion pos);
+
 	virtual ~SaltoOblicuo();
 };
 

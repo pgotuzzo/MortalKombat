@@ -4,18 +4,21 @@
 #include "../Accion.h"
 
 class SaltoVertical : public Accion{
-public:
+
+private:
 	Posicion posIni;
 	Posicion posImg;
 	bool subiendo;
 
-
+public:
 
 	SaltoVertical();
+
 	bool getEstado();
 	void setEstado(bool nuevoEstado, Posicion nuevaPosicion);
 
 	Posicion realizarAccion(Posicion pos_actual);
+
 	virtual ~SaltoVertical();
 };
 

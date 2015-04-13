@@ -4,7 +4,8 @@
 #include "../Accion.h"
 
 class Agachar : public Accion {
-    public:
+
+private:
     bool estado;
     Posicion posInicial;
     float alturaPJ;
@@ -12,10 +13,14 @@ class Agachar : public Accion {
     float* pAlturaPJ;
     float alturaAgachado;
 
+public:
     Agachar(float* alturaPJ,float yPiso);
-    Posicion realizarAccion(Posicion posActual);
+
     bool getEstado();
     void setEstado(bool nuevoEstado,Posicion pos);
+
+    Posicion realizarAccion(Posicion posActual);
+
     virtual~Agachar();
 };
 
