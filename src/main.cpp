@@ -4,6 +4,10 @@
 #include "parser/config.h"
 #include "modelo/Mundo.h"
 #include "controlador/Controlador.h"
+#include <time.h>
+
+const float delay = 35.0;
+const int cantLoops = 2;
 
 int main(int argc, char **argv) {
 
@@ -11,6 +15,10 @@ int main(int argc, char **argv) {
     cout << "------------------------------------------------------------" << endl;
     cout << "------------------INICIO DEL JUEGO--------------------------" << endl;
     cout << "------------------------------------------------------------" << endl;
+
+    clock_t t1, t2;
+    float timeloop = 0.0;
+    int framerape = 0;
 
     while (!endGame) {
 
@@ -24,11 +32,11 @@ int main(int argc, char **argv) {
         Tescenario tescenario = configuracion.getEscenario();
         Tpersonaje tpersonaje = configuracion.getPersonaje();
         tventana.distTope = MIN_DISTANCE_FROM_BOUND;
-        Pantalla pantalla = Pantalla(vectorTcapa, tventana, tescenario, tpersonaje);
+        Pantalla* pantalla = new Pantalla(vectorTcapa, tventana, tescenario, tpersonaje);
         cout << "Finaliza la creacion de la pantalla" << endl;
 
         cout << "Inicia la creacion del mundo..." << endl;
-        Mundo mundo = Mundo(configuracion);
+        Mundo* mundo = new Mundo(configuracion);
         cout << "Finaliza la creacion del mundo" << endl;
 
         cout << "Inicia la creacion del controlador" << endl;
@@ -55,7 +63,7 @@ int main(int argc, char **argv) {
             int k;
             Tinput input;
 
-            SDL_Delay(40);
+            t1 = clock();
 
             // INPUT
             input = controlador.getInputs();
@@ -66,15 +74,22 @@ int main(int argc, char **argv) {
 
             //PARA RESTABLECER EL JUEGO
             if (input == KEY_RESTART) {
+                delete mundo;
+                delete pantalla;
+
                 restart = true;
             }
 
                 //DEMAS ACCIONES
             else {
-                c = mundo.actualizarMundo(c, input);
-                pantalla.update(c);
-                pantalla.dibujar();
+                c = mundo->actualizarMundo(c, input);
+                pantalla->update(c);
+                if( framerape % cantLoops == 0) pantalla->dibujar();
             }
+            t2 = clock();
+            timeloop = (((float)t2 - (float)t1) / 1000000.0F ) * 1000;
+            framerape++;
+            SDL_Delay(delay - timeloop);
         }
     }
     cout << "------------------------------------------------------------" << endl;

@@ -13,7 +13,7 @@ Agachar::Agachar(float* altura,float nuevoYPiso){
 	alturaPJ = *altura;
 	pAlturaPJ = altura;
     yPiso = nuevoYPiso;
-    alturaAgachado = (2 * alturaPJ)/3; // Se definio que se va a achicar solo un tercio de su altura.
+    alturaAgachado = (2 * alturaPJ/3); // Se definio que se va a achicar solo un tercio de su altura.
     estado = false;
     }
 
@@ -38,7 +38,7 @@ Posicion Agachar::realizarAccion(Posicion posActual) {
     }
 
     //entra cuando el personaje no esta agachado y debe agacharse
-	if ( (yPiso-posActual.getY() == alturaPJ) &&(estado)){
+	if ( (floor(yPiso-posActual.getY()) == floor(alturaPJ)) &&(estado)){
         Posicion nuevaPosicion;
         nuevaPosicion.setY(yPiso-alturaAgachado);
         nuevaPosicion.setX(posActual.getX());
