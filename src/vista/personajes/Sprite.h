@@ -11,6 +11,7 @@ private:
     std::vector<SDL_Texture *> mTextures;
     int mCurrent;
     bool mRepeat;
+    bool mFirstPass;
 
 public:
     Sprite(){};

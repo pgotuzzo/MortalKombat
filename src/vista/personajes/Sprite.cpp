@@ -5,6 +5,7 @@
 Sprite::Sprite(SDL_Renderer* renderer, std::string dirPath, bool repeat) {
     mCurrent = 0;
     mRepeat = repeat;
+    mFirstPass = true;
     mRenderer = renderer;
     mTextures = std::vector<SDL_Texture *>();
 
@@ -34,25 +35,29 @@ long Sprite::getCount() {
 }
 
 void Sprite::getFirst(SDL_Texture* texture, bool flip) {
+    mFirstPass = true;
     VistaUtils::copyTexture(mRenderer, mTextures[0], texture);
 }
 
 void Sprite::getNext(SDL_Texture* texture, bool flip) {
-    if ((mCurrent == getCount() - 1) && (mRepeat)){
-        mCurrent = 0;
-    }else if(mCurrent < getCount() - 1){
-        mCurrent++;
-    }
     VistaUtils::copyTexture(mRenderer, mTextures[mCurrent], texture, flip);
+    if (mCurrent < getCount() - 1) {
+        mCurrent++;
+    } else if (mRepeat){
+        mCurrent = 0;
+    }
 }
 
 void Sprite::getBefore(SDL_Texture *texture, bool flip) {
-    if ((mCurrent == 0) && (mRepeat)){
-        mCurrent = (int) mTextures.size() - 1;
-    }else if(mCurrent > 0){
-        mCurrent--;
-    }
     VistaUtils::copyTexture(mRenderer, mTextures[mCurrent], texture, flip);
+    if (mCurrent == 0){
+        mCurrent = (int) getCount() - 1;
+    } else if ( ( mCurrent > 0 ) && ( mCurrent < getCount() - 1 ) ){
+        mCurrent--;
+    } else if (mFirstPass){
+        mCurrent--;
+        mFirstPass = mRepeat;
+    }
 }
 
 void Sprite::freeTextures() {
