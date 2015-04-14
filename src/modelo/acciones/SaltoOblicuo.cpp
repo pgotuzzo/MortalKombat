@@ -59,6 +59,7 @@ Posicion SaltoOblicuo::realizarAccion(Posicion pos){
 			estado = false;
 			return posFinal;
 		}
+	posImg.mostrarPar();
 	return posImg;
 }
 
