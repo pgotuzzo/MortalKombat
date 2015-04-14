@@ -26,7 +26,7 @@ public:
 	SaltoOblicuo(float altura);
 
 	bool getEstado();
-	void setEstado(bool nuevoEstado, Posicion nuevaPosicion,bool direccionSalto);
+	void setEstado(bool nuevoEstado, Posicion nuevaPosicion,bool sentidoSalto);
 
 	Posicion realizarAccion(Posicion pos);
 

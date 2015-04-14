@@ -18,8 +18,8 @@ private:
 
 	bool parado;
 	Posicion pos;
-	bool orientacion;
 	bool direccion;
+	bool sentido;
 	float alturaDelPersonaje;
 	float anchoDelPersonaje;
 	float altoEscenario;
@@ -34,15 +34,15 @@ private:
 
 public:
 
-	Personaje(bool Orientacion,Posicion posInicial,float alto,float ancho,float nuevoAltoEscenario);
+	Personaje(bool direccion,Posicion posInicial,float alto,float ancho,float nuevoAltoEscenario);
 	void realizarAccion(Tinput orden,float anchoEscenario);
 
 	Posicion getPosicion();
 	TestadoPersonaje getEstado();
 	float getAlturaPersonaje();
 	float getAnchoPersonaje();
-	bool getOrientacion();
 	bool getDireccion();
+	bool getSentido();
 
 	virtual ~Personaje();
 

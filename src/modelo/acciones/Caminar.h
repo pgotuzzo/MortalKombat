@@ -13,7 +13,7 @@ public:
 	Caminar();
 
 	bool getEstado();
-	void setEstado(bool nuevoEstado, bool NuevaOrientacion);
+	void setEstado(bool nuevoEstado, bool nuevaDireccion);
 
 	Posicion realizarAccion(Posicion pos);
 

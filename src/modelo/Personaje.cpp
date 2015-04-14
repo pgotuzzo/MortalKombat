@@ -14,10 +14,12 @@ const bool activado = true;
 
 /*
  *Constructor de personaje. Se crean acciones que puede realizar el mismo.
+ * Direccion: True = derecha
+ * Sentido: True = derecha
  */
-Personaje::Personaje(bool orientacion,Posicion posInicial,float alto,float ancho,float nuevoAltoEscenario){
-	this->orientacion = orientacion;
-	this->direccion = true;
+Personaje::Personaje(bool direccion,Posicion posInicial,float alto,float ancho,float nuevoAltoEscenario){
+	this->direccion = direccion;
+	this->sentido = true;
 	parado = true;
 	estado = PARADO;
 	pos = posInicial;
@@ -119,7 +121,7 @@ void Personaje::realizarAccion(Tinput orden,float anchoEscenario){
 				case (KEY_DERECHA):
 					if(!accionesEnCurso[1]->getEstado()) {
 						//activo el estado avanzar
-						direccion = true;
+						sentido = true;
 						accionesEnCurso[2]->setEstado(activado,true);
 						estado = CAMINANDO;
 						parado=false;
@@ -129,7 +131,7 @@ void Personaje::realizarAccion(Tinput orden,float anchoEscenario){
 				case (KEY_IZQUIERDA):
 					if(!accionesEnCurso[1]->getEstado()) {
 						//activo el estado avanzar
-						direccion = false;
+						sentido = false;
 						accionesEnCurso[2]->setEstado(activado,false);
 						estado = CAMINANDO;
 						parado=false;
@@ -139,7 +141,7 @@ void Personaje::realizarAccion(Tinput orden,float anchoEscenario){
 				case (KEY_ARRIBA_DERECHA):
 					if(!accionesEnCurso[1]->getEstado()){
 						//Activo el estado de saltar oblicuamente
-						direccion = true;
+						sentido = true;
 						accionesEnCurso[3]->setEstado(activado, pos,true);
 						estado = SALTANDO_OBLICUO;
 						parado=false;
@@ -150,7 +152,7 @@ void Personaje::realizarAccion(Tinput orden,float anchoEscenario){
 				case (KEY_ARRIBA_IZQUIERDA):
 					if(!accionesEnCurso[1]->getEstado()){
 						//Activo el estado de saltar oblicuamente
-						direccion = false;
+						sentido = false;
 						accionesEnCurso[3]->setEstado(activado, pos, false);
 						estado = SALTANDO_OBLICUO;
 						parado=false;
@@ -168,12 +170,12 @@ void Personaje::realizarAccion(Tinput orden,float anchoEscenario){
 	//Cada accion se desactiva cuando termina.
 }
 
-bool Personaje::getDireccion() {
-	return direccion;
+bool Personaje::getSentido() {
+	return sentido;
 }
 
-bool Personaje::getOrientacion() {
-	return orientacion;
+bool Personaje::getDireccion() {
+	return direccion;
 }
 
 

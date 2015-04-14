@@ -7,23 +7,23 @@
     "escenario": { 
         "ancho": 1000, 
         "alto": 150, 
-        "y-piso": 20 
+        "y-piso": 15
     }, 
     "capas": [ 
         { 
             "imagen_fondo": "/home/miguel/ClionProjects/MortalKombat/resources/capas/capa1.png",
-            "ancho": 500 
+            "ancho": 100
         }, 
         { 
             "imagen_fondo": "/home/miguel/ClionProjects/MortalKombat/resources/capas/capa2.png",
-            "ancho": 1000 
+            "ancho": 200
         } 
     ], 
     "personaje": { 
-        "ancho": 20, 
-        "alto": 35,
-        "z-index": 1,
-	"orientacion": "izquierda",
+        "ancho": 20,
+        "alto": 50,
+        "z-index": 0,
+	"orientacion": "derecha",
         "sprites": "/home/miguel/ClionProjects/MortalKombat/resources/sprites"
     } 
 } 

@@ -20,11 +20,11 @@ SaltoOblicuo::SaltoOblicuo(float altura) {
  * El recorrido del salto se realiza mediante una funcion parabolica de la
  * forma y = a*(x-x1)*(x-x2) donde x1 y x2 son el x inicial y final del personaje.
  */
-void SaltoOblicuo::setEstado(bool nuevoEstado,Posicion nuevaPosicion,bool direccionSalto) {
+void SaltoOblicuo::setEstado(bool nuevoEstado,Posicion nuevaPosicion,bool sentidoSalto) {
     estado = nuevoEstado;
     posInicial = nuevaPosicion;
 	posImg = nuevaPosicion; // Para que no se pase del margen.
-    if (direccionSalto) {
+    if (sentidoSalto) {
     	posFinal = posInicial + Posicion(longitudSalto,0);
     	coeficiente = 1.0; // este coeficiente sirve para saber si le tengo que restar o sumar a la posicion en x.
     }

@@ -22,9 +22,14 @@ Mundo::Mundo(config configuracion) {
 	float pos_x = anchoEscenario/2;
 	float pos_y = altoEscenario - altoPiso - altoPJ;
 
-	bool orientacion = true;
+	Tdireccion direccion = configuracion.getPersonaje().orientacion;
 
-	personaje1 = new Personaje(orientacion,Posicion(pos_x,pos_y),altoPJ,anchoPJ, altoEscenario);
+	bool dir;
+
+	if (direccion == DERECHA) dir = true;
+	else dir = false;
+
+	personaje1 = new Personaje(dir,Posicion(pos_x,pos_y),altoPJ,anchoPJ, altoEscenario);
 
 }
 
@@ -52,9 +57,9 @@ float Mundo::getAltoPiso(){
 Tcambio Mundo::actualizarMundo(Tcambio c,Tinput input){
 	personaje1->realizarAccion(input,anchoEscenario);
 	c.posicion = personaje1->getPosicion();
-	if(personaje1->getOrientacion()) c.direccion = DERECHA;
+	if(personaje1->getDireccion()) c.direccion = DERECHA;
 	else c.direccion = IZQUIERDA;
-	if(personaje1->getDireccion()) c.sentido = ADELANTE;
+	if(personaje1->getSentido()) c.sentido = ADELANTE;
 	else c.sentido = ATRAS;
 	c.estado = personaje1->getEstado();
 	c.alturaPJ = personaje1->getAlturaPersonaje();
