@@ -121,7 +121,10 @@ void Personaje::realizarAccion(Tinput orden,float anchoEscenario){
 				case (KEY_DERECHA):
 					if(!accionesEnCurso[1]->getEstado()) {
 						//activo el estado avanzar
-						sentido = true;
+						if (direccion == true)
+							sentido = true;
+						else
+							sentido = false;
 						accionesEnCurso[2]->setEstado(activado,true);
 						estado = CAMINANDO;
 						parado=false;
@@ -131,7 +134,10 @@ void Personaje::realizarAccion(Tinput orden,float anchoEscenario){
 				case (KEY_IZQUIERDA):
 					if(!accionesEnCurso[1]->getEstado()) {
 						//activo el estado avanzar
-						sentido = false;
+						if (direccion == true)
+							sentido = false;
+						else
+							sentido = true;
 						accionesEnCurso[2]->setEstado(activado,false);
 						estado = CAMINANDO;
 						parado=false;
@@ -141,7 +147,10 @@ void Personaje::realizarAccion(Tinput orden,float anchoEscenario){
 				case (KEY_ARRIBA_DERECHA):
 					if(!accionesEnCurso[1]->getEstado()){
 						//Activo el estado de saltar oblicuamente
-						sentido = true;
+						if (direccion == true)
+							sentido = true;
+						else
+							sentido = false;
 						accionesEnCurso[3]->setEstado(activado, pos,true);
 						estado = SALTANDO_OBLICUO;
 						parado=false;
@@ -152,7 +161,10 @@ void Personaje::realizarAccion(Tinput orden,float anchoEscenario){
 				case (KEY_ARRIBA_IZQUIERDA):
 					if(!accionesEnCurso[1]->getEstado()){
 						//Activo el estado de saltar oblicuamente
-						sentido = false;
+						if (direccion == true)
+							sentido = false;
+						else
+							sentido = true;
 						accionesEnCurso[3]->setEstado(activado, pos, false);
 						estado = SALTANDO_OBLICUO;
 						parado=false;
