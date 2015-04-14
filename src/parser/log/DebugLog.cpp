@@ -29,13 +29,13 @@ void DebugLog::loguear(const char* mensajeError, Log::Tlog tipo)  {
 
 	switch (tipo) {
 	case (LOG_ERR):
-		tipoDeLog = " - Error - ";
+		tipoDeLog = " -Error- ";
 		break;
 	case (LOG_DEB):
-		tipoDeLog = " - Debug - ";
+		tipoDeLog = " -Debug- ";
 		break;
 	case (LOG_WAR):
-		tipoDeLog = " - Warning - ";
+		tipoDeLog = " -Warning- ";
 		break;
 	default:
 		;

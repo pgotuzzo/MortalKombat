@@ -1,5 +1,6 @@
 #include "config.h"
 #include <fstream>
+#include <string.h>
 
 using namespace Json;
 
@@ -75,14 +76,14 @@ void config::setValores(Value partes){
 	this->ventana.ancho = partes["ventana"].get("ancho", 200).asInt();
 	this->validacionPositivoI(this->ventana.ancho,"ventana","ancho");
 
-	this->personaje.ancho = partes["personaje"].get("ancho", 0).asFloat();
+	this->personaje.ancho = partes["personaje"].get("ancho", 20).asFloat();
 	this->validacionPositivoF(this->personaje.ancho,"personaje","ancho");
 
-	this->personaje.alto = partes["personaje"].get("alto", -100).asFloat();
+	this->personaje.alto = partes["personaje"].get("alto", 35).asFloat();
 	this->validacionPositivoF(this->personaje.alto,"personaje","alto");
 
 
-	this->personaje.zIndex = partes["personaje"].get("z-index",0).asInt();
+	this->personaje.zIndex = partes["personaje"].get("z-index",1).asInt();
 	this->validacionPositivoI(this->personaje.zIndex,"personaje","z-index");
 
 	string orientacion;
@@ -93,22 +94,22 @@ void config::setValores(Value partes){
 	this->personaje.sprites = partes["personaje"].get("sprites","/home/MortalKombat/sprites").asString();
 	this->validacionPath(this->personaje.sprites);
 
-	this->escenario.alto = partes["escenario"].get("alto",111).asFloat();
+	this->escenario.alto = partes["escenario"].get("alto",150).asFloat();
 	this->validacionPositivoF(this->escenario.alto,"escenario","alto");
 
 
-	this->escenario.ancho = partes["escenario"].get("ancho",111).asFloat();
+	this->escenario.ancho = partes["escenario"].get("ancho",1000).asFloat();
 	this->validacionPositivoF(this->escenario.ancho,"escenario","ancho");
 
 
-	this->escenario.yPiso = partes["escenario"].get("y-piso",0).asInt();
+	this->escenario.yPiso = partes["escenario"].get("y-piso",20).asInt();
 	this->validacionPositivoI(this->escenario.yPiso,"escenario","y-piso");
 
 
 	Value capa=partes["capas"];
 	Tcapa aux;
 	bool existe=true;
-
+	int anchoCapa=500;
 	for(unsigned i = 0; i < capa.size(); i++){
 		aux.dirCapa=capa[i].get("imagen_fondo","default").asString();
 		FILE *fp = fopen(aux.dirCapa.c_str(),"r");
@@ -116,7 +117,8 @@ void config::setValores(Value partes){
 			existe=false;
 		else
 			fclose(fp);
-		aux.ancho=capa[i].get("ancho",111).asFloat();
+		aux.ancho=capa[i].get("ancho",anchoCapa).asFloat();
+		anchoCapa=anchoCapa*2;
 		this->vectorCapas.push_back(aux);
 	}
 
@@ -148,50 +150,77 @@ void config::cargaPorDefecto(){
 
 void config::validacionPath(string path){
 	ostringstream os;
+
+	int cantErroneos=0;
+	bool directorioErroneo=false;
 	for(int e = 0; e < 5; e++ ){
 
 		TestadoPersonaje estado = (TestadoPersonaje) e;
+		ostringstream dir;
+		dir<<path<<"/"<<TestadoPersonajeToString(estado);
+		FILE* archivo=fopen(dir.str().c_str(),"r");
 
-		for(int i = 1; i <= this->cantSprites(estado); i++){
-			os.str("");
-			os.clear();
-			if(i<=9)
-				os<<path<<"/"<<TestadoPersonajeToString(estado)<<"/0"<<i<<".png";
-			else
-				os<<path<<"/"<<TestadoPersonajeToString(estado)<<"/"<<i<<".png";
-			FILE* fp=fopen(os.str().c_str(),"r");
-			if(!fp){
-				// TODO - Agregar Ruta relativa
-				string path="/home/MortalKombat/sprites/default.jpg";
-				ifstream aux;
-				ofstream arch;
-				const int LEN=8192;
-				char buffer_out[LEN];
-				char buffer_in[LEN];
-				if (LEN) {
-
-				    aux.rdbuf()->pubsetbuf(buffer_in, LEN );
-				    arch.rdbuf()->pubsetbuf(buffer_out, LEN);
-				} else {
-				    aux.rdbuf()->pubsetbuf(NULL, 0 );
-				    arch.rdbuf()->pubsetbuf(NULL, 0);
-				}
-				aux.open(path.c_str(), ios::in | ios::binary);
-				arch.open(os.str().c_str(), ios::out | ios::binary);
-				arch << aux.rdbuf();
-
-				arch.close();
-				aux.close();
-
-				ostringstream mensajeError;
-				mensajeError<<"Falló la carga de "<<os.str()<<". Se duplica un sprite en su lugar.";
-				loguerWar->loguear(mensajeError.str().c_str(), Log::Tlog::LOG_ERR);
-				cout<<os.str()<<" esta roto\n";
-			} else
-				fclose(fp);
-		}
-
+		if(archivo==NULL)
+			directorioErroneo=true;
+		else
+			fclose(archivo);
 	}
+
+	if(directorioErroneo){
+		this->personaje.sprites="/home/MortalKombat/sprites";
+		ostringstream mensajeError;
+		mensajeError<<"Directorios erroneos. Se cargan sprites por default.";
+		loguerWar->loguear(mensajeError.str().c_str(), Log::Tlog::LOG_ERR);
+	} else
+		for(int e = 0; e < 5; e++ ){
+
+			TestadoPersonaje estado = (TestadoPersonaje) e;
+
+			for(int i = 1; i <= this->cantSprites(estado); i++){
+				os.str("");
+				os.clear();
+				if(i<=9)
+					os<<path<<"/"<<TestadoPersonajeToString(estado)<<"/0"<<i<<".png";
+				else
+					os<<path<<"/"<<TestadoPersonajeToString(estado)<<"/"<<i<<".png";
+				FILE* fp=fopen(os.str().c_str(),"r");
+				if(!fp){
+					cantErroneos++;
+					if(cantErroneos==40){
+						this->personaje.sprites="/home/MortalKombat/sprites";
+						ostringstream mensajeError;
+						mensajeError<<"Falló la carga de todos los sprites. Se cargan sprites por default.";
+						loguerWar->loguear(mensajeError.str().c_str(), Log::Tlog::LOG_ERR);
+					}
+					// TODO - Agregar Ruta relativa
+					string path="/home/MortalKombat/sprites/default.jpg";
+					ifstream aux;
+					ofstream arch;
+					const int LEN=8192;
+					char buffer_out[LEN];
+					char buffer_in[LEN];
+					if (LEN) {
+						aux.rdbuf()->pubsetbuf(buffer_in, LEN );
+						arch.rdbuf()->pubsetbuf(buffer_out, LEN);
+					} else {
+						aux.rdbuf()->pubsetbuf(NULL, 0 );
+						arch.rdbuf()->pubsetbuf(NULL, 0);
+					}
+					aux.open(path.c_str(), ios::in | ios::binary);
+					arch.open(os.str().c_str(), ios::out | ios::binary);
+					arch << aux.rdbuf();
+
+					arch.close();
+					aux.close();
+
+					ostringstream mensajeError;
+					mensajeError<<"Falló la carga de "<<os.str()<<". Se duplica un sprite en su lugar.";
+					loguerWar->loguear(mensajeError.str().c_str(), Log::Tlog::LOG_ERR);
+				} else
+					fclose(fp);
+			}
+
+		}
 }
 
 void config::validacionPositivoI(int num,string parte,string conf){
@@ -206,16 +235,16 @@ void config::validacionPositivoI(int num,string parte,string conf){
 			mensajeError<<"Se ingresó un número negativo en "<<parte<<"/"<<conf<<". Se carga un valor por defecto.";
 			loguerWar->loguear(mensajeError.str().c_str(), Log::Tlog::LOG_ERR);
 			//Cambia el valor negativo por uno por defecto.
-			if(parte=="ventana"){
-					if(conf=="ancho-px")
+			if(strcmp(parte.c_str(),"ventana")){
+					if(strcmp(conf.c_str(),"ancho-px"))
 						this->ventana.anchopx=800;
 					else
-						if(conf=="alto-px")
+						if(strcmp(parte.c_str(),"alto-px"))
 							this->ventana.altopx=600;
 						else
 							this->ventana.ancho=200;
 			}else
-				if(parte=="escenario")
+				if(strcmp(parte.c_str(),"escenario"))
 					this->escenario.yPiso=20;
 				else
 					this->personaje.zIndex=1;
@@ -237,15 +266,15 @@ void config::validacionPositivoF(float num,string parte,string conf){
 		mensajeError<<"Se ingresó un número negativo en "<<parte<<"/"<<conf<<". Se carga un valor por defecto.";
 		loguerWar->loguear(mensajeError.str().c_str(), Log::Tlog::LOG_ERR);
 		//Cambia el valor negativo por uno por defecto.
-		if(parte=="escenario") {
-			if(conf=="ancho")
+		if(strcmp(parte.c_str(),"escenario")) {
+			if(strcmp(parte.c_str(),"ancho"))
 				this->escenario.ancho=1000;
 			else
 				this->escenario.alto=150;
 
 		} else
-			if(parte=="personaje"){
-				if(conf=="ancho")
+			if(strcmp(parte.c_str(),"personaje")){
+				if(strcmp(conf.c_str(),"ancho"))
 					this->personaje.ancho=20;
 				else
 					this->personaje.alto=35;
@@ -264,13 +293,13 @@ int config::cantSprites(TestadoPersonaje e){
 		cant=3;
 		break;
 	case CAMINANDO:
-		cant=9;
+		cant=12;
 		break;
 	case SALTANDO_OBLICUO:
 		cant=8;
 		break;
 	case SALTANDO_VERTICAL:
-		cant=4;
+		cant=5;
 		break;
 	}
 	return cant;

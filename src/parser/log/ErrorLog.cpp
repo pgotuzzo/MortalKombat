@@ -30,7 +30,7 @@ ErrorLog* ErrorLog::getInstance() {
 
         std::ofstream salida(archivo, std::ios::out | std::ios::app);
 
-        salida << "Error - " << mensajeError << "\n";
+        salida <<fecha<< "Error- " << mensajeError << "\n";
         salida.close();
     }
 }

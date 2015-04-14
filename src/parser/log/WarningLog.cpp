@@ -31,10 +31,10 @@ void WarningLog::loguear(const char* mensajeError, Log::Tlog tipo) {
 
     switch (tipo) {
         case (LOG_ERR):
-            tipoDeLog = "Error - ";
+            tipoDeLog = " Error - ";
             break;
         case (LOG_WAR):
-            tipoDeLog = "Warning - ";
+            tipoDeLog = " Warning - ";
             break;
         default:
             return;
@@ -43,7 +43,7 @@ void WarningLog::loguear(const char* mensajeError, Log::Tlog tipo) {
     if(salida.is_open()){
         std::cout<<"okkkk";
     }
-    salida << tipoDeLog << mensajeError << "\n";
+    salida<<fecha << tipoDeLog << mensajeError << "\n";
     salida.close();
 }
 
