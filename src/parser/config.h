@@ -21,18 +21,28 @@ public:
 	Tpersonaje getPersonaje ();
 
 private:
+
 	Tventana ventana;
 	Tescenario escenario;
 	Tpersonaje personaje;
 	Tcapa capa;
 	vector<Tcapa> vectorCapas;
+
 	void setValores(Json::Value);
-	void cargaPorDefecto();
 	Tdireccion obtieneEnum(string);
+	int cantSprites(TestadoPersonaje);
+
+	//Validacion de direcciones de archivos, numeros positivos, y tamaños deseados.
 	void validacionPath(string);
 	void validacionPositivoI(int,string,string);
 	void validacionPositivoF(float,string,string);
-	int cantSprites(TestadoPersonaje);
+	void validacionTamanioZindex();
+	void validacionTamanioYpiso();
+
+	void ventanaDefecto();
+	void escenarioDefecto();
+	void personajeDefecto();
+	void capasDefecto();
 };
 
 /* namespace config */

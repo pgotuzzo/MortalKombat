@@ -41,7 +41,6 @@ void DebugLog::loguear(const char* mensajeError, Log::Tlog tipo)  {
 		;
 	}
 	ofstream salida(archivo, std::ios::out | std::ios::app);
-
 	salida << fecha << tipoDeLog << mensajeError << "\n";
 	salida.close();
 }
