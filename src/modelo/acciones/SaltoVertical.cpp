@@ -2,7 +2,7 @@
 
 // Constantes para que se regule el salto vertical
 const float altura_salto = 60;
-const float intervalo_salto =5; // altura_salto / intervalo_salto = numero de loops
+const float intervalo_salto =6; // altura_salto / intervalo_salto = numero de loops
 
 
 SaltoVertical::SaltoVertical() {

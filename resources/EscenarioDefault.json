@@ -16,14 +16,22 @@
         },
         {
             "imagen_fondo": "/home/miguel/ClionProjects/MortalKombat/resources/capas/capa2.png",
+            "ancho": 600
+        },
+        {
+            "imagen_fondo": "/home/miguel/ClionProjects/MortalKombat/resources/capas/capa3.png",
+            "ancho": 800
+        },
+        {
+            "imagen_fondo": "/home/miguel/ClionProjects/MortalKombat/resources/capas/capa4.png",
             "ancho": 1000
         }
     ],
     "personaje": {
         "ancho": 20,
         "alto": 50,
-        "z-index": 0,
-	"orientacion": "derecha",
+        "z-index":2,
+        "orientacion": "derecha",
         "sprites": "/home/miguel/ClionProjects/MortalKombat/resources/sprites"
-    } 
+    }
 } 
