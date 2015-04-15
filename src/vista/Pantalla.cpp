@@ -42,10 +42,11 @@ Pantalla::Pantalla(vector<Tcapa> tcapas, Tventana ventana, Tescenario escenario,
         rect.w = anchoPantalla;
         rect.p.x = (tcapa.ancho - anchoPantalla)/2;
         rect.p.y = 0;
-        Capa* capa = new Capa(mRenderer, tcapa.dirCapa, rect);
-        capa->setValores(tcapa.ancho, altoPantalla);
-        capas.push_back(*capa);
-        delete(capa);
+//        Capa* capa = new Capa(mRenderer, tcapa.dirCapa, rect);
+        Capa capa = Capa(mRenderer, tcapa.dirCapa, rect);
+        capa.setValores(tcapa.ancho, altoPantalla);
+        capas.push_back(capa);
+//        delete(capa);
     }
 }
 

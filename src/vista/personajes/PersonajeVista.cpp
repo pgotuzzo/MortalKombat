@@ -16,7 +16,7 @@ void PersonajeVista::crearSprites(std::string path) {
         TestadoPersonaje state = TestadoPersonaje(s);
         std::string spritesPath = path + "/" + TestadoPersonajeToString(state) + "/";
 
-        switch (s){
+        switch (state){
             case AGACHADO:
             case SALTANDO_VERTICAL:{
                 mSprites[s] = Sprite(mRenderer, spritesPath, false);
@@ -65,7 +65,3 @@ void PersonajeVista::freeTextures() {
         s.freeTextures();
     SDL_DestroyTexture(mTexture);
 }
-
-PersonajeVista::~PersonajeVista() {}
-
-

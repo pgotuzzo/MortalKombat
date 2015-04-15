@@ -18,7 +18,7 @@ float Capa::posEscenario = 0;
 */
 Capa::Capa(SDL_Renderer *renderer, std::string dirPath, VistaUtils::Trect rectPantalla) {
     mRenderer = renderer;
-    mTexture = VistaUtils::loadTexture(mRenderer, dirPath, VistaUtils::COLORKEY::BLANCO);
+    mAuxTexture = VistaUtils::loadTexture(mRenderer, dirPath, VistaUtils::COLORKEY::BLANCO);
     mRect = rectPantalla;
 }
 
@@ -30,9 +30,8 @@ Capa::Capa(SDL_Renderer *renderer, std::string dirPath, VistaUtils::Trect rectPa
  */
 void Capa::setValores(float anchoCapa, float altoCapa) {
     mRelacionCapa = (Capa::mAnchoEscenario - Capa::mAnchoPantalla)/(anchoCapa - Capa::mAnchoPantalla);
-    SDL_Texture * t = VistaUtils::createTexture(mRenderer, anchoCapa, altoCapa);
-    VistaUtils::copyTexture(mRenderer, mTexture, t);
-    mTexture = t;
+    mTexture = VistaUtils::createTexture(mRenderer, anchoCapa, altoCapa);
+    VistaUtils::copyTexture(mRenderer, mAuxTexture, mTexture);
 }
 
 /*
@@ -90,6 +89,7 @@ Capa::Capa() {}
 
 void Capa::freeTextures() {
     SDL_DestroyTexture(mTexture);
+    SDL_DestroyTexture(mAuxTexture);
 }
 
 Capa::~Capa() {}

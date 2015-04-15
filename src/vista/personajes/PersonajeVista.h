@@ -31,7 +31,6 @@ public:
     VistaUtils::Trect getRect();
 
     void freeTextures();
-    virtual ~PersonajeVista();
 };
 
 

@@ -65,10 +65,7 @@ void Sprite::getBefore(SDL_Texture *texture, bool flip) {
 }
 
 void Sprite::freeTextures() {
-    for(SDL_Texture* t : mTextures)
+    for(SDL_Texture* t : mTextures) {
         SDL_DestroyTexture(t);
+    }
 }
-
-Sprite::~Sprite() {}
-
-

@@ -10,6 +10,7 @@ class Capa {
 private:
     SDL_Renderer* mRenderer;
     SDL_Texture * mTexture;
+    SDL_Texture * mAuxTexture;
     float mRelacionCapa;
     VistaUtils::Trect mRect;
     static float distTope;

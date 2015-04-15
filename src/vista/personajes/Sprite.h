@@ -23,7 +23,6 @@ public:
     void getBefore(SDL_Texture* texture, bool flip);
 
     void freeTextures();
-    virtual ~Sprite();
 };
 
 
