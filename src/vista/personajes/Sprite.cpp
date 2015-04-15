@@ -34,6 +34,10 @@ long Sprite::getCount() {
     return mTextures.size();
 }
 
+void Sprite::restart() {
+    mCurrent = 0;
+}
+
 void Sprite::getFirst(SDL_Texture* texture, bool flip) {
     mFirstPass = true;
     VistaUtils::copyTexture(mRenderer, mTextures[0], texture);
@@ -66,3 +70,5 @@ void Sprite::freeTextures() {
 }
 
 Sprite::~Sprite() {}
+
+

@@ -31,7 +31,10 @@ void PersonajeVista::crearSprites(std::string path) {
 void PersonajeVista::update(Tcambio tcambio) {
     mRect.p.x = tcambio.posicion.x;
     mRect.p.y = tcambio.posicion.y;
-    mCurrentState = tcambio.estado;
+    if (mCurrentState != tcambio.estado){
+        mCurrentState = tcambio.estado;
+        mSprites[mCurrentState].restart();
+    }
     mDirection = tcambio.direccion;
     mTarget = tcambio.sentido;
     mRect.h = tcambio.alturaPJ;
