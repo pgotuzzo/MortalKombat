@@ -11,6 +11,8 @@ const int cantLoops = 2;
 
 int main(int argc, char **argv) {
 
+    Mundo* mundo;
+    Pantalla* pantalla;
     bool endGame = false;
     cout << "------------------------------------------------------------" << endl;
     cout << "------------------INICIO DEL JUEGO--------------------------" << endl;
@@ -32,11 +34,11 @@ int main(int argc, char **argv) {
         Tescenario tescenario = configuracion.getEscenario();
         Tpersonaje tpersonaje = configuracion.getPersonaje();
         tventana.distTope = MIN_DISTANCE_FROM_BOUND;
-        Pantalla* pantalla = new Pantalla(vectorTcapa, tventana, tescenario, tpersonaje);
+        pantalla = new Pantalla(vectorTcapa, tventana, tescenario, tpersonaje);
         cout << "Finaliza la creacion de la pantalla" << endl;
 
         cout << "Inicia la creacion del mundo..." << endl;
-        Mundo* mundo = new Mundo(configuracion);
+        mundo = new Mundo(configuracion);
         cout << "Finaliza la creacion del mundo" << endl;
 
         cout << "Inicia la creacion del controlador" << endl;
@@ -92,6 +94,9 @@ int main(int argc, char **argv) {
             SDL_Delay(delay - timeloop);
         }
     }
+
+    delete mundo;
+    delete pantalla;
     cout << "------------------------------------------------------------" << endl;
     cout << "---------------------FIN DEL JUEGO--------------------------" << endl;
     cout << "------------------------------------------------------------" << endl;

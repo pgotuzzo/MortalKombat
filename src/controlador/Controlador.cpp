@@ -45,7 +45,7 @@ Tinput Controlador::getInputs() {
 
 	SDL_Event event;
 //	TODO - Fran - Comento esta linea porque sino no funciona la tecla R. Hay que hacer alguna otra modificacion??
-//	while (SDL_PollEvent(&event) != 0) {}
+	while (SDL_PollEvent(&event) != 0) {}
 	SDL_PollEvent(&event);
 	Tinput anterior = esAnterior(state);
 	switch (event.type) {
@@ -74,6 +74,7 @@ Tinput Controlador::getInputs() {
 		}
 		default:
 			if (anterior != KEY_NADA) return anterior;
+			if (state[SDL_SCANCODE_R]) return KEY_RESTART;
 			if (state[SDL_SCANCODE_RIGHT]) return inputAnterior = KEY_DERECHA;
 			else if (state[SDL_SCANCODE_LEFT]) return inputAnterior = KEY_IZQUIERDA;
 			else if (state[SDL_SCANCODE_UP]) return inputAnterior = KEY_ARRIBA;
