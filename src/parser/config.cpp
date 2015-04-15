@@ -2,6 +2,8 @@
 #include <fstream>
 #include <string.h>
 
+const int cantidadDeCapasDefault = 5;
+
 using namespace Json;
 
 config::config(string path) {
@@ -16,7 +18,7 @@ config::config(string path) {
 	bool noCoincide=true;
 	//Dentro del if, se fija si estan todas las partes del escenario bien escritas, osea si coinciden.
 	if(formatoCorrectoJson){
-		 noCoincide=partes["ventana"].isNull()&&partes["personaje"].isNull()&&partes["capas"].isNull()&&partes["escenario"].isNull();
+		noCoincide=partes["ventana"].isNull()&&partes["personaje"].isNull()&&partes["capas"].isNull()&&partes["escenario"].isNull();
 	}
 	//Si el formato del archivo original es incorrecto o el formato es correcto, pero
 	//no coincide los nombres de las partes, se carga por defecto.
@@ -24,9 +26,9 @@ config::config(string path) {
 
 		string mensaje;
 		if (formatoCorrectoJson && noCoincide){
-			 mensaje = "Fallo el parseo, se carga por defecto. No coinciden los nombres de las partes del escenario";
+			mensaje = "Fallo el parseo, se carga por defecto. No coinciden los nombres de las partes del escenario";
 		} else{
-			 mensaje = "Fallo el parseo, se carga por defecto" + reader.getFormattedErrorMessages();
+			mensaje = "Fallo el parseo, se carga por defecto" + reader.getFormattedErrorMessages();
 		}
 		porDefecto=true;
 		//Se loguea el error pertinente.
@@ -37,8 +39,8 @@ config::config(string path) {
 		std::ifstream prueba("/home/MortalKombat/EscenarioDefault.json", std::ifstream::binary);
 		formatoCorrectoJson = reader.parse(prueba, partes, true);
 		if(formatoCorrectoJson){
-				 noCoincide=partes["ventana"].isNull()&&partes["personaje"].isNull()&&partes["capas"].isNull()&&partes["escenario"].isNull();
-			}
+			noCoincide=partes["ventana"].isNull()&&partes["personaje"].isNull()&&partes["capas"].isNull()&&partes["escenario"].isNull();
+		}
 	}
 
 	//Si el parseo del archivo original y el por defecto fallan, se loguea el error.
@@ -60,13 +62,13 @@ Tdireccion config::obtieneEnum(string ori){
 	if(strcmp(ori.c_str(),"derecha")==0)
 		return Tdireccion::DERECHA;
 	else
-		if(strcmp(ori.c_str(),"izquierda")==0)
-			return Tdireccion::IZQUIERDA;
-		else{
-			return Tdireccion::DERECHA;
-			string mensajeError="Orientación: izquierda o derecha, mal escrita. Se carga por defecto derecha.";
-			loguerWar->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
-		}
+	if(strcmp(ori.c_str(),"izquierda")==0)
+		return Tdireccion::IZQUIERDA;
+	else{
+		return Tdireccion::DERECHA;
+		string mensajeError="Orientación: izquierda o derecha, mal escrita. Se carga por defecto derecha.";
+		loguerWar->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
+	}
 }
 
 void config::setValores(Value partes){
@@ -75,25 +77,46 @@ void config::setValores(Value partes){
 	if(! partes["capas"].isNull()){
 		Value capa=partes["capas"];
 		Tcapa aux;
-		bool existe=true;
-		int anchoCapa=500;
-		for(unsigned i = 0; i < capa.size(); i++){
-			aux.dirCapa=capa[i].get("imagen_fondo","default").asString();
-			FILE *fp = fopen(aux.dirCapa.c_str(),"r");
-			if(!fp)
-				existe=false;
-			else
-				fclose(fp);
-			aux.ancho=capa[i].get("ancho",anchoCapa).asFloat();
-			anchoCapa=anchoCapa*2;
-			this->vectorCapas.push_back(aux);
+		int anchoCapa = 500;
+		bool existe = true;
+		if (capa.size() == 0) this->capasDefecto(); // Miki: agrego este if pq si el array de capas estaba vacio ponia
+			//una ventana transparente.
+		else {
+			float anchoAnterior = 0.0; // Esto lo declare yo. Miki
+			for (unsigned i = 0; i < capa.size(); i++) {
+				aux.dirCapa = capa[i].get("imagen_fondo", "default").asString();
+				FILE *fp = fopen(aux.dirCapa.c_str(), "r");
+				if (!fp)
+					existe = false;
+				else
+					fclose(fp);
+				aux.ancho = capa[i].get("ancho", anchoCapa).asFloat();
+				// Miki: ancho capa mal en json negativo. Devuelvo valor default
+				if (aux.ancho <= 0.0) {
+					if ( i == 0 ) {
+						aux.ancho = 500;
+						anchoAnterior = aux.ancho;
+					}
+					else {
+						aux.ancho = anchoAnterior;
+					}
+					ostringstream mensajeError;
+					mensajeError<<"Se ingresó un número negativo en la capa "<<(i+1)<<".Se carga un valor por defecto.";
+					loguerWar->loguear(mensajeError.str().c_str(), Log::Tlog::LOG_ERR);
+				}
+				anchoAnterior = aux.ancho;
+				// Aca es lo mio. Miki
+				//anchoCapa = anchoCapa * 2;
+				this->vectorCapas.push_back(aux);
+			}
 		}
 
 		//Se fija si existe la ruta, sino existe alguna de las rutas, levanta por defecto.
 		if(!existe)
 			this->capasDefecto();
-	} else
+	} else {
 		this->capasDefecto();
+	}
 
 	//Si algun nombre de las partes del escenario no coincide se carga por defecto ese valor.
 	if(! partes["ventana"].isNull()){
@@ -107,7 +130,7 @@ void config::setValores(Value partes){
 		}
 
 		this->ventana.anchopx = partes["ventana"].get("ancho-px", 800).asFloat();
-		this->validacionPositivoF(this->ventana.anchopx,"ventana","ancho-px");
+		this->validacionPositivoI(this->ventana.anchopx,"ventana","ancho-px");
 
 		//Se verifica si existe el miembro en la variable partes. Si no se carga por defecto.
 		if(! partes["ventana"].isMember("ancho-px")){
@@ -116,7 +139,7 @@ void config::setValores(Value partes){
 		}
 
 		this->ventana.ancho = partes["ventana"].get("ancho", 200).asInt();
-		this->validacionPositivoI(this->ventana.ancho,"ventana","ancho");
+		this->validacionPositivoF(this->ventana.ancho,"ventana","ancho");
 
 		//Se verifica si existe el miembro en la variable partes. Si no se carga por defecto.
 		if(! partes["ventana"].isMember("ancho")){
@@ -269,7 +292,7 @@ void config::capasDefecto(){
 	loguerWar->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
 	Tcapa aux;
 	this->vectorCapas.clear();
-	for(unsigned i=0; i<2; i++){
+	for(unsigned i=0; i<cantidadDeCapasDefault; i++){
 
 		float auxAncho;
 		ostringstream os;
@@ -367,34 +390,35 @@ void config::validacionPath(string path){
 
 void config::validacionPositivoI(int num,string parte,string conf){
 	bool negativo;
-		if(num>=0)
-			negativo=false;
-		else
-			negativo=true;
+	if(num>0)
+		negativo=false;
+	else
+		negativo=true;
 
-		if (negativo){
+	if (negativo){
 
-			ostringstream mensajeError;
-			mensajeError<<"Se ingresó un número negativo en "<<parte<<"/"<<conf<<". Se carga un valor por defecto.";
-			loguerWar->loguear(mensajeError.str().c_str(), Log::Tlog::LOG_ERR);
+		ostringstream mensajeError;
+		mensajeError<<"Se ingresó un número negativo en "<<parte<<"/"<<conf<<". Se carga un valor por defecto.";
+		loguerWar->loguear(mensajeError.str().c_str(), Log::Tlog::LOG_ERR);
 
-			//Cambia el valor negativo por uno por defecto.
-			if(strcmp(parte.c_str(),"ventana")==0){
-					if(strcmp(conf.c_str(),"ancho-px")==0)
-						this->ventana.anchopx=800;
-					else
-						if(strcmp(conf.c_str(),"alto-px")==0)
-							this->ventana.altopx=600;
-			}else
-				if(strcmp(parte.c_str(),"personaje")==0)
-					this->personaje.zIndex=1;
-			}
+
+		//Cambia el valor negativo por uno por defecto.
+		if(strcmp(parte.c_str(),"ventana")==0){
+			if(strcmp(conf.c_str(),"ancho-px")==0)
+				this->ventana.anchopx=800;
+			else
+			if(strcmp(conf.c_str(),"alto-px")==0)
+				this->ventana.altopx=600;
+		}else
+		if(strcmp(parte.c_str(),"personaje")==0)
+			this->personaje.zIndex=1;
+	}
 
 }
 
 void config::validacionPositivoF(float num,string parte,string conf){
 	bool negativo;
-	if(num>=0)
+	if(num>0)
 		negativo=false;
 	else
 		negativo=true;
@@ -410,41 +434,41 @@ void config::validacionPositivoF(float num,string parte,string conf){
 			if(strcmp(conf.c_str(),"ancho")==0)
 				this->escenario.ancho=1000;
 			else
-				if(strcmp(conf.c_str(),"alto")==0)
-					this->escenario.alto=150;
-				else
-					this->escenario.yPiso=1;
+			if(strcmp(conf.c_str(),"alto")==0)
+				this->escenario.alto=150;
+			else
+				this->escenario.yPiso=1;
 
 		} else
-			if(strcmp(parte.c_str(),"personaje")==0){
-				if(strcmp(conf.c_str(),"ancho")==0)
-					this->personaje.ancho=20;
-				else
-					this->personaje.alto=35;
-			} else
-				this->ventana.ancho=200;
+		if(strcmp(parte.c_str(),"personaje")==0){
+			if(strcmp(conf.c_str(),"ancho")==0)
+				this->personaje.ancho=20;
+			else
+				this->personaje.alto=35;
+		} else
+			this->ventana.ancho=200;
 
-		}
+	}
 }
 
 int config::cantSprites(TestadoPersonaje e){
 	int cant=0;
 	switch ( e ) {
-	case PARADO:
-		cant=12;
-		break;
-	case AGACHADO:
-		cant=3;
-		break;
-	case CAMINANDO:
-		cant=12;
-		break;
-	case SALTANDO_OBLICUO:
-		cant=8;
-		break;
-	case SALTANDO_VERTICAL:
-		cant=5;
-		break;
+		case PARADO:
+			cant=12;
+			break;
+		case AGACHADO:
+			cant=3;
+			break;
+		case CAMINANDO:
+			cant=12;
+			break;
+		case SALTANDO_OBLICUO:
+			cant=8;
+			break;
+		case SALTANDO_VERTICAL:
+			cant=5;
+			break;
 	}
 	return cant;
 }
@@ -464,7 +488,6 @@ Tpersonaje config::getPersonaje(){
 vector<Tcapa> config::getCapas(){
 	return this->vectorCapas;
 }
-
 
 
 
