@@ -65,9 +65,9 @@ Tdireccion config::obtieneEnum(string ori){
 	if(strcmp(ori.c_str(),"izquierda")==0)
 		return Tdireccion::IZQUIERDA;
 	else{
-		return Tdireccion::DERECHA;
 		string mensajeError="Orientación: izquierda o derecha, mal escrita. Se carga por defecto derecha.";
 		loguerWar->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
+		return Tdireccion::DERECHA;
 	}
 }
 
@@ -251,7 +251,7 @@ void config::escenarioDefecto(){
 void config::personajeDefecto(){
 	string mensajeError="No se encuentra: personaje en el archivo Json. Se carga por defecto todas sus partes.";
 	loguerWar->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
-	this->personaje.alto=35;
+	this->personaje.alto=50;
 	this->personaje.ancho=20;
 	this->personaje.zIndex=1;
 	this->personaje.orientacion=Tdireccion::DERECHA;
