@@ -30,6 +30,7 @@ Mundo::Mundo(config configuracion) {
 	else dir = false;
 
 	personaje1 = new Personaje(dir,Posicion(pos_x,pos_y),altoPJ,anchoPJ, altoEscenario);
+	personaje2 = new Personaje(!dir,Posicion(pos_x+50,pos_y),altoPJ,anchoPJ,altoEscenario);
 
 }
 
@@ -50,25 +51,33 @@ float Mundo::getAltoPiso(){
 	return altoPiso;
 }
 
+
+void Mundo::actualizarPersonaje(Tcambio* c, Personaje *personaje) {
+	c->posicion = personaje->getPosicion();
+	if(personaje->getDireccion()) c->direccion = DERECHA;
+	else c->direccion = IZQUIERDA;
+	if(personaje->getSentido()) c->sentido = ADELANTE;
+	else c->sentido = ATRAS;
+	c->estado = personaje->getEstado();
+	c->alturaPJ = personaje->getAlturaPersonaje();
+	c->anchoPJ = personaje->getAnchoPersonaje();
+
+}
 /* Devuelve la actualizacion del struct Tcambio recibido junto con el numero de accion que debe realizar
  * Personaje realiza su respectiva accion.
  * Se asigna todos los datos pertinentes de personaje a Tcambio.
  */
-Tcambio Mundo::actualizarMundo(Tcambio c,Tinput input){
-	personaje1->realizarAccion(input,anchoEscenario);
-	c.posicion = personaje1->getPosicion();
-	if(personaje1->getDireccion()) c.direccion = DERECHA;
-	else c.direccion = IZQUIERDA;
-	if(personaje1->getSentido()) c.sentido = ADELANTE;
-	else c.sentido = ATRAS;
-	c.estado = personaje1->getEstado();
-	c.alturaPJ = personaje1->getAlturaPersonaje();
-	c.anchoPJ = personaje1->getAnchoPersonaje();
+Tcambio Mundo::actualizarMundo(Tcambio c,Tinput input1,Tinput input2){
+	personaje1->realizarAccion(input1,anchoEscenario);
+	actualizarPersonaje(&c,personaje1);
+	personaje2->realizarAccion(input2,anchoEscenario);
+	//actualizarPersonaje(&c,personaje2);
 
 	return c;
 }
 
 Mundo::~Mundo() {
 	delete personaje1;
+	delete personaje2;
 }
 

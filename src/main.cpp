@@ -78,7 +78,7 @@ int main(int argc, char **argv) {
 
                 //DEMAS ACCIONES
             else {
-                c = mundo.actualizarMundo(c, input);
+                c = mundo.actualizarMundo(c, input,KEY_NADA);
                 pantalla.update(c);
                 pantalla.dibujar();
             }
