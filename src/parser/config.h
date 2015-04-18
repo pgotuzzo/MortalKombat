@@ -43,6 +43,8 @@ private:
 	void escenarioDefecto();
 	void personajeDefecto();
 	void capasDefecto();
+
+	bool esNumero();
 };
 
 /* namespace config */

@@ -16,7 +16,7 @@ int main(int argc, char **argv) {
     cout << "------------------------------------------------------------" << endl;
 
     clock_t t1, t2;
-    float timeloop = 0.0;
+    float timeloop = 00.0;
 
     while (!endGame) {
 

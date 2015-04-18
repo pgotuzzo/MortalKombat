@@ -95,7 +95,7 @@ struct Tventana {
 struct Tescenario {
     float ancho;
     float alto;
-    int yPiso;
+    float yPiso;
 };
 
 struct Tcapa {
