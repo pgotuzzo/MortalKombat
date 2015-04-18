@@ -154,7 +154,9 @@ struct Tpersonaje {
  *  todos los cambios que se produjeron a lo
  *  largo de un gameloop.
  */
-struct Tcambio{
+
+
+struct TdatosPersonaje{
     Posicion posicion;
     TestadoPersonaje estado;
     Tdireccion direccion;
@@ -163,16 +165,27 @@ struct Tcambio{
     float anchoPJ;
 };
 
+struct Tcambios{
+    TdatosPersonaje personaje1;
+    TdatosPersonaje personaje2;
+};
+
+
+
+
+
+
 /**
  * Enum con todos los posibles inputs que el
  *  juego debe ser capaz de manejar.
  */
-enum Tinput{
+
+enum TinputPersonaje{
     // Teclas no utilizadas
-    KEY_NADA,
+            KEY_NADA,
 
     // Movimientos Basicos
-    KEY_ARRIBA,
+            KEY_ARRIBA,
     KEY_ABAJO,
     KEY_DERECHA,
     KEY_IZQUIERDA,
@@ -180,9 +193,16 @@ enum Tinput{
     KEY_ARRIBA_IZQUIERDA,
 
     // Cierre o reinicio del juego
-    KEY_RESTART,
+            KEY_RESTART,
     KEY_EXIT
 };
+
+
+struct Tinputs{
+    TinputPersonaje personaje1;
+    TinputPersonaje personaje2;
+};
+
 
 /**
  * Se define esta constante por si se llega a

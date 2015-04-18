@@ -7,11 +7,11 @@
 
 class Controlador {
 private:
-    Tinput esAnterior(const Uint8 *state);
+    TinputPersonaje esAnterior(const Uint8 *state);
 public:
-    Tinput inputAnterior;
+    TinputPersonaje inputAnterior;
     Controlador();
-    Tinput getInputs();
+    TinputPersonaje getInputs();
 };
 
 

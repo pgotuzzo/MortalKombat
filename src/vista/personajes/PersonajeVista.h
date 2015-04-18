@@ -26,7 +26,7 @@ public:
     PersonajeVista();
     PersonajeVista(SDL_Renderer* renderer, std::string spritesPath, float ancho, float alto, Tdireccion direction);
 
-    void update(Tcambio);
+    void update(TdatosPersonaje);
     void getTexture(SDL_Texture* ventana, float x);
     VistaUtils::Trect getRect();
 

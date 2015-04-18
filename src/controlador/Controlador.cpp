@@ -9,7 +9,7 @@ Controlador::Controlador() {
 /*
  * Devuelve la tecla anterior si se repite o la tecla nada si no se repite
  */
-Tinput Controlador::esAnterior(const Uint8 *state) {
+TinputPersonaje Controlador::esAnterior(const Uint8 *state) {
 	switch (inputAnterior) {
 		case KEY_IZQUIERDA: {
 			if (state[SDL_SCANCODE_UP] && state[SDL_SCANCODE_LEFT]) return inputAnterior = KEY_ARRIBA_IZQUIERDA;
@@ -39,7 +39,7 @@ Tinput Controlador::esAnterior(const Uint8 *state) {
 	return KEY_NADA;
 }
 
-Tinput Controlador::getInputs() {
+TinputPersonaje Controlador::getInputs() {
 
 	const Uint8 *state = SDL_GetKeyboardState(NULL);
 
@@ -47,7 +47,7 @@ Tinput Controlador::getInputs() {
 //	TODO - Fran - Comento esta linea porque sino no funciona la tecla R. Hay que hacer alguna otra modificacion??
 	while (SDL_PollEvent(&event) != 0) {}
 	SDL_PollEvent(&event);
-	Tinput anterior = esAnterior(state);
+	TinputPersonaje anterior = esAnterior(state);
 	switch (event.type) {
 		case SDL_QUIT:
 			return KEY_EXIT;

@@ -89,7 +89,7 @@ void Personaje::ejecutarAcionesActivadas(Accion **accionesEnCurso,float anchoEsc
  * Se verifica que no se puedan activar dos funciones al mismo tiempo. Por ejemplo no
  * se puede agachar mientras esta saltando verticalmente.
  */
-void Personaje::realizarAccion(Tinput orden,float anchoEscenario){
+void Personaje::realizarAccion(TinputPersonaje orden,float anchoEscenario){
 	if (!accionesEnCurso[0]->getEstado()){
 		if(!accionesEnCurso[3]->getEstado()){
 			switch (orden){

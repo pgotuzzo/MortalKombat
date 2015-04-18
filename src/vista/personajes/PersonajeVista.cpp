@@ -28,7 +28,7 @@ void PersonajeVista::crearSprites(std::string path) {
     }
 }
 
-void PersonajeVista::update(Tcambio tcambio) {
+void PersonajeVista::update(TdatosPersonaje tcambio) {
     mRect.p.x = tcambio.posicion.x;
     mRect.p.y = tcambio.posicion.y;
     if (mCurrentState != tcambio.estado){

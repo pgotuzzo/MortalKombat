@@ -40,7 +40,7 @@ public:
      * Actualiza todos los objetos de pantalla.
      * change : contiene los cambios a realizar.
      */
-    void update(Tcambio change);
+    void update(TdatosPersonaje change);
 
     virtual ~Pantalla();
 };

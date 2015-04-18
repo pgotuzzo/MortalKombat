@@ -71,7 +71,7 @@ void Pantalla::dibujar() {
  * Actualiza todos los objetos de pantalla.
  * change : contiene los cambios a realizar.
  */
-void Pantalla::update(Tcambio change) {
+void Pantalla::update(TdatosPersonaje change) {
     personaje.update(change);
     Capa::cambiarEscenario(change.posicion.x);
     for (int i = 0; i < capas.size(); i++) {

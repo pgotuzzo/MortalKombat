@@ -35,7 +35,7 @@ private:
 public:
 
 	Personaje(bool direccion,Posicion posInicial,float alto,float ancho,float nuevoAltoEscenario);
-	void realizarAccion(Tinput orden,float anchoEscenario);
+	void realizarAccion(TinputPersonaje orden,float anchoEscenario);
 
 	Posicion getPosicion();
 	TestadoPersonaje getEstado();

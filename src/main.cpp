@@ -57,20 +57,20 @@ int main(int argc, char **argv) {
             //7 Restart
             //8 Exit
 
-            Tcambio c;
-            Tinput input;
+            Tcambios c;
+            Tinputs inputs;
 
             t1 = clock();
 
             // INPUT
-            input = controlador.getInputs();
+            inputs.personaje1 = controlador.getInputs();
 
             //SI SE DESEA SALIR DEL JUEGO
-            if (input == KEY_EXIT)
+            if (inputs.personaje1 == KEY_EXIT)
                 endGame = true;
 
             //PARA RESTABLECER EL JUEGO
-            if (input == KEY_RESTART) {
+            if (inputs.personaje1 == KEY_RESTART) {
 
 
                 restart = true;
@@ -78,8 +78,8 @@ int main(int argc, char **argv) {
 
                 //DEMAS ACCIONES
             else {
-                c = mundo.actualizarMundo(c, input);
-                pantalla.update(c);
+                c = mundo.actualizarMundo(c, inputs);
+                pantalla.update(c.personaje1);
                 pantalla.dibujar();
             }
             t2 = clock();
