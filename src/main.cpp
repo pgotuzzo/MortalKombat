@@ -73,8 +73,6 @@ int main(int argc, char **argv) {
 
             //PARA RESTABLECER EL JUEGO
             if (input == KEY_RESTART) {
-
-
                 restart = true;
             }
 

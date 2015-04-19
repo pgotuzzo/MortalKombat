@@ -1,14 +1,15 @@
 #include "Pantalla.h"
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 
 /*
  * Se inicia la ventana y el renderer.
  */
 void Pantalla::Inicializar(int anchoPx,int altoPx) {
     if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
-        cout << "Fallo la inicializacion de SDL." << endl;
+        loguer->loguear("Fallo la inicializacion de SDL.", Log::LOG_ERR);
 
-    mWindow = SDL_CreateWindow("TEST", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, anchoPx, altoPx, SDL_WINDOW_SHOWN);
+    mWindow = SDL_CreateWindow("MortalKombat", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, anchoPx, altoPx, SDL_WINDOW_SHOWN);
     mRenderer = SDL_CreateRenderer(mWindow, -1, SDL_RENDERER_ACCELERATED);
 }
 
@@ -36,17 +37,15 @@ Pantalla::Pantalla(vector<Tcapa> tcapas, Tventana ventana, Tescenario escenario,
     // Primero se setean las variables de clase.
     Capa::setStatics(ventana.distTope, tpersonaje.ancho, escenario.ancho, anchoPantalla);
     // Crea las capas.
-    for (Tcapa tcapa : tcapas){
+    for (int i = 0; i < tcapas.size(); i++){
         VistaUtils::Trect rect;
         rect.h = altoPantalla;
         rect.w = anchoPantalla;
-        rect.p.x = (tcapa.ancho - anchoPantalla)/2;
+        rect.p.x = (tcapas[i].ancho - anchoPantalla)/2;
         rect.p.y = 0;
-//        Capa* capa = new Capa(mRenderer, tcapa.dirCapa, rect);
-        Capa capa = Capa(mRenderer, tcapa.dirCapa, rect);
-        capa.setValores(tcapa.ancho, altoPantalla);
+        Capa capa = Capa(mRenderer, tcapas[i].dirCapa, rect);
+        capa.setValores(tcapas[i].ancho, altoPantalla);
         capas.push_back(capa);
-//        delete(capa);
     }
 }
 
@@ -81,9 +80,11 @@ void Pantalla::update(Tcambio change) {
 
 
 Pantalla::~Pantalla() {
-    for (Capa c : capas)
-        c.freeTextures();
+    for (int i = 0; i < capas.size(); i++)
+        capas[i].freeTextures();
     personaje.freeTextures();
     SDL_DestroyRenderer(mRenderer);
     SDL_DestroyWindow(mWindow);
+    SDL_Quit();
+    IMG_Quit();
 }

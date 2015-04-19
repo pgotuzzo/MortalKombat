@@ -44,7 +44,6 @@ Tinput Controlador::getInputs() {
 	const Uint8 *state = SDL_GetKeyboardState(NULL);
 
 	SDL_Event event;
-//	TODO - Fran - Comento esta linea porque sino no funciona la tecla R. Hay que hacer alguna otra modificacion??
 	while (SDL_PollEvent(&event) != 0) {}
 	SDL_PollEvent(&event);
 	Tinput anterior = esAnterior(state);

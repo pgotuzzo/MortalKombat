@@ -61,7 +61,7 @@ PersonajeVista::PersonajeVista() {}
 
 
 void PersonajeVista::freeTextures() {
-    for (Sprite s : mSprites)
-        s.freeTextures();
+    for (int i = 0; i < mSprites.size(); i++)
+        mSprites[i].freeTextures();
     SDL_DestroyTexture(mTexture);
 }
