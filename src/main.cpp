@@ -10,11 +10,13 @@ const float delay = 45.0;
 
 int main(int argc, char **argv) {
 
-    bool endGame = false;
+    string jsonPath = (argv[1] == nullptr) ? string("") : argv[1];
+
     cout << "------------------------------------------------------------" << endl;
     cout << "------------------INICIO DEL JUEGO--------------------------" << endl;
     cout << "------------------------------------------------------------" << endl;
 
+    bool endGame = false;
     clock_t t1, t2;
     float timeloop = 00.0;
 
@@ -22,7 +24,7 @@ int main(int argc, char **argv) {
 
         cout << "-------------- Cargando la configuracion -------------------" << endl;
 
-        config configuracion = config(argv[1]);
+        config configuracion = config(jsonPath);
 
         cout << "Inicia la creacion de la pantalla..." << endl;
         Tventana tventana = configuracion.getVentana();

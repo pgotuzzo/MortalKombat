@@ -6,10 +6,8 @@
 class DebugLog: public Log {
 private:
     const char * fecha;
-    static DebugLog* instance;
-    DebugLog();
 public:
-    static DebugLog* getInstance();
+    DebugLog();
     void loguear(const char*, Log::Tlog);
     virtual ~DebugLog();
 };

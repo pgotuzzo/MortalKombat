@@ -7,15 +7,6 @@ DebugLog::DebugLog() {
 	fecha = nullptr;
 }
 
-DebugLog* DebugLog::instance = nullptr;
-
-DebugLog* DebugLog::getInstance() {
-	if (instance == nullptr) {
-		instance = new DebugLog();
-	}
-	return instance;
-}
-
 void DebugLog::loguear(const char* mensajeError, Log::Tlog tipo)  {
 	const char * tipoDeLog;
 	time_t t;

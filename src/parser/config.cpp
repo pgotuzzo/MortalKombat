@@ -32,7 +32,7 @@ config::config(string path) {
 		}
 		porDefecto=true;
 		//Se loguea el error pertinente.
-		loguerWar->loguear(mensaje.c_str(), Log::Tlog::LOG_ERR);
+		loguer->loguear(mensaje.c_str(), Log::Tlog::LOG_ERR);
 		//se abre el archivo por defecto.
 
 		// TODO - Agregar Ruta relativa
@@ -47,7 +47,7 @@ config::config(string path) {
 	if (noCoincide && porDefecto) {
 		string aux="Fallo el parseo, no coincide ninguno de los nombres de las partes del escenario.No-defecto, No-path";
 		string mensajeError = aux + reader.getFormattedErrorMessages();
-		loguerWar->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
+		loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
 		std::cout << mensajeError << "\n";
 	} else {
 
@@ -69,7 +69,7 @@ Tdireccion config::obtieneEnum(string ori){
 		return Tdireccion::IZQUIERDA;
 	else{
 		string mensajeError="Orientación: izquierda o derecha, mal escrita. Se carga por defecto derecha.";
-		loguerWar->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
+		loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
 		return Tdireccion::DERECHA;
 	}
 }
@@ -90,7 +90,7 @@ void config::setValores(Value partes){
 
 				if(!capa[i].get("imagen_fondo", "default").isString()){
 					string mensajeError="En ventana/capas/imagen_fondo, no hay un string. Se carga por defecto todas sus partes.";
-					loguerWar->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
+					loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
 					aux.dirCapa="default2";
 				} else
 					aux.dirCapa = capa[i].get("imagen_fondo", "default").asString();
@@ -104,7 +104,7 @@ void config::setValores(Value partes){
 
 				if(!capa[i].get("ancho", anchoCapa).isDouble()){
 					string mensajeError="En ventana/capas/ancho, no hay un float. Se carga por defecto todas sus partes.";
-					loguerWar->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
+					loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
 					aux.ancho=anchoCapa;
 				} else
 					aux.ancho = capa[i].get("ancho", anchoCapa).asFloat();
@@ -121,7 +121,7 @@ void config::setValores(Value partes){
 					}
 					ostringstream mensajeError;
 					mensajeError<<"Se ingresó un número negativo en la capa "<<(i+1)<<".Se carga un valor por defecto.";
-					loguerWar->loguear(mensajeError.str().c_str(), Log::Tlog::LOG_ERR);
+					loguer->loguear(mensajeError.str().c_str(), Log::Tlog::LOG_ERR);
 				}
 				anchoAnterior = aux.ancho;
 				// Aca es lo mio. Miki
@@ -142,7 +142,7 @@ void config::setValores(Value partes){
 
 		if(!partes["ventana"].get("alto-px", 600).isInt()){
 			string mensajeError="En ventana/alto-px, no hay un numero. Se carga por defecto todas sus partes.";
-			loguerWar->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
+			loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
 			this->ventana.altopx=600;
 		} else
 			this->ventana.altopx= partes["ventana"].get("alto-px", 600).asInt();
@@ -153,12 +153,12 @@ void config::setValores(Value partes){
 		if(! partes["ventana"].isMember("alto-px")){
 
 			string mensajeError="No se encuentra en ventana alto-px en el archivo Json. Se carga por defecto todas sus partes.";
-			loguerWar->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
+			loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
 		}
 
 		if(!partes["ventana"].get("ancho-px", 800).isInt()){
 			string mensajeError="En ventana/ancho-px, no hay un numero. Se carga por defecto todas sus partes.";
-			loguerWar->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
+			loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
 			this->ventana.anchopx=800;
 		} else
 			this->ventana.anchopx = partes["ventana"].get("ancho-px", 800).asInt();
@@ -169,12 +169,12 @@ void config::setValores(Value partes){
 		//Se verifica si existe el miembro en la variable partes. Si no se carga por defecto.
 		if(! partes["ventana"].isMember("ancho-px")){
 			string mensajeError="En ancho-px, no hay un numero. Se carga por defecto todas sus partes.";
-			loguerWar->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
+			loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
 		}
 
 		if(!partes["ventana"].get("ancho", 200).isDouble()){
 			string mensajeError="En ancho, no hay un numero. Se carga por defecto todas sus partes.";
-			loguerWar->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
+			loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
 			this->ventana.ancho=200;
 		} else
 			this->ventana.ancho = partes["ventana"].get("ancho", 200).asFloat();
@@ -185,7 +185,7 @@ void config::setValores(Value partes){
 		//Se verifica si existe el miembro en la variable partes. Si no se carga por defecto.
 		if(! partes["ventana"].isMember("ancho")){
 			string mensajeError="No se encuentra en ventana ancho en el archivo Json. Se carga por defecto todas sus partes.";
-			loguerWar->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
+			loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
 		}
 
 	} else
@@ -196,7 +196,7 @@ void config::setValores(Value partes){
 
 		if(!partes["personaje"].get("ancho", 20).isDouble()){
 			string mensajeError="En personaje/ancho, no hay un numero. Se carga por defecto todas sus partes.";
-			loguerWar->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
+			loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
 			this->personaje.ancho=20;
 		} else
 			this->personaje.ancho = partes["personaje"].get("ancho", 20).asFloat();
@@ -207,12 +207,12 @@ void config::setValores(Value partes){
 		//Se verifica si existe el miembro en la variable partes. Si no se carga por defecto.
 		if(! partes["personaje"].isMember("ancho")){
 			string mensajeError="No se encuentra en personaje ancho en el archivo Json. Se carga por defecto todas sus partes.";
-			loguerWar->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
+			loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
 		}
 
 		if(!partes["personaje"].get("alto", 35).isDouble()){
 			string mensajeError="En personaje/alto, no hay un numero. Se carga por defecto todas sus partes.";
-			loguerWar->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
+			loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
 			this->personaje.alto=35;
 		} else
 			this->personaje.alto = partes["personaje"].get("alto", 35).asFloat();
@@ -223,12 +223,12 @@ void config::setValores(Value partes){
 		//Se verifica si existe el miembro en la variable partes. Si no se carga por defecto.
 		if(! partes["personaje"].isMember("alto")){
 			string mensajeError="No se encuentra en personaje alto en el archivo Json. Se carga por defecto todas sus partes.";
-			loguerWar->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
+			loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
 		}
 
 		if(!partes["personaje"].get("z-index", 1).isInt()){
 			string mensajeError="En personaje/z-index, no hay un numero. Se carga por defecto todas sus partes.";
-			loguerWar->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
+			loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
 			this->personaje.zIndex=1;
 		} else
 			this->personaje.zIndex = partes["personaje"].get("z-index", 1).asInt();
@@ -240,13 +240,13 @@ void config::setValores(Value partes){
 		//Se verifica si existe el miembro en la variable partes. Si no se carga por defecto.
 		if(! partes["personaje"].isMember("z-index")){
 			string mensajeError="No se encuentra en personaje z-index en el archivo Json. Se carga por defecto todas sus partes.";
-			loguerWar->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
+			loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
 		}
 
 		string orientacion;
 		if(!partes["personaje"].get("orientacion", "derecha").isString()){
 			string mensajeError="En personaje/orientacion, no hay un numero. Se carga por defecto todas sus partes.";
-			loguerWar->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
+			loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
 			this->personaje.orientacion=DERECHA;
 		} else {
 			orientacion = partes["personaje"].get("orientacion","derecha").asString();
@@ -257,12 +257,12 @@ void config::setValores(Value partes){
 		//Se verifica si existe el miembro en la variable partes. Si no se carga por defecto.
 		if(! partes["personaje"].isMember("orientacion")){
 			string mensajeError="No se encuentra en personaje orientacion en el archivo Json. Se carga por defecto todas sus partes.";
-			loguerWar->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
+			loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
 		}
 		// TODO - Agregar Ruta relativa
 		if(!partes["personaje"].get("sprites", "/home/MortalKombat/sprites").isString()){
 			string mensajeError="En personaje/sprites, no hay un numero. Se carga por defecto todas sus partes.";
-			loguerWar->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
+			loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
 			this->personaje.sprites="/home/MortalKombat/sprites";
 		} else
 			this->personaje.sprites = partes["personaje"].get("sprites","/home/MortalKombat/sprites").asString();
@@ -274,7 +274,7 @@ void config::setValores(Value partes){
 		//Se verifica si existe el miembro en la variable partes. Si no se carga por defecto.
 		if(! partes["personaje"].isMember("sprites")){
 			string mensajeError="No se encuentra en personaje sprites en el archivo Json. Se carga por defecto todas sus partes.";
-			loguerWar->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
+			loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
 		}
 
 	} else
@@ -285,7 +285,7 @@ void config::setValores(Value partes){
 
 		if(!partes["escenario"].get("alto", 150).isDouble()){
 			string mensajeError="En personaje/alto, no hay un numero. Se carga por defecto todas sus partes.";
-			loguerWar->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
+			loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
 			this->escenario.alto=150;
 		} else
 			this->escenario.alto = partes["escenario"].get("alto",150).asFloat();
@@ -296,12 +296,12 @@ void config::setValores(Value partes){
 		//Se verifica si existe el miembro en la variable partes. Si no se carga por defecto.
 		if(! partes["escenario"].isMember("alto")){
 			string mensajeError="No se encuentra en escenario alto en el archivo Json. Se carga por defecto todas sus partes.";
-			loguerWar->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
+			loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
 		}
 
 		if(!partes["escenario"].get("ancho", 1000).isDouble()){
 			string mensajeError="En personaje/ancho, no hay un numero. Se carga por defecto todas sus partes.";
-			loguerWar->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
+			loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
 			this->escenario.ancho=1000;
 		} else
 			this->escenario.ancho = partes["escenario"].get("ancho",1000).asFloat();
@@ -312,12 +312,12 @@ void config::setValores(Value partes){
 		//Se verifica si existe el miembro en la variable partes. Si no se carga por defecto.
 		if(! partes["escenario"].isMember("ancho")){
 			string mensajeError="No se encuentra en escenario ancho en el archivo Json. Se carga por defecto todas sus partes.";
-			loguerWar->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
+			loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
 		}
 
 		if(!partes["escenario"].get("y-piso", 20).isDouble()){
 			string mensajeError="En personaje/y-piso, no hay un numero. Se carga por defecto todas sus partes.";
-			loguerWar->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
+			loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
 			this->escenario.yPiso=20;
 		} else
 			this->escenario.yPiso = partes["escenario"].get("y-piso",20).asFloat();
@@ -329,7 +329,7 @@ void config::setValores(Value partes){
 		//Se verifica si existe el miembro en la variable partes. Si no se carga por defecto.
 		if(! partes["escenario"].isMember("y-piso")){
 			string mensajeError="No se encuentra en escenario y-piso en el archivo Json. Se carga por defecto todas sus partes.";
-			loguerWar->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
+			loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
 		}
 
 	} else
@@ -339,7 +339,7 @@ void config::setValores(Value partes){
 
 void config::escenarioDefecto(){
 	string mensajeError="No se encuentra: escenario en el archivo Json. Se carga por defecto todas sus partes.";
-	loguerWar->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
+	loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
 	this->escenario.alto=150;
 	this->escenario.ancho=1000;
 	this->escenario.yPiso=10;
@@ -348,7 +348,7 @@ void config::escenarioDefecto(){
 
 void config::personajeDefecto(){
 	string mensajeError="No se encuentra: personaje en el archivo Json. Se carga por defecto todas sus partes.";
-	loguerWar->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
+	loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
 	this->personaje.alto=50;
 	this->personaje.ancho=20;
 	this->personaje.zIndex=1;
@@ -359,7 +359,7 @@ void config::personajeDefecto(){
 
 void config::ventanaDefecto(){
 	string mensajeError="No se encuentra: ventana en el archivo Json. Se carga por defecto todas sus partes.";
-	loguerWar->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
+	loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
 	this->ventana.altopx=600;
 	this->ventana.anchopx=800;
 	this->ventana.ancho=200;
@@ -371,7 +371,7 @@ void config::validacionTamanioYpiso(){
 	if(this->escenario.yPiso>=this->ventana.altopx){
 		this->escenario.yPiso=20;
 		string mensajeError="En encenario: y-piso, más grande que el alto de la ventana. Se carga por defecto y-piso.";
-		loguerWar->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
+		loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
 	}
 }
 
@@ -380,18 +380,17 @@ void config::validacionTamanioZindex(){
 
 		this->personaje.zIndex=1;
 		string mensajeError="En personaje: z-index, mas grande que las capas cargadas. Se carga por defecto z-index.";
-		loguerWar->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
+		loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
 	}
 }
 
 void config::capasDefecto(){
 
 	string mensajeError="Fallo la carga de una de las capas, se cargan capas por defecto.";
-	loguerWar->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
+	loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
 	Tcapa aux;
 	//borrar vector capas
 	this->vectorCapas.clear();
-	this->vectorCapas.erase(this->vectorCapas.begin()+(this->vectorCapas.size()-1));
 	for(unsigned i=0; i<cantidadDeCapasDefault; i++){
 
 		float auxAncho;
@@ -433,7 +432,7 @@ void config::validacionPath(string path){
 
 		ostringstream mensajeError;
 		mensajeError<<"Directorios erroneos. Se cargan sprites por default.";
-		loguerWar->loguear(mensajeError.str().c_str(), Log::Tlog::LOG_ERR);
+		loguer->loguear(mensajeError.str().c_str(), Log::Tlog::LOG_ERR);
 
 	} else
 		for(int e = 0; e < 5; e++ ){
@@ -455,7 +454,7 @@ void config::validacionPath(string path){
 						this->personaje.sprites="/home/MortalKombat/sprites";
 						ostringstream mensajeError;
 						mensajeError<<"Falló la carga de todos los sprites. Se cargan sprites por default.";
-						loguerWar->loguear(mensajeError.str().c_str(), Log::Tlog::LOG_ERR);
+						loguer->loguear(mensajeError.str().c_str(), Log::Tlog::LOG_ERR);
 					}
 					// TODO - Agregar Ruta relativa
 					string path="/home/MortalKombat/sprites/default.jpg";
@@ -480,7 +479,7 @@ void config::validacionPath(string path){
 
 					ostringstream mensajeError;
 					mensajeError<<"Falló la carga de "<<os.str()<<". Se duplica un sprite en su lugar.";
-					loguerWar->loguear(mensajeError.str().c_str(), Log::Tlog::LOG_ERR);
+					loguer->loguear(mensajeError.str().c_str(), Log::Tlog::LOG_ERR);
 				} else
 					fclose(fp);
 			}
@@ -499,7 +498,7 @@ void config::validacionPositivoI(int num,string parte,string conf){
 
 		ostringstream mensajeError;
 		mensajeError<<"Se ingresó un número negativo en "<<parte<<"/"<<conf<<". Se carga un valor por defecto.";
-		loguerWar->loguear(mensajeError.str().c_str(), Log::Tlog::LOG_ERR);
+		loguer->loguear(mensajeError.str().c_str(), Log::Tlog::LOG_ERR);
 
 
 		//Cambia el valor negativo por uno por defecto.
@@ -527,7 +526,7 @@ void config::validacionPositivoF(float num,string parte,string conf){
 
 		ostringstream mensajeError;
 		mensajeError<<"Se ingresó un número negativo en "<<parte<<"/"<<conf<<". Se carga un valor por defecto.";
-		loguerWar->loguear(mensajeError.str().c_str(), Log::Tlog::LOG_ERR);
+		loguer->loguear(mensajeError.str().c_str(), Log::Tlog::LOG_ERR);
 
 		//Cambia el valor negativo por uno por defecto.
 		if(strcmp(parte.c_str(),"escenario")==0) {

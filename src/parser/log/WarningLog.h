@@ -7,11 +7,9 @@
 class WarningLog: public Log {
 private:
     const char* fecha;
-    static WarningLog* instance;
-    WarningLog();
-public:
 
-    static WarningLog* getInstance();
+public:
+    WarningLog();
     void loguear(const char*, Log::Tlog) ;
     virtual ~WarningLog();
 };
