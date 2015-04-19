@@ -12,9 +12,7 @@ int main(int argc, char **argv) {
 
     string jsonPath = (argv[1] == nullptr) ? string("") : argv[1];
 
-    cout << "------------------------------------------------------------" << endl;
-    cout << "------------------INICIO DEL JUEGO--------------------------" << endl;
-    cout << "------------------------------------------------------------" << endl;
+    loguer->loguear("------------------INICIO DEL JUEGO--------------------------", Log::LOG_DEB);
 
     bool endGame = false;
     clock_t t1, t2;
@@ -22,29 +20,34 @@ int main(int argc, char **argv) {
 
     while (!endGame) {
 
-        cout << "-------------- Cargando la configuracion -------------------" << endl;
+        loguer->loguear("-------------- Cargando la configuracion -------------------", Log::LOG_DEB);
 
         config configuracion = config(jsonPath);
 
-        cout << "Inicia la creacion de la pantalla..." << endl;
+        loguer->loguear("Inicia la creacion de la pantalla...", Log::LOG_DEB);
+
         Tventana tventana = configuracion.getVentana();
         std::vector<Tcapa> vectorTcapa = configuracion.getCapas();
         Tescenario tescenario = configuracion.getEscenario();
         Tpersonaje tpersonaje = configuracion.getPersonaje();
         tventana.distTope = MIN_DISTANCE_FROM_BOUND;
         Pantalla pantalla = Pantalla(vectorTcapa, tventana, tescenario, tpersonaje);
-        cout << "Finaliza la creacion de la pantalla" << endl;
 
-        cout << "Inicia la creacion del mundo..." << endl;
+        loguer->loguear("Finaliza la creacion de la pantalla", Log::LOG_DEB);
+        loguer->loguear("Inicia la creacion del mundo...", Log::LOG_DEB);
+
         Mundo mundo = Mundo(configuracion);
-        cout << "Finaliza la creacion del mundo" << endl;
 
-        cout << "Inicia la creacion del controlador" << endl;
+        loguer->loguear("Finaliza la creacion del mundo", Log::LOG_DEB);
+        loguer->loguear("Inicia la creacion del controlador", Log::LOG_DEB);
+
         Controlador controlador = Controlador();
-        cout << "Finaliza la creacion del controlador" << endl;
+
+        loguer->loguear("Finaliza la creacion del controlador", Log::LOG_DEB);
 
         bool restart = false;
-        cout << "-------------- GameLoop ----------------------------" << endl;
+
+        loguer->loguear("-------------- GameLoop ----------------------------", Log::LOG_DEB);
 
         while ( !restart && !endGame ) {
             //Declaracion de variables necesarias para el gameloop
@@ -88,9 +91,7 @@ int main(int argc, char **argv) {
         }
     }
 
-    cout << "------------------------------------------------------------" << endl;
-    cout << "---------------------FIN DEL JUEGO--------------------------" << endl;
-    cout << "------------------------------------------------------------" << endl;
+   loguer->loguear("---------------------FIN DEL JUEGO--------------------------", Log::LOG_DEB);
 
     return 0;
 }

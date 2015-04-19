@@ -65,7 +65,11 @@ void Sprite::getBefore(SDL_Texture *texture, bool flip) {
 }
 
 void Sprite::freeTextures() {
+    loguer->loguear("Comienza a eliminarse un vector de Sprites", Log::LOG_DEB);
     for(int i = 0; i < mTextures.size(); i++) {
+        string message = "Elimina textura " + to_string(i + 1);
+        loguer->loguear(message.c_str(), Log::LOG_DEB);
         SDL_DestroyTexture(mTextures[i]);
     }
+    loguer->loguear("Finaliza la eliminacion del vector de Sprites", Log::LOG_DEB);
 }

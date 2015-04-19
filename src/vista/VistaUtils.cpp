@@ -13,6 +13,9 @@ Uint32 VistaUtils::getColorKeyValue(VistaUtils::COLORKEY color, SDL_Surface* s) 
 }
 
 SDL_Texture *VistaUtils::createTexture(SDL_Renderer* renderer, float width, float height) {
+    string message = "Crea textura de dimensiones " + to_string(width) + " x " + to_string(height);
+    loguer->loguear(message.c_str(), Log::LOG_DEB);
+
     int scaledWidth = (int) (width * SCALE_X);
     int scaledHeight = (int) (height * SCALE_Y);
     return SDL_CreateTexture(renderer, SDL_PIXELFORMAT_UNKNOWN, SDL_TEXTUREACCESS_TARGET, scaledWidth, scaledHeight);
@@ -23,6 +26,9 @@ SDL_Texture* VistaUtils::loadTexture(SDL_Renderer *r, std::string path, VistaUti
     if (surface == NULL){
         return nullptr;
     }else {
+        string message = "Carga textura desde " + path;
+        loguer->loguear(message.c_str(), Log::LOG_DEB);
+
         SDL_SetColorKey(surface, SDL_TRUE, getColorKeyValue(colorkey, surface) );
         SDL_Texture* t = SDL_CreateTextureFromSurface(r, surface);
         SDL_FreeSurface(surface);

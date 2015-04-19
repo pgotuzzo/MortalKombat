@@ -6,6 +6,7 @@
  * Se inicia la ventana y el renderer.
  */
 void Pantalla::Inicializar(int anchoPx,int altoPx) {
+    loguer->loguear("Inicia SDL", Log::LOG_DEB);
     if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
         loguer->loguear("Fallo la inicializacion de SDL.", Log::LOG_ERR);
 
@@ -80,11 +81,13 @@ void Pantalla::update(Tcambio change) {
 
 
 Pantalla::~Pantalla() {
+    loguer->loguear("Destruccion de la pantalla", Log::LOG_DEB);
     for (int i = 0; i < capas.size(); i++)
         capas[i].freeTextures();
     personaje.freeTextures();
     SDL_DestroyRenderer(mRenderer);
     SDL_DestroyWindow(mWindow);
+    loguer->loguear("Cierra SDL", Log::LOG_DEB);
     SDL_Quit();
     IMG_Quit();
 }
