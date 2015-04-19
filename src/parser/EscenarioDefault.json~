@@ -1,0 +1,29 @@
+{ 
+    "ventana": { 
+        "ancho-px": 500, 
+        "alto-px": 300, 
+        "ancho": 200 
+    }, 
+    "escenario": { 
+        "ancho": 1000, 
+        "alto": 150, 
+        "y-piso": 20 
+    }, 
+    "capas": [ 
+        { 
+            "imagen_fondo": "/home/miguel/ClionProjects/MortalKombat/resources/capas/capa1.jpeg", 
+            "ancho": 500 
+        }, 
+        { 
+            "imagen_fondo": "/home/miguel/ClionProjects/MortalKombat/resources/capas/capa2.jpeg", 
+            "ancho": 1000 
+        } 
+    ], 
+    "personaje": { 
+        "ancho": 20, 
+        "alto": 35, 
+        "z-index": 1,
+	"orientacion": "izquierda", 
+        "sprites": ? 
+    } 
+} 

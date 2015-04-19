@@ -1,0 +1,38 @@
+{
+    "ventana": {
+        "ancho-px": 800,
+        "alto-px": 600,
+        "ancho": 200
+    },
+    "escenario": {
+        "ancho": 1000,
+        "alto": 150,
+        "y-piso": 25
+    },
+    "capas": [
+        {
+            "imagen_fondo": "/home/venesio/ClionProjects/MortalKombat/resources/capas/capa1.png",
+            "ancho": 500
+        },
+        {
+            "imagen_fondo": "/home/venesio/ClionProjects/MortalKombat/resources/capas/capa2.png",
+            "ancho": 600
+        },
+        {
+            "imagen_fondo": "/home/venesio/ClionProjects/MortalKombat/resources/capas/capa3.png",
+            "ancho": 800
+        },
+        {
+            "imagen_fondo": "/home/venesio/ClionProjects/MortalKombat/resources/capas/capa4.png",
+            "ancho": 1000
+        }
+
+    ],
+    "personaje": {
+        "ancho": 20,
+        "alto": 70,
+        "z-index":2,
+        "orientacion": "derecha",
+        "sprites": "/home/venesio/ClionProjects/MortalKombat/resources/sprites"
+    }
+} 
