@@ -554,13 +554,13 @@ int config::cantSprites(TestadoPersonaje e){
 	int cant=0;
 	switch ( e ) {
 		case PARADO:
-			cant=13;
+			cant=9;
 			break;
 		case AGACHADO:
 			cant=3;
 			break;
 		case CAMINANDO:
-			cant=10;
+			cant=8;
 			break;
 		case SALTANDO_OBLICUO:
 			cant=10;
