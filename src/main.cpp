@@ -6,7 +6,7 @@
 #include "controlador/Controlador.h"
 #include <time.h>
 
-const float delay = 45.0;
+const float delay = 30;
 
 int main(int argc, char **argv) {
 
@@ -31,12 +31,13 @@ int main(int argc, char **argv) {
         Tescenario tescenario = configuracion.getEscenario();
         Tpersonaje tpersonaje = configuracion.getPersonaje();
         tventana.distTope = MIN_DISTANCE_FROM_BOUND;
-        Pantalla pantalla = Pantalla(vectorTcapa, tventana, tescenario, tpersonaje);
+
+        Pantalla* pantalla = new Pantalla(vectorTcapa, tventana, tescenario, tpersonaje);
 
         loguer->loguear("Finaliza la creacion de la pantalla", Log::LOG_DEB);
         loguer->loguear("Inicia la creacion del mundo...", Log::LOG_DEB);
 
-        Mundo mundo = Mundo(configuracion);
+        Mundo* mundo = new Mundo(configuracion);
 
         loguer->loguear("Finaliza la creacion del mundo", Log::LOG_DEB);
         loguer->loguear("Inicia la creacion del controlador", Log::LOG_DEB);
@@ -44,54 +45,43 @@ int main(int argc, char **argv) {
         Controlador controlador = Controlador();
 
         loguer->loguear("Finaliza la creacion del controlador", Log::LOG_DEB);
-
-        bool restart = false;
-
         loguer->loguear("-------------- GameLoop ----------------------------", Log::LOG_DEB);
 
+        bool restart = false;
         while ( !restart && !endGame ) {
-            //Declaracion de variables necesarias para el gameloop
-
-            //0 PARADO
-            //1 SALTAR
-            //2 AGACHAR
-            //3 Caminar a la derecha
-            //4 Caminar a la izquierda
-            //5 Salto oblicuo a la derecha
-            //6 Salto oblicuo a la izquierda
-            //7 Restart
-            //8 Exit
-
-            Tcambio c;
-            Tinput input;
-
             t1 = clock();
 
             // INPUT
-            input = controlador.getInputs();
+            Tinput input = controlador.getInputs();
 
-            //SI SE DESEA SALIR DEL JUEGO
-            if (input == KEY_EXIT)
-                endGame = true;
-
-            //PARA RESTABLECER EL JUEGO
-            if (input == KEY_RESTART) {
-                restart = true;
-            }
-
+            switch (input){
+                //PARA RESTABLECER EL JUEGO
+                case KEY_RESTART:{
+                    restart = true;
+                    delete(pantalla);
+                    delete(mundo);
+                    break;
+                };
+                //SI SE DESEA SALIR DEL JUEGO
+                case KEY_EXIT:{
+                    endGame = true;
+                    delete(pantalla);
+                    delete(mundo);
+                    break;
+                }
                 //DEMAS ACCIONES
-            else {
-                c = mundo.actualizarMundo(c, input);
-                pantalla.update(c);
-                pantalla.dibujar();
-            }
-            t2 = clock();
-            timeloop = (((float)t2 - (float)t1) / 1000000.0F ) * 1000;
-            SDL_Delay(delay - timeloop);
+                default:{
+                    Tcambio c = mundo->actualizarMundo(c, input);
+                    pantalla->update(c);
+                    pantalla->dibujar();
+                    t2 = clock();
+                    timeloop = (((float)t2 - (float)t1) / 1000000.0F ) * 1000;
+                    SDL_Delay(delay - timeloop);
+                }
+            };
         }
     }
-
-   loguer->loguear("---------------------FIN DEL JUEGO--------------------------", Log::LOG_DEB);
+    loguer->loguear("---------------------FIN DEL JUEGO--------------------------", Log::LOG_DEB);
 
     return 0;
 }
