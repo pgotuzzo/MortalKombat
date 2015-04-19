@@ -46,7 +46,7 @@ void Capa::setStatics(float distanciaTope, float anchoPersonaje, float anchoEsce
     Capa::distTope = distanciaTope;
     Capa::mAnchoPersonaje = anchoPersonaje;
     Capa::mAnchoEscenario = anchoEscenario;
-    Capa::posEscenario = (anchoPantalla-anchoEscenario)/2;
+    Capa::posEscenario = ( anchoEscenario - anchoPantalla ) / 2;
 }
 
 /*
