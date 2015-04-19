@@ -7,6 +7,15 @@ ErrorLog::ErrorLog() {
     fecha = nullptr;
 }
 
+ErrorLog* ErrorLog::instance = nullptr;
+
+ErrorLog* ErrorLog::getInstance() {
+    if (instance == nullptr) {
+        instance = new ErrorLog();
+    }
+    return instance;
+}
+
  void ErrorLog::loguear(const char* mensajeError, Log::Tlog tipo) {
     if (tipo == LOG_ERR) {
         time_t t;

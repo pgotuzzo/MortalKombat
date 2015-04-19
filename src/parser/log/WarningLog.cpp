@@ -8,6 +8,15 @@ WarningLog::WarningLog() {
     fecha = nullptr;
 }
 
+WarningLog* WarningLog::instance = nullptr;
+
+WarningLog* WarningLog::getInstance() {
+    if (instance == nullptr) {
+        instance = new WarningLog();
+    }
+    return instance;
+}
+
 void WarningLog::loguear(const char* mensajeError, Log::Tlog tipo) {
     const char * tipoDeLog;
     time_t t;

@@ -76,7 +76,7 @@ struct Posicion{
 /**
  * Loguer
  */
-static Log* loguer = new DebugLog();
+static Log* loguer = DebugLog::getInstance();
 
 /**
  * Estructuras que se utilizan para
