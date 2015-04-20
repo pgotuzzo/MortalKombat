@@ -17,9 +17,10 @@ const bool activado = true;
  * Direccion: True = derecha
  * Sentido: True = derecha
  */
-Personaje::Personaje(bool direccion,Posicion posInicial,float alto,float ancho,float nuevoAltoEscenario){
+Personaje::Personaje(bool direccion,Posicion posInicial,float alto,float ancho,float nuevoAltoEscenario, float distMaxEnemigo){
 	this->direccion = direccion;
 	this->sentido = true;
+	distanciaMaxEnemigo = distMaxEnemigo;
 	parado = true;
 	estado = PARADO;
 	pos = posInicial;
@@ -55,6 +56,12 @@ Posicion Personaje::verificarPuntoEnX(Posicion posicionActual,float anchoEscenar
 	}
 	if (posicionActual.getX() < 1){
 		return Posicion(1,posicionActual.getY());
+	}
+
+	// Valida que no se puedan separar los 2 pj mas de distanciaMaxEnemigo
+	if (pow(posicionActual.getX() - posEnemigo.getX(),2) >= pow(distanciaMaxEnemigo,2) ){
+		if(direccion == true) return Posicion(posEnemigo.getX() - distanciaMaxEnemigo,posicionActual.getY());
+		else return Posicion(posEnemigo.getX() + distanciaMaxEnemigo,posicionActual.getY());
 	}
 	else return posicionActual;
 }

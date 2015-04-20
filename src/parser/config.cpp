@@ -461,7 +461,7 @@ int config::cantSprites(TestadoPersonaje e){
 			cant=3;
 			break;
 		case CAMINANDO:
-			cant=10;
+			cant=11;
 			break;
 		case SALTANDO_OBLICUO:
 			cant=10;

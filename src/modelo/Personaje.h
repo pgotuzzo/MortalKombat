@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <iostream>
 #include <list>
+#include "math.h"
 #include <tr1/unordered_map>
 #include "Accion.h"
 #include "../Common.h"
@@ -14,16 +15,18 @@ using namespace std;
 
 class Personaje {
 
-private:
+public:
 
 	bool parado;
 	Posicion pos;
+	Posicion posEnemigo;
 	bool direccion;
 	bool sentido;
 	float alturaDelPersonaje;
 	float anchoDelPersonaje;
 	float altoEscenario;
 	float yPiso;
+	float distanciaMaxEnemigo;
 	TestadoPersonaje estado;
 	Accion* accionesEnCurso[4];
 
@@ -32,9 +35,8 @@ private:
 
 	void ejecutarAcionesActivadas(Accion **accionesEnCurso,float anchoEscenario);
 
-public:
 
-	Personaje(bool direccion,Posicion posInicial,float alto,float ancho,float nuevoAltoEscenario);
+	Personaje(bool direccion,Posicion posInicial,float alto,float ancho,float nuevoAltoEscenario, float distMaxEnemigo);
 	void realizarAccion(Tinput orden,float anchoEscenario);
 
 	Posicion getPosicion();

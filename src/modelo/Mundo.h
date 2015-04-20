@@ -10,10 +10,12 @@ private:
 	float anchoEscenario;
 	float altoEscenario;
 	float altoPiso;
+	float anchoVentana;
 	Personaje* personaje1;
 	Personaje* personaje2;
 
 	void actualizarPersonaje(Tcambio* c, Personaje* personaje);
+	bool verificarDireccion(Posicion posPJ1, Posicion posPJ2);
 
 public:
 	Mundo(config configuracion);
