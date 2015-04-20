@@ -70,5 +70,6 @@ Tcambio Mundo::actualizarMundo(Tcambio c,Tinput input){
 
 Mundo::~Mundo() {
 	delete personaje1;
+	loguer->loguear("Se libera al personaje", Log::LOG_DEB);
 }
 
