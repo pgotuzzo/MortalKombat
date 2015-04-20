@@ -32,7 +32,7 @@ config::config(string path) {
 		}
 		porDefecto=true;
 		//Se loguea el error pertinente.
-		loguer->loguear(mensaje.c_str(), Log::Tlog::LOG_ERR);
+		loguer->loguear(mensaje.c_str(), Log::Tlog::LOG_WAR);
 		//se abre el archivo por defecto.
 
 		// TODO - Agregar Ruta relativa
@@ -45,301 +45,301 @@ config::config(string path) {
 
 	//Si el parseo del archivo original y el por defecto fallan, se loguea el error.
 	if (noCoincide && porDefecto) {
+
 		string aux="Fallo el parseo, no coincide ninguno de los nombres de las partes del escenario.No-defecto, No-path";
 		string mensajeError = aux + reader.getFormattedErrorMessages();
 		loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
 		std::cout << mensajeError << "\n";
-	} else {
 
+	} else {
 		//Si el archivo original o el por defecto se pueden parsear entra y setea los valores
 		this->setValores(partes);
 	}
 }
 
-config::~config() {
-	this->vectorCapas.clear();
 
-}
 
-Tdireccion config::obtieneEnum(string ori){
-	if(strcmp(ori.c_str(),"derecha")==0)
-		return Tdireccion::DERECHA;
-	else
-	if(strcmp(ori.c_str(),"izquierda")==0)
-		return Tdireccion::IZQUIERDA;
-	else{
-		string mensajeError="Orientación: izquierda o derecha, mal escrita. Se carga por defecto derecha.";
-		loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
-		return Tdireccion::DERECHA;
-	}
-}
 
 void config::setValores(Value partes){
 
+	this->setCapa(partes);
+
+	this->setVentana(partes);
+
+	this->setPersonaje(partes);
+
+	this->setEscenario(partes);
+
+}
+
+void config::setEscenario(Value partes){
 	//Se fija si existe esa parte en Json. Si no carga por defecto.
-	if(! partes["capas"].isNull()){
-		Value capa=partes["capas"];
-		Tcapa aux;
-		float anchoCapa = 500;
-		bool existe = true;
-		if (capa.size() == 0) this->capasDefecto(); // Miki: agrego este if pq si el array de capas estaba vacio ponia
-			//una ventana transparente.
-		else {
-			float anchoAnterior = 0.0; // Esto lo declare yo. Miki
-			for (unsigned i = 0; i < capa.size(); i++) {
+		if(! partes["escenario"].isNull()){
 
-				if(!capa[i].get("imagen_fondo", "default").isString()){
-					string mensajeError="En ventana/capas/imagen_fondo, no hay un string. Se carga por defecto todas sus partes.";
-					loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
-					aux.dirCapa="default2";
-				} else
-					aux.dirCapa = capa[i].get("imagen_fondo", "default").asString();
+			if(!partes["escenario"].get("alto", 150).isDouble()){
+				string mensajeError="En personaje/alto, no hay un numero. Se carga por defecto todas sus partes.";
+				loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_WAR);
+				this->escenario.alto=150;
+			} else
+				this->escenario.alto = partes["escenario"].get("alto",150).asFloat();
 
 
-				FILE *fp = fopen(aux.dirCapa.c_str(), "r");
-				if (!fp)
-					existe = false;
-				else
-					fclose(fp);
+			this->validacionPositivoF(this->escenario.alto,"escenario","alto");
 
-				if(!capa[i].get("ancho", anchoCapa).isDouble()){
-					string mensajeError="En ventana/capas/ancho, no hay un float. Se carga por defecto todas sus partes.";
-					loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
-					aux.ancho=anchoCapa;
-				} else
-					aux.ancho = capa[i].get("ancho", anchoCapa).asFloat();
-
-
-				// Miki: ancho capa mal en json negativo. Devuelvo valor default
-				if (aux.ancho <= 0.0) {
-					if ( i == 0 ) {
-						aux.ancho = 500;
-						anchoAnterior = aux.ancho;
-					}
-					else {
-						aux.ancho = anchoAnterior;
-					}
-					ostringstream mensajeError;
-					mensajeError<<"Se ingresó un número negativo en la capa "<<(i+1)<<".Se carga un valor por defecto.";
-					loguer->loguear(mensajeError.str().c_str(), Log::Tlog::LOG_ERR);
-				}
-				anchoAnterior = aux.ancho;
-				// Aca es lo mio. Miki
-				//anchoCapa = anchoCapa * 2;
-				this->vectorCapas.push_back(aux);
+			//Se verifica si existe el miembro en la variable partes. Si no se carga por defecto.
+			if(! partes["escenario"].isMember("alto")){
+				string mensajeError="No se encuentra en escenario alto en el archivo Json. Se carga por defecto todas sus partes.";
+				loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_WAR);
 			}
-		}
 
-		//Se fija si existe la ruta, sino existe alguna de las rutas, levanta por defecto.
-		if(!existe)
-			this->capasDefecto();
-	} else {
-		this->capasDefecto();
-	}
+			if(!partes["escenario"].get("ancho", 1000).isDouble()){
+				string mensajeError="En personaje/ancho, no hay un numero. Se carga por defecto todas sus partes.";
+				loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_WAR);
+				this->escenario.ancho=1000;
+			} else
+				this->escenario.ancho = partes["escenario"].get("ancho",1000).asFloat();
+
+
+			this->validacionPositivoF(this->escenario.ancho,"escenario","ancho");
+
+			//Se verifica si existe el miembro en la variable partes. Si no se carga por defecto.
+			if(! partes["escenario"].isMember("ancho")){
+				string mensajeError="No se encuentra en escenario ancho en el archivo Json. Se carga por defecto todas sus partes.";
+				loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_WAR);
+			}
+
+			if(!partes["escenario"].get("y-piso", 20).isDouble()){
+				string mensajeError="En personaje/y-piso, no hay un numero. Se carga por defecto todas sus partes.";
+				loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_WAR);
+				this->escenario.yPiso=20;
+			} else
+				this->escenario.yPiso = partes["escenario"].get("y-piso",20).asFloat();
+
+
+			this->validacionPositivoF(this->escenario.yPiso,"escenario","y-piso");
+			this->validacionTamanioYpiso();
+
+			//Se verifica si existe el miembro en la variable partes. Si no se carga por defecto.
+			if(! partes["escenario"].isMember("y-piso")){
+				string mensajeError="No se encuentra en escenario y-piso en el archivo Json. Se carga por defecto todas sus partes.";
+				loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_WAR);
+			}
+
+		} else
+			this->escenarioDefecto();
+
+}
+
+void config::setPersonaje(Value partes){
+	//Se fija si existe esa parte en Json. Si no carga por defecto.
+		if(! partes["personaje"].isNull()){
+
+			if(!partes["personaje"].get("ancho", 20).isDouble()){
+				string mensajeError="En personaje/ancho, no hay un float. Se carga por defecto todas sus partes.";
+				loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_WAR);
+				this->personaje.ancho=20;
+			} else
+				this->personaje.ancho = partes["personaje"].get("ancho", 20).asFloat();
+
+			this->validacionPositivoF(this->personaje.ancho,"personaje","ancho");
+
+			//Se verifica si existe el miembro en la variable partes. Si no se carga por defecto.
+			if(! partes["personaje"].isMember("ancho")){
+				string mensajeError="No se encuentra en personaje ancho en el archivo Json. Se carga por defecto todas sus partes.";
+				loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_WAR);
+			}
+
+			if(!partes["personaje"].get("alto", 35).isDouble()){
+				string mensajeError="En personaje/alto, no hay un float. Se carga por defecto todas sus partes.";
+				loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_WAR);
+				this->personaje.alto=35;
+			} else
+				this->personaje.alto = partes["personaje"].get("alto", 35).asFloat();
+
+			this->validacionPositivoF(this->personaje.alto,"personaje","alto");
+
+			//Se verifica si existe el miembro en la variable partes. Si no se carga por defecto.
+			if(! partes["personaje"].isMember("alto")){
+				string mensajeError="No se encuentra en personaje alto en el archivo Json. Se carga por defecto todas sus partes.";
+				loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_WAR);
+			}
+
+			if(!partes["personaje"].get("z-index", 1).isInt()){
+				string mensajeError="En personaje/z-index, no hay un Int. Se carga por defecto todas sus partes.";
+				loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_WAR);
+				this->personaje.zIndex=1;
+			} else
+				this->personaje.zIndex = partes["personaje"].get("z-index", 1).asInt();
+
+			this->validacionPositivoI(this->personaje.zIndex,"personaje","z-index");
+			this->validacionTamanioZindex();
+
+			//Se verifica si existe el miembro en la variable partes. Si no se carga por defecto.
+			if(! partes["personaje"].isMember("z-index")){
+				string mensajeError="No se encuentra en personaje z-index en el archivo Json. Se carga por defecto todas sus partes.";
+				loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_WAR);
+			}
+
+			string orientacion;
+			if(!partes["personaje"].get("orientacion", "derecha").isString()){
+				string mensajeError="En personaje/orientacion, no hay un string. Se carga por defecto todas sus partes.";
+				loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_WAR);
+				this->personaje.orientacion=DERECHA;
+			} else {
+				orientacion = partes["personaje"].get("orientacion","derecha").asString();
+				this->personaje.orientacion = this->obtieneEnum(orientacion);
+			}
+
+			//Se verifica si existe el miembro en la variable partes. Si no se carga por defecto.
+			if(! partes["personaje"].isMember("orientacion")){
+				string mensajeError="No se encuentra en personaje orientacion en el archivo Json. Se carga por defecto todas sus partes.";
+				loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_WAR);
+			}
+
+			// TODO - Agregar Ruta relativa
+			if(!partes["personaje"].get("sprites", "/home/MortalKombat/sprites").isString()){
+				string mensajeError="En personaje/sprites, no hay un string. Se carga por defecto todas sus partes.";
+				loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_WAR);
+				this->personaje.sprites="/home/MortalKombat/sprites";
+			} else
+				this->personaje.sprites = partes["personaje"].get("sprites","/home/MortalKombat/sprites").asString();
+
+			this->validacionPath(this->personaje.sprites);
+
+			//Se verifica si existe el miembro en la variable partes. Si no se carga por defecto.
+			if(! partes["personaje"].isMember("sprites")){
+				string mensajeError="No se encuentra en personaje sprites en el archivo Json. Se carga por defecto todas sus partes.";
+				loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_WAR);
+			}
+
+		} else
+			this->personajeDefecto();
+}
+
+void config::setVentana(Value partes){
 
 	//Si algun nombre de las partes del escenario no coincide se carga por defecto ese valor.
-	if(! partes["ventana"].isNull()){
+		if(! partes["ventana"].isNull()){
 
-		if(!partes["ventana"].get("alto-px", 600).isInt()){
-			string mensajeError="En ventana/alto-px, no hay un numero. Se carga por defecto todas sus partes.";
-			loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
-			this->ventana.altopx=600;
+			if(!partes["ventana"].get("alto-px", 600).isInt()){
+				string mensajeError="En ventana/alto-px, no hay un int. Se carga por defecto todas sus partes.";
+				loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_WAR);
+				this->ventana.altopx=600;
+			} else
+				this->ventana.altopx= partes["ventana"].get("alto-px", 600).asInt();
+
+			this->validacionPositivoI(this->ventana.altopx,"ventana","alto-px");
+
+			//Se verifica si existe el miembro en la variable partes. Si no se carga por defecto.
+			if(! partes["ventana"].isMember("alto-px")){
+
+				string mensajeError="No se encuentra en ventana alto-px en el archivo Json. Se carga por defecto todas sus partes.";
+				loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_WAR);
+			}
+
+			if(!partes["ventana"].get("ancho-px", 800).isInt()){
+				string mensajeError="En ventana/ancho-px, no hay un Int. Se carga por defecto todas sus partes.";
+				loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_WAR);
+				this->ventana.anchopx=800;
+			} else
+				this->ventana.anchopx = partes["ventana"].get("ancho-px", 800).asInt();
+
+
+			this->validacionPositivoI(this->ventana.anchopx,"ventana","ancho-px");
+
+			//Se verifica si existe el miembro en la variable partes. Si no se carga por defecto.
+			if(! partes["ventana"].isMember("ancho-px")){
+				string mensajeError="No se encuentra en ventana ancho-px en el archivo Json. Se carga por defecto todas sus partes.";
+				loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_WAR);
+			}
+
+			if(!partes["ventana"].get("ancho", 200).isDouble()){
+				string mensajeError="En ancho, no hay un float. Se carga por defecto todas sus partes.";
+				loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_WAR);
+				this->ventana.ancho=200;
+			} else
+				this->ventana.ancho = partes["ventana"].get("ancho", 200).asFloat();
+
+
+			this->validacionPositivoF(this->ventana.ancho,"ventana","ancho");
+
+			//Se verifica si existe el miembro en la variable partes. Si no se carga por defecto.
+			if(! partes["ventana"].isMember("ancho")){
+				string mensajeError="No se encuentra en ventana ancho en el archivo Json. Se carga por defecto todas sus partes.";
+				loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_WAR);
+			}
+
 		} else
-			this->ventana.altopx= partes["ventana"].get("alto-px", 600).asInt();
+			this->ventanaDefecto();
+}
 
-		this->validacionPositivoI(this->ventana.altopx,"ventana","alto-px");
+void config::setCapa(Value parte){
 
-		//Se verifica si existe el miembro en la variable partes. Si no se carga por defecto.
-		if(! partes["ventana"].isMember("alto-px")){
-
-			string mensajeError="No se encuentra en ventana alto-px en el archivo Json. Se carga por defecto todas sus partes.";
-			loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
-		}
-
-		if(!partes["ventana"].get("ancho-px", 800).isInt()){
-			string mensajeError="En ventana/ancho-px, no hay un numero. Se carga por defecto todas sus partes.";
-			loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
-			this->ventana.anchopx=800;
-		} else
-			this->ventana.anchopx = partes["ventana"].get("ancho-px", 800).asInt();
-
-
-		this->validacionPositivoI(this->ventana.anchopx,"ventana","ancho-px");
-
-		//Se verifica si existe el miembro en la variable partes. Si no se carga por defecto.
-		if(! partes["ventana"].isMember("ancho-px")){
-			string mensajeError="En ancho-px, no hay un numero. Se carga por defecto todas sus partes.";
-			loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
-		}
-
-		if(!partes["ventana"].get("ancho", 200).isDouble()){
-			string mensajeError="En ancho, no hay un numero. Se carga por defecto todas sus partes.";
-			loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
-			this->ventana.ancho=200;
-		} else
-			this->ventana.ancho = partes["ventana"].get("ancho", 200).asFloat();
-
-
-		this->validacionPositivoF(this->ventana.ancho,"ventana","ancho");
-
-		//Se verifica si existe el miembro en la variable partes. Si no se carga por defecto.
-		if(! partes["ventana"].isMember("ancho")){
-			string mensajeError="No se encuentra en ventana ancho en el archivo Json. Se carga por defecto todas sus partes.";
-			loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
-		}
-
-	} else
-		this->ventanaDefecto();
+	this->vectorCapas.clear();
 
 	//Se fija si existe esa parte en Json. Si no carga por defecto.
-	if(! partes["personaje"].isNull()){
+		if(! parte["capas"].isNull()){
+			Value capa=parte["capas"];
+			Tcapa aux;
+			float anchoCapa = 500;
+			bool existe = true;
+			if (capa.size() == 0) this->capasDefecto(); // Miki: agrego este if pq si el array de capas estaba vacio ponia
+				//una ventana transparente.
+			else {
+				float anchoAnterior = 0.0; // Esto lo declare yo. Miki
+				unsigned int i=0;
+				while( i < capa.size() && existe) {
 
-		if(!partes["personaje"].get("ancho", 20).isDouble()){
-			string mensajeError="En personaje/ancho, no hay un numero. Se carga por defecto todas sus partes.";
-			loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
-			this->personaje.ancho=20;
-		} else
-			this->personaje.ancho = partes["personaje"].get("ancho", 20).asFloat();
+					if(!capa[i].get("imagen_fondo", "default").isString()){
+						string mensajeError="En ventana/capas/imagen_fondo, no hay un string. Se carga por defecto todas sus partes.";
+						loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_WAR);
+						aux.dirCapa="default";
+					} else
+						aux.dirCapa = capa[i].get("imagen_fondo", "default").asString();
 
+					existe=this->directorioExiste(aux.dirCapa.c_str());
 
-		this->validacionPositivoF(this->personaje.ancho,"personaje","ancho");
-
-		//Se verifica si existe el miembro en la variable partes. Si no se carga por defecto.
-		if(! partes["personaje"].isMember("ancho")){
-			string mensajeError="No se encuentra en personaje ancho en el archivo Json. Se carga por defecto todas sus partes.";
-			loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
-		}
-
-		if(!partes["personaje"].get("alto", 35).isDouble()){
-			string mensajeError="En personaje/alto, no hay un numero. Se carga por defecto todas sus partes.";
-			loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
-			this->personaje.alto=35;
-		} else
-			this->personaje.alto = partes["personaje"].get("alto", 35).asFloat();
-
-
-		this->validacionPositivoF(this->personaje.alto,"personaje","alto");
-
-		//Se verifica si existe el miembro en la variable partes. Si no se carga por defecto.
-		if(! partes["personaje"].isMember("alto")){
-			string mensajeError="No se encuentra en personaje alto en el archivo Json. Se carga por defecto todas sus partes.";
-			loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
-		}
-
-		if(!partes["personaje"].get("z-index", 1).isInt()){
-			string mensajeError="En personaje/z-index, no hay un numero. Se carga por defecto todas sus partes.";
-			loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
-			this->personaje.zIndex=1;
-		} else
-			this->personaje.zIndex = partes["personaje"].get("z-index", 1).asInt();
+					if(!capa[i].get("ancho", anchoCapa).isDouble()){
+						string mensajeError="En ventana/capas/ancho, no hay un float. Se carga por defecto todas sus partes.";
+						loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_WAR);
+						aux.ancho=anchoCapa;
+					} else
+						aux.ancho = capa[i].get("ancho", anchoCapa).asFloat();
 
 
-		this->validacionPositivoI(this->personaje.zIndex,"personaje","z-index");
-		this->validacionTamanioZindex();
+					// Miki: ancho capa mal en json negativo. Devuelvo valor default
+					if (aux.ancho <= 0.0) {
+						if ( i == 0 ) {
+							aux.ancho = 500;
+							anchoAnterior = aux.ancho;
+						}
+						else {
+							aux.ancho = anchoAnterior;
+						}
+						ostringstream mensajeError;
+						mensajeError<<"Se ingresó un número negativo en la capa "<<(i+1)<<".Se carga un valor por defecto.";
+						loguer->loguear(mensajeError.str().c_str(), Log::Tlog::LOG_WAR);
+					}
+					anchoAnterior = aux.ancho;
+					// Aca es lo mio. Miki
+					//anchoCapa = anchoCapa * 2;
+					this->vectorCapas.push_back(aux);
+					i++;
+				}
+			}
 
-		//Se verifica si existe el miembro en la variable partes. Si no se carga por defecto.
-		if(! partes["personaje"].isMember("z-index")){
-			string mensajeError="No se encuentra en personaje z-index en el archivo Json. Se carga por defecto todas sus partes.";
-			loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
-		}
-
-		string orientacion;
-		if(!partes["personaje"].get("orientacion", "derecha").isString()){
-			string mensajeError="En personaje/orientacion, no hay un numero. Se carga por defecto todas sus partes.";
-			loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
-			this->personaje.orientacion=DERECHA;
+			//Se fija si existe la ruta, sino existe alguna de las rutas, levanta por defecto.
+			if(!existe)
+				this->capasDefecto();
 		} else {
-			orientacion = partes["personaje"].get("orientacion","derecha").asString();
-			this->personaje.orientacion = this->obtieneEnum(orientacion);
+			this->capasDefecto();
 		}
-
-
-		//Se verifica si existe el miembro en la variable partes. Si no se carga por defecto.
-		if(! partes["personaje"].isMember("orientacion")){
-			string mensajeError="No se encuentra en personaje orientacion en el archivo Json. Se carga por defecto todas sus partes.";
-			loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
-		}
-		// TODO - Agregar Ruta relativa
-		if(!partes["personaje"].get("sprites", "/home/MortalKombat/sprites").isString()){
-			string mensajeError="En personaje/sprites, no hay un numero. Se carga por defecto todas sus partes.";
-			loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
-			this->personaje.sprites="/home/MortalKombat/sprites";
-		} else
-			this->personaje.sprites = partes["personaje"].get("sprites","/home/MortalKombat/sprites").asString();
-
-
-
-		this->validacionPath(this->personaje.sprites);
-
-		//Se verifica si existe el miembro en la variable partes. Si no se carga por defecto.
-		if(! partes["personaje"].isMember("sprites")){
-			string mensajeError="No se encuentra en personaje sprites en el archivo Json. Se carga por defecto todas sus partes.";
-			loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
-		}
-
-	} else
-		this->personajeDefecto();
-
-	//Se fija si existe esa parte en Json. Si no carga por defecto.
-	if(! partes["escenario"].isNull()){
-
-		if(!partes["escenario"].get("alto", 150).isDouble()){
-			string mensajeError="En personaje/alto, no hay un numero. Se carga por defecto todas sus partes.";
-			loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
-			this->escenario.alto=150;
-		} else
-			this->escenario.alto = partes["escenario"].get("alto",150).asFloat();
-
-
-		this->validacionPositivoF(this->escenario.alto,"escenario","alto");
-
-		//Se verifica si existe el miembro en la variable partes. Si no se carga por defecto.
-		if(! partes["escenario"].isMember("alto")){
-			string mensajeError="No se encuentra en escenario alto en el archivo Json. Se carga por defecto todas sus partes.";
-			loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
-		}
-
-		if(!partes["escenario"].get("ancho", 1000).isDouble()){
-			string mensajeError="En personaje/ancho, no hay un numero. Se carga por defecto todas sus partes.";
-			loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
-			this->escenario.ancho=1000;
-		} else
-			this->escenario.ancho = partes["escenario"].get("ancho",1000).asFloat();
-
-
-		this->validacionPositivoF(this->escenario.ancho,"escenario","ancho");
-
-		//Se verifica si existe el miembro en la variable partes. Si no se carga por defecto.
-		if(! partes["escenario"].isMember("ancho")){
-			string mensajeError="No se encuentra en escenario ancho en el archivo Json. Se carga por defecto todas sus partes.";
-			loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
-		}
-
-		if(!partes["escenario"].get("y-piso", 20).isDouble()){
-			string mensajeError="En personaje/y-piso, no hay un numero. Se carga por defecto todas sus partes.";
-			loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
-			this->escenario.yPiso=20;
-		} else
-			this->escenario.yPiso = partes["escenario"].get("y-piso",20).asFloat();
-
-
-		this->validacionPositivoF(this->escenario.yPiso,"escenario","y-piso");
-		this->validacionTamanioYpiso();
-
-		//Se verifica si existe el miembro en la variable partes. Si no se carga por defecto.
-		if(! partes["escenario"].isMember("y-piso")){
-			string mensajeError="No se encuentra en escenario y-piso en el archivo Json. Se carga por defecto todas sus partes.";
-			loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
-		}
-
-	} else
-		this->escenarioDefecto();
 
 }
 
 void config::escenarioDefecto(){
 	string mensajeError="No se encuentra: escenario en el archivo Json. Se carga por defecto todas sus partes.";
-	loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
+	loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_WAR);
 	this->escenario.alto=150;
 	this->escenario.ancho=1000;
 	this->escenario.yPiso=10;
@@ -348,7 +348,7 @@ void config::escenarioDefecto(){
 
 void config::personajeDefecto(){
 	string mensajeError="No se encuentra: personaje en el archivo Json. Se carga por defecto todas sus partes.";
-	loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
+	loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_WAR);
 	this->personaje.alto=50;
 	this->personaje.ancho=20;
 	this->personaje.zIndex=1;
@@ -359,38 +359,21 @@ void config::personajeDefecto(){
 
 void config::ventanaDefecto(){
 	string mensajeError="No se encuentra: ventana en el archivo Json. Se carga por defecto todas sus partes.";
-	loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
+	loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_WAR);
 	this->ventana.altopx=600;
 	this->ventana.anchopx=800;
 	this->ventana.ancho=200;
 
 }
 
-void config::validacionTamanioYpiso(){
-
-	if(this->escenario.yPiso>=this->ventana.altopx){
-		this->escenario.yPiso=20;
-		string mensajeError="En encenario: y-piso, más grande que el alto de la ventana. Se carga por defecto y-piso.";
-		loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
-	}
-}
-
-void config::validacionTamanioZindex(){
-	if((unsigned)this->personaje.zIndex>= this->vectorCapas.size()){
-
-		this->personaje.zIndex=1;
-		string mensajeError="En personaje: z-index, mas grande que las capas cargadas. Se carga por defecto z-index.";
-		loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
-	}
-}
-
 void config::capasDefecto(){
 
 	string mensajeError="Fallo la carga de una de las capas, se cargan capas por defecto.";
-	loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_ERR);
+	loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_WAR);
 	Tcapa aux;
 	//borrar vector capas
 	this->vectorCapas.clear();
+
 	for(unsigned i=0; i<cantidadDeCapasDefault; i++){
 
 		float auxAncho;
@@ -412,27 +395,26 @@ void config::validacionPath(string path){
 	ostringstream os;
 
 	int cantErroneos=0;
-	bool directorioErroneo=false;
-	for(int e = 0; e < 5; e++ ){
+	bool directorioExiste=true;
+	int e=0;
+	while( e < 5 && directorioExiste ){
 
 		TestadoPersonaje estado = (TestadoPersonaje) e;
 		ostringstream dir;
 		dir<<path<<"/"<<TestadoPersonajeToString(estado);
-		FILE* archivo=fopen(dir.str().c_str(),"r");
 
-		if(archivo==NULL)
-			directorioErroneo=true;
-		else
-			fclose(archivo);
+		directorioExiste=this->directorioExiste(dir.str().c_str());
+
+		e++;
 	}
 
-	if(directorioErroneo){
+	if(!directorioExiste){
 		// TODO - Agregar Ruta relativa
 		this->personaje.sprites="/home/MortalKombat/sprites";
 
 		ostringstream mensajeError;
 		mensajeError<<"Directorios erroneos. Se cargan sprites por default.";
-		loguer->loguear(mensajeError.str().c_str(), Log::Tlog::LOG_ERR);
+		loguer->loguear(mensajeError.str().c_str(), Log::Tlog::LOG_WAR);
 
 	} else
 		for(int e = 0; e < 5; e++ ){
@@ -446,59 +428,82 @@ void config::validacionPath(string path){
 					os<<path<<"/"<<TestadoPersonajeToString(estado)<<"/0"<<i<<".png";
 				else
 					os<<path<<"/"<<TestadoPersonajeToString(estado)<<"/"<<i<<".png";
-				FILE* fp=fopen(os.str().c_str(),"r");
-				if(!fp){
-					cantErroneos++;
-					if(cantErroneos==40){
-						// TODO - Agregar Ruta relativa
-						this->personaje.sprites="/home/MortalKombat/sprites";
-						ostringstream mensajeError;
-						mensajeError<<"Falló la carga de todos los sprites. Se cargan sprites por default.";
-						loguer->loguear(mensajeError.str().c_str(), Log::Tlog::LOG_ERR);
-					}
-					// TODO - Agregar Ruta relativa
-					string path="/home/MortalKombat/sprites/default.jpg";
-					ifstream aux;
-					ofstream arch;
-					const int LEN=8192;
-					char buffer_out[LEN];
-					char buffer_in[LEN];
-					if (LEN) {
-						aux.rdbuf()->pubsetbuf(buffer_in, LEN );
-						arch.rdbuf()->pubsetbuf(buffer_out, LEN);
-					} else {
-						aux.rdbuf()->pubsetbuf(NULL, 0 );
-						arch.rdbuf()->pubsetbuf(NULL, 0);
-					}
-					aux.open(path.c_str(), ios::in | ios::binary);
-					arch.open(os.str().c_str(), ios::out | ios::binary);
-					arch << aux.rdbuf();
 
-					arch.close();
-					aux.close();
-
-					ostringstream mensajeError;
-					mensajeError<<"Falló la carga de "<<os.str()<<". Se duplica un sprite en su lugar.";
-					loguer->loguear(mensajeError.str().c_str(), Log::Tlog::LOG_ERR);
-				} else
-					fclose(fp);
+				if(!this->directorioExiste(os.str().c_str()))
+					this->copiarImagenDefault(cantErroneos,os.str().c_str());
 			}
 
 		}
 }
 
+void config::copiarImagenDefault(int &ContadorErroneos,const char* os){
+
+	ContadorErroneos++;
+	if(ContadorErroneos==40){
+		// TODO - Agregar Ruta relativa
+		this->personaje.sprites="/home/MortalKombat/sprites";
+		ostringstream mensajeError;
+		mensajeError<<"Falló la carga de todos los sprites. Se cargan sprites por default.";
+		loguer->loguear(mensajeError.str().c_str(), Log::Tlog::LOG_WAR);
+	}
+	// TODO - Agregar Ruta relativa
+	string path="/home/MortalKombat/sprites/default.jpg";
+	ifstream aux;
+	ofstream arch;
+	const int LEN=8192;
+	char buffer_out[LEN];
+	char buffer_in[LEN];
+	if (LEN) {
+		aux.rdbuf()->pubsetbuf(buffer_in, LEN );
+		arch.rdbuf()->pubsetbuf(buffer_out, LEN);
+	} else {
+		aux.rdbuf()->pubsetbuf(NULL, 0 );
+		arch.rdbuf()->pubsetbuf(NULL, 0);
+	}
+	aux.open(path.c_str(), ios::in | ios::binary);
+	arch.open(os, ios::out | ios::binary);
+	arch << aux.rdbuf();
+
+	arch.close();
+	aux.close();
+
+	ostringstream mensajeError;
+	mensajeError<<"Falló la carga de "<<os<<". Se duplica un sprite en su lugar.";
+	loguer->loguear(mensajeError.str().c_str(), Log::Tlog::LOG_WAR);
+}
+
+void config::validacionTamanioYpiso(){
+
+	float relacion=(float)this->ventana.altopx*(float)this->ventana.ancho/(float)this->ventana.anchopx;
+
+	if(this->escenario.yPiso>=relacion){
+		this->escenario.yPiso=20;
+		string mensajeError="En encenario: y-piso, más grande que el alto de la ventana. Se carga por defecto y-piso.";
+		loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_WAR);
+	}
+}
+
+void config::validacionTamanioZindex(){
+	if((unsigned)this->personaje.zIndex>= this->vectorCapas.size()){
+
+		this->personaje.zIndex=1;
+		string mensajeError="En personaje: z-index, mas grande que las capas cargadas. Se carga por defecto z-index.";
+		loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_WAR);
+	}
+}
+
 void config::validacionPositivoI(int num,string parte,string conf){
 	bool negativo;
-	if(num>0)
+	if(num>=0)
 		negativo=false;
 	else
 		negativo=true;
 
-	if (negativo){
+	if (negativo || (strcmp(conf.c_str(),"z-index")!=0 && negativo)){
 
 		ostringstream mensajeError;
 		mensajeError<<"Se ingresó un número negativo en "<<parte<<"/"<<conf<<". Se carga un valor por defecto.";
-		loguer->loguear(mensajeError.str().c_str(), Log::Tlog::LOG_ERR);
+		loguer->loguear(mensajeError.str().c_str(), Log::Tlog::LOG_WAR);
 
 
 		//Cambia el valor negativo por uno por defecto.
@@ -526,7 +531,7 @@ void config::validacionPositivoF(float num,string parte,string conf){
 
 		ostringstream mensajeError;
 		mensajeError<<"Se ingresó un número negativo en "<<parte<<"/"<<conf<<". Se carga un valor por defecto.";
-		loguer->loguear(mensajeError.str().c_str(), Log::Tlog::LOG_ERR);
+		loguer->loguear(mensajeError.str().c_str(), Log::Tlog::LOG_WAR);
 
 		//Cambia el valor negativo por uno por defecto.
 		if(strcmp(parte.c_str(),"escenario")==0) {
@@ -550,26 +555,54 @@ void config::validacionPositivoF(float num,string parte,string conf){
 	}
 }
 
+Tdireccion config::obtieneEnum(string ori){
+	if(strcmp(ori.c_str(),"derecha")==0)
+		return Tdireccion::DERECHA;
+	else
+	if(strcmp(ori.c_str(),"izquierda")==0)
+		return Tdireccion::IZQUIERDA;
+	else{
+		string mensajeError="Orientación: izquierda o derecha, mal escrita. Se carga por defecto derecha.";
+		loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_WAR);
+		return Tdireccion::DERECHA;
+	}
+}
+
 int config::cantSprites(TestadoPersonaje e){
 	int cant=0;
 	switch ( e ) {
-		case PARADO:
-			cant=9;
-			break;
-		case AGACHADO:
-			cant=3;
-			break;
-		case CAMINANDO:
-			cant=8;
-			break;
-		case SALTANDO_OBLICUO:
-			cant=10;
-			break;
-		case SALTANDO_VERTICAL:
-			cant=5;
-			break;
+	case PARADO:
+		cant=9;
+		break;
+	case AGACHADO:
+		cant=3;
+		break;
+	case CAMINANDO:
+		cant=8;
+		break;
+	case SALTANDO_OBLICUO:
+		cant=10;
+		break;
+	case SALTANDO_VERTICAL:
+		cant=5;
+		break;
 	}
 	return cant;
+}
+
+bool config::directorioExiste(const char* direc){
+
+	bool directorioExiste=true;
+
+	FILE* archivo=fopen(direc,"r");
+
+	if(archivo==NULL)
+		directorioExiste=false;
+	else
+		fclose(archivo);
+
+	return directorioExiste;
+
 }
 
 Tventana config::getVentana(){
@@ -586,6 +619,12 @@ Tpersonaje config::getPersonaje(){
 
 vector<Tcapa> config::getCapas(){
 	return this->vectorCapas;
+}
+
+config::~config() {
+
+	this->vectorCapas.clear();
+
 }
 
 

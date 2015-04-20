@@ -5,6 +5,11 @@ DebugLog::DebugLog() {
 	// TODO - Cambiar a ruta relativa
 	archivo = "/home/MortalKombat/logs/debug_log.txt";
 	fecha = nullptr;
+	FILE* fp=fopen(archivo.c_str(),"r");
+	if(fp){
+		fclose(fp);
+		remove(archivo.c_str());
+	}
 }
 
 DebugLog* DebugLog::instance = nullptr;

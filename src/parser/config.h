@@ -29,8 +29,14 @@ private:
 	vector<Tcapa> vectorCapas;
 
 	void setValores(Json::Value);
+		void setCapa(Json::Value);
+		void setVentana(Json::Value);
+		void setEscenario(Json::Value);
+		void setPersonaje(Json::Value);
+
 	Tdireccion obtieneEnum(string);
 	int cantSprites(TestadoPersonaje);
+	bool directorioExiste(const char*);
 
 	//Validacion de direcciones de archivos, numeros positivos, y tamaños deseados.
 	void validacionPath(string);
@@ -38,6 +44,8 @@ private:
 	void validacionPositivoF(float,string,string);
 	void validacionTamanioZindex();
 	void validacionTamanioYpiso();
+
+	void copiarImagenDefault(int&,const char*);
 
 	void ventanaDefecto();
 	void escenarioDefecto();

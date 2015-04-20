@@ -3,8 +3,13 @@
 
 ErrorLog::ErrorLog() {
     //TODO Cambiar rutas relativas
-    archivo = "/home/MortalKombat/logs/error_log.txt";
-    fecha = nullptr;
+	archivo = "/home/MortalKombat/logs/error_log.txt";
+	fecha = nullptr;
+	FILE* fp=fopen(archivo.c_str(),"r");
+	if(fp){
+		fclose(fp);
+		remove(archivo.c_str());
+	}
 }
 
 ErrorLog* ErrorLog::instance = nullptr;

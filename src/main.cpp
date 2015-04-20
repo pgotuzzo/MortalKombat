@@ -6,7 +6,7 @@
 #include "controlador/Controlador.h"
 #include <time.h>
 
-const float delay = 30;
+const float delay = 45;
 
 int main(int argc, char **argv) {
 
@@ -60,6 +60,7 @@ int main(int argc, char **argv) {
                     restart = true;
                     delete(pantalla);
                     delete(mundo);
+                    loguer->loguear("Reiniciando el juego...", Log::LOG_DEB);
                     break;
                 };
                 //SI SE DESEA SALIR DEL JUEGO
