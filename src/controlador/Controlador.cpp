@@ -68,12 +68,16 @@ Tinput Controlador::getInputs() {
 					return inputAnterior = KEY_ARRIBA;
 				};
 				case SDLK_DOWN: return inputAnterior = KEY_ABAJO;
-				case SDLK_r: return KEY_RESTART;
+				//case SDLK_r: return KEY_RESTART;
 			}
 		}
+		// Solo captura el evento cuando suelta R
+		case SDL_KEYUP: {
+			if (event.key.keysym.sym == SDLK_r) return KEY_RESTART;
+		};
 		default:
 			if (anterior != KEY_NADA) return anterior;
-			if (state[SDL_SCANCODE_R]) return KEY_RESTART;
+			//if (state[SDL_SCANCODE_R]) return KEY_RESTART;
 			if (state[SDL_SCANCODE_RIGHT]) return inputAnterior = KEY_DERECHA;
 			else if (state[SDL_SCANCODE_LEFT]) return inputAnterior = KEY_IZQUIERDA;
 			else if (state[SDL_SCANCODE_UP]) return inputAnterior = KEY_ARRIBA;
