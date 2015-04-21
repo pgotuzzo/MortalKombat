@@ -37,6 +37,7 @@ private:
 	Tdireccion obtieneEnum(string);
 	int cantSprites(TestadoPersonaje);
 	bool directorioExiste(const char*);
+	void cargaExistosa(string);
 
 	//Validacion de direcciones de archivos, numeros positivos, y tamaños deseados.
 	void validacionPath(string);

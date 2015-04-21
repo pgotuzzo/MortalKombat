@@ -41,4 +41,12 @@ ErrorLog* ErrorLog::getInstance() {
 
 ErrorLog::~ErrorLog() {}
 
+void ErrorLog::borrar(){
+	FILE* fp=fopen(archivo.c_str(),"r");
+		if(fp){
+			fclose(fp);
+			remove(archivo.c_str());
+		}
+}
+
 

@@ -13,6 +13,7 @@ public:
     static WarningLog* getInstance();
     void loguear(const char*, Log::Tlog) ;
     virtual ~WarningLog();
+    void borrar();
 };
 
 

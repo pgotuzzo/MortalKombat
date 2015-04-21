@@ -10,8 +10,8 @@ const float delay = 45;
 
 int main(int argc, char **argv) {
 
-
-    //loguer->borrar();
+	
+	loguer->borrar();
 
     string jsonPath = (argv[1] == nullptr) ? string("") : argv[1];
 
@@ -23,7 +23,7 @@ int main(int argc, char **argv) {
 
     while (!endGame) {
 
-        bool restart = false;
+    	bool restart = false;
 
 
         loguer->loguear("-------------- Cargando la configuracion -------------------", Log::LOG_DEB);
@@ -68,14 +68,14 @@ int main(int argc, char **argv) {
                     delete(mundo);
                     break;
                 };
-                    //SI SE DESEA SALIR DEL JUEGO
+                //SI SE DESEA SALIR DEL JUEGO
                 case KEY_EXIT:{
                     endGame = true;
                     delete(pantalla);
                     delete(mundo);
                     break;
                 }
-                    //DEMAS ACCIONES
+                //DEMAS ACCIONES
                 default:{
                     Tcambio c = mundo->actualizarMundo(c, input);
                     pantalla->update(c);

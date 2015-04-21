@@ -53,4 +53,12 @@ void WarningLog::loguear(const char* mensajeError, Log::Tlog tipo) {
 
 WarningLog::~WarningLog() {}
 
+void WarningLog::borrar(){
+	FILE* fp=fopen(archivo.c_str(),"r");
+		if(fp){
+			fclose(fp);
+			remove(archivo.c_str());
+		}
+}
+
 

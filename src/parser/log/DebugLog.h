@@ -12,6 +12,7 @@ public:
     static DebugLog* getInstance();
     void loguear(const char*, Log::Tlog);
     virtual ~DebugLog();
+    void borrar();
 };
 
 #endif //JASON_DEBUGLOG_H_

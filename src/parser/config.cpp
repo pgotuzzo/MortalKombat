@@ -54,6 +54,8 @@ config::config(string path) {
 	} else {
 		//Si el archivo original o el por defecto se pueden parsear entra y setea los valores
 		this->setValores(partes);
+		string mensaje="Configuración cargada.";
+		loguer->loguear(mensaje.c_str(), Log::Tlog::LOG_DEB);
 	}
 }
 
@@ -62,9 +64,9 @@ config::config(string path) {
 
 void config::setValores(Value partes){
 
-	this->setCapa(partes);
-
 	this->setVentana(partes);
+
+	this->setCapa(partes);
 
 	this->setPersonaje(partes);
 
@@ -124,6 +126,7 @@ void config::setEscenario(Value partes){
 				string mensajeError="No se encuentra en escenario y-piso en el archivo Json. Se carga por defecto todas sus partes.";
 				loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_WAR);
 			}
+			cargaExistosa("escenario");
 
 		} else
 			this->escenarioDefecto();
@@ -212,6 +215,8 @@ void config::setPersonaje(Value partes){
 				loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_WAR);
 			}
 
+			cargaExistosa("personaje");
+
 		} else
 			this->personajeDefecto();
 }
@@ -269,6 +274,8 @@ void config::setVentana(Value partes){
 				loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_WAR);
 			}
 
+			cargaExistosa("ventana");
+
 		} else
 			this->ventanaDefecto();
 }
@@ -293,7 +300,7 @@ void config::setCapa(Value parte){
 					if(!capa[i].get("imagen_fondo", "default").isString()){
 						string mensajeError="En ventana/capas/imagen_fondo, no hay un string. Se carga por defecto todas sus partes.";
 						loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_WAR);
-						aux.dirCapa="default";
+						aux.dirCapa="default+";
 					} else
 						aux.dirCapa = capa[i].get("imagen_fondo", "default").asString();
 
@@ -321,6 +328,11 @@ void config::setCapa(Value parte){
 						loguer->loguear(mensajeError.str().c_str(), Log::Tlog::LOG_WAR);
 					}
 					anchoAnterior = aux.ancho;
+					if(aux.ancho<this->ventana.ancho){
+						string mensaje="Ancho de capa mas chico que ancho de la ventana. Se ajusta ancho de capa.";
+						loguer->loguear(mensaje.c_str(), Log::Tlog::LOG_WAR);
+					}
+
 					// Aca es lo mio. Miki
 					//anchoCapa = anchoCapa * 2;
 					this->vectorCapas.push_back(aux);
@@ -331,6 +343,9 @@ void config::setCapa(Value parte){
 			//Se fija si existe la ruta, sino existe alguna de las rutas, levanta por defecto.
 			if(!existe)
 				this->capasDefecto();
+			else
+				cargaExistosa("capas");
+
 		} else {
 			this->capasDefecto();
 		}
@@ -343,6 +358,7 @@ void config::escenarioDefecto(){
 	this->escenario.alto=150;
 	this->escenario.ancho=1000;
 	this->escenario.yPiso=10;
+	cargaExistosa("escenario");
 
 }
 
@@ -355,6 +371,8 @@ void config::personajeDefecto(){
 	this->personaje.orientacion=Tdireccion::DERECHA;
 	// TODO - Agregar Ruta relativa
 	this->personaje.sprites="/home/MortalKombat/sprites";
+
+	cargaExistosa("personaje");
 }
 
 void config::ventanaDefecto(){
@@ -363,6 +381,8 @@ void config::ventanaDefecto(){
 	this->ventana.altopx=600;
 	this->ventana.anchopx=800;
 	this->ventana.ancho=200;
+
+	cargaExistosa("ventana");
 
 }
 
@@ -374,21 +394,23 @@ void config::capasDefecto(){
 	//borrar vector capas
 	this->vectorCapas.clear();
 
-	for(unsigned i=0; i<cantidadDeCapasDefault; i++){
+	for(unsigned i=1; i<=cantidadDeCapasDefault; i++){
 
 		float auxAncho;
 		ostringstream os;
 
 		// TODO - Agregar Ruta relativa
-		os<<"/home/MortalKombat/capas/capa"<<(i+1)<<".png";
+		os<<"/home/MortalKombat/capas/capa"<<(i)<<".png";
 		aux.dirCapa=os.str();
-		if(i==0)
-			auxAncho=500;
+		if(i==1)
+			auxAncho=200;
 		else
-			auxAncho=1000;
+			auxAncho=auxAncho+150;
 		aux.ancho=auxAncho;
 		this->vectorCapas.push_back(aux);
 	}
+
+	cargaExistosa("capas");
 }
 
 void config::validacionPath(string path){
@@ -603,6 +625,13 @@ bool config::directorioExiste(const char* direc){
 
 	return directorioExiste;
 
+}
+
+void config::cargaExistosa(string parte){
+
+	ostringstream mensaje;
+	mensaje<<"Se cargó "<<parte;
+	loguer->loguear(mensaje.str().c_str(), Log::Tlog::LOG_DEB);
 }
 
 Tventana config::getVentana(){
