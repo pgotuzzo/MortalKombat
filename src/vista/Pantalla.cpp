@@ -23,29 +23,30 @@ void Pantalla::Inicializar(int anchoPx,int altoPx) {
  */
 Pantalla::Pantalla(vector<Tcapa> tcapas, Tventana ventana, Tescenario escenario, Tpersonaje tpersonaje) {
     // Setea los parametros de la pantalla
-	anchoPantalla = ventana.ancho;
-    altoPantalla = escenario.alto;
+	mDimension.w = ventana.ancho;
+    mDimension.h = escenario.alto;
 
-    // Setea las escalas de relacion entre unidades y pixeles
+    // Setea las escalas de relacion entre unidades y pixeles en la clase utilitaria
     VistaUtils::SCALE_X = ventana.anchopx / ventana.ancho;
     VistaUtils::SCALE_Y = ventana.altopx / escenario.alto;
 
     // Inicia la ventana y el renderer
-    Inicializar(ventana.anchopx,ventana.altopx);
+    Inicializar(ventana.anchopx, ventana.altopx);
+    xVentana = (escenario.ancho - ventana.ancho)/ 2;
+    topeVentana = ventana.distTope;
+    anchoEscenario = escenario.ancho;
+
+    // Personaje
     zIndex = tpersonaje.zIndex;
     personaje = PersonajeVista(mRenderer, tpersonaje.sprites, tpersonaje.ancho, tpersonaje.alto, tpersonaje.orientacion);
 
-    // Primero se setean las variables de clase.
-    Capa::setStatics(ventana.distTope, tpersonaje.ancho, escenario.ancho, anchoPantalla);
-    // Crea las capas.
     for (int i = 0; i < tcapas.size(); i++){
-        VistaUtils::Trect rect;
-        rect.h = altoPantalla;
-        rect.w = anchoPantalla;
-        rect.p.x = (tcapas[i].ancho - anchoPantalla)/2;
-        rect.p.y = 0;
-        Capa capa = Capa(mRenderer, tcapas[i].dirCapa, rect);
-        capa.setValores(tcapas[i].ancho, altoPantalla);
+        Tdimension d;
+        d.h = mDimension.h;
+        d.w = tcapas[i].ancho;
+        float v = (d.w - ventana.ancho) / (escenario.ancho - ventana.ancho); // TODO - Si ecenario == ventana?????
+        v = ( v < 0 ) ? 0 : v;
+        Capa capa = Capa(mRenderer, tcapas[i].dirCapa, d, v);
         capas.push_back(capa);
     }
 }
@@ -58,9 +59,9 @@ void Pantalla::dibujar() {
     SDL_Texture* ventana = SDL_GetRenderTarget(mRenderer);
 
     for (int i = 0; i < capas.size(); i++) {
-        capas[i].getTexture(ventana);
+        capas[i].getTexture(ventana, mDimension.w, xVentana);
         if (i == zIndex) {
-            personaje.getTexture(ventana, Capa::getPosPantalla());
+            personaje.getTexture(ventana, xVentana);
         }
     }
     SDL_RenderPresent(mRenderer);
@@ -73,10 +74,19 @@ void Pantalla::dibujar() {
  */
 void Pantalla::update(Tcambio change) {
     personaje.update(change);
-    Capa::cambiarEscenario(change.posicion.x);
-    for (int i = 0; i < capas.size(); i++) {
-        capas[i].ajustar();
+    float xPersonaje = personaje.getRect().p.x;
+    if ( xPersonaje < xVentana + topeVentana ) {
+        xVentana = xPersonaje - topeVentana;
+        xVentana = (xVentana > 0) ? xVentana : 0;
     }
+    else if ( xPersonaje > xVentana + mDimension.w - topeVentana ){
+        xVentana = xPersonaje + topeVentana - mDimension.w;
+        xVentana = (xVentana < anchoEscenario - mDimension.w) ? xVentana : anchoEscenario - mDimension.w;
+    }
+//    Capa::cambiarEscenario(change.posicion.x);
+//    for (int i = 0; i < capas.size(); i++) {
+//        capas[i].ajustar();
+//    }
 }
 
 

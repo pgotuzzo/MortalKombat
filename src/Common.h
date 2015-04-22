@@ -73,6 +73,11 @@ struct Posicion{
 
 };
 
+struct Tdimension{
+    float w;
+    float h;
+};
+
 /**
  * Loguer
  */
@@ -189,6 +194,11 @@ enum Tinput{
  */
 static const std::string SPRITES_FORMAT = ".png";
 
+/**
+ * Constante que determina la distancia minima entre el
+ *  personaje y los bordes, antes de que las capas comienzen
+ *  a desplazarse.
+ */
 static const float MIN_DISTANCE_FROM_BOUND = 50;
 
 #endif //_MORTALKOMBAT_COMMON_H_

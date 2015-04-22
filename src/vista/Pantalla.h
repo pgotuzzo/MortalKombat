@@ -15,14 +15,21 @@ private:
     vector<Capa> capas;
     PersonajeVista personaje;
     int zIndex;
-    float anchoPantalla, altoPantalla;
+
+    // Dimensiones en unidades logicas
+    Tdimension mDimension;
+
+    float anchoEscenario;
+    float xVentana;
+    float topeVentana;
+
     /*
      * Se inicia la ventana y el renderer.
      */
     void Inicializar(int anchoPx,int altoPx);
 
 public:
-    /*
+    /**
      * Crea una pantalla.
      * capas : formato de cada capa.
      * ventana : formato de ventana.

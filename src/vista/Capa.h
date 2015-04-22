@@ -6,75 +6,42 @@
 #include "../Common.h"
 #include "VistaUtils.h"
 
+/**
+ * Observacion
+ *  Todas las medidas que se tomen en esta clase, son unidades logicas.
+ *  No son pixeles necesariamente.
+ */
 class Capa {
 private:
     SDL_Renderer* mRenderer;
-    SDL_Texture * mTexture;
-    SDL_Texture * mAuxTexture;
-    float mRelacionCapa;
-    VistaUtils::Trect mRect;
-    static float distTope;
-    static float mAnchoPersonaje;
-    static float mAnchoEscenario;
-    static float posEscenario;
-    static float mAnchoPantalla;
+    SDL_Texture* mTexture;
+    Tdimension mDimension;
+    float mVelocidad;
 
 public:
+
     Capa();
-    /*
-    *  Crea una capa.
-    *  renderer : renderer utilizado
-    *  dirPath : direccion de la imagen de la capa
-    *  rectPantalla : contiene el tamaño de la pantalla y la posicion inicial de la
-    *  capa en relacion a su tamaño total de la imagen
-    */
-    Capa(SDL_Renderer *renderer, std::string dirPath, VistaUtils::Trect rectPantalla);
 
-    /*
-    *  Setea los valores de la capa y genera su textura.
-    *  anchoCapa : ancho total de la capa en unidades
-    *  distTope : distancia limite en relacion al borde de la pantalla para que se empiecen
-    *  a mover las capas
+    /**
+     *  Crea una capa.
+     *  renderer : renderer utilizado
+     *  dirPath : direccion de la imagen de la capa
+     *  dimensiones : dimensiones de la capa
+     *  velocidad: velocidad de dezplazamiento
      */
-    void setValores(float anchoCapa, float altoCapa);
+    Capa(SDL_Renderer* renderer, std::string dirPath, Tdimension dimensiones, float velocidad);
 
-
-    /*
-    *  Setea los valores de clase.
-    *  distanciaTope : distancia tope desde los bordes para que la capa se mueva.
-    *  anchoPersonaje : ancho del personaje.
-    *  anchoEscenario : ancho del escenario.
-    *  anchoPantalla : ancho de la pantalla.
+    /**
+     * target:  Textura a donde se debe copiar la capa.
+     * ancho:   anchura que debe tener la capa.
+     * x:   valor en el eje x, donde inicia la capa.
      */
-    static void setStatics(float distanciaTope, float anchoPersonaje, float anchoEscenario, float anchoPantalla);
-
-    /*
-    *  Guarda el pedazo de la capa a mostrar en le pedazo de textura pasado por parametro.
-    *  texture : puntero a una textura del tamaño de la pantalla
-    */
-    void getTexture(SDL_Texture *texture);
-
-    /*
-     * Cambia la posicion del escenario segun donde se encuentra el personaje.
-	 * posPersonajeX: posicion x del personaje.
-	 */
-	static void cambiarEscenario(float posPersonajeX);
-
-
-    /*
-     * Cambia la posicion de la capa ajustandola a la posicion del escenario
-     */
-    void ajustar();
-
-
-    /*
-     * Devuelve la posicion de la pantalla en el escenario.
-     */
-    static float getPosPantalla();
+    void getTexture(SDL_Texture *target, float ancho, float x);
 
     void freeTextures();
 
     virtual ~Capa();
+
 };
 
 

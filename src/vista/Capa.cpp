@@ -2,95 +2,38 @@
 #include <iostream>
 #include "Capa.h"
 
-float Capa::distTope = 0;
-float Capa::mAnchoPersonaje = 0;
-float Capa::mAnchoPantalla = 0;
-float Capa::mAnchoEscenario = 0;
-float Capa::posEscenario = 0;
+Capa::Capa() {}
 
-
-/*
-*  Crea una capa.
-*  renderer : renderer utilizado
-*  dirPath : direccion de la imagen de la capa
-*  rectPantalla : contiene el tamaño de la pantalla y la posicion inicial de la
-*  capa en relacion a su tamaño total de la imagen
-*/
-Capa::Capa(SDL_Renderer *renderer, std::string dirPath, VistaUtils::Trect rectPantalla) {
+Capa::Capa(SDL_Renderer *renderer, std::string dirPath, Tdimension dimensiones, float velocidad){
     mRenderer = renderer;
-    mAuxTexture = VistaUtils::loadTexture(mRenderer, dirPath, VistaUtils::COLORKEY::BLANCO);
-    mRect = rectPantalla;
-}
-
-/*
-*  Setea los valores de la capa y genera su textura.
-*  anchoCapa : ancho total de la capa en unidades.
-*  distTope : distancia limite en relacion al borde de la pantalla para que se empiecen
-*  a mover las capas.
- */
-void Capa::setValores(float anchoCapa, float altoCapa) {
-    mRelacionCapa = (Capa::mAnchoEscenario - Capa::mAnchoPantalla)/(anchoCapa - Capa::mAnchoPantalla);
-    mTexture = VistaUtils::createTexture(mRenderer, anchoCapa, altoCapa);
-    VistaUtils::copyTexture(mRenderer, mAuxTexture, mTexture);
-}
-
-/*
-*  Setea los valores de clase.
-*  distanciaTope : distancia tope desde los bordes para que la capa se mueva.
-*  anchoPersonaje : ancho del personaje.
-*  anchoEscenario : ancho del escenario.
-*  anchoPantalla : ancho de la pantalla.
- */
-void Capa::setStatics(float distanciaTope, float anchoPersonaje, float anchoEscenario, float anchoPantalla) {
-    Capa::mAnchoPantalla = anchoPantalla;
-    Capa::distTope = distanciaTope;
-    Capa::mAnchoPersonaje = anchoPersonaje;
-    Capa::mAnchoEscenario = anchoEscenario;
-    Capa::posEscenario = ( anchoEscenario - anchoPantalla ) / 2;
-}
-
-/*
-*  Guarda el pedazo de la capa a mostrar en le pedazo de textura pasado por parametro.
-*  texture : puntero a una textura del tamaño de la pantalla
-*/
-void Capa::getTexture(SDL_Texture *texture) {
-    VistaUtils::copyTexture(mRenderer, mTexture, texture, &mRect, NULL);
-}
-
-/*
- * Cambia la posicion del escenario segun donde se encuentra el personaje.
- * posPersonajeX: posicion x del personaje.
- */
-void Capa::cambiarEscenario(float posPersonajeX) {
-    float topeDerecha = posEscenario + mAnchoPantalla - Capa::distTope;
-    float topeIzquierda = posEscenario + Capa::distTope;
-    if (topeIzquierda > posPersonajeX && posPersonajeX - Capa::distTope> 0) {
-        posEscenario = posPersonajeX - Capa::distTope;
-    } else if (posPersonajeX + mAnchoPersonaje > topeDerecha && posPersonajeX + mAnchoPersonaje + Capa::distTope < mAnchoEscenario) {
-        posEscenario = posPersonajeX + mAnchoPersonaje + Capa::distTope - mAnchoPantalla;
+    mDimension = dimensiones;
+    mVelocidad = velocidad;
+    mTexture = VistaUtils::loadTexture(mRenderer, dirPath, VistaUtils::BLANCO);
+    if (mTexture != nullptr)
+        loguer->loguear("Se carga textura de capa", Log::LOG_DEB);
+    else {
+        loguer->loguear("Error al cargar la textura de capa", Log::LOG_ERR);
+        throw new exception();
     }
 }
 
-/*
- * Cambia la posicion de la capa ajustandola a la posicion del escenario
- */
-void Capa::ajustar() {
-    mRect.p.x = posEscenario / mRelacionCapa;
+void Capa::getTexture(SDL_Texture *target, float ancho, float x) {
+    int w;
+    int h;
+    SDL_QueryTexture(mTexture, NULL, NULL, &w, &h);
+    VistaUtils::Trect rect;
+    rect.w = ancho * ( w / mDimension.w ) ;
+    rect.h = h;
+    rect.p.x = ( mVelocidad * x ) * ( w / mDimension.w );
+    rect.p.y = 0;
+    VistaUtils::copyTexture2(mRenderer, mTexture, target, &rect, NULL);
 }
-
-/*
- * Devuelve la posicion de la pantalla en el escenario.
- */
-float Capa::getPosPantalla() {
-    return posEscenario;
-}
-
-Capa::Capa() {}
 
 void Capa::freeTextures() {
     loguer->loguear("Elimina capa", Log::LOG_DEB);
     SDL_DestroyTexture(mTexture);
-    SDL_DestroyTexture(mAuxTexture);
 }
 
 Capa::~Capa() {}
+
+
