@@ -24,7 +24,7 @@ Mundo::Mundo(config configuracion) {
 	float pos_y = altoEscenario - altoPiso - altoPJ;
 
 	anchoVentana = configuracion.getVentana().ancho;
-	float distanciaMaximaPJs = anchoVentana - 3 * anchoPJ;
+	float distanciaMaximaPJs = anchoVentana - 4 * anchoPJ;
 
 	Tdireccion direccion = configuracion.getPersonaje().orientacion;
 
@@ -76,7 +76,7 @@ void Mundo::actualizarPersonaje(Tcambio* c, Personaje *personaje) {
 Tcambio Mundo::actualizarMundo(Tcambio c,Tinput input1,Tinput input2){
 	personaje1->realizarAccion(input1,anchoEscenario);
 	personaje2->realizarAccion(input2,anchoEscenario);
-	personaje1->sentido = personaje1->direccion = verificarDireccion(personaje1->pos,personaje2->pos);
+	personaje1->direccion = verificarDireccion(personaje1->pos,personaje2->pos);
 	personaje2->direccion = !personaje1->direccion;
 	actualizarPersonaje(&c,personaje1);
 	//actualizarPersonaje(&c,personaje2);

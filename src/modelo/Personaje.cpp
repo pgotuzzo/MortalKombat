@@ -21,6 +21,7 @@ Personaje::Personaje(bool direccion,Posicion posInicial,float alto,float ancho,f
 	this->direccion = direccion;
 	this->sentido = true;
 	distanciaMaxEnemigo = distMaxEnemigo;
+	posEnemigo = Posicion(posInicial.getX()+50,posInicial.getY()); // TODO: Hardcodeo, cambiarlo luego
 	parado = true;
 	estado = PARADO;
 	pos = posInicial;
