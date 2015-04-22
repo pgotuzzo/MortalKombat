@@ -18,7 +18,7 @@ float Capa::posEscenario = 0;
 */
 Capa::Capa(SDL_Renderer *renderer, std::string dirPath, VistaUtils::Trect rectPantalla) {
     mRenderer = renderer;
-    mAuxTexture = VistaUtils::loadTexture(mRenderer, dirPath, VistaUtils::COLORKEY::BLANCO);
+    mTexture = VistaUtils::loadTexture(mRenderer, dirPath, VistaUtils::COLORKEY::BLANCO);
     mRect = rectPantalla;
 }
 
@@ -29,9 +29,14 @@ Capa::Capa(SDL_Renderer *renderer, std::string dirPath, VistaUtils::Trect rectPa
 *  a mover las capas.
  */
 void Capa::setValores(float anchoCapa, float altoCapa) {
-    mRelacionCapa = (Capa::mAnchoEscenario - Capa::mAnchoPantalla)/(anchoCapa - Capa::mAnchoPantalla);
-    mTexture = VistaUtils::createTexture(mRenderer, anchoCapa, altoCapa);
-    VistaUtils::copyTexture(mRenderer, mAuxTexture, mTexture);
+    int h, w;
+    SDL_QueryTexture(mTexture, NULL, NULL, &w, &h);
+
+    float aux = (anchoCapa - Capa::mAnchoPantalla)/(Capa::mAnchoEscenario - Capa::mAnchoPantalla);
+    mRect.h = h;
+    mRect.w = w * mAnchoPantalla / anchoCapa;
+    mRelacionCapa = w * aux / anchoCapa ;
+
 }
 
 /*
@@ -54,7 +59,7 @@ void Capa::setStatics(float distanciaTope, float anchoPersonaje, float anchoEsce
 *  texture : puntero a una textura del tamaño de la pantalla
 */
 void Capa::getTexture(SDL_Texture *texture) {
-    VistaUtils::copyTexture(mRenderer, mTexture, texture, &mRect, NULL);
+    VistaUtils::copyTextureNoScale(mRenderer, mTexture, texture, &mRect, NULL);
 }
 
 /*
@@ -75,7 +80,7 @@ void Capa::cambiarEscenario(float posPersonajeX) {
  * Cambia la posicion de la capa ajustandola a la posicion del escenario
  */
 void Capa::ajustar() {
-    mRect.p.x = posEscenario / mRelacionCapa;
+    mRect.p.x = posEscenario * mRelacionCapa;
 }
 
 /*

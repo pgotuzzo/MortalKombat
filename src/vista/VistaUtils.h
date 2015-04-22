@@ -35,6 +35,8 @@ public:
 
     static void copyTexture(SDL_Renderer* r, SDL_Texture *src, SDL_Texture *dst, Trect* rectSrc, Trect* rectDst, bool flip);
 
+    static void copyTextureNoScale(SDL_Renderer* r, SDL_Texture *src, SDL_Texture *dst, Trect* rectSrc, Trect* rectDst);
+
     /**
      * Limpia la textura
      */
