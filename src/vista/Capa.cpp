@@ -95,7 +95,6 @@ Capa::Capa() {}
 void Capa::freeTextures() {
     loguer->loguear("Elimina capa", Log::LOG_DEB);
     SDL_DestroyTexture(mTexture);
-    SDL_DestroyTexture(mAuxTexture);
 }
 
 Capa::~Capa() {}
