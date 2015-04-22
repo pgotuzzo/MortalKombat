@@ -29,10 +29,10 @@ private:
 	vector<Tcapa> vectorCapas;
 
 	void setValores(Json::Value);
-		void setCapa(Json::Value);
-		void setVentana(Json::Value);
-		void setEscenario(Json::Value);
-		void setPersonaje(Json::Value);
+	void setCapa(Json::Value);
+	void setVentana(Json::Value);
+	void setEscenario(Json::Value);
+	void setPersonaje(Json::Value);
 
 	Tdireccion obtieneEnum(string);
 	int cantSprites(TestadoPersonaje);
@@ -45,6 +45,7 @@ private:
 	void validacionPositivoF(float,string,string);
 	void validacionTamanioZindex();
 	void validacionTamanioYpiso();
+	void validacionAnchoVentanaEscenario();
 
 	void copiarImagenDefault(int&,const char*);
 
