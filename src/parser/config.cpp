@@ -2,7 +2,7 @@
 #include <fstream>
 #include <string.h>
 
-const int cantidadDeCapasDefault = 5;
+const int cantidadDeCapasDefault = 3;
 
 using namespace Json;
 
@@ -405,9 +405,9 @@ void config::capasDefecto(){
 		os<<"/home/MortalKombat/capas/capa"<<(i)<<".png";
 		aux.dirCapa=os.str();
 		if(i==1)
-			auxAncho=200;
+			auxAncho=600;
 		else
-			auxAncho=auxAncho+150;
+			auxAncho=auxAncho+200;
 		aux.ancho=auxAncho;
 		this->vectorCapas.push_back(aux);
 	}

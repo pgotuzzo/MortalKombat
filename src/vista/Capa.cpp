@@ -18,7 +18,9 @@ float Capa::posEscenario = 0;
 */
 Capa::Capa(SDL_Renderer *renderer, std::string dirPath, VistaUtils::Trect rectPantalla) {
     mRenderer = renderer;
-    mTexture = VistaUtils::loadTexture(mRenderer, dirPath, VistaUtils::COLORKEY::BLANCO);
+    mAuxTexture = VistaUtils::loadTexture(mRenderer, dirPath, VistaUtils::COLORKEY::BLANCO);
+    mTexture = VistaUtils::createTexture(mRenderer, 800, 600);
+    VistaUtils::copyTexture(mRenderer, mAuxTexture, mTexture, NULL, NULL);
     mRect = rectPantalla;
 }
 
@@ -80,7 +82,7 @@ void Capa::cambiarEscenario(float posPersonajeX) {
  * Cambia la posicion de la capa ajustandola a la posicion del escenario
  */
 void Capa::ajustar() {
-    mRect.p.x = posEscenario * mRelacionCapa;
+    mRect.p.x =  posEscenario * mRelacionCapa;
 }
 
 /*
@@ -95,6 +97,8 @@ Capa::Capa() {}
 void Capa::freeTextures() {
     loguer->loguear("Elimina capa", Log::LOG_DEB);
     SDL_DestroyTexture(mTexture);
+    loguer->loguear("Elimina capa", Log::LOG_DEB);
+    SDL_DestroyTexture(mAuxTexture);
 }
 
 Capa::~Capa() {}
