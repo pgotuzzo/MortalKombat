@@ -26,7 +26,7 @@ Tinput ControladorTeclado::esAnterior1(const Uint8 *state) {
 			else if (state[SDL_SCANCODE_UP]) return inputAnterior1 = KEY_ARRIBA; break;
 		};
 		case KEY_ABAJO: {
-			if (state[SDL_SCANCODE_S]) return inputAnterior1 = KEY_ABAJO; break;
+			if (state[SDL_SCANCODE_DOWN]) return inputAnterior1 = KEY_ABAJO; break;
 		};
 		case KEY_ARRIBA_DERECHA: {
 			if (state[SDL_SCANCODE_UP] && state[SDL_SCANCODE_RIGHT]) return inputAnterior1 = KEY_ARRIBA_DERECHA;
@@ -45,7 +45,7 @@ Tinput ControladorTeclado::esAnterior1(const Uint8 *state) {
 Tinput ControladorTeclado::esAnterior2(const Uint8 *state) {
 	switch (inputAnterior2) {
 		case KEY_IZQUIERDA: {
-			if (state[SDL_SCANCODE_W] && state[SDL_SCANCODE_D]) return inputAnterior2 = KEY_ARRIBA_IZQUIERDA;
+			if (state[SDL_SCANCODE_W] && state[SDL_SCANCODE_A]) return inputAnterior2 = KEY_ARRIBA_IZQUIERDA;
 			else if (state[SDL_SCANCODE_A]) return inputAnterior2 = KEY_IZQUIERDA; break;
 		};
 		case KEY_DERECHA: {
@@ -104,7 +104,7 @@ Tinputs ControladorTeclado::getInputs() {
 				if (state[SDL_SCANCODE_D]) inputAnterior2 = KEY_DERECHA;
 				else if (state[SDL_SCANCODE_A]) inputAnterior2 = KEY_IZQUIERDA;
 				else if (state[SDL_SCANCODE_W]) inputAnterior2 = KEY_ARRIBA;
-				else if (state[SDL_SCANCODE_D]) inputAnterior2 = KEY_ABAJO;
+				else if (state[SDL_SCANCODE_S]) inputAnterior2 = KEY_ABAJO;
 				else if (state[SDL_SCANCODE_W] && state[SDL_SCANCODE_D]) inputAnterior2 = KEY_ARRIBA_DERECHA;
 				else if (state[SDL_SCANCODE_W] && state[SDL_SCANCODE_A]) inputAnterior2 = KEY_ARRIBA_IZQUIERDA;
 				else inputAnterior2 = KEY_NADA;
@@ -133,7 +133,7 @@ Tinputs ControladorTeclado::getInputs() {
 				if (state[SDL_SCANCODE_D]) inputAnterior2 = KEY_DERECHA;
 				else if (state[SDL_SCANCODE_A]) inputAnterior2 = KEY_IZQUIERDA;
 				else if (state[SDL_SCANCODE_W]) inputAnterior2 = KEY_ARRIBA;
-				else if (state[SDL_SCANCODE_D]) inputAnterior2 = KEY_ABAJO;
+				else if (state[SDL_SCANCODE_S]) inputAnterior2 = KEY_ABAJO;
 				else if (state[SDL_SCANCODE_W] && state[SDL_SCANCODE_D]) inputAnterior2 = KEY_ARRIBA_DERECHA;
 				else if (state[SDL_SCANCODE_W] && state[SDL_SCANCODE_A]) inputAnterior2 = KEY_ARRIBA_IZQUIERDA;
 				else inputAnterior2 = KEY_NADA;
@@ -142,10 +142,4 @@ Tinputs ControladorTeclado::getInputs() {
 				return inputs;
 			}
 	}
-
-	inputAnterior1 = KEY_NADA;
-	inputAnterior2 = KEY_NADA;
-	inputs.input1 = KEY_NADA;
-	inputs.input2 = KEY_NADA;
-	return inputs;
 }
