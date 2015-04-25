@@ -1,11 +1,14 @@
 cmake_minimum_required(VERSION 3.1)
 project(MortalKombat)
 
+# Directorios a crear
+file(MAKE_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
+file(MAKE_DIRECTORY ${PROJECT_SOURCE_DIR}/bin/logs)
+
 # Seteo de los flags a uitlizar a la hora de compilar
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0 -std=c++11")
 
 # Directorio destino
-file(MAKE_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
 
 # Resources
@@ -45,7 +48,6 @@ set(SOURCE_FILES
     src/parser/log/Log.h
     src/parser/log/WarningLog.cpp
     src/parser/log/WarningLog.h
-    src/parser/json
     src/parser/json/json.h
     src/parser/json/json-forwards.h
     src/parser/config.cpp
@@ -64,8 +66,8 @@ set(SOURCE_FILES
     src/vista/VistaUtils.h
     src/Common.h
     src/main.cpp
-    src/controlador/Controlador.cpp
-    src/controlador/Controlador.h
+    src/controlador/ControladorTeclado.cpp
+    src/controlador/ControladorTeclado.h
     )
 
 add_executable(MortalKombat ${SOURCE_FILES})
