@@ -11,6 +11,7 @@ private:
 	float altoEscenario;
 	float altoPiso;
 	Personaje* personaje1;
+	Personaje* personaje2;
 
 public:
 	Mundo(config configuracion);
@@ -20,7 +21,7 @@ public:
 	float getAlto();
 	float getAltoPiso();
 
-	Tcambios actualizarMundo(Tinput input);
+	Tcambios actualizarMundo(Tinputs inputs);
 
 	virtual ~Mundo();
 };

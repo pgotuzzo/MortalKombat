@@ -194,6 +194,11 @@ enum Tinput{
     KEY_EXIT
 };
 
+struct Tinputs{
+    Tinput input1;
+    Tinput input2;
+};
+
 /**
  * Se define esta constante por si se llega a
  *  necesitar cambiar la extension de las imagenes

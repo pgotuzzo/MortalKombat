@@ -29,7 +29,8 @@ Mundo::Mundo(config configuracion) {
 	if (direccion == DERECHA) dir = true;
 	else dir = false;
 
-	personaje1 = new Personaje(dir,Posicion(pos_x,pos_y),altoPJ,anchoPJ, altoEscenario);
+	personaje1 = new Personaje(dir,Posicion(pos_x+anchoPJ,pos_y),altoPJ,anchoPJ, altoEscenario);
+	personaje2 = new Personaje(dir,Posicion(pos_x-anchoPJ,pos_y),altoPJ,anchoPJ, altoEscenario);
 
 }
 
@@ -54,9 +55,10 @@ float Mundo::getAltoPiso(){
  * Personaje realiza su respectiva accion.
  * Se asigna todos los datos pertinentes de personaje a Tcambio.
  */
-Tcambios Mundo::actualizarMundo(Tinput input) {
+Tcambios Mundo::actualizarMundo(Tinputs inputs) {
 	Tcambios c;
-	personaje1->realizarAccion(input,anchoEscenario);
+	personaje1->realizarAccion(inputs.input1,anchoEscenario);
+	personaje2->realizarAccion(inputs.input2,anchoEscenario);
 	c.cambio1.posicion = personaje1->getPosicion();
 	if(personaje1->getDireccion()) c.cambio1.direccion = DERECHA;
 	else c.cambio1.direccion = IZQUIERDA;
@@ -65,20 +67,22 @@ Tcambios Mundo::actualizarMundo(Tinput input) {
 	c.cambio1.estado = personaje1->getEstado();
 	c.cambio1.alturaPJ = personaje1->getAlturaPersonaje();
 	c.cambio1.anchoPJ = personaje1->getAnchoPersonaje();
-//TODO implementar cmabio2
-	c.cambio2.posicion = personaje1->getPosicion();
-	c.cambio2.posicion.x = 500;
-	c.cambio2.estado = personaje1->getEstado();
-	c.cambio2.alturaPJ = personaje1->getAlturaPersonaje();
-	c.cambio2.anchoPJ = personaje1->getAnchoPersonaje();
-	c.cambio2.direccion = IZQUIERDA;
-	c.cambio2.sentido = ATRAS;
+
+	c.cambio2.posicion = personaje2->getPosicion();
+	c.cambio2.estado = personaje2->getEstado();
+	c.cambio2.alturaPJ = personaje2->getAlturaPersonaje();
+	c.cambio2.anchoPJ = personaje2->getAnchoPersonaje();
+	if(personaje2->getDireccion()) c.cambio2.direccion = DERECHA;
+	else c.cambio2.direccion = IZQUIERDA;
+	if(personaje2->getSentido()) c.cambio2.sentido = ADELANTE;
+	else c.cambio2.sentido = ATRAS;
 
 	return c;
 }
 
 Mundo::~Mundo() {
 	delete personaje1;
+	delete personaje2;
 	loguer->loguear("Se libera al personaje", Log::LOG_DEB);
 }
 

@@ -3,7 +3,7 @@
 #include "vista/Pantalla.h"
 #include "parser/config.h"
 #include "modelo/Mundo.h"
-#include "controlador/Controlador.h"
+#include "controlador/ControladorTeclado.h"
 #include <time.h>
 
 const float delay = 45;
@@ -56,7 +56,7 @@ int main(int argc, char **argv) {
         loguer->loguear("Finaliza la creacion del mundo", Log::LOG_DEB);
         loguer->loguear("Inicia la creacion del controlador", Log::LOG_DEB);
 
-        Controlador controlador = Controlador();
+        ControladorTeclado controlador = ControladorTeclado();
 
         loguer->loguear("Finaliza la creacion del controlador", Log::LOG_DEB);
         loguer->loguear("-------------- GameLoop ----------------------------", Log::LOG_DEB);
@@ -66,9 +66,9 @@ int main(int argc, char **argv) {
             t1 = clock();
 
             // INPUT
-            Tinput input = controlador.getInputs();
+            Tinputs inputs = controlador.getInputs();
 
-            switch (input){
+            switch (inputs.input1){
                 //PARA RESTABLECER EL JUEGO
                 case KEY_RESTART:{
                     restart = true;
@@ -86,7 +86,7 @@ int main(int argc, char **argv) {
                     //DEMAS ACCIONES
                 default:{
                     Tcambios c;
-                    c = mundo->actualizarMundo(input);
+                    c = mundo->actualizarMundo(inputs);
                     pantalla->update(c);
                     pantalla->dibujar();
                     t2 = clock();
