@@ -76,9 +76,7 @@ struct Posicion{
 /**
  * Loguer
  */
-static Log* loguerErr = (Log*) ErrorLog::getInstance();
-static Log* loguerDebug = (Log*) DebugLog::getInstance();
-static Log* loguerWar = (Log*) WarningLog::getInstance();
+static Log* loguer = WarningLog::getInstance();
 
 /**
  * Estructuras que se utilizan para
@@ -95,7 +93,7 @@ struct Tventana {
 struct Tescenario {
     float ancho;
     float alto;
-    int yPiso;
+    float yPiso;
 };
 
 struct Tcapa {
@@ -138,7 +136,7 @@ enum Tsentido{
     ADELANTE,
     ATRAS
 };
-
+//TODO borrar esto cuando ya no sirva mas
 struct Tpersonaje {
     float ancho;
     float alto;
@@ -147,6 +145,13 @@ struct Tpersonaje {
     std::string sprites;
 };
 
+struct Tpersonajes {
+    float ancho;
+    float alto;
+    int zIndex;
+    Tdireccion orientacion[2];
+    std::string sprites[2];
+};
 
 /**
  * Estructura que media entre el modelo y
@@ -161,6 +166,11 @@ struct Tcambio{
     Tsentido sentido;
     float alturaPJ;
     float anchoPJ;
+};
+
+struct Tcambios{
+    Tcambio cambio1;
+    Tcambio cambio2;
 };
 
 /**
@@ -182,6 +192,11 @@ enum Tinput{
     // Cierre o reinicio del juego
     KEY_RESTART,
     KEY_EXIT
+};
+
+struct Tinputs{
+    Tinput input1;
+    Tinput input2;
 };
 
 /**

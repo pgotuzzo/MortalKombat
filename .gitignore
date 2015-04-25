@@ -30,6 +30,7 @@
 # Clion
 .idea
 CMakeLists.txt
+/out/
 
 #Eclipse
 .project

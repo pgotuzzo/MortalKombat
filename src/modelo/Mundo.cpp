@@ -19,12 +19,10 @@ Mundo::Mundo(config configuracion) {
 	float altoPJ = pj.alto;
 	float anchoPJ = pj.ancho;
 
-	float pos_x1 = anchoEscenario/2 - anchoPJ;
-	float pos_x2 = anchoEscenario/2 + anchoPJ;
+	float pos_x = anchoEscenario/2;
 	float pos_y = altoEscenario - altoPiso - altoPJ;
+	float distanciaMaxima = configuracion.getVentana().ancho -((MIN_DISTANCE_FROM_BOUND*2)-1);
 
-	anchoVentana = configuracion.getVentana().ancho;
-	float distanciaMaximaPJs = anchoVentana - 4 * anchoPJ;
 
 	Tdireccion direccion = configuracion.getPersonaje().orientacion;
 
@@ -33,8 +31,8 @@ Mundo::Mundo(config configuracion) {
 	if (direccion == DERECHA) dir = true;
 	else dir = false;
 
-	personaje1 = new Personaje(dir,Posicion(pos_x1,pos_y),altoPJ,anchoPJ, altoEscenario,distanciaMaximaPJs);
-	personaje2 = new Personaje(!dir,Posicion(pos_x2,pos_y),altoPJ,anchoPJ,altoEscenario,distanciaMaximaPJs);
+	personaje1 = new Personaje(dir,Posicion(pos_x+anchoPJ,pos_y),altoPJ,anchoPJ, altoEscenario, distanciaMaxima);
+	personaje2 = new Personaje(dir,Posicion(pos_x-anchoPJ,pos_y),altoPJ,anchoPJ, altoEscenario, distanciaMaxima);
 
 }
 
@@ -55,42 +53,38 @@ float Mundo::getAltoPiso(){
 	return altoPiso;
 }
 
-
-void Mundo::actualizarPersonaje(Tcambio* c, Personaje *personaje) {
-	c->posicion = personaje->getPosicion();
-	if(personaje->getDireccion()) c->direccion = DERECHA;
-	else c->direccion = IZQUIERDA;
-	if(personaje->getSentido()) c->sentido = ADELANTE;
-	else c->sentido = ATRAS;
-	c->estado = personaje->getEstado();
-	c->alturaPJ = personaje->getAlturaPersonaje();
-	c->anchoPJ = personaje->getAnchoPersonaje();
-
-}
 /* Devuelve la actualizacion del struct Tcambio recibido junto con el numero de accion que debe realizar
  * Personaje realiza su respectiva accion.
  * Se asigna todos los datos pertinentes de personaje a Tcambio.
  */
+Tcambios Mundo::actualizarMundo(Tinputs inputs) {
+	Tcambios c;
+	personaje1->realizarAccion(inputs.input1,anchoEscenario);
+	personaje2->realizarAccion(inputs.input2,anchoEscenario);
+	c.cambio1.posicion = personaje1->getPosicion();
+	if(personaje1->getDireccion()) c.cambio1.direccion = DERECHA;
+	else c.cambio1.direccion = IZQUIERDA;
+	if(personaje1->getSentido()) c.cambio1.sentido = ADELANTE;
+	else c.cambio1.sentido = ATRAS;
+	c.cambio1.estado = personaje1->getEstado();
+	c.cambio1.alturaPJ = personaje1->getAlturaPersonaje();
+	c.cambio1.anchoPJ = personaje1->getAnchoPersonaje();
 
-// TODO: Verificar logica sentido y terminar de verificar cuando se tiene que dar vuelta el pj
-Tcambio Mundo::actualizarMundo(Tcambio c,Tinput input1,Tinput input2){
-	personaje1->realizarAccion(input1,anchoEscenario);
-	personaje2->realizarAccion(input2,anchoEscenario);
-	personaje1->direccion = verificarDireccion(personaje1->pos,personaje2->pos);
-	personaje2->direccion = !personaje1->direccion;
-	actualizarPersonaje(&c,personaje1);
-	//actualizarPersonaje(&c,personaje2);
+	c.cambio2.posicion = personaje2->getPosicion();
+	c.cambio2.estado = personaje2->getEstado();
+	c.cambio2.alturaPJ = personaje2->getAlturaPersonaje();
+	c.cambio2.anchoPJ = personaje2->getAnchoPersonaje();
+	if(personaje2->getDireccion()) c.cambio2.direccion = DERECHA;
+	else c.cambio2.direccion = IZQUIERDA;
+	if(personaje2->getSentido()) c.cambio2.sentido = ADELANTE;
+	else c.cambio2.sentido = ATRAS;
 
 	return c;
-}
-
-bool Mundo::verificarDireccion(Posicion posPJ1, Posicion posPJ2) {
-	if (posPJ1.getX() <= posPJ2.getX()) return true;
-	else return false;
 }
 
 Mundo::~Mundo() {
 	delete personaje1;
 	delete personaje2;
+	loguer->loguear("Se libera al personaje", Log::LOG_DEB);
 }
 

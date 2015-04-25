@@ -12,6 +12,7 @@ public:
     static ErrorLog* getInstance();
     void loguear(const char*, Log::Tlog);
     virtual ~ErrorLog();
+    void borrar();
 };
 
 #endif //JASON_ERRORLOG_H

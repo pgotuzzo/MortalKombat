@@ -3,18 +3,22 @@
 
 ErrorLog::ErrorLog() {
     //TODO Cambiar rutas relativas
-    archivo = "/home/MortalKombat/logs/error_log.txt";
-    fecha = nullptr;
+	archivo = "/home/MortalKombat/logs/error_log.txt";
+	fecha = nullptr;
+	FILE* fp=fopen(archivo.c_str(),"r");
+	if(fp){
+		fclose(fp);
+		remove(archivo.c_str());
+	}
 }
-
 
 ErrorLog* ErrorLog::instance = nullptr;
 
 ErrorLog* ErrorLog::getInstance() {
-	if (instance == nullptr) {
-		instance = new ErrorLog();
-	}
-	return instance;
+    if (instance == nullptr) {
+        instance = new ErrorLog();
+    }
+    return instance;
 }
 
  void ErrorLog::loguear(const char* mensajeError, Log::Tlog tipo) {
@@ -36,5 +40,13 @@ ErrorLog* ErrorLog::getInstance() {
 }
 
 ErrorLog::~ErrorLog() {}
+
+void ErrorLog::borrar(){
+	FILE* fp=fopen(archivo.c_str(),"r");
+		if(fp){
+			fclose(fp);
+			remove(archivo.c_str());
+		}
+}
 
 

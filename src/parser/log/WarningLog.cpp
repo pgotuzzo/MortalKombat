@@ -4,8 +4,13 @@
 
 WarningLog::WarningLog() {
     //TODO - Cambiar rutas relativas
-    this->archivo = "/home/MortalKombat/logs/warning_log.txt";
-    fecha = nullptr;
+	archivo = "/home/MortalKombat/logs/warning_log.txt";
+	fecha = nullptr;
+	FILE* fp=fopen(archivo.c_str(),"r");
+	if(fp){
+		fclose(fp);
+		remove(archivo.c_str());
+	}
 }
 
 WarningLog* WarningLog::instance = nullptr;
@@ -16,7 +21,6 @@ WarningLog* WarningLog::getInstance() {
     }
     return instance;
 }
-
 
 void WarningLog::loguear(const char* mensajeError, Log::Tlog tipo) {
     const char * tipoDeLog;
@@ -48,5 +52,13 @@ void WarningLog::loguear(const char* mensajeError, Log::Tlog tipo) {
 }
 
 WarningLog::~WarningLog() {}
+
+void WarningLog::borrar(){
+	FILE* fp=fopen(archivo.c_str(),"r");
+		if(fp){
+			fclose(fp);
+			remove(archivo.c_str());
+		}
+}
 
 

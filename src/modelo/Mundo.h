@@ -10,12 +10,8 @@ private:
 	float anchoEscenario;
 	float altoEscenario;
 	float altoPiso;
-	float anchoVentana;
 	Personaje* personaje1;
 	Personaje* personaje2;
-
-	void actualizarPersonaje(Tcambio* c, Personaje* personaje);
-	bool verificarDireccion(Posicion posPJ1, Posicion posPJ2);
 
 public:
 	Mundo(config configuracion);
@@ -24,8 +20,9 @@ public:
 	float getAncho();
 	float getAlto();
 	float getAltoPiso();
+	float distanciaMaxima;
 
-	Tcambio actualizarMundo(Tcambio c,Tinput input1, Tinput input2);
+	Tcambios actualizarMundo(Tinputs inputs);
 
 	virtual ~Mundo();
 };

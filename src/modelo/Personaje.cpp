@@ -33,6 +33,11 @@ Personaje::Personaje(bool direccion,Posicion posInicial,float alto,float ancho,f
 	accionesEnCurso[1] = new Agachar(&alturaDelPersonaje, pos.getY() + alturaDelPersonaje);
 	accionesEnCurso[2] = new Caminar();
 	accionesEnCurso[3] = new SaltoOblicuo(alturaDelPersonaje);
+
+	string pj = "Se crea personaje con ancho "+to_string(ancho)+" y alto "+to_string(alto);
+	loguer->loguear(pj.c_str(), Log::LOG_DEB);
+	loguer->loguear("Se crean las acciones del personaje", Log::LOG_DEB);
+
 }
 
 
@@ -111,6 +116,7 @@ void Personaje::realizarAccion(Tinput orden,float anchoEscenario){
 				//Parado
 				case(KEY_NADA):
 					if(!accionesEnCurso[1]->getEstado()){
+						//loguer->loguear("El personaje se encuentra parado", Log::LOG_DEB);
 						parado=true;
 						estado = PARADO;
 					}
@@ -119,6 +125,7 @@ void Personaje::realizarAccion(Tinput orden,float anchoEscenario){
 				case (KEY_ARRIBA):
 					if(!accionesEnCurso[1]->getEstado()){
 						//Activo el estado de saltar verticalmente
+						loguer->loguear("El personaje salta verticalmente", Log::LOG_DEB);
 						accionesEnCurso[0]->setEstado(activado,pos);
 						estado = SALTANDO_VERTICAL;
 						parado=false;
@@ -127,6 +134,7 @@ void Personaje::realizarAccion(Tinput orden,float anchoEscenario){
 				//Agachar
 				case (KEY_ABAJO):
 					//activo el estado de agachar
+					loguer->loguear("El personaje se encuentra agachado", Log::LOG_DEB);
 					accionesEnCurso[1]->setEstado(activado,pos);
 					estado = AGACHADO;
 					parado=false;
@@ -140,6 +148,7 @@ void Personaje::realizarAccion(Tinput orden,float anchoEscenario){
 							sentido = true;
 						else
 							sentido = false;
+						loguer->loguear("El personaje camina hacia la derecha", Log::LOG_DEB);
 						accionesEnCurso[2]->setEstado(activado,true);
 						estado = CAMINANDO;
 						parado=false;
@@ -153,6 +162,7 @@ void Personaje::realizarAccion(Tinput orden,float anchoEscenario){
 							sentido = false;
 						else
 							sentido = true;
+						loguer->loguear("El personaje camina hacia la izquierda", Log::LOG_DEB);
 						accionesEnCurso[2]->setEstado(activado,false);
 						estado = CAMINANDO;
 						parado=false;
@@ -166,6 +176,7 @@ void Personaje::realizarAccion(Tinput orden,float anchoEscenario){
 							sentido = true;
 						else
 							sentido = false;
+						loguer->loguear("El personaje salta a la derecha", Log::LOG_DEB);
 						accionesEnCurso[3]->setEstado(activado, pos,true);
 						estado = SALTANDO_OBLICUO;
 						parado=false;
@@ -180,6 +191,7 @@ void Personaje::realizarAccion(Tinput orden,float anchoEscenario){
 							sentido = false;
 						else
 							sentido = true;
+						loguer->loguear("El personaje salta a la izquierda", Log::LOG_DEB);
 						accionesEnCurso[3]->setEstado(activado, pos, false);
 						estado = SALTANDO_OBLICUO;
 						parado=false;
@@ -219,7 +231,7 @@ Posicion Personaje::getPosicion(){
 
 float Personaje::getAlturaPersonaje() {
 	// si esta saltando oblicuamente devuelve la mitad de la altura del personaje.
-	if (accionesEnCurso[3]->getEstado()) return alturaDelPersonaje/2;
+	if (accionesEnCurso[3]->getEstado()) return alturaDelPersonaje / 2;
 	return alturaDelPersonaje;
 }
 
@@ -233,6 +245,7 @@ Personaje::~Personaje() {
 	for (i = 0;i<4;i++){
 		delete accionesEnCurso[i];
 	}
+	loguer->loguear("Se liberan acciones del personaje", Log::LOG_DEB);
 
 }
 

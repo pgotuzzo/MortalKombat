@@ -11,5 +11,6 @@ public:
 
 	virtual  void loguear(const char* mensaje, Tlog tipo){};
 	virtual ~Log(){} ;
+	virtual void borrar(){};
 };
 #endif //JASON_LOG_H

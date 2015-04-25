@@ -5,6 +5,7 @@ DebugLog::DebugLog() {
 	// TODO - Cambiar a ruta relativa
 	archivo = "/home/MortalKombat/logs/debug_log.txt";
 	fecha = nullptr;
+
 }
 
 DebugLog* DebugLog::instance = nullptr;
@@ -15,6 +16,7 @@ DebugLog* DebugLog::getInstance() {
 	}
 	return instance;
 }
+
 
 void DebugLog::loguear(const char* mensajeError, Log::Tlog tipo)  {
 	const char * tipoDeLog;
@@ -45,5 +47,15 @@ void DebugLog::loguear(const char* mensajeError, Log::Tlog tipo)  {
 	salida.close();
 }
 
-DebugLog::~DebugLog() {}
+DebugLog::~DebugLog() {
+
+}
+
+void DebugLog::borrar(){
+	FILE* fp=fopen(archivo.c_str(),"r");
+		if(fp){
+			fclose(fp);
+			remove(archivo.c_str());
+		}
+}
 
