@@ -13,7 +13,7 @@ private:
     SDL_Window *mWindow;
     SDL_Renderer *mRenderer;
     vector<Capa> capas;
-    PersonajeVista personaje;
+    PersonajeVista personaje1,personaje2;
     int zIndex;
     float altoPantalla,anchoPantalla;
 
@@ -35,7 +35,7 @@ public:
      * escenario : formato del escenario.
      * personaje : formato del personaje.
      */
-    Pantalla(vector<Tcapa> capas, Tventana ventana, Tescenario escenario, Tpersonaje personaje);
+    Pantalla(vector<Tcapa> capas, Tventana ventana, Tescenario escenario, Tpersonajes tpersonajes);
 
     /*
      * Dibuja todos los objetos en pantalla.
@@ -46,7 +46,7 @@ public:
      * Actualiza todos los objetos de pantalla.
      * change : contiene los cambios a realizar.
      */
-    void update(Tcambio change);
+    void update(Tcambios changes);
 
     virtual ~Pantalla();
 };

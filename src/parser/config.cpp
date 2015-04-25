@@ -95,7 +95,7 @@ void config::setEscenario(Value partes){
 		}
 
 		if(!partes["escenario"].get("ancho", 1000).isDouble()){
-			string mensajeError="En personaje/ancho, no hay un numero. Se carga por defecto todas sus partes.";
+			string mensajeError="En Escenario/ancho, no hay un numero. Se carga por defecto todas sus partes.";
 			loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_WAR);
 			this->escenario.ancho=1000;
 		} else

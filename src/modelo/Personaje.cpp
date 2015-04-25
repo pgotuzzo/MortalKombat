@@ -101,7 +101,7 @@ void Personaje::realizarAccion(Tinput orden,float anchoEscenario){
 				//Parado
 				case(KEY_NADA):
 					if(!accionesEnCurso[1]->getEstado()){
-						loguer->loguear("El personaje se encuentra parado", Log::LOG_DEB);
+						//loguer->loguear("El personaje se encuentra parado", Log::LOG_DEB);
 						parado=true;
 						estado = PARADO;
 					}

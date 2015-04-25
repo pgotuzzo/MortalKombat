@@ -37,8 +37,16 @@ int main(int argc, char **argv) {
         Tescenario tescenario = configuracion.getEscenario();
         Tpersonaje tpersonaje = configuracion.getPersonaje();
         tventana.distTope = MIN_DISTANCE_FROM_BOUND;
+        Tpersonajes tpersonajes;
+        tpersonajes.ancho=tpersonaje.ancho;
+        tpersonajes.alto=tpersonaje.alto;
+        tpersonajes.zIndex=tpersonaje.zIndex;
+        tpersonajes.orientacion[0]=tpersonaje.orientacion;
+        tpersonajes.sprites[0]=tpersonaje.sprites;
+        tpersonajes.orientacion[1]=tpersonaje.orientacion;
+        tpersonajes.sprites[1]=tpersonaje.sprites;
 
-        Pantalla* pantalla = new Pantalla(vectorTcapa, tventana, tescenario, tpersonaje);
+        Pantalla* pantalla = new Pantalla(vectorTcapa, tventana, tescenario, tpersonajes);
 
         loguer->loguear("Finaliza la creacion de la pantalla", Log::LOG_DEB);
         loguer->loguear("Inicia la creacion del mundo...", Log::LOG_DEB);
@@ -77,7 +85,8 @@ int main(int argc, char **argv) {
                 }
                     //DEMAS ACCIONES
                 default:{
-                    Tcambio c = mundo->actualizarMundo(c, input);
+                    Tcambios c;
+                    c = mundo->actualizarMundo(input);
                     pantalla->update(c);
                     pantalla->dibujar();
                     t2 = clock();

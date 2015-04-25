@@ -54,16 +54,25 @@ float Mundo::getAltoPiso(){
  * Personaje realiza su respectiva accion.
  * Se asigna todos los datos pertinentes de personaje a Tcambio.
  */
-Tcambio Mundo::actualizarMundo(Tcambio c,Tinput input){
+Tcambios Mundo::actualizarMundo(Tinput input) {
+	Tcambios c;
 	personaje1->realizarAccion(input,anchoEscenario);
-	c.posicion = personaje1->getPosicion();
-	if(personaje1->getDireccion()) c.direccion = DERECHA;
-	else c.direccion = IZQUIERDA;
-	if(personaje1->getSentido()) c.sentido = ADELANTE;
-	else c.sentido = ATRAS;
-	c.estado = personaje1->getEstado();
-	c.alturaPJ = personaje1->getAlturaPersonaje();
-	c.anchoPJ = personaje1->getAnchoPersonaje();
+	c.cambio1.posicion = personaje1->getPosicion();
+	if(personaje1->getDireccion()) c.cambio1.direccion = DERECHA;
+	else c.cambio1.direccion = IZQUIERDA;
+	if(personaje1->getSentido()) c.cambio1.sentido = ADELANTE;
+	else c.cambio1.sentido = ATRAS;
+	c.cambio1.estado = personaje1->getEstado();
+	c.cambio1.alturaPJ = personaje1->getAlturaPersonaje();
+	c.cambio1.anchoPJ = personaje1->getAnchoPersonaje();
+//TODO implementar cmabio2
+	c.cambio2.posicion = personaje1->getPosicion();
+	c.cambio2.posicion.x = 500;
+	c.cambio2.estado = personaje1->getEstado();
+	c.cambio2.alturaPJ = personaje1->getAlturaPersonaje();
+	c.cambio2.anchoPJ = personaje1->getAnchoPersonaje();
+	c.cambio2.direccion = IZQUIERDA;
+	c.cambio2.sentido = ATRAS;
 
 	return c;
 }

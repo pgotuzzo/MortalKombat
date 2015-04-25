@@ -21,7 +21,7 @@ void Pantalla::Inicializar(int anchoPx,int altoPx) {
  * escenario : formato del escenario.
  * personaje : formato del personaje.
  */
-Pantalla::Pantalla(vector<Tcapa> tcapas, Tventana ventana, Tescenario escenario, Tpersonaje tpersonaje) {
+Pantalla::Pantalla(vector<Tcapa> tcapas, Tventana ventana, Tescenario escenario, Tpersonajes tpersonajes) {
     // Setea los parametros de la pantalla
 	anchoPantalla = ventana.ancho;
     altoPantalla = escenario.alto;
@@ -32,11 +32,12 @@ Pantalla::Pantalla(vector<Tcapa> tcapas, Tventana ventana, Tescenario escenario,
 
     // Inicia la ventana y el renderer
     Inicializar(ventana.anchopx,ventana.altopx);
-    zIndex = tpersonaje.zIndex;
-    personaje = PersonajeVista(mRenderer, tpersonaje.sprites, tpersonaje.ancho, tpersonaje.alto, tpersonaje.orientacion);
+    zIndex = tpersonajes.zIndex;
+    personaje1 = PersonajeVista(mRenderer, tpersonajes.sprites[0], tpersonajes.ancho, tpersonajes.alto, tpersonajes.orientacion[0]);
+    personaje2 = PersonajeVista(mRenderer, tpersonajes.sprites[1], tpersonajes.ancho, tpersonajes.alto, tpersonajes.orientacion[1]);
 
     distTope = ventana.distTope;
-    mAnchoPersonaje = tpersonaje.ancho;
+    mAnchoPersonaje = tpersonajes.ancho;
     mAnchoEscenario = escenario.ancho;
     posEscenario = ( mAnchoEscenario - anchoPantalla ) / 2;
 
@@ -62,7 +63,8 @@ void Pantalla::dibujar() {
     for (int i = 0; i < capas.size(); i++) {
         capas[i].getTexture(ventana);
         if (i == zIndex) {
-            personaje.getTexture(ventana, posEscenario);
+            personaje1.getTexture(ventana, posEscenario);
+            personaje2.getTexture(ventana, posEscenario);
         }
     }
     SDL_RenderPresent(mRenderer);
@@ -73,16 +75,27 @@ void Pantalla::dibujar() {
  * Actualiza todos los objetos de pantalla.
  * change : contiene los cambios a realizar.
  */
-void Pantalla::update(Tcambio change) {
-    personaje.update(change);
-    float posPersonajeX = change.posicion.x;
+void Pantalla::update(Tcambios changes) {
+    personaje1.update(changes.cambio1);
+    personaje2.update(changes.cambio2);
+    float posPersonaje1X = changes.cambio1.posicion.x;
+    float posPersonaje2X = changes.cambio2.posicion.x;
     float topeDerecha = posEscenario + anchoPantalla - distTope;
     float topeIzquierda = posEscenario + distTope;
-    if (topeIzquierda > posPersonajeX && posPersonajeX - distTope> 0) {
-        posEscenario = posPersonajeX - distTope;
-    } else if (posPersonajeX + mAnchoPersonaje > topeDerecha && posPersonajeX + mAnchoPersonaje + distTope < mAnchoEscenario) {
-        posEscenario = posPersonajeX + mAnchoPersonaje + distTope - anchoPantalla;
+    bool moverIzq1 = topeIzquierda > posPersonaje1X && posPersonaje1X-distTope> 0;
+    bool moverIzq2 = topeIzquierda > posPersonaje2X && posPersonaje2X-distTope> 0;
+    bool moverDer1 = posPersonaje1X + mAnchoPersonaje > topeDerecha && posPersonaje1X + mAnchoPersonaje + distTope < mAnchoEscenario;
+    bool moverDer2 = posPersonaje2X + mAnchoPersonaje > topeDerecha && posPersonaje2X + mAnchoPersonaje + distTope < mAnchoEscenario;
+    if (moverIzq1) {
+        posEscenario = posPersonaje1X - distTope;
+    } else if (moverIzq2) {
+        posEscenario = posPersonaje2X - distTope;
+    } else if (moverDer1) {
+        posEscenario = posPersonaje1X + mAnchoPersonaje + distTope - anchoPantalla;
+    } else if (moverDer2) {
+        posEscenario = posPersonaje2X + mAnchoPersonaje + distTope - anchoPantalla;
     }
+
     for (int i = 0; i < capas.size(); i++) {
         capas[i].ajustar(posEscenario);
     }
@@ -93,7 +106,8 @@ Pantalla::~Pantalla() {
     loguer->loguear("Destruccion de la pantalla", Log::LOG_DEB);
     for (int i = 0; i < capas.size(); i++)
         capas[i].freeTextures();
-    personaje.freeTextures();
+    personaje1.freeTextures();
+    personaje2.freeTextures();
     SDL_DestroyRenderer(mRenderer);
     SDL_DestroyWindow(mWindow);
     loguer->loguear("Cierra SDL", Log::LOG_DEB);

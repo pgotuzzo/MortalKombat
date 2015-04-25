@@ -2,58 +2,23 @@
 #include <iostream>
 #include "Capa.h"
 
-float Capa::distTope = 0;
-float Capa::mAnchoPersonaje = 0;
-float Capa::mAnchoPantalla = 0;
-float Capa::mAnchoEscenario = 0;
-float Capa::posEscenario = 0;
-
-
 /*
 *  Crea una capa.
 *  renderer : renderer utilizado
 *  dirPath : direccion de la imagen de la capa
 *  rectPantalla : contiene el tamaño de la pantalla y la posicion inicial de la
 *  capa en relacion a su tamaño total de la imagen
-*/
-Capa::Capa(SDL_Renderer *renderer, std::string dirPath, VistaUtils::Trect rectPantalla) {
-    mRenderer = renderer;
-    mAuxTexture = VistaUtils::loadTexture(mRenderer, dirPath, VistaUtils::COLORKEY::BLANCO);
-    mTexture = VistaUtils::createTexture(mRenderer, 800, 600);
-    VistaUtils::copyTexture(mRenderer, mAuxTexture, mTexture, NULL, NULL);
-    mRect = rectPantalla;
-}
-
-/*
-*  Setea los valores de la capa y genera su textura.
 *  anchoCapa : ancho total de la capa en unidades.
-*  distTope : distancia limite en relacion al borde de la pantalla para que se empiecen
-*  a mover las capas.
- */
-void Capa::setValores(float anchoCapa, float altoCapa) {
-    int h, w;
-    SDL_QueryTexture(mTexture, NULL, NULL, &w, &h);
+*/
+Capa::Capa(SDL_Renderer *renderer, std::string dirPath, VistaUtils::Trect rectPantalla,float anchoCapa,float anchoEscenario) {
+    int wMax = 4000;
+    mRenderer = renderer;
+    mTexture = VistaUtils::createTexture(mRenderer, wMax, rectPantalla.h, dirPath);
 
-    float aux = (anchoCapa - Capa::mAnchoPantalla)/(Capa::mAnchoEscenario - Capa::mAnchoPantalla);
-    mRect.h = h;
-    mRect.w = w * mAnchoPantalla / anchoCapa;
-    mRelacionCapa = w * aux / anchoCapa ;
-
-}
-
-/*
-*  Setea los valores de clase.
-*  distanciaTope : distancia tope desde los bordes para que la capa se mueva.
-*  anchoPersonaje : ancho del personaje.
-*  anchoEscenario : ancho del escenario.
-*  anchoPantalla : ancho de la pantalla.
- */
-void Capa::setStatics(float distanciaTope, float anchoPersonaje, float anchoEscenario, float anchoPantalla) {
-    Capa::mAnchoPantalla = anchoPantalla;
-    Capa::distTope = distanciaTope;
-    Capa::mAnchoPersonaje = anchoPersonaje;
-    Capa::mAnchoEscenario = anchoEscenario;
-    Capa::posEscenario = ( anchoEscenario - anchoPantalla ) / 2;
+    mRect = rectPantalla;
+    float relacionDeDesp = (anchoCapa - mRect.w)/(anchoEscenario - mRect.w);
+    mRect.w = wMax * rectPantalla.w / anchoCapa;
+    mVelocidadCapa = wMax * relacionDeDesp / anchoCapa ;
 }
 
 /*
@@ -65,31 +30,10 @@ void Capa::getTexture(SDL_Texture *texture) {
 }
 
 /*
- * Cambia la posicion del escenario segun donde se encuentra el personaje.
- * posPersonajeX: posicion x del personaje.
- */
-void Capa::cambiarEscenario(float posPersonajeX) {
-    float topeDerecha = posEscenario + mAnchoPantalla - Capa::distTope;
-    float topeIzquierda = posEscenario + Capa::distTope;
-    if (topeIzquierda > posPersonajeX && posPersonajeX - Capa::distTope> 0) {
-        posEscenario = posPersonajeX - Capa::distTope;
-    } else if (posPersonajeX + mAnchoPersonaje > topeDerecha && posPersonajeX + mAnchoPersonaje + Capa::distTope < mAnchoEscenario) {
-        posEscenario = posPersonajeX + mAnchoPersonaje + Capa::distTope - mAnchoPantalla;
-    }
-}
-
-/*
  * Cambia la posicion de la capa ajustandola a la posicion del escenario
  */
-void Capa::ajustar() {
-    mRect.p.x =  posEscenario * mRelacionCapa;
-}
-
-/*
- * Devuelve la posicion de la pantalla en el escenario.
- */
-float Capa::getPosPantalla() {
-    return posEscenario;
+void Capa::ajustar(float posEscenario) {
+    mRect.p.x =  posEscenario * mVelocidadCapa;
 }
 
 Capa::Capa() {}
@@ -98,7 +42,6 @@ void Capa::freeTextures() {
     loguer->loguear("Elimina capa", Log::LOG_DEB);
     SDL_DestroyTexture(mTexture);
     loguer->loguear("Elimina capa", Log::LOG_DEB);
-    SDL_DestroyTexture(mAuxTexture);
 }
 
 Capa::~Capa() {}

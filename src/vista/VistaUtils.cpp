@@ -21,6 +21,17 @@ SDL_Texture *VistaUtils::createTexture(SDL_Renderer* renderer, float width, floa
     return SDL_CreateTexture(renderer, SDL_PIXELFORMAT_UNKNOWN, SDL_TEXTUREACCESS_TARGET, scaledWidth, scaledHeight);
 }
 
+SDL_Texture *VistaUtils::createTexture(SDL_Renderer* renderer, float width, float height, std::string path) {
+    string message = "Crea textura de dimensiones " + to_string(width) + " x " + to_string(height);
+    loguer->loguear(message.c_str(), Log::LOG_DEB);
+
+    SDL_Texture *mAuxTexture = VistaUtils::loadTexture(renderer, path, VistaUtils::COLORKEY::BLANCO);
+    SDL_Texture *mTexture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_UNKNOWN, SDL_TEXTUREACCESS_TARGET, width, height);
+    VistaUtils::copyTexture(renderer, mAuxTexture, mTexture, NULL, NULL);
+    SDL_DestroyTexture(mAuxTexture);
+    return mTexture;
+}
+
 SDL_Texture* VistaUtils::loadTexture(SDL_Renderer *r, std::string path, VistaUtils::COLORKEY colorkey) {
     SDL_Surface* surface = IMG_Load(path.c_str());
     if (surface == NULL){
