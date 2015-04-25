@@ -20,7 +20,7 @@ const bool activado = true;
 Personaje::Personaje(bool direccion,Posicion posInicial,float alto,float ancho,float nuevoAltoEscenario, float distMaxEnemigo){
 	this->direccion = direccion;
 	this->sentido = true;
-	distanciaMaxEnemigo = distMaxEnemigo;
+	distanciaMaxEnemigo = distMaxEnemigo ;
 	posEnemigo = Posicion(posInicial.getX()+50,posInicial.getY()); // TODO: Hardcodeo, cambiarlo luego
 	parado = true;
 	estado = PARADO;
@@ -64,6 +64,13 @@ Posicion Personaje::verificarPuntoEnX(Posicion posicionActual,float anchoEscenar
 		if(direccion == true) return Posicion(posEnemigo.getX() - distanciaMaxEnemigo,posicionActual.getY());
 		else return Posicion(posEnemigo.getX() + distanciaMaxEnemigo,posicionActual.getY());
 	}
+	//Valida que no se puedan atravesar los pjs
+	if (pow(posicionActual.getX() - posEnemigo.getX(),2) <= pow(anchoDelPersonaje,2)){
+
+		if(direccion == true) return Posicion(posicionActual.getX()-2,posicionActual.getY());
+			else return Posicion(posicionActual.getX()+2,posicionActual.getY());
+	}
+
 	else return posicionActual;
 }
 
