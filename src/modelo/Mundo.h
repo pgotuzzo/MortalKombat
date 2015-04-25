@@ -20,7 +20,7 @@ public:
 	float getAlto();
 	float getAltoPiso();
 
-	Tcambio actualizarMundo(Tcambio c,Tinput input);
+	Tcambios actualizarMundo(Tinput input);
 
 	virtual ~Mundo();
 };

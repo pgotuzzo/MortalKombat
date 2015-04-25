@@ -76,7 +76,7 @@ struct Posicion{
 /**
  * Loguer
  */
-static Log* loguer = DebugLog::getInstance();
+static Log* loguer = WarningLog::getInstance();
 
 /**
  * Estructuras que se utilizan para
@@ -136,7 +136,7 @@ enum Tsentido{
     ADELANTE,
     ATRAS
 };
-
+//TODO borrar esto cuando ya no sirva mas
 struct Tpersonaje {
     float ancho;
     float alto;
@@ -145,6 +145,13 @@ struct Tpersonaje {
     std::string sprites;
 };
 
+struct Tpersonajes {
+    float ancho;
+    float alto;
+    int zIndex;
+    Tdireccion orientacion[2];
+    std::string sprites[2];
+};
 
 /**
  * Estructura que media entre el modelo y
@@ -159,6 +166,11 @@ struct Tcambio{
     Tsentido sentido;
     float alturaPJ;
     float anchoPJ;
+};
+
+struct Tcambios{
+    Tcambio cambio1;
+    Tcambio cambio2;
 };
 
 /**

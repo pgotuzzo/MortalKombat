@@ -27,6 +27,8 @@ public:
 
     static SDL_Texture* loadTexture(SDL_Renderer* r, std::string path, COLORKEY);
 
+    static SDL_Texture* createTexture(SDL_Renderer *renderer, float width, float height, string path);
+
     static void copyTexture(SDL_Renderer* r, SDL_Texture* src, SDL_Texture* dst);
 
     static void copyTexture(SDL_Renderer* r, SDL_Texture* src, SDL_Texture* dst, bool flip);
@@ -45,6 +47,7 @@ public:
 private:
 
     static Uint32 getColorKeyValue(COLORKEY color, SDL_Surface* s);
+
 };
 
 
