@@ -15,7 +15,13 @@ private:
     vector<Capa> capas;
     PersonajeVista personaje;
     int zIndex;
-    float anchoPantalla, altoPantalla;
+    float altoPantalla,anchoPantalla;
+
+    float distTope;
+    float mAnchoPersonaje;
+    float mAnchoEscenario;
+    float posEscenario;
+
     /*
      * Se inicia la ventana y el renderer.
      */

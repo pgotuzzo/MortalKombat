@@ -35,8 +35,11 @@ Pantalla::Pantalla(vector<Tcapa> tcapas, Tventana ventana, Tescenario escenario,
     zIndex = tpersonaje.zIndex;
     personaje = PersonajeVista(mRenderer, tpersonaje.sprites, tpersonaje.ancho, tpersonaje.alto, tpersonaje.orientacion);
 
-    // Primero se setean las variables de clase.
-    Capa::setStatics(ventana.distTope, tpersonaje.ancho, escenario.ancho, anchoPantalla);
+    distTope = ventana.distTope;
+    mAnchoPersonaje = tpersonaje.ancho;
+    mAnchoEscenario = escenario.ancho;
+    posEscenario = ( mAnchoEscenario - anchoPantalla ) / 2;
+
     // Crea las capas.
     for (int i = 0; i < tcapas.size(); i++){
         VistaUtils::Trect rect;
@@ -44,8 +47,7 @@ Pantalla::Pantalla(vector<Tcapa> tcapas, Tventana ventana, Tescenario escenario,
         rect.w = anchoPantalla;
         rect.p.x = (tcapas[i].ancho - anchoPantalla)/2;
         rect.p.y = 0;
-        Capa capa = Capa(mRenderer, tcapas[i].dirCapa, rect);
-        capa.setValores(tcapas[i].ancho, altoPantalla);
+        Capa capa = Capa(mRenderer, tcapas[i].dirCapa, rect,tcapas[i].ancho,mAnchoEscenario);
         capas.push_back(capa);
     }
 }
@@ -60,7 +62,7 @@ void Pantalla::dibujar() {
     for (int i = 0; i < capas.size(); i++) {
         capas[i].getTexture(ventana);
         if (i == zIndex) {
-            personaje.getTexture(ventana, Capa::getPosPantalla());
+            personaje.getTexture(ventana, posEscenario);
         }
     }
     SDL_RenderPresent(mRenderer);
@@ -73,9 +75,16 @@ void Pantalla::dibujar() {
  */
 void Pantalla::update(Tcambio change) {
     personaje.update(change);
-    Capa::cambiarEscenario(change.posicion.x);
+    float posPersonajeX = change.posicion.x;
+    float topeDerecha = posEscenario + anchoPantalla - distTope;
+    float topeIzquierda = posEscenario + distTope;
+    if (topeIzquierda > posPersonajeX && posPersonajeX - distTope> 0) {
+        posEscenario = posPersonajeX - distTope;
+    } else if (posPersonajeX + mAnchoPersonaje > topeDerecha && posPersonajeX + mAnchoPersonaje + distTope < mAnchoEscenario) {
+        posEscenario = posPersonajeX + mAnchoPersonaje + distTope - anchoPantalla;
+    }
     for (int i = 0; i < capas.size(); i++) {
-        capas[i].ajustar();
+        capas[i].ajustar(posEscenario);
     }
 }
 
