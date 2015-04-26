@@ -10,16 +10,10 @@ DetectorDeColisiones::DetectorDeColisiones() {
 bool DetectorDeColisiones::sonProximos(ObjetoColisionable* primerObjeto, ObjetoColisionable* segundoObjeto, float delta) {
     //Aqui debe ocurrir la magia de la deteccion de las proximidades entre dos objetos
     //TODO: INSERTE AQUI LA MAGIA
-
-    float puntoObjeto1 = (primerObjeto->pos.getX() - (primerObjeto->ancho/2));
-    float puntoObjeto2 = (segundoObjeto->pos.getX() + (segundoObjeto->ancho/2));
-    float deltaCuadrado = (float) pow(delta,2);
-    //Distancia si entre un punto y otro es maxima
-    float distanciaMasLarga = (float) (pow(primerObjeto->ancho + segundoObjeto->ancho +delta,2));
-    //Distancia si entre un punto y otro es minima
-    float distanciaMasCorta = (float) (pow(puntoObjeto1-puntoObjeto2,2));
-    return (distanciaMasLarga <= deltaCuadrado)||(distanciaMasCorta <= deltaCuadrado);
-
+    float anchoRectanguloMinimo = pow((primerObjeto->ancho/2)+(segundoObjeto->ancho/2)+(delta),2);
+    float distanciaPuntos = pow((primerObjeto->pos.getX() - segundoObjeto->pos.getX()),2);
+    if (distanciaPuntos <= anchoRectanguloMinimo) return true;
+    return false;
 
 }
 

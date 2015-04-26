@@ -1,7 +1,7 @@
 #include "../parser/config.h"
 #include "Mundo.h"
 
-const float delta = 20;
+const float delta = -3.00;
 
 
 /* Constructor de Mundo.
