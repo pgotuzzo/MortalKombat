@@ -1,6 +1,8 @@
 #include "../parser/config.h"
 #include "Mundo.h"
 
+const float delta = 20;
+
 
 /* Constructor de Mundo.
  * Recibe la configuracion que se devuelve del parser.
@@ -31,7 +33,7 @@ Mundo::Mundo(config configuracion) {
 
 	personaje1 = new Personaje(dir,Posicion(pos_x+anchoPJ,pos_y),altoPJ,anchoPJ);
 	personaje2 = new Personaje(dir,Posicion(pos_x-anchoPJ,pos_y),altoPJ,anchoPJ);
-
+	detector = DetectorDeColisiones();
 }
 
 /* Devuelve la actualizacion del struct Tcambio recibido junto con el numero de accion que debe realizar
@@ -59,6 +61,18 @@ Tcambios Mundo::actualizarMundo(Tinputs inputs) {
 	else c.cambio2.direccion = IZQUIERDA;
 	if(personaje2->getSentido()) c.cambio2.sentido = ADELANTE;
 	else c.cambio2.sentido = ATRAS;
+
+	vector<ObjetoColisionable*> objetos;
+	vector<ObjetoColisionable*> objetosProximos;
+
+	objetos.push_back(personaje1);
+	objetos.push_back(personaje2);
+
+	objetosProximos = detector.detectorDeProximidad(objetos, delta);
+
+	if (!objetosProximos.empty()){
+		objetosProximos[1]->solucionColision();
+	}
 
 	return c;
 }

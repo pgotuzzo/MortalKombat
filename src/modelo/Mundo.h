@@ -3,6 +3,7 @@
 
 #include "../parser/config.h"
 #include "Personaje.h"
+#include "DetectorDeColisiones.h"
 #include "../Common.h"
 
 class Mundo {
@@ -14,6 +15,7 @@ private:
 	Personaje* personaje2;
 
 public:
+	DetectorDeColisiones detector;
 	Mundo(config configuracion);
 
 	Tcambios actualizarMundo(Tinputs inputs);
