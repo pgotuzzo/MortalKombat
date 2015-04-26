@@ -19,12 +19,10 @@ public:
 
 	bool parado;
 	Posicion pos;
-	Posicion posEnemigo;
 	bool direccion;
 	bool sentido;
 	float alturaDelPersonaje;
 	float anchoDelPersonaje;
-	float altoEscenario;
 	float yPiso;
 	float distanciaMaxEnemigo;
 	TestadoPersonaje estado;
@@ -36,7 +34,7 @@ public:
 	void ejecutarAcionesActivadas(Accion **accionesEnCurso,float anchoEscenario);
 
 
-	Personaje(bool direccion,Posicion posInicial,float alto,float ancho,float nuevoAltoEscenario, float distMaxEnemigo);
+	Personaje(bool direccion,Posicion posInicial,float alto,float ancho);
 	void realizarAccion(Tinput orden,float anchoEscenario);
 
 	Posicion getPosicion();

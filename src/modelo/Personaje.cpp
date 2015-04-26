@@ -17,17 +17,14 @@ const bool activado = true;
  * Direccion: True = derecha
  * Sentido: True = derecha
  */
-Personaje::Personaje(bool direccion,Posicion posInicial,float alto,float ancho,float nuevoAltoEscenario, float distMaxEnemigo){
+Personaje::Personaje(bool direccion,Posicion posInicial,float alto,float ancho){
 	this->direccion = direccion;
 	this->sentido = true;
-	distanciaMaxEnemigo = distMaxEnemigo ;
-	posEnemigo = Posicion(posInicial.getX()+50,posInicial.getY()); // TODO: Hardcodeo, cambiarlo luego
 	parado = true;
 	estado = PARADO;
 	pos = posInicial;
 	alturaDelPersonaje = alto;
 	anchoDelPersonaje = ancho;
-	altoEscenario = nuevoAltoEscenario;
 	yPiso = alturaDelPersonaje + pos.getY();
 	accionesEnCurso[0] = new SaltoVertical();
 	accionesEnCurso[1] = new Agachar(&alturaDelPersonaje, pos.getY() + alturaDelPersonaje);
@@ -39,6 +36,7 @@ Personaje::Personaje(bool direccion,Posicion posInicial,float alto,float ancho,f
 	loguer->loguear("Se crean las acciones del personaje", Log::LOG_DEB);
 
 }
+
 
 
 /*
@@ -63,19 +61,6 @@ Posicion Personaje::verificarPuntoEnX(Posicion posicionActual,float anchoEscenar
 	if (posicionActual.getX() < 1){
 		return Posicion(1,posicionActual.getY());
 	}
-
-	// Valida que no se puedan separar los 2 pj mas de distanciaMaxEnemigo
-	if (pow(posicionActual.getX() - posEnemigo.getX(),2) >= pow(distanciaMaxEnemigo,2) ){
-		if(direccion == true) return Posicion(posEnemigo.getX() - distanciaMaxEnemigo,posicionActual.getY());
-		else return Posicion(posEnemigo.getX() + distanciaMaxEnemigo,posicionActual.getY());
-	}
-	//Valida que no se puedan atravesar los pjs
-	if (pow(posicionActual.getX() - posEnemigo.getX(),2) <= pow(anchoDelPersonaje,2)){
-
-		if(direccion == true) return Posicion(posicionActual.getX()-2,posicionActual.getY());
-			else return Posicion(posicionActual.getX()+2,posicionActual.getY());
-	}
-
 	else return posicionActual;
 }
 
@@ -144,10 +129,7 @@ void Personaje::realizarAccion(Tinput orden,float anchoEscenario){
 				case (KEY_DERECHA):
 					if(!accionesEnCurso[1]->getEstado()) {
 						//activo el estado avanzar
-						if (direccion == true)
-							sentido = true;
-						else
-							sentido = false;
+						sentido = direccion;
 						loguer->loguear("El personaje camina hacia la derecha", Log::LOG_DEB);
 						accionesEnCurso[2]->setEstado(activado,true);
 						estado = CAMINANDO;
@@ -158,10 +140,7 @@ void Personaje::realizarAccion(Tinput orden,float anchoEscenario){
 				case (KEY_IZQUIERDA):
 					if(!accionesEnCurso[1]->getEstado()) {
 						//activo el estado avanzar
-						if (direccion == true)
-							sentido = false;
-						else
-							sentido = true;
+						sentido = !direccion;
 						loguer->loguear("El personaje camina hacia la izquierda", Log::LOG_DEB);
 						accionesEnCurso[2]->setEstado(activado,false);
 						estado = CAMINANDO;
@@ -172,10 +151,7 @@ void Personaje::realizarAccion(Tinput orden,float anchoEscenario){
 				case (KEY_ARRIBA_DERECHA):
 					if(!accionesEnCurso[1]->getEstado()){
 						//Activo el estado de saltar oblicuamente
-						if (direccion == true)
-							sentido = true;
-						else
-							sentido = false;
+						sentido = direccion;
 						loguer->loguear("El personaje salta a la derecha", Log::LOG_DEB);
 						accionesEnCurso[3]->setEstado(activado, pos,true);
 						estado = SALTANDO_OBLICUO;
@@ -187,10 +163,7 @@ void Personaje::realizarAccion(Tinput orden,float anchoEscenario){
 				case (KEY_ARRIBA_IZQUIERDA):
 					if(!accionesEnCurso[1]->getEstado()){
 						//Activo el estado de saltar oblicuamente
-						if (direccion == true)
-							sentido = false;
-						else
-							sentido = true;
+						sentido = !direccion;
 						loguer->loguear("El personaje salta a la izquierda", Log::LOG_DEB);
 						accionesEnCurso[3]->setEstado(activado, pos, false);
 						estado = SALTANDO_OBLICUO;

@@ -31,26 +31,9 @@ Mundo::Mundo(config configuracion) {
 	if (direccion == DERECHA) dir = true;
 	else dir = false;
 
-	personaje1 = new Personaje(dir,Posicion(pos_x+anchoPJ,pos_y),altoPJ,anchoPJ, altoEscenario, distanciaMaxima);
-	personaje2 = new Personaje(dir,Posicion(pos_x-anchoPJ,pos_y),altoPJ,anchoPJ, altoEscenario, distanciaMaxima);
+	personaje1 = new Personaje(dir,Posicion(pos_x+anchoPJ,pos_y),altoPJ,anchoPJ);
+	personaje2 = new Personaje(dir,Posicion(pos_x-anchoPJ,pos_y),altoPJ,anchoPJ);
 
-}
-
-
-Personaje* Mundo::getPersonaje(){
-	return personaje1;
-}
-
-float Mundo::getAlto(){
-	return altoEscenario;
-}
-
-float Mundo::getAncho(){
-	return anchoEscenario;
-}
-
-float Mundo::getAltoPiso(){
-	return altoPiso;
 }
 
 /* Devuelve la actualizacion del struct Tcambio recibido junto con el numero de accion que debe realizar

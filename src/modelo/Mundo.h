@@ -16,12 +16,6 @@ private:
 public:
 	Mundo(config configuracion);
 
-	Personaje* getPersonaje();
-	float getAncho();
-	float getAlto();
-	float getAltoPiso();
-	float distanciaMaxima;
-
 	Tcambios actualizarMundo(Tinputs inputs);
 
 	virtual ~Mundo();
