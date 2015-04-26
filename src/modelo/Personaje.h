@@ -9,22 +9,19 @@
 #include <tr1/unordered_map>
 #include "Accion.h"
 #include "../Common.h"
+#include "ObjetoColisionable.h"
 
 
 using namespace std;
 
-class Personaje {
+class Personaje: public ObjetoColisionable {
 
 public:
 
 	bool parado;
-	Posicion pos;
 	bool direccion;
 	bool sentido;
-	float alturaDelPersonaje;
-	float anchoDelPersonaje;
 	float yPiso;
-	float distanciaMaxEnemigo;
 	TestadoPersonaje estado;
 	Accion* accionesEnCurso[4];
 
@@ -37,6 +34,7 @@ public:
 	Personaje(bool direccion,Posicion posInicial,float alto,float ancho);
 	void realizarAccion(Tinput orden,float anchoEscenario);
 
+	void solucionColision();
 	Posicion getPosicion();
 	TestadoPersonaje getEstado();
 	float getAlturaPersonaje();

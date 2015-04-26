@@ -21,15 +21,13 @@ Mundo::Mundo(config configuracion) {
 
 	float pos_x = anchoEscenario/2;
 	float pos_y = altoEscenario - altoPiso - altoPJ;
-	float distanciaMaxima = configuracion.getVentana().ancho -((MIN_DISTANCE_FROM_BOUND*2)-1);
 
 
 	Tdireccion direccion = configuracion.getPersonaje().orientacion;
 
 	bool dir;
 
-	if (direccion == DERECHA) dir = true;
-	else dir = false;
+	dir = direccion == DERECHA;
 
 	personaje1 = new Personaje(dir,Posicion(pos_x+anchoPJ,pos_y),altoPJ,anchoPJ);
 	personaje2 = new Personaje(dir,Posicion(pos_x-anchoPJ,pos_y),altoPJ,anchoPJ);

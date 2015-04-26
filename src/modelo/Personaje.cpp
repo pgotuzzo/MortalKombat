@@ -23,13 +23,13 @@ Personaje::Personaje(bool direccion,Posicion posInicial,float alto,float ancho){
 	parado = true;
 	estado = PARADO;
 	pos = posInicial;
-	alturaDelPersonaje = alto;
-	anchoDelPersonaje = ancho;
-	yPiso = alturaDelPersonaje + pos.getY();
+	this->altura = alto;
+	this->ancho = ancho;
+	yPiso = altura + pos.getY();
 	accionesEnCurso[0] = new SaltoVertical();
-	accionesEnCurso[1] = new Agachar(&alturaDelPersonaje, pos.getY() + alturaDelPersonaje);
+	accionesEnCurso[1] = new Agachar(&altura, pos.getY() + altura);
 	accionesEnCurso[2] = new Caminar();
-	accionesEnCurso[3] = new SaltoOblicuo(alturaDelPersonaje);
+	accionesEnCurso[3] = new SaltoOblicuo(altura);
 
 	string pj = "Se crea personaje con ancho "+to_string(ancho)+" y alto "+to_string(alto);
 	loguer->loguear(pj.c_str(), Log::LOG_DEB);
@@ -43,8 +43,8 @@ Personaje::Personaje(bool direccion,Posicion posInicial,float alto,float ancho){
  * Se verifica que el personaje no se pase nunca por debajo del piso.
  */
 Posicion Personaje::verificarPuntoEnY(Posicion posicionActual){
-	if(posicionActual.getY()+alturaDelPersonaje >= yPiso){
-		return Posicion(posicionActual.getX(),yPiso-alturaDelPersonaje);
+	if(posicionActual.getY()+altura >= yPiso){
+		return Posicion(posicionActual.getX(),yPiso-altura);
 	}
 	return posicionActual;
 
@@ -55,8 +55,8 @@ Posicion Personaje::verificarPuntoEnY(Posicion posicionActual){
  * Si se pasa devuelve la posicion del limite del margen correspondiente.
  */
 Posicion Personaje::verificarPuntoEnX(Posicion posicionActual,float anchoEscenario){
-	if (posicionActual.getX() > anchoEscenario - anchoDelPersonaje){
-		return Posicion(anchoEscenario - anchoDelPersonaje, posicionActual.getY());
+	if (posicionActual.getX() > anchoEscenario - ancho){
+		return Posicion(anchoEscenario - ancho, posicionActual.getY());
 	}
 	if (posicionActual.getX() < 1){
 		return Posicion(1,posicionActual.getY());
@@ -204,12 +204,12 @@ Posicion Personaje::getPosicion(){
 
 float Personaje::getAlturaPersonaje() {
 	// si esta saltando oblicuamente devuelve la mitad de la altura del personaje.
-	if (accionesEnCurso[3]->getEstado()) return alturaDelPersonaje / 2;
-	return alturaDelPersonaje;
+	if (accionesEnCurso[3]->getEstado()) return altura / 2;
+	return altura;
 }
 
 float Personaje::getAnchoPersonaje() {
-	return anchoDelPersonaje;
+	return ancho;
 }
 
 // Se destruyen las acciones creadas en el constructor de personaje.
@@ -220,5 +220,9 @@ Personaje::~Personaje() {
 	}
 	loguer->loguear("Se liberan acciones del personaje", Log::LOG_DEB);
 
+}
+
+void Personaje::solucionColision() {
+	cout<<"hola"<<endl;
 }
 
