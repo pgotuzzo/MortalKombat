@@ -10,6 +10,8 @@
 #include "acciones/SaltoOblicuo.h"
 #include "DetectorDeColisiones.h"
 
+
+const float factorDeRestroceso = 2;
 const bool activado = true;
 
 
@@ -234,18 +236,22 @@ void Personaje::solucionColision(vector<ObjetoColisionable*>  objetosProximos) {
 		determinarAccionPorColision(objetosColisionados[0], objetosColisionados[1]);
 		//}
 	}
-	cout<<"hola"<<endl;
 }
 
 void Personaje::determinarAccionPorColision(ObjetoColisionable *primerObjeto, ObjetoColisionable *segundoObjeto) {
-
+	cout<<endl<<"CHOCAMOS VIEJA NO ME IMPORTA NADA"<<endl;
 	if ((primerObjeto->pos.getX() - segundoObjeto->pos.getX()) <= 0){
 
-		primerObjeto->pos.setX(primerObjeto->pos.getX() - 1);
-		segundoObjeto->pos.setX(segundoObjeto->pos.getX() + 1);
+		primerObjeto->pos.setX(primerObjeto->pos.getX() - factorDeRestroceso);
+		segundoObjeto->pos.setX(segundoObjeto->pos.getX() + factorDeRestroceso);
 	}	else{
-			primerObjeto->pos.setX(primerObjeto->pos.getX() + 1);
-			segundoObjeto->pos.setX(segundoObjeto->pos.getX() - 1);
+			primerObjeto->pos.setX(primerObjeto->pos.getX() + factorDeRestroceso);
+			segundoObjeto->pos.setX(segundoObjeto->pos.getX() - factorDeRestroceso);
 		};
+
+}
+
+void Personaje::setDireccion(bool direccion) {
+	this->direccion = direccion;
 
 }

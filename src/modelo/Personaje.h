@@ -38,6 +38,8 @@ public:
 	void determinarAccionPorColision(ObjetoColisionable* primerObjeto, ObjetoColisionable* segundoObjeto);
 	Posicion getPosicion();
 	TestadoPersonaje getEstado();
+
+	void setDireccion(bool direccion);
 	float getAlturaPersonaje();
 	float getAnchoPersonaje();
 	bool getDireccion();

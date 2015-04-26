@@ -43,6 +43,17 @@ Mundo::Mundo(config configuracion) {
  */
 Tcambios Mundo::actualizarMundo(Tinputs inputs) {
 	Tcambios c;
+	//direccion derecha igual true
+	bool direccion = true;
+
+	if(personaje1->pos.getX() - personaje2->pos.getX() <= 0){
+		personaje1->setDireccion(direccion);
+		personaje2->setDireccion(!direccion);
+
+	}	else{
+		personaje1->setDireccion(!direccion);
+		personaje2->setDireccion(direccion);
+	}
 	personaje1->realizarAccion(inputs.input1,anchoEscenario);
 	personaje2->realizarAccion(inputs.input2,anchoEscenario);
 	c.cambio1.posicion = personaje1->getPosicion();
@@ -53,6 +64,7 @@ Tcambios Mundo::actualizarMundo(Tinputs inputs) {
 	c.cambio1.estado = personaje1->getEstado();
 	c.cambio1.alturaPJ = personaje1->getAlturaPersonaje();
 	c.cambio1.anchoPJ = personaje1->getAnchoPersonaje();
+
 
 	c.cambio2.posicion = personaje2->getPosicion();
 	c.cambio2.estado = personaje2->getEstado();
@@ -71,6 +83,7 @@ Tcambios Mundo::actualizarMundo(Tinputs inputs) {
 
 	objetosProximos = detector.detectorDeProximidad(objetos, delta);
 	if (!objetosProximos.empty()){
+		cout<<"ELERTA DE PROXIMIDAD"<<endl;
 		objetosProximos[1]->solucionColision(objetos);
 	}
 
