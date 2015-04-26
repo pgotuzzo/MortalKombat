@@ -1,7 +1,8 @@
+#include <functional>
 #include "../parser/config.h"
 #include "Mundo.h"
 
-const float delta = -3.00;
+const float delta = 5.00;
 
 
 /* Constructor de Mundo.
@@ -69,9 +70,8 @@ Tcambios Mundo::actualizarMundo(Tinputs inputs) {
 	objetos.push_back(personaje2);
 
 	objetosProximos = detector.detectorDeProximidad(objetos, delta);
-
 	if (!objetosProximos.empty()){
-		objetosProximos[1]->solucionColision();
+		objetosProximos[1]->solucionColision(objetos);
 	}
 
 	return c;

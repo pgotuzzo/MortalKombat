@@ -16,7 +16,7 @@ bool DetectorDeColisiones::sonProximos(ObjetoColisionable* primerObjeto, ObjetoC
     float distancia1 = pow(primerObjeto->pos.getY()-segundoObjeto->pos.getY(),2);
     float distancia2 = pow((primerObjeto->pos.getY()+primerObjeto->altura)-(segundoObjeto->pos.getY()+segundoObjeto->altura),2);
     if((distancia1 <= segundoObjeto->altura)||(distancia2 <= primerObjeto->altura)){
-        if (distanciaPuntos <= anchoRectanguloMinimo-5) return true;
+        if (distanciaPuntos <= anchoRectanguloMinimo-10) return true;
         return false;
     }
     return  false;

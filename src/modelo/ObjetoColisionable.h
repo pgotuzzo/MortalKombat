@@ -2,6 +2,7 @@
 #define MORTALKOMBAT_OBJETOCOLISIONABLE_H
 
 #include "Personaje.h"
+#include <vector>
 #include "../Common.h"
 
 class ObjetoColisionable {
@@ -11,7 +12,8 @@ public:
     float altura;
     float ancho;
 
-    virtual void solucionColision() = 0;
+    virtual void solucionColision(vector<ObjetoColisionable*>  objetosProximos) = 0;
+    virtual void determinarAccionPorColision(ObjetoColisionable* primerObjeto, ObjetoColisionable* segundoObjeto)= 0;
     virtual ~ObjetoColisionable() {}
 
 };

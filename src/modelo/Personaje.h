@@ -34,7 +34,8 @@ public:
 	Personaje(bool direccion,Posicion posInicial,float alto,float ancho);
 	void realizarAccion(Tinput orden,float anchoEscenario);
 
-	void solucionColision();
+	void solucionColision(vector<ObjetoColisionable*>  objetosProximos);
+	void determinarAccionPorColision(ObjetoColisionable* primerObjeto, ObjetoColisionable* segundoObjeto);
 	Posicion getPosicion();
 	TestadoPersonaje getEstado();
 	float getAlturaPersonaje();

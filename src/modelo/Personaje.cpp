@@ -8,6 +8,7 @@
 #include "acciones/Agachar.h"
 #include "acciones/Caminar.h"
 #include "acciones/SaltoOblicuo.h"
+#include "DetectorDeColisiones.h"
 
 const bool activado = true;
 
@@ -222,7 +223,29 @@ Personaje::~Personaje() {
 
 }
 
-void Personaje::solucionColision() {
+void Personaje::solucionColision(vector<ObjetoColisionable*>  objetosProximos) {
+
+	DetectorDeColisiones detector = DetectorDeColisiones();
+	vector<ObjetoColisionable*> objetosColisionados;
+	//Como quiero saber si realmente estan colisionando le mando un delta 0.0
+	objetosColisionados = detector.detectorDeProximidad(objetosProximos,0.0);
+	if(!objetosColisionados.empty()){
+		//for (int i = 0; i<=objetosColisionados.size();i = i+2){
+		determinarAccionPorColision(objetosColisionados[0], objetosColisionados[1]);
+		//}
+	}
 	cout<<"hola"<<endl;
 }
 
+void Personaje::determinarAccionPorColision(ObjetoColisionable *primerObjeto, ObjetoColisionable *segundoObjeto) {
+
+	if ((primerObjeto->pos.getX() - segundoObjeto->pos.getX()) <= 0){
+
+		primerObjeto->pos.setX(primerObjeto->pos.getX() - 1);
+		segundoObjeto->pos.setX(segundoObjeto->pos.getX() + 1);
+	}	else{
+			primerObjeto->pos.setX(primerObjeto->pos.getX() + 1);
+			segundoObjeto->pos.setX(segundoObjeto->pos.getX() - 1);
+		};
+
+}
