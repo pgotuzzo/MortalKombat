@@ -14,6 +14,7 @@ private:
 public:
     DetectorDeColisiones();
     vector<ObjetoColisionable*> detectorDeProximidad(vector<ObjetoColisionable*> objetos, float delta );
+    bool seVan(Personaje* PJ1, Personaje* PJ2, float delta );
     virtual ~DetectorDeColisiones();
 
 };

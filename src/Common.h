@@ -67,7 +67,6 @@ struct Posicion{
     }
 
     void mostrarPar(){
-        std::cout << "ESTA ES LA POSICION" << std::endl;
         std::cout << "X: " << x << " - " << "Y: " << y << std::endl;
     }
 
@@ -206,7 +205,7 @@ struct Tinputs{
  */
 static const std::string SPRITES_FORMAT = ".png";
 
-static const float MIN_DISTANCE_FROM_BOUND = 50;
+static const float MIN_DISTANCE_FROM_BOUND = 30;
 
 #endif //_MORTALKOMBAT_COMMON_H_
 

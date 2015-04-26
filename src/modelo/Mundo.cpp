@@ -35,6 +35,7 @@ Mundo::Mundo(config configuracion) {
 	personaje1 = new Personaje(dir,Posicion(pos_x+anchoPJ,pos_y),altoPJ,anchoPJ);
 	personaje2 = new Personaje(dir,Posicion(pos_x-anchoPJ,pos_y),altoPJ,anchoPJ);
 	detector = DetectorDeColisiones();
+	anchoPantalla = configuracion.getVentana().ancho;
 }
 
 /* Devuelve la actualizacion del struct Tcambio recibido junto con el numero de accion que debe realizar
@@ -75,15 +76,35 @@ Tcambios Mundo::actualizarMundo(Tinputs inputs) {
 	if(personaje2->getSentido()) c.cambio2.sentido = ADELANTE;
 	else c.cambio2.sentido = ATRAS;
 
-	vector<ObjetoColisionable*> objetos;
-	vector<ObjetoColisionable*> objetosProximos;
+	//TODO: NEGRADA PARA QUE NO SE VALLAN DE LA PANTALLA, EMPROLIJAR
+	//La idea es calcular la distancia entre los personajes segun un cierto delta, si no estan
+	//quiere decir que se estan por ir de la pantalla, y abria que acomodarlos.
+	//TODO: ARREGLAR ESTO
+	//Esto que hice no funciona del bien
+	//No deberia arrastrar al otro pj
+	//ese cuatro seria el factor de retroseso cuando se salen del cuadrado
+	if(!detector.seVan(personaje1,personaje2,(anchoPantalla -MIN_DISTANCE_FROM_BOUND*4))){
+		if(personaje1->pos.getX()-personaje2->pos.getX() <=0){
+			personaje1->pos.setX(personaje1->pos.getX()+4);
+			personaje2->pos.setX(personaje2->pos.getX()-4);
+			}else{
+				personaje1->pos.setX(personaje1->pos.getX()-4);
+				personaje2->pos.setX(personaje2->pos.getX()+4);
+		}
+	}
 
+
+//TODO HACER MAS GENERICO, DEBERIAN METERSE TODOS LOS OBJETOS COLISIONABLES
+//Esto va a ser para cuando halla mas objetos colisionables por ejemplo poderes
+	vector<ObjetoColisionable*> objetosProximos;
+	vector<ObjetoColisionable*> objetos;
 	objetos.push_back(personaje1);
 	objetos.push_back(personaje2);
 
 	objetosProximos = detector.detectorDeProximidad(objetos, delta);
 	if (!objetosProximos.empty()){
-		cout<<"ELERTA DE PROXIMIDAD"<<endl;
+		//cout<<"ELERTA DE PROXIMIDAD"<<endl;
+		objetosProximos[0]->solucionColision(objetos);
 		objetosProximos[1]->solucionColision(objetos);
 	}
 

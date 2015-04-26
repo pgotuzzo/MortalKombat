@@ -238,16 +238,25 @@ void Personaje::solucionColision(vector<ObjetoColisionable*>  objetosProximos) {
 	}
 }
 
-void Personaje::determinarAccionPorColision(ObjetoColisionable *primerObjeto, ObjetoColisionable *segundoObjeto) {
-	cout<<endl<<"CHOCAMOS VIEJA NO ME IMPORTA NADA"<<endl;
-	if ((primerObjeto->pos.getX() - segundoObjeto->pos.getX()) <= 0){
 
+//TODO: DEBEMOS CONTEMPLAR EL CASO EN QUE SALTEN Y CHOQUEN EN EL AIRE
+// IDEA: generar un un estado "CaidaLibre" que se accione solo cuando chocan en el aire
+//       que al setearse desactive todos los otros estados y dure hasta que llegue al piso.
+// es solo una sugerencia.
+
+void Personaje::determinarAccionPorColision(ObjetoColisionable *primerObjeto, ObjetoColisionable *segundoObjeto) {
+	//cout<<endl<<"CHOCAMOS VIEJA NO ME IMPORTA NADA"<<endl<<endl;
+
+
+	if ((primerObjeto->pos.getX() - segundoObjeto->pos.getX()) <= 0){
 		primerObjeto->pos.setX(primerObjeto->pos.getX() - factorDeRestroceso);
 		segundoObjeto->pos.setX(segundoObjeto->pos.getX() + factorDeRestroceso);
 	}	else{
 			primerObjeto->pos.setX(primerObjeto->pos.getX() + factorDeRestroceso);
 			segundoObjeto->pos.setX(segundoObjeto->pos.getX() - factorDeRestroceso);
-		};
+
+
+	};
 
 }
 

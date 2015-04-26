@@ -13,6 +13,7 @@ private:
 	float altoPiso;
 	Personaje* personaje1;
 	Personaje* personaje2;
+	float anchoPantalla;
 
 public:
 	DetectorDeColisiones detector;

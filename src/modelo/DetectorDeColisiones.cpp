@@ -9,7 +9,6 @@ DetectorDeColisiones::DetectorDeColisiones() {
 
 bool DetectorDeColisiones::sonProximos(ObjetoColisionable* primerObjeto, ObjetoColisionable* segundoObjeto, float delta) {
     //Aqui debe ocurrir la magia de la deteccion de las proximidades entre dos objetos
-    //TODO: INSERTE AQUI LA MAGIA
     float anchoRectanguloMinimo = pow((primerObjeto->ancho/2)+(segundoObjeto->ancho/2)+(delta),2);
     float distanciaPuntos = pow((primerObjeto->pos.getX() - segundoObjeto->pos.getX()),2);
 
@@ -51,8 +50,19 @@ vector<ObjetoColisionable*> DetectorDeColisiones::detectorDeProximidad(vector<Ob
     }
     return obejtosProximos;
 }
-
+//TODO:HACER QUE LA SALIDA DE LA FUNCION DE ARRIBA SEA LA DE UN VECTOR DE PAIRS DE PUNTEROS A OBJETOS COLISIONABLES
+// quedaria mas lindo, tendriamos un vector de pares que estan tan proximos como un cierto delta
+// habria que modificar varias cosas en otros lados
 
 DetectorDeColisiones::~DetectorDeColisiones() {
 
+}
+
+bool DetectorDeColisiones::seVan(Personaje* PJ1, Personaje* PJ2, float delta) {
+    //Aqui debe ocurrir la magia de la deteccion de las proximidades entre dos objetos
+    float anchoRectanguloMinimo = pow((PJ1->ancho/2)+(PJ2->ancho/2)+(delta),2);
+    float distanciaPuntos = pow((PJ1->pos.getX() - PJ2->pos.getX()),2);
+
+    if (distanciaPuntos <= anchoRectanguloMinimo) return true;
+    return false;
 }
