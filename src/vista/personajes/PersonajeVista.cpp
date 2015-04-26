@@ -43,11 +43,22 @@ void PersonajeVista::update(Tcambio tcambio) {
 void PersonajeVista::getTexture(SDL_Texture* ventana, float x) {
     VistaUtils::cleanTexture(mRenderer, mTexture);
     bool flip = (mDirection != Tdireccion::DERECHA);
-    if(mTarget == Tsentido::ADELANTE) {
-        mSprites[mCurrentState].getNext(mTexture, flip);
-    }else{
-        mSprites[mCurrentState].getBefore(mTexture, flip);
+
+    // El "sentido" del personaje es importante SOLO para las acciones de salto oblicuo o caminar
+    switch (mCurrentState){
+        case SALTANDO_OBLICUO:
+        case CAMINANDO:{
+            if(mTarget == Tsentido::ADELANTE){
+                mSprites[mCurrentState].getNext(mTexture, flip);
+            }else{
+                mSprites[mCurrentState].getBefore(mTexture, flip);
+            }
+            break;
+        };
+        default:
+            mSprites[mCurrentState].getNext(mTexture, flip);
     }
+
     VistaUtils::Trect r = mRect;
     r.p.x = mRect.p.x - x;
     VistaUtils::copyTexture(mRenderer, mTexture, ventana, NULL, &r);

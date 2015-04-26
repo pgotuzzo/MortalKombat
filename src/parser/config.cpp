@@ -35,8 +35,7 @@ config::config(string path) {
 		loguer->loguear(mensaje.c_str(), Log::Tlog::LOG_WAR);
 		//se abre el archivo por defecto.
 
-		// TODO - Agregar Ruta relativa
-		std::ifstream prueba("/home/MortalKombat/EscenarioDefault.json", std::ifstream::binary);
+		std::ifstream prueba("./resources/EscenarioDefault.json", std::ifstream::binary);
 		formatoCorrectoJson = reader.parse(prueba, partes, true);
 		if(formatoCorrectoJson){
 			noCoincide=partes["ventana"].isNull()&&partes["personaje"].isNull()&&partes["capas"].isNull()&&partes["escenario"].isNull();
@@ -201,13 +200,12 @@ void config::setPersonaje(Value partes){
 			loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_WAR);
 		}
 
-		// TODO - Agregar Ruta relativa
-		if(!partes["personaje"].get("sprites", "/home/MortalKombat/sprites").isString()){
+		if(!partes["personaje"].get("sprites", "./resources/sprites").isString()){
 			string mensajeError="En personaje/sprites, no hay un string. Se carga por defecto todas sus partes.";
 			loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_WAR);
-			this->personaje.sprites="/home/MortalKombat/sprites";
+			this->personaje.sprites="./resources/sprites";
 		} else
-			this->personaje.sprites = partes["personaje"].get("sprites","/home/MortalKombat/sprites").asString();
+			this->personaje.sprites = partes["personaje"].get("sprites","./resources/sprites").asString();
 
 		this->validacionPath(this->personaje.sprites);
 
@@ -371,8 +369,7 @@ void config::personajeDefecto(){
 	this->personaje.ancho=20;
 	this->personaje.zIndex=1;
 	this->personaje.orientacion=Tdireccion::DERECHA;
-	// TODO - Agregar Ruta relativa
-	this->personaje.sprites="/home/MortalKombat/sprites";
+	this->personaje.sprites="./resources/sprites";
 
 	cargaExistosa("personaje");
 }
@@ -401,8 +398,7 @@ void config::capasDefecto(){
 		float auxAncho;
 		ostringstream os;
 
-		// TODO - Agregar Ruta relativa
-		os<<"/home/MortalKombat/capas/capa"<<(i)<<".png";
+		os<<"./resources/capas/capa"<<(i)<<".png";
 		aux.dirCapa=os.str();
 		if(i==1)
 			auxAncho=600;
@@ -433,8 +429,7 @@ void config::validacionPath(string path){
 	}
 
 	if(!directorioExiste){
-		// TODO - Agregar Ruta relativa
-		this->personaje.sprites="/home/MortalKombat/sprites";
+		this->personaje.sprites="./resources/sprites";
 
 		ostringstream mensajeError;
 		mensajeError<<"Directorios erroneos. Se cargan sprites por default.";
@@ -464,14 +459,12 @@ void config::copiarImagenDefault(int &ContadorErroneos,const char* os){
 
 	ContadorErroneos++;
 	if(ContadorErroneos==40){
-		// TODO - Agregar Ruta relativa
-		this->personaje.sprites="/home/MortalKombat/sprites";
+		this->personaje.sprites="./resources/sprites";
 		ostringstream mensajeError;
 		mensajeError<<"Falló la carga de todos los sprites. Se cargan sprites por default.";
 		loguer->loguear(mensajeError.str().c_str(), Log::Tlog::LOG_WAR);
 	}
-	// TODO - Agregar Ruta relativa
-	string path="/home/MortalKombat/sprites/default.jpg";
+	string path="./resources/sprites/default.jpg";
 	ifstream aux;
 	ofstream arch;
 	const int LEN=8192;

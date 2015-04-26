@@ -18,7 +18,6 @@ public:
     Sprite(SDL_Renderer* renderer, std::string dirPath, bool repeat);
     long getCount();
     void restart();
-    void getFirst(SDL_Texture* texture, bool flip);
     void getNext(SDL_Texture* texture, bool flip);
     void getBefore(SDL_Texture* texture, bool flip);
 
