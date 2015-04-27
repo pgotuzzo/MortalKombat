@@ -25,6 +25,7 @@ public:
 	TestadoPersonaje estado;
 	Accion* accionesEnCurso[4];
 
+
 	Posicion verificarPuntoEnX(Posicion posicionActual,float anchoEscenario);
 	Posicion verificarPuntoEnY(Posicion posicionActual);
 

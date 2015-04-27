@@ -9,6 +9,7 @@ class ObjetoColisionable {
 public:
 
     Posicion pos;
+    Posicion posAnt;
     float altura;
     float ancho;
 

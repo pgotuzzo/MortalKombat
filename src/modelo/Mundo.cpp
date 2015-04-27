@@ -76,21 +76,13 @@ Tcambios Mundo::actualizarMundo(Tinputs inputs) {
 	if(personaje2->getSentido()) c.cambio2.sentido = ADELANTE;
 	else c.cambio2.sentido = ATRAS;
 
-	//TODO: NEGRADA PARA QUE NO SE VALLAN DE LA PANTALLA, EMPROLIJAR
+	//TODO: PLANTEARSE CAMBIAR SALTO OBLICUO O IMPLEMENTAR OTRA FUNCION
+	//TODO: ARREGLAR EL TEMA CUANDO SALTA OBLICUAMENTE
 	//La idea es calcular la distancia entre los personajes segun un cierto delta, si no estan
-	//quiere decir que se estan por ir de la pantalla, y abria que acomodarlos.
-	//TODO: ARREGLAR ESTO
-	//Esto que hice no funciona del bien
-	//No deberia arrastrar al otro pj
-	//ese cuatro seria el factor de retroseso cuando se salen del cuadrado
-	if(!detector.seVan(personaje1,personaje2,(anchoPantalla -MIN_DISTANCE_FROM_BOUND*4))){
-		if(personaje1->pos.getX()-personaje2->pos.getX() <=0){
-			personaje1->pos.setX(personaje1->pos.getX()+4);
-			personaje2->pos.setX(personaje2->pos.getX()-4);
-			}else{
-				personaje1->pos.setX(personaje1->pos.getX()-4);
-				personaje2->pos.setX(personaje2->pos.getX()+4);
-		}
+	//quiere decir que se estan por ir de la pantalla, y le asignamos su posicion anterior
+	if(!detector.seVan(personaje1,personaje2,(anchoPantalla -(MIN_DISTANCE_FROM_BOUND*5)))){
+			personaje1->pos = personaje1->posAnt;
+			personaje2->pos = personaje2->posAnt;
 	}
 
 

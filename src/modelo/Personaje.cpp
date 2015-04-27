@@ -26,6 +26,7 @@ Personaje::Personaje(bool direccion,Posicion posInicial,float alto,float ancho){
 	parado = true;
 	estado = PARADO;
 	pos = posInicial;
+	posAnt = posInicial;
 	this->altura = alto;
 	this->ancho = ancho;
 	yPiso = altura + pos.getY();
@@ -98,6 +99,7 @@ void Personaje::ejecutarAcionesActivadas(Accion **accionesEnCurso,float anchoEsc
  * se puede agachar mientras esta saltando verticalmente.
  */
 void Personaje::realizarAccion(Tinput orden,float anchoEscenario){
+	posAnt = pos;
 	if (!accionesEnCurso[0]->getEstado()){
 		if(!accionesEnCurso[3]->getEstado()){
 			switch (orden){
