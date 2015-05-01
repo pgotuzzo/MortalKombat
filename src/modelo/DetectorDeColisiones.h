@@ -17,6 +17,7 @@ public:
     bool seVan(Personaje* PJ1, Personaje* PJ2, float delta );
     virtual ~DetectorDeColisiones();
 
+    bool detectarLejania(Personaje *PJ1, Personaje *PJ2, float delta);
 };
 
 

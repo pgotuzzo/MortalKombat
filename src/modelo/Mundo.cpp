@@ -45,11 +45,26 @@ Mundo::Mundo(config configuracion) {
 Tcambios Mundo::actualizarMundo(Tinputs inputs) {
 	Tcambios c;
 	//direccion derecha igual true
-	bool direccion = true;
-
 	verificarDireccionDeLosPersonajes();
+	//TODO: PLANTEARSE CAMBIAR SALTO OBLICUO O IMPLEMENTAR OTRA FUNCION
+	//TODO: ARREGLAR EL TEMA CUANDO SALTA OBLICUAMENTE
+	//La idea es calcular la distancia entre los personajes segun un cierto delta, si no estan
+	//quiere decir que se estan por ir de la pantalla, y le asignamos su posicion anterior
+	if(!detector.detectarLejania(personaje1,personaje2,anchoPantalla -(MIN_DISTANCE_FROM_BOUND*4))){
+		if(personaje1->estado == CAMINANDO){
+//			personaje1->pos = personaje1->posAnt;
+			if(personaje1->direccion) personaje1->pos = Posicion(personaje1->pos.getX()+2,personaje1->pos.getY());
+				else personaje1->pos = Posicion(personaje1->pos.getX()-2,personaje1->pos.getY());
+		}
+		if(personaje2->estado == CAMINANDO){
+//			personaje2->pos = personaje2->posAnt;
+			if(personaje2->direccion) personaje2->pos = Posicion(personaje2->pos.getX()+2,personaje2->pos.getY());
+			else personaje2->pos = Posicion(personaje2->pos.getX()-2,personaje2->pos.getY());
 
-	if(!detector.seVan(personaje1,personaje2,anchoPantalla-(120)))verificarQueNoSeVallaDeLaPantalla();
+		}
+	}
+
+	if(!detector.detectarLejania(personaje1,personaje2,anchoPantalla-(120)))verificarQueNoSeVallaDeLaPantalla();
 		else VerificarSiPjsColisionanaEnElAire();
 	personaje1->realizarAccion(inputs.input1,anchoEscenario);
 	personaje2->realizarAccion(inputs.input2,anchoEscenario);
@@ -72,14 +87,6 @@ Tcambios Mundo::actualizarMundo(Tinputs inputs) {
 	if(personaje2->getSentido()) c.cambio2.sentido = ADELANTE;
 	else c.cambio2.sentido = ATRAS;
 
-	//TODO: PLANTEARSE CAMBIAR SALTO OBLICUO O IMPLEMENTAR OTRA FUNCION
-	//TODO: ARREGLAR EL TEMA CUANDO SALTA OBLICUAMENTE
-	//La idea es calcular la distancia entre los personajes segun un cierto delta, si no estan
-	//quiere decir que se estan por ir de la pantalla, y le asignamos su posicion anterior
-	if(!detector.seVan(personaje1,personaje2,(anchoPantalla -(MIN_DISTANCE_FROM_BOUND*5)))){
-			personaje1->pos = personaje1->posAnt;
-			personaje2->pos = personaje2->posAnt;
-	}
 
 
 //TODO HACER MAS GENERICO, DEBERIAN METERSE TODOS LOS OBJETOS COLISIONABLES
@@ -107,7 +114,6 @@ Mundo::~Mundo() {
 
 void Mundo::verificarDireccionDeLosPersonajes() {
 	//direccion derecha igual true
-
 	if(personaje1->pos.getX() - personaje2->pos.getX() <= 0){
 		personaje1->setDireccion(true);
 		personaje2->setDireccion(false);

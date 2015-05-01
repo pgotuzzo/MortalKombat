@@ -91,6 +91,7 @@ void Personaje::ejecutarAcionesActivadas(Accion **accionesEnCurso,float anchoEsc
 	if (accionesEnCurso[3]->getEstado()){
 		//cout<<"Ejecuto accion de salto oblicuo"<<endl;
 		pos = verificarPuntoEnX(accionesEnCurso[3]->realizarAccion(pos,enCaida),anchoEscenario);
+		pos.mostrarPar();
 	}
 }
 

@@ -60,9 +60,17 @@ DetectorDeColisiones::~DetectorDeColisiones() {
 
 bool DetectorDeColisiones::seVan(Personaje* PJ1, Personaje* PJ2, float delta) {
     //Aqui debe ocurrir la magia de la deteccion de las proximidades entre dos objetos
-    float anchoRectanguloMinimo = pow((PJ1->ancho/2)+(PJ2->ancho/2)+(delta),2);
-    float distanciaPuntos = pow((PJ1->pos.getX() - PJ2->pos.getX()),2);
+    float anchoRectanguloMinimo =(float) pow((PJ1->ancho/2)+(PJ2->ancho/2)+(delta),2);
+    float distanciaPuntos = (float)pow((PJ1->pos.getX() - PJ2->pos.getX()),2);
 
-    if (distanciaPuntos <= anchoRectanguloMinimo) return true;
-    return false;
+    return distanciaPuntos <= anchoRectanguloMinimo;
+}
+
+bool DetectorDeColisiones::detectarLejania(Personaje* PJ1, Personaje* PJ2, float delta) {
+    //Aqui debe ocurrir la magia de la deteccion de las proximidades entre dos objetos
+    float anchoRectanguloMinimo =(float) pow(delta,2);
+
+    float distanciaPuntos = (float)pow((PJ1->pos.getX() - PJ2->pos.getX()),2);
+
+    return distanciaPuntos <= anchoRectanguloMinimo;
 }
