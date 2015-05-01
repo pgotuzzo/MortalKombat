@@ -1,7 +1,6 @@
 #ifndef MORTALKOMBAT_OBJETOCOLISIONABLE_H
 #define MORTALKOMBAT_OBJETOCOLISIONABLE_H
 
-#include "Personaje.h"
 #include <vector>
 #include "../Common.h"
 
@@ -15,6 +14,7 @@ public:
 
     virtual void solucionColision(vector<ObjetoColisionable*>  objetosProximos) = 0;
     virtual void determinarAccionPorColision(ObjetoColisionable* primerObjeto, ObjetoColisionable* segundoObjeto)= 0;
+    virtual void solucionarColision(ObjetoColisionable* enemigo) = 0;
     virtual ~ObjetoColisionable() {}
 
 };

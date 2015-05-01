@@ -1,8 +1,11 @@
 #include <functional>
 #include "../parser/config.h"
 #include "Mundo.h"
+#include "Golpe.h"
 
 const float delta = 5.00;
+const float deltaParaPelea = 25;
+const float deltaParaPoder = 5;
 
 
 /* Constructor de Mundo.
@@ -88,16 +91,57 @@ Tcambios Mundo::actualizarMundo(Tinputs inputs) {
 
 //TODO HACER MAS GENERICO, DEBERIAN METERSE TODOS LOS OBJETOS COLISIONABLES
 //Esto va a ser para cuando halla mas objetos colisionables por ejemplo poderes
+
 	vector<ObjetoColisionable*> objetosProximos;
 	vector<ObjetoColisionable*> objetos;
 	objetos.push_back(personaje1);
 	objetos.push_back(personaje2);
-
-	objetosProximos = detector.detectorDeProximidad(objetos, delta);
+	//cout<<endl<<"Objetos size: "<<objetos.size()<<endl;
+	objetosProximos = detector.detectorDeProximidad(objetos, deltaParaPelea);
+	string pj = "Objetos proximos:  "+to_string(objetosProximos.size());
+	loguer->loguear(pj.c_str(), Log::LOG_DEB);
 	if (!objetosProximos.empty()){
+		personaje1->solucionarColision(personaje2);
+		personaje2->solucionarColision(personaje1);
+		if(personaje1->lanzandoGolpe){
+			personaje2->mePegaron(personaje1->punchCreator.getGolpe()->danio);
+			string pj = "Vida personaje2:  "+to_string(personaje2->vida);
+			loguer->loguear(pj.c_str(), Log::LOG_DEB);
+		}
+		if(personaje2->lanzandoGolpe){
+			personaje1->mePegaron(personaje2->punchCreator.getGolpe()->danio);
+			string pj = "Vida personaje1:  "+to_string(personaje1->vida);
+			loguer->loguear(pj.c_str(), Log::LOG_DEB);
+		}
 		//cout<<"ELERTA DE PROXIMIDAD"<<endl;
-		objetosProximos[0]->solucionColision(objetos);
-		objetosProximos[1]->solucionColision(objetos);
+
+		/*for (int i=0; i<objetosProximos.size();i++){
+			objetosProximos[i]->solucionColision(objetos);
+		}*/
+	}
+
+
+
+	if (personaje1->lanzandoPoder){
+		vector<ObjetoColisionable*> personajePoder;
+		personajePoder.push_back(personaje2);
+		personajePoder.push_back(personaje1->poder);
+		objetosProximos = detector.detectorDeProximidad(personajePoder, deltaParaPoder);
+		if(!objetosProximos.empty()){
+			personaje1->poder->solucionarColision(personaje2);
+		}
+
+	}
+
+	if (personaje2->lanzandoPoder){
+		vector<ObjetoColisionable*> personajePoder1;
+		personajePoder1.push_back(personaje1);
+		personajePoder1.push_back(personaje2->poder);
+		objetosProximos = detector.detectorDeProximidad(personajePoder1, deltaParaPoder);
+		if(!objetosProximos.empty()){
+			personaje2->poder->solucionarColision(personaje1);
+		}
+
 	}
 
 	return c;
