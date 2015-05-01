@@ -28,9 +28,12 @@ public:
 	bool getEstado();
 	void setEstado(bool nuevoEstado, Posicion nuevaPosicion,bool sentidoSalto);
 
-	Posicion realizarAccion(Posicion pos);
+	Posicion realizarAccion(Posicion pos,bool enCaida);
 
 	virtual ~SaltoOblicuo();
+
+	bool primeraVez;
+	Posicion posCaida;
 };
 
 #endif /* SALTOOBLICUO_H_ */

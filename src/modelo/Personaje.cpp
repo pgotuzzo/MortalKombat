@@ -21,6 +21,7 @@ const bool activado = true;
  * Sentido: True = derecha
  */
 Personaje::Personaje(bool direccion,Posicion posInicial,float alto,float ancho){
+
 	this->direccion = direccion;
 	this->sentido = true;
 	parado = true;
@@ -39,6 +40,7 @@ Personaje::Personaje(bool direccion,Posicion posInicial,float alto,float ancho){
 	loguer->loguear(pj.c_str(), Log::LOG_DEB);
 	loguer->loguear("Se crean las acciones del personaje", Log::LOG_DEB);
 
+	enCaida = false;
 }
 
 
@@ -88,7 +90,7 @@ void Personaje::ejecutarAcionesActivadas(Accion **accionesEnCurso,float anchoEsc
 	}
 	if (accionesEnCurso[3]->getEstado()){
 		//cout<<"Ejecuto accion de salto oblicuo"<<endl;
-		pos = verificarPuntoEnX(accionesEnCurso[3]->realizarAccion(pos),anchoEscenario);
+		pos = verificarPuntoEnX(accionesEnCurso[3]->realizarAccion(pos,enCaida),anchoEscenario);
 	}
 }
 

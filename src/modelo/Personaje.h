@@ -18,6 +18,7 @@ class Personaje: public ObjetoColisionable {
 
 public:
 
+ 	bool enCaida;
 	bool parado;
 	bool direccion;
 	bool sentido;

@@ -47,14 +47,10 @@ Tcambios Mundo::actualizarMundo(Tinputs inputs) {
 	//direccion derecha igual true
 	bool direccion = true;
 
-	if(personaje1->pos.getX() - personaje2->pos.getX() <= 0){
-		personaje1->setDireccion(direccion);
-		personaje2->setDireccion(!direccion);
+	verificarDireccionDeLosPersonajes();
 
-	}	else{
-		personaje1->setDireccion(!direccion);
-		personaje2->setDireccion(direccion);
-	}
+	if(!detector.seVan(personaje1,personaje2,anchoPantalla-(120)))verificarQueNoSeVallaDeLaPantalla();
+		else VerificarSiPjsColisionanaEnElAire();
 	personaje1->realizarAccion(inputs.input1,anchoEscenario);
 	personaje2->realizarAccion(inputs.input2,anchoEscenario);
 	c.cambio1.posicion = personaje1->getPosicion();
@@ -109,3 +105,43 @@ Mundo::~Mundo() {
 	loguer->loguear("Se libera al personaje", Log::LOG_DEB);
 }
 
+void Mundo::verificarDireccionDeLosPersonajes() {
+	//direccion derecha igual true
+
+	if(personaje1->pos.getX() - personaje2->pos.getX() <= 0){
+		personaje1->setDireccion(true);
+		personaje2->setDireccion(false);
+
+	}	else{
+		personaje1->setDireccion(false);
+		personaje2->setDireccion(true);
+	}
+}
+
+void Mundo::VerificarSiPjsColisionanaEnElAire() {
+	if(personaje1->estado == SALTANDO_OBLICUO && personaje2->estado == SALTANDO_OBLICUO){
+		if(detector.seVan(personaje1,personaje2,5)){
+			personaje1->enCaida = true;
+			personaje2->enCaida = true;
+		}else{
+			personaje1->enCaida = false;
+			personaje2->enCaida = false;
+		}
+	}else{
+		personaje1->enCaida = false;
+		personaje2->enCaida = false;
+	}
+}
+
+void Mundo::verificarQueNoSeVallaDeLaPantalla() {
+		if(personaje1->estado == SALTANDO_OBLICUO) {
+			if (((!personaje1->getSentido())&&(personaje1->getDireccion()))||
+				((!personaje1->getSentido())&&(!personaje1->getDireccion())))
+				personaje1->enCaida = true;
+		}else personaje1->enCaida = false;
+		if(personaje2->estado == SALTANDO_OBLICUO) {
+			if (((!personaje2->getSentido())&&(personaje2->getDireccion()))||
+				((!personaje2->getSentido())&&(!personaje2->getDireccion())))
+				personaje2->enCaida = true;
+		}else personaje2->enCaida = false;
+}

@@ -22,6 +22,12 @@ public:
 	Tcambios actualizarMundo(Tinputs inputs);
 
 	virtual ~Mundo();
+
+	void verificarDireccionDeLosPersonajes();
+
+	void VerificarSiPjsColisionanaEnElAire();
+
+	void verificarQueNoSeVallaDeLaPantalla();
 };
 
 #endif /* SRC_MODELO_MUNDO_H_ */
