@@ -123,20 +123,22 @@ void Mundo::verificarDireccionDeLosPersonajes() {
 	}
 }
 
-void Mundo::VerificarSiPjsColisionanaEnElAire() {
-	if(personaje1->estado == SALTANDO_OBLICUO && personaje2->estado == SALTANDO_OBLICUO){
-		if(detector.seVan(personaje1,personaje2,deltaCero)){
-			personaje1->enCaida = true;
-			personaje2->enCaida = true;
-		}else{
-			personaje1->enCaida = false;
-			personaje2->enCaida = false;
-		}
-	}else{
+void Mundo::VerificarSiPjsColisionanaEnElAire(){
+	if (personaje1->getEstado() != SALTANDO_OBLICUO) {
 		personaje1->enCaida = false;
+	}
+	if (personaje2->getEstado() != SALTANDO_OBLICUO) {
 		personaje2->enCaida = false;
 	}
+	if (personaje1->estado == SALTANDO_OBLICUO && personaje2->estado == SALTANDO_OBLICUO) {
+		if (detector.seVan(personaje1, personaje2, deltaCero)) {
+			personaje1->enCaida = true;
+			personaje2->enCaida = true;
+		}
+	}
 }
+
+
 
 void Mundo::verificarQueNoSeVallaDeLaPantalla() {
 		if(personaje1->estado == SALTANDO_OBLICUO) {

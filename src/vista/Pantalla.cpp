@@ -33,8 +33,10 @@ Pantalla::Pantalla(vector<Tcapa> tcapas, Tventana ventana, Tescenario escenario,
     // Inicia la ventana y el renderer
     Inicializar(ventana.anchopx,ventana.altopx);
     zIndex = tpersonajes.zIndex;
+    string pathPJ2 = "/home/MortalKombat/sprites";
+    cout<<endl<<tpersonajes.sprites[0]<<endl<<endl;
     personaje1 = PersonajeVista(mRenderer, tpersonajes.sprites[0], tpersonajes.ancho, tpersonajes.alto, tpersonajes.orientacion[0]);
-    personaje2 = PersonajeVista(mRenderer, tpersonajes.sprites[1], tpersonajes.ancho, tpersonajes.alto, tpersonajes.orientacion[1]);
+    personaje2 = PersonajeVista(mRenderer, pathPJ2, tpersonajes.ancho, tpersonajes.alto, tpersonajes.orientacion[1]);
 
     distTope = ventana.distTope;
     mAnchoPersonaje = tpersonajes.ancho;
