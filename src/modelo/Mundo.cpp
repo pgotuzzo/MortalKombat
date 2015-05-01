@@ -3,7 +3,8 @@
 #include "Mundo.h"
 
 const float delta = 5.00;
-
+const float deltaLejania = 80;
+const float deltaCero = 0;
 
 /* Constructor de Mundo.
  * Recibe la configuracion que se devuelve del parser.
@@ -52,19 +53,17 @@ Tcambios Mundo::actualizarMundo(Tinputs inputs) {
 	//quiere decir que se estan por ir de la pantalla, y le asignamos su posicion anterior
 	if(!detector.detectarLejania(personaje1,personaje2,anchoPantalla -(MIN_DISTANCE_FROM_BOUND*4))){
 		if(personaje1->estado == CAMINANDO){
-//			personaje1->pos = personaje1->posAnt;
 			if(personaje1->direccion) personaje1->pos = Posicion(personaje1->pos.getX()+2,personaje1->pos.getY());
 				else personaje1->pos = Posicion(personaje1->pos.getX()-2,personaje1->pos.getY());
 		}
 		if(personaje2->estado == CAMINANDO){
-//			personaje2->pos = personaje2->posAnt;
 			if(personaje2->direccion) personaje2->pos = Posicion(personaje2->pos.getX()+2,personaje2->pos.getY());
 			else personaje2->pos = Posicion(personaje2->pos.getX()-2,personaje2->pos.getY());
 
 		}
 	}
 
-	if(!detector.detectarLejania(personaje1,personaje2,anchoPantalla-(120)))verificarQueNoSeVallaDeLaPantalla();
+	if(!detector.detectarLejania(personaje1,personaje2,anchoPantalla-deltaLejania))verificarQueNoSeVallaDeLaPantalla();
 		else VerificarSiPjsColisionanaEnElAire();
 	personaje1->realizarAccion(inputs.input1,anchoEscenario);
 	personaje2->realizarAccion(inputs.input2,anchoEscenario);
@@ -126,7 +125,7 @@ void Mundo::verificarDireccionDeLosPersonajes() {
 
 void Mundo::VerificarSiPjsColisionanaEnElAire() {
 	if(personaje1->estado == SALTANDO_OBLICUO && personaje2->estado == SALTANDO_OBLICUO){
-		if(detector.seVan(personaje1,personaje2,5)){
+		if(detector.seVan(personaje1,personaje2,deltaCero)){
 			personaje1->enCaida = true;
 			personaje2->enCaida = true;
 		}else{
@@ -143,7 +142,7 @@ void Mundo::verificarQueNoSeVallaDeLaPantalla() {
 		if(personaje1->estado == SALTANDO_OBLICUO) {
 			if (((!personaje1->getSentido())&&(personaje1->getDireccion()))||
 				((!personaje1->getSentido())&&(!personaje1->getDireccion())))
-				personaje1->enCaida = true;
+			personaje1->enCaida = true;
 		}else personaje1->enCaida = false;
 		if(personaje2->estado == SALTANDO_OBLICUO) {
 			if (((!personaje2->getSentido())&&(personaje2->getDireccion()))||
