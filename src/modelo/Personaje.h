@@ -10,6 +10,8 @@
 #include "Accion.h"
 #include "../Common.h"
 #include "ObjetoColisionable.h"
+#include "CreadorDeGolpes.h"
+#include "Poder.h"
 
 
 using namespace std;
@@ -25,7 +27,17 @@ public:
 	float yPiso;
 	TestadoPersonaje estado;
 	Accion* accionesEnCurso[4];
+	float vida;
 
+	CreadorDeGolpes punchCreator;
+
+	bool lanzandoGolpe;
+	bool lanzandoPoder;
+
+	Poder* poder;
+
+
+	void mePegaron(float danioGolpe);
 
 	Posicion verificarPuntoEnX(Posicion posicionActual,float anchoEscenario);
 	Posicion verificarPuntoEnY(Posicion posicionActual);
@@ -48,6 +60,7 @@ public:
 	bool getSentido();
 
 	virtual ~Personaje();
+	void solucionarColision(ObjetoColisionable* enemigo);
 
 };
 #endif /* PERSONAJE_H_ */

@@ -75,7 +75,7 @@ struct Posicion{
 /**
  * Loguer
  */
-static Log* loguer = WarningLog::getInstance();
+static Log* loguer = DebugLog::getInstance();
 
 /**
  * Estructuras que se utilizan para
@@ -110,7 +110,13 @@ enum TestadoPersonaje {
     CAMINANDO,
     SALTANDO_VERTICAL,
     SALTANDO_OBLICUO,
-    AGACHADO
+    AGACHADO,
+    PINIA_ALTA,
+    PINIA_BAJA,
+    PATADA_ALTA,
+    PATADA_BAJA,
+    PODER,
+    PROTECCION
 };
 
 static std::string TestadoPersonajeToString(TestadoPersonaje e) {
@@ -178,18 +184,26 @@ struct Tcambios{
  */
 enum Tinput{
     // Teclas no utilizadas
-    KEY_NADA,
+            KEY_NADA,
 
     // Movimientos Basicos
-    KEY_ARRIBA,
+            KEY_ARRIBA,
     KEY_ABAJO,
     KEY_DERECHA,
     KEY_IZQUIERDA,
     KEY_ARRIBA_DERECHA,
     KEY_ARRIBA_IZQUIERDA,
 
+    // Golpes Basicos
+            KEY_PINIA_ALTA,
+    KEY_PINIA_BAJA,
+    KEY_PATADA_ALTA,
+    KEY_PATADA_BAJA,
+    KEY_PROTECCION,
+    KEY_PODER,
+
     // Cierre o reinicio del juego
-    KEY_RESTART,
+            KEY_RESTART,
     KEY_EXIT
 };
 
