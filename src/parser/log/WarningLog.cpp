@@ -3,8 +3,7 @@
 #include <iostream>
 
 WarningLog::WarningLog() {
-    //TODO - Cambiar rutas relativas
-	archivo = "/home/MortalKombat/logs/warning_log.txt";
+	archivo = "./logs/warning_log.txt";
 	fecha = nullptr;
 	FILE* fp=fopen(archivo.c_str(),"r");
 	if(fp){

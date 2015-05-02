@@ -2,8 +2,7 @@
 #include <fstream>
 
 DebugLog::DebugLog() {
-	// TODO - Cambiar a ruta relativa
-	archivo = "/home/MortalKombat/logs/debug_log.txt";
+	archivo = "./logs/debug_log.txt";
 	fecha = nullptr;
 
 }
