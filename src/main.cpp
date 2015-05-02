@@ -4,14 +4,10 @@
 #include "parser/config.h"
 #include "modelo/Mundo.h"
 #include "controlador/ControladorTeclado.h"
-#include <time.h>
 
 const float delay = 45;
 
 int main(int argc, char **argv) {
-
-
-    //loguer->borrar();
 
     string jsonPath = (argv[1] == nullptr) ? string("") : argv[1];
 
@@ -19,7 +15,7 @@ int main(int argc, char **argv) {
 
     bool endGame = false;
     clock_t t1, t2;
-    float timeloop = 00.0;
+    float timeloop;
 
     while (!endGame) {
 
@@ -33,18 +29,16 @@ int main(int argc, char **argv) {
         loguer->loguear("Inicia la creacion de la pantalla...", Log::LOG_DEB);
 
         Tventana tventana = configuracion.getVentana();
-        std::vector<Tcapa> vectorTcapa = configuracion.getCapas();
-        Tescenario tescenario = configuracion.getEscenario();
-        Tpersonaje tpersonaje = configuracion.getPersonaje();
         tventana.distTope = MIN_DISTANCE_FROM_BOUND;
-        Tpersonajes tpersonajes;
-        tpersonajes.ancho=tpersonaje.ancho;
-        tpersonajes.alto=tpersonaje.alto;
-        tpersonajes.zIndex=tpersonaje.zIndex;
-        tpersonajes.orientacion[0]=tpersonaje.orientacion;
-        tpersonajes.sprites[0]=tpersonaje.sprites;
-        tpersonajes.orientacion[1]=tpersonaje.orientacion;
-        tpersonajes.sprites[1]=tpersonaje.sprites;
+
+        std::vector<Tcapa> vectorTcapa = configuracion.getCapas();
+
+        Tescenario tescenario = configuracion.getEscenario();
+
+        Tpersonaje tpersonaje = configuracion.getPersonaje();
+        vector<Tpersonaje> tpersonajes;
+        tpersonajes.push_back(tpersonaje);
+        tpersonajes.push_back(tpersonaje);
 
         Pantalla* pantalla = new Pantalla(vectorTcapa, tventana, tescenario, tpersonajes);
 
@@ -66,9 +60,9 @@ int main(int argc, char **argv) {
             t1 = clock();
 
             // INPUT
-            Tinputs inputs = controlador.getInputs();
+            vector<Tinput> inputs = controlador.getInputs();
 
-            switch (inputs.input1){
+            switch (inputs[0]){
                 //PARA RESTABLECER EL JUEGO
                 case KEY_RESTART:{
                     restart = true;
@@ -85,13 +79,13 @@ int main(int argc, char **argv) {
                 }
                     //DEMAS ACCIONES
                 default:{
-                    Tcambios c;
+                    vector<Tcambio> c;
                     c = mundo->actualizarMundo(inputs);
                     pantalla->update(c);
                     pantalla->dibujar();
                     t2 = clock();
                     timeloop = (((float)t2 - (float)t1) / 1000000.0F ) * 1000;
-                    SDL_Delay(delay - timeloop);
+                    SDL_Delay( (Uint32) (delay - timeloop) );
                 }
             };
         }

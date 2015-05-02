@@ -19,7 +19,12 @@ public:
 	DetectorDeColisiones detector;
 	Mundo(config configuracion);
 
-	Tcambios actualizarMundo(Tinputs inputs);
+	Personaje* getPersonaje();
+	float getAncho();
+	float getAlto();
+	float getAltoPiso();
+
+	vector<Tcambio> actualizarMundo(vector<Tinput> inputs);
 
 	virtual ~Mundo();
 

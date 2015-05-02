@@ -2,6 +2,8 @@
 #include <iostream>
 #include "Capa.h"
 
+Capa::Capa() {}
+
 /*
 *  Crea una capa.
 *  renderer : renderer utilizado
@@ -10,15 +12,12 @@
 *  capa en relacion a su tamaño total de la imagen
 *  anchoCapa : ancho total de la capa en unidades.
 */
-Capa::Capa(SDL_Renderer *renderer, std::string dirPath, VistaUtils::Trect rectPantalla,float anchoCapa,float anchoEscenario) {
-    int wMax = 4000;
-    mRenderer = renderer;
-    mTexture = VistaUtils::createTexture(mRenderer, wMax, rectPantalla.h, dirPath);
-
+Capa::Capa(VistaUtils* utils, std::string dirPath, Trect rectPantalla, float anchoCapa, float anchoEscenario) {
+    mUtils= utils;
+    mTexture = mUtils->loadTexture(dirPath, VistaUtils::BLANCO);
+    mAncho = anchoCapa;
+    mVelocidadCapa = (mAncho - rectPantalla.d.w)/(anchoEscenario - rectPantalla.d.w);
     mRect = rectPantalla;
-    float relacionDeDesp = (anchoCapa - mRect.w)/(anchoEscenario - mRect.w);
-    mRect.w = wMax * rectPantalla.w / anchoCapa;
-    mVelocidadCapa = wMax * relacionDeDesp / anchoCapa ;
 }
 
 /*
@@ -26,17 +25,16 @@ Capa::Capa(SDL_Renderer *renderer, std::string dirPath, VistaUtils::Trect rectPa
 *  texture : puntero a una textura del tamaño de la pantalla
 */
 void Capa::getTexture(SDL_Texture *texture) {
-    VistaUtils::copyTextureNoScale(mRenderer, mTexture, texture, &mRect, NULL);
+    Tdimension dim = {mAncho, mRect.d.h};
+    mUtils->copyTexture(mTexture, texture, &mRect, NULL, &dim, NULL);
 }
 
 /*
  * Cambia la posicion de la capa ajustandola a la posicion del escenario
  */
-void Capa::ajustar(float posEscenario) {
-    mRect.p.x =  posEscenario * mVelocidadCapa;
+void Capa::ajustar(float x) {
+    mRect.p.x =  x * mVelocidadCapa;
 }
-
-Capa::Capa() {}
 
 void Capa::freeTextures() {
     loguer->loguear("Elimina capa", Log::LOG_DEB);

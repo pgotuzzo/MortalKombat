@@ -14,21 +14,19 @@ private:
     Tsentido mTarget;
     Tdireccion mDirection;
 
-
-    SDL_Renderer* mRenderer;
+    VistaUtils* mUtils;
     SDL_Texture* mTexture;
-    VistaUtils::Trect mRect;
+    Trect mRect;
     std::array <Sprite, TestadoPersonajeCount> mSprites;
 
     void crearSprites(std::string path);
 
 public:
     PersonajeVista();
-    PersonajeVista(SDL_Renderer* renderer, std::string spritesPath, float ancho, float alto, Tdireccion direction);
+    PersonajeVista(VistaUtils* utils, std::string spritesPath, Tdimension dimension, Tdireccion direction);
 
     void update(Tcambio);
     void getTexture(SDL_Texture* ventana, float x);
-    VistaUtils::Trect getRect();
 
     void freeTextures();
 };

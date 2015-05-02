@@ -108,23 +108,23 @@ Tinput ControladorTeclado::esAnterior2(const Uint8 *state) {
 	return KEY_NADA;
 }
 
-Tinputs ControladorTeclado::getInputs() {
+vector<Tinput> ControladorTeclado::getInputs() {
 
 	const Uint8 *state = SDL_GetKeyboardState(NULL);
-	Tinputs inputs;
+	vector<Tinput> inputs = {Tinput(), Tinput()};
 
 	SDL_Event event;
 	while (SDL_PollEvent(&event) != 0) {}
 	SDL_PollEvent(&event);
 	switch (event.type) {
 		case SDL_QUIT:
-			inputs.input1 = KEY_EXIT;
+			inputs[0] = KEY_EXIT;
 			return inputs;
 
 			// Solo captura el evento cuando suelta R
 		case SDL_KEYUP: {
 			if (event.key.keysym.sym == SDLK_r) {
-				inputs.input1 = KEY_RESTART;
+				inputs[0] = KEY_RESTART;
 				return inputs;
 			}
 		};
@@ -132,11 +132,11 @@ Tinputs ControladorTeclado::getInputs() {
 			Tinput anterior1 = esAnterior1(state);
 			Tinput anterior2 = esAnterior2(state);
 			if (anterior1 != KEY_NADA && anterior2 != KEY_NADA) {
-				inputs.input1 = anterior1;
-				inputs.input2 = anterior2;
+				inputs[0] = anterior1;
+				inputs[1] = anterior2;
 				return inputs;
 			} else if (anterior1 != KEY_NADA) {
-				inputs.input1 = anterior1;
+				inputs[0] = anterior1;
 				if (state[SDL_SCANCODE_D]) inputAnterior2 = KEY_DERECHA;
 				else if (state[SDL_SCANCODE_A]) inputAnterior2 = KEY_IZQUIERDA;
 				else if (state[SDL_SCANCODE_W]) inputAnterior2 = KEY_ARRIBA;
@@ -150,11 +150,11 @@ Tinputs ControladorTeclado::getInputs() {
 				else if (state[SDL_SCANCODE_H]) inputAnterior2 = KEY_PROTECCION;
 				else if (state[SDL_SCANCODE_N]) inputAnterior2 = KEY_PODER;
 				else inputAnterior2 = KEY_NADA;
-				inputs.input2 = inputAnterior2;
+				inputs[1] = inputAnterior2;
 				return inputs;
 
 			} else if (anterior2 != KEY_NADA) {
-				inputs.input2 = anterior2;
+				inputs[1] = anterior2;
 				if (state[SDL_SCANCODE_RIGHT]) inputAnterior1 = KEY_DERECHA;
 				else if (state[SDL_SCANCODE_LEFT]) inputAnterior1 = KEY_IZQUIERDA;
 				else if (state[SDL_SCANCODE_UP]) inputAnterior1 = KEY_ARRIBA;
@@ -168,7 +168,7 @@ Tinputs ControladorTeclado::getInputs() {
 				else if (state[SDL_SCANCODE_O]) inputAnterior1 = KEY_PROTECCION;
 				else if (state[SDL_SCANCODE_L]) inputAnterior1 = KEY_PODER;
 				else inputAnterior1 = KEY_NADA;
-				inputs.input1 = inputAnterior1;
+				inputs[0] = inputAnterior1;
 				return inputs;
 			} else {
 				if (state[SDL_SCANCODE_RIGHT]) inputAnterior1 = KEY_DERECHA;
@@ -197,9 +197,9 @@ Tinputs ControladorTeclado::getInputs() {
 				else if (state[SDL_SCANCODE_O]) inputAnterior2 = KEY_PROTECCION;
 				else if (state[SDL_SCANCODE_L]) inputAnterior2 = KEY_PODER;
 				else inputAnterior2 = KEY_NADA;
-				inputs.input1 = inputAnterior1;
-				inputs.input2 = inputAnterior2;
+				inputs[0] = inputAnterior1;
+				inputs[1] = inputAnterior2;
 				return inputs;
 			}
 	}
-}
+};

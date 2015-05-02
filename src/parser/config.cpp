@@ -80,12 +80,12 @@ void config::setEscenario(Value partes){
 		if(!partes["escenario"].get("alto", 150).isDouble()){
 			string mensajeError="En personaje/alto, no hay un numero. Se carga por defecto todas sus partes.";
 			loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_WAR);
-			this->escenario.alto=150;
+			this->escenario.d.h=150;
 		} else
-			this->escenario.alto = partes["escenario"].get("alto",150).asFloat();
+			this->escenario.d.h= partes["escenario"].get("alto",150).asFloat();
 
 
-		this->validacionPositivoF(this->escenario.alto,"escenario","alto");
+		this->validacionPositivoF(this->escenario.d.h,"escenario","alto");
 
 		//Se verifica si existe el miembro en la variable partes. Si no se carga por defecto.
 		if(! partes["escenario"].isMember("alto")){
@@ -96,12 +96,12 @@ void config::setEscenario(Value partes){
 		if(!partes["escenario"].get("ancho", 1000).isDouble()){
 			string mensajeError="En Escenario/ancho, no hay un numero. Se carga por defecto todas sus partes.";
 			loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_WAR);
-			this->escenario.ancho=1000;
+			this->escenario.d.w = 1000;
 		} else
-			this->escenario.ancho = partes["escenario"].get("ancho",1000).asFloat();
+			this->escenario.d.w = partes["escenario"].get("ancho",1000).asFloat();
 
 
-		this->validacionPositivoF(this->escenario.ancho,"escenario","ancho");
+		this->validacionPositivoF(this->escenario.d.w, "escenario", "ancho");
 		this->validacionAnchoVentanaEscenario();
 
 
@@ -141,11 +141,11 @@ void config::setPersonaje(Value partes){
 		if(!partes["personaje"].get("ancho", 20).isDouble()){
 			string mensajeError="En personaje/ancho, no hay un float. Se carga por defecto todas sus partes.";
 			loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_WAR);
-			this->personaje.ancho=20;
+			this->personaje.d.w=20;
 		} else
-			this->personaje.ancho = partes["personaje"].get("ancho", 20).asFloat();
+			this->personaje.d.w = partes["personaje"].get("ancho", 20).asFloat();
 
-		this->validacionPositivoF(this->personaje.ancho,"personaje","ancho");
+		this->validacionPositivoF(this->personaje.d.w, "personaje", "ancho");
 
 		//Se verifica si existe el miembro en la variable partes. Si no se carga por defecto.
 		if(! partes["personaje"].isMember("ancho")){
@@ -156,11 +156,11 @@ void config::setPersonaje(Value partes){
 		if(!partes["personaje"].get("alto", 35).isDouble()){
 			string mensajeError="En personaje/alto, no hay un float. Se carga por defecto todas sus partes.";
 			loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_WAR);
-			this->personaje.alto=35;
+			this->personaje.d.h = 35;
 		} else
-			this->personaje.alto = partes["personaje"].get("alto", 35).asFloat();
+			this->personaje.d.h = partes["personaje"].get("alto", 35).asFloat();
 
-		this->validacionPositivoF(this->personaje.alto,"personaje","alto");
+		this->validacionPositivoF(this->personaje.d.h, "personaje","alto");
 
 		//Se verifica si existe el miembro en la variable partes. Si no se carga por defecto.
 		if(! partes["personaje"].isMember("alto")){
@@ -229,11 +229,11 @@ void config::setVentana(Value partes){
 		if(!partes["ventana"].get("alto-px", 600).isInt()){
 			string mensajeError="En ventana/alto-px, no hay un int. Se carga por defecto todas sus partes.";
 			loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_WAR);
-			this->ventana.altopx=600;
+			this->ventana.dimPx.h = 600;
 		} else
-			this->ventana.altopx= partes["ventana"].get("alto-px", 600).asInt();
+			this->ventana.dimPx.h = partes["ventana"].get("alto-px", 600).asInt();
 
-		this->validacionPositivoI(this->ventana.altopx,"ventana","alto-px");
+		this->validacionPositivoI((int) this->ventana.dimPx.h, "ventana","alto-px");
 
 		//Se verifica si existe el miembro en la variable partes. Si no se carga por defecto.
 		if(! partes["ventana"].isMember("alto-px")){
@@ -245,12 +245,12 @@ void config::setVentana(Value partes){
 		if(!partes["ventana"].get("ancho-px", 800).isInt()){
 			string mensajeError="En ventana/ancho-px, no hay un Int. Se carga por defecto todas sus partes.";
 			loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_WAR);
-			this->ventana.anchopx=800;
+			this->ventana.dimPx.w=800;
 		} else
-			this->ventana.anchopx = partes["ventana"].get("ancho-px", 800).asInt();
+			this->ventana.dimPx.w = partes["ventana"].get("ancho-px", 800).asInt();
 
 
-		this->validacionPositivoI(this->ventana.anchopx,"ventana","ancho-px");
+		this->validacionPositivoI((int) this->ventana.dimPx.w,"ventana","ancho-px");
 
 		//Se verifica si existe el miembro en la variable partes. Si no se carga por defecto.
 		if(! partes["ventana"].isMember("ancho-px")){
@@ -355,8 +355,8 @@ void config::setCapa(Value parte){
 void config::escenarioDefecto(){
 	string mensajeError="No se encuentra: escenario en el archivo Json. Se carga por defecto todas sus partes.";
 	loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_WAR);
-	this->escenario.alto=150;
-	this->escenario.ancho=1000;
+	this->escenario.d.h = 150;
+	this->escenario.d.w = 1000;
 	this->escenario.yPiso=10;
 	cargaExistosa("escenario");
 
@@ -365,11 +365,11 @@ void config::escenarioDefecto(){
 void config::personajeDefecto(){
 	string mensajeError="No se encuentra: personaje en el archivo Json. Se carga por defecto todas sus partes.";
 	loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_WAR);
-	this->personaje.alto=50;
-	this->personaje.ancho=20;
+	this->personaje.d.h = 50;
+	this->personaje.d.w = 20;
 	this->personaje.zIndex=1;
-	this->personaje.orientacion=Tdireccion::DERECHA;
-	this->personaje.sprites="./resources/sprites";
+	this->personaje.orientacion = Tdireccion::DERECHA;
+	this->personaje.sprites = "./resources/sprites";
 
 	cargaExistosa("personaje");
 }
@@ -377,8 +377,8 @@ void config::personajeDefecto(){
 void config::ventanaDefecto(){
 	string mensajeError="No se encuentra: ventana en el archivo Json. Se carga por defecto todas sus partes.";
 	loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_WAR);
-	this->ventana.altopx=600;
-	this->ventana.anchopx=800;
+	this->ventana.dimPx.h = 600;
+	this->ventana.dimPx.w = 800;
 	this->ventana.ancho=200;
 
 	cargaExistosa("ventana");
@@ -491,7 +491,7 @@ void config::copiarImagenDefault(int &ContadorErroneos,const char* os){
 
 void config::validacionTamanioYpiso(){
 
-	float relacion=(float)this->ventana.altopx*(float)this->ventana.ancho/(float)this->ventana.anchopx;
+	float relacion=(float)this->ventana.dimPx.h * (float)this->ventana.ancho/(float)this->ventana.dimPx.w;
 
 	if(this->escenario.yPiso>=relacion){
 		this->escenario.yPiso=20;
@@ -526,10 +526,10 @@ void config::validacionPositivoI(int num,string parte,string conf){
 		//Cambia el valor negativo por uno por defecto.
 		if(strcmp(parte.c_str(),"ventana")==0){
 			if(strcmp(conf.c_str(),"ancho-px")==0)
-				this->ventana.anchopx=800;
+				this->ventana.dimPx.w = 800;
 			else
 			if(strcmp(conf.c_str(),"alto-px")==0)
-				this->ventana.altopx=600;
+				this->ventana.dimPx.h = 600;
 		}else
 		if(strcmp(parte.c_str(),"personaje")==0)
 			this->personaje.zIndex=1;
@@ -553,19 +553,19 @@ void config::validacionPositivoF(float num,string parte,string conf){
 		//Cambia el valor negativo por uno por defecto.
 		if(strcmp(parte.c_str(),"escenario")==0) {
 			if(strcmp(conf.c_str(),"ancho")==0)
-				this->escenario.ancho=1000;
+				this->escenario.d.w = 1000;
 			else
 			if(strcmp(conf.c_str(),"alto")==0)
-				this->escenario.alto=150;
+				this->escenario.d.h = 150;
 			else
 				this->escenario.yPiso=1;
 
 		} else
 		if(strcmp(parte.c_str(),"personaje")==0){
 			if(strcmp(conf.c_str(),"ancho")==0)
-				this->personaje.ancho=20;
+				this->personaje.d.w = 20;
 			else
-				this->personaje.alto=35;
+				this->personaje.d.h = 35;
 		} else
 			this->ventana.ancho=200;
 
@@ -573,8 +573,8 @@ void config::validacionPositivoF(float num,string parte,string conf){
 }
 
 void config::validacionAnchoVentanaEscenario(){
-	if(escenario.ancho<=ventana.ancho){
-		this->escenario.ancho=this->ventana.ancho+100;
+	if(escenario.d.w <= ventana.ancho){
+		this->escenario.d.w = this->ventana.ancho+100;
 		string mensaje="Ancho de ventana menor que ancho de pantalla. Se carga por defecto ancho de pantalla.";
 		loguer->loguear(mensaje.c_str(), Log::Tlog::LOG_WAR);
 	}

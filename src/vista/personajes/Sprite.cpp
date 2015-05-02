@@ -2,11 +2,11 @@
 #include "Sprite.h"
 #include "../VistaUtils.h"
 
-Sprite::Sprite(SDL_Renderer* renderer, std::string dirPath, bool repeat) {
+Sprite::Sprite(VistaUtils* utils, std::string dirPath, bool repeat) {
     mCurrent = 0;
     mRepeat = repeat;
     mFirstPass = true;
-    mRenderer = renderer;
+    mUtils = utils;
     mTextures = std::vector<SDL_Texture *>();
 
     bool end = false;
@@ -20,7 +20,7 @@ Sprite::Sprite(SDL_Renderer* renderer, std::string dirPath, bool repeat) {
             number = std::to_string(getCount() + 1);
         }
         filePath = dirPath + number + SPRITES_FORMAT;
-        SDL_Texture* t = VistaUtils::loadTexture(mRenderer, filePath, VistaUtils::BLANCO);
+        SDL_Texture* t = mUtils->loadTexture(filePath, VistaUtils::BLANCO);
         if (t == nullptr){
             end = true;
         }else {
@@ -40,7 +40,7 @@ void Sprite::restart() {
 }
 
 void Sprite::getNext(SDL_Texture* texture, bool flip) {
-    VistaUtils::copyTexture(mRenderer, mTextures[mCurrent], texture, flip);
+    mUtils->copyTexture(mTextures[mCurrent], texture, flip);
     if (mCurrent < getCount() - 1) {
         mCurrent++;
     } else if (mRepeat){
@@ -49,7 +49,7 @@ void Sprite::getNext(SDL_Texture* texture, bool flip) {
 }
 
 void Sprite::getBefore(SDL_Texture *texture, bool flip) {
-    VistaUtils::copyTexture(mRenderer, mTextures[mCurrent], texture, flip);
+    mUtils->copyTexture(mTextures[mCurrent], texture, flip);
     if (mCurrent == 0){
         mCurrent = (int) getCount() - 1;
     } else if ( ( mCurrent > 0 ) && ( mCurrent < getCount() - 1 ) ){
@@ -68,4 +68,10 @@ void Sprite::freeTextures() {
         SDL_DestroyTexture(mTextures[i]);
     }
     loguer->loguear("Finaliza la eliminacion del vector de Sprites", Log::LOG_DEB);
+}
+
+Tdimension Sprite::getDimension() {
+    int w, h;
+    SDL_QueryTexture(mTextures[0], NULL, NULL, &w, &h);
+    return {w,h};
 }

@@ -18,22 +18,22 @@ Mundo::Mundo(config configuracion) {
 	Tescenario escenario = configuracion.getEscenario();
 	Tpersonaje pj = configuracion.getPersonaje();
 
-	anchoEscenario = escenario.ancho;
-	altoEscenario = escenario.alto;
+	anchoEscenario = escenario.d.w;
+	altoEscenario = escenario.d.h;
 	altoPiso = escenario.yPiso;
 
-	float altoPJ = pj.alto;
-	float anchoPJ = pj.ancho;
+	float altoPJ = pj.d.h;
+	float anchoPJ = pj.d.w;
 
 	float pos_x = anchoEscenario/2;
 	float pos_y = altoEscenario - altoPiso - altoPJ;
-
 
 	Tdireccion direccion = configuracion.getPersonaje().orientacion;
 
 	bool dir;
 
-	dir = direccion == DERECHA;
+	if (direccion == DERECHA) dir = true;
+	else dir = false;
 
 	personaje1 = new Personaje(dir,Posicion(pos_x+anchoPJ,pos_y),altoPJ,anchoPJ);
 	personaje2 = new Personaje(dir,Posicion(pos_x-anchoPJ,pos_y),altoPJ,anchoPJ);
@@ -41,18 +41,37 @@ Mundo::Mundo(config configuracion) {
 	anchoPantalla = configuracion.getVentana().ancho;
 }
 
+
+Personaje* Mundo::getPersonaje(){
+	return personaje1;
+}
+
+float Mundo::getAlto(){
+	return altoEscenario;
+}
+
+float Mundo::getAncho(){
+	return anchoEscenario;
+}
+
+float Mundo::getAltoPiso(){
+	return altoPiso;
+}
+
 /* Devuelve la actualizacion del struct Tcambio recibido junto con el numero de accion que debe realizar
  * Personaje realiza su respectiva accion.
  * Se asigna todos los datos pertinentes de personaje a Tcambio.
  */
-Tcambios Mundo::actualizarMundo(Tinputs inputs) {
-	Tcambios c;
-	//direccion derecha igual true
+
+
+vector<Tcambio> Mundo::actualizarMundo(vector<Tinput> inputs) {
+	vector<Tcambio> c;
+	Tcambio cambio1, cambio2;
 	verificarDireccionDeLosPersonajes();
 	if(!detector.detectarLejania(personaje1,personaje2,anchoPantalla -(MIN_DISTANCE_FROM_BOUND*4))){
 		if(personaje1->estado == CAMINANDO){
 			if(personaje1->direccion) personaje1->pos = Posicion(personaje1->pos.getX()+2,personaje1->pos.getY());
-				else personaje1->pos = Posicion(personaje1->pos.getX()-2,personaje1->pos.getY());
+			else personaje1->pos = Posicion(personaje1->pos.getX()-2,personaje1->pos.getY());
 		}
 		if(personaje2->estado == CAMINANDO){
 			if(personaje2->direccion) personaje2->pos = Posicion(personaje2->pos.getX()+2,personaje2->pos.getY());
@@ -62,27 +81,29 @@ Tcambios Mundo::actualizarMundo(Tinputs inputs) {
 	}
 
 	if(!detector.detectarLejania(personaje1,personaje2,anchoPantalla-deltaLejania))verificarQueNoSeVallaDeLaPantalla();
-		else VerificarSiPjsColisionanaEnElAire();
-	personaje1->realizarAccion(inputs.input1,anchoEscenario);
-	personaje2->realizarAccion(inputs.input2,anchoEscenario);
-	c.cambio1.posicion = personaje1->getPosicion();
-	if(personaje1->getDireccion()) c.cambio1.direccion = DERECHA;
-	else c.cambio1.direccion = IZQUIERDA;
-	if(personaje1->getSentido()) c.cambio1.sentido = ADELANTE;
-	else c.cambio1.sentido = ATRAS;
-	c.cambio1.estado = personaje1->getEstado();
-	c.cambio1.alturaPJ = personaje1->getAlturaPersonaje();
-	c.cambio1.anchoPJ = personaje1->getAnchoPersonaje();
+	else VerificarSiPjsColisionanaEnElAire();
+	personaje1->realizarAccion(inputs[0],anchoEscenario);
+	personaje2->realizarAccion(inputs[1],anchoEscenario);
+	cambio1.posicion = personaje1->getPosicion();
+	if(personaje1->getDireccion()) cambio1.direccion = DERECHA;
+	else cambio1.direccion = IZQUIERDA;
+	if(personaje1->getSentido()) cambio1.sentido = ADELANTE;
+	else cambio1.sentido = ATRAS;
+	cambio1.estado = personaje1->getEstado();
+	cambio1.dPJ.h = personaje1->getAlturaPersonaje();
+	cambio1.dPJ.w = personaje1->getAnchoPersonaje();
 
+	cambio2.posicion = personaje2->getPosicion();
+	cambio2.estado = personaje2->getEstado();
+	cambio2.dPJ.h = personaje2->getAlturaPersonaje();
+	cambio2.dPJ.w = personaje2->getAnchoPersonaje();
+	if(personaje2->getDireccion()) cambio2.direccion = DERECHA;
+	else cambio2.direccion = IZQUIERDA;
+	if(personaje2->getSentido()) cambio2.sentido = ADELANTE;
+	else cambio2.sentido = ATRAS;
 
-	c.cambio2.posicion = personaje2->getPosicion();
-	c.cambio2.estado = personaje2->getEstado();
-	c.cambio2.alturaPJ = personaje2->getAlturaPersonaje();
-	c.cambio2.anchoPJ = personaje2->getAnchoPersonaje();
-	if(personaje2->getDireccion()) c.cambio2.direccion = DERECHA;
-	else c.cambio2.direccion = IZQUIERDA;
-	if(personaje2->getSentido()) c.cambio2.sentido = ADELANTE;
-	else c.cambio2.sentido = ATRAS;
+	c.push_back(cambio1);
+	c.push_back(cambio2);
 
 
 

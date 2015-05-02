@@ -1,8 +1,17 @@
 #include <SDL2/SDL_image.h>
 #include "VistaUtils.h"
 
-float VistaUtils::SCALE_X = 1;
-float VistaUtils::SCALE_Y = 1;
+/**
+ * Si ratio es menor o igual que cero, la relacion de aspecto será 1.
+ *
+ * ratio    relacion de aspecto ratio = (ancho / alto)
+ */
+VistaUtils::VistaUtils(SDL_Renderer* renderer, float ratio, float scales[2]) {
+    mRenderer = renderer;
+    mRatio = (ratio > 0) ? ratio : 1;
+    mScales[0] = scales[0];
+    mScales[1] = scales[1];
+}
 
 Uint32 VistaUtils::getColorKeyValue(VistaUtils::COLORKEY color, SDL_Surface* s) {
     switch (color){
@@ -12,27 +21,50 @@ Uint32 VistaUtils::getColorKeyValue(VistaUtils::COLORKEY color, SDL_Surface* s) 
     }
 }
 
-SDL_Texture *VistaUtils::createTexture(SDL_Renderer* renderer, float width, float height) {
-    string message = "Crea textura de dimensiones " + to_string(width) + " x " + to_string(height);
-    loguer->loguear(message.c_str(), Log::LOG_DEB);
+/**
+ * Calcula la escala a utilizar teniendo en cuenta las dimensiones (unidades logicas)
+ *  y el tamaño actual de la textura.
+ */
+void VistaUtils::getScales(SDL_Texture *texture, Tdimension* dimension, float scales[2]){
+    if (dimension == NULL){
+        scales[0] = mScales[0];
+        scales[1] = mScales[1];
+    } else {
+        int w, h;
 
-    int scaledWidth = (int) (width * SCALE_X);
-    int scaledHeight = (int) (height * SCALE_Y);
-    return SDL_CreateTexture(renderer, SDL_PIXELFORMAT_UNKNOWN, SDL_TEXTUREACCESS_TARGET, scaledWidth, scaledHeight);
+        SDL_QueryTexture(texture, NULL, NULL, &w, &h);
+        scales[0] = w / dimension->w;
+        scales[1] = h / dimension->h;
+    }
 }
 
-SDL_Texture *VistaUtils::createTexture(SDL_Renderer* renderer, float width, float height, std::string path) {
-    string message = "Crea textura de dimensiones " + to_string(width) + " x " + to_string(height);
-    loguer->loguear(message.c_str(), Log::LOG_DEB);
+/**
+ * Crea una textura manteniendo la relacion de aspecto
+ *  Por lo tanto se crea una textura con dimension
+ *  ancho = width * ratio
+ *  alto = height / ratio
+ *
+ *  ancho   pixeles
+ *  alto    pixeles
+ */
+SDL_Texture *VistaUtils::createTexture(Tdimension dimension) {
+    int w = (int) (dimension.w * mRatio);
+    int h = (int) (dimension.h * mRatio);
 
-    SDL_Texture *mAuxTexture = VistaUtils::loadTexture(renderer, path, VistaUtils::COLORKEY::BLANCO);
-    SDL_Texture *mTexture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_UNKNOWN, SDL_TEXTUREACCESS_TARGET, width, height);
-    VistaUtils::copyTexture(renderer, mAuxTexture, mTexture, NULL, NULL);
-    SDL_DestroyTexture(mAuxTexture);
-    return mTexture;
+    SDL_Texture * t = SDL_CreateTexture(mRenderer, SDL_PIXELFORMAT_UNKNOWN, SDL_TEXTUREACCESS_TARGET, w, h);
+    if (t != 0) {
+        string message = "Crea textura de dimensiones " + to_string(w) + " x " + to_string(h);
+        loguer->loguear(message.c_str(), Log::LOG_DEB);
+        return t;
+    }
+    loguer->loguear("ERROR - No se pudo crear la textura", Log::LOG_ERR);
+    return nullptr;
 }
 
-SDL_Texture* VistaUtils::loadTexture(SDL_Renderer *r, std::string path, VistaUtils::COLORKEY colorkey) {
+/**
+ * Se crea una textura a partir de un path, respetando la relacion de aspecto.
+ */
+SDL_Texture* VistaUtils::loadTexture(std::string path, VistaUtils::COLORKEY colorkey) {
     SDL_Surface* surface = IMG_Load(path.c_str());
     if (surface == NULL){
         return nullptr;
@@ -40,94 +72,100 @@ SDL_Texture* VistaUtils::loadTexture(SDL_Renderer *r, std::string path, VistaUti
         string message = "Carga textura desde " + path;
         loguer->loguear(message.c_str(), Log::LOG_DEB);
 
+        // setea el color que será reemplazado por transparencia
         SDL_SetColorKey(surface, SDL_TRUE, getColorKeyValue(colorkey, surface) );
-        SDL_Texture* t = SDL_CreateTextureFromSurface(r, surface);
+
+        SDL_Texture* aux = SDL_CreateTextureFromSurface(mRenderer, surface);
+        mAuxTextures.push_back(aux);
+
         SDL_FreeSurface(surface);
+
+        int w, h;
+        SDL_QueryTexture(aux, NULL, NULL, &w, &h);
+        SDL_Texture* t = createTexture({w, h});
+        copyTexture(aux, t);
+
         return t;
     }
 }
 
-void VistaUtils::copyTexture(SDL_Renderer* r, SDL_Texture *src, SDL_Texture *dst) {
-    VistaUtils::copyTexture(r, src, dst, NULL, NULL);
+void VistaUtils::copyTexture(SDL_Texture *src, SDL_Texture *dst) {
+    copyTexture(src, dst, false);
 }
 
-void VistaUtils::copyTexture(SDL_Renderer* r, SDL_Texture *src, SDL_Texture *dst, bool flip) {
-    VistaUtils::copyTexture(r, src, dst, NULL, NULL, flip);
-}
+/**
+ * Se copia el contenido de un textura en otra.
+ */
+void VistaUtils::copyTexture(SDL_Texture *src, SDL_Texture *dst, bool flip) {
+    // guardo el target original
+    SDL_Texture *originalTarget = SDL_GetRenderTarget(mRenderer);
 
-void VistaUtils::copyTexture(SDL_Renderer* r, SDL_Texture *src, SDL_Texture *dst, Trect* rectSrc, Trect* rectDst) {
-    copyTexture(r, src, dst, rectSrc, rectDst, false);
-}
-
-void VistaUtils::copyTexture(SDL_Renderer *r, SDL_Texture *src, SDL_Texture *dst, Trect* rectSrc, Trect* rectDst, bool flip) {
-    SDL_Texture *originalTarget = SDL_GetRenderTarget(r);
-
-    SDL_SetRenderTarget(r, dst);
+    // cambio el target para que apunte a la textura dst
+    SDL_SetRenderTarget(mRenderer, dst);
 
     // Importante para que se generen las transparencias si se usa colorkey.
     SDL_SetTextureBlendMode(dst, SDL_BLENDMODE_BLEND);
-
-    SDL_Rect scaledRectSrc;
-    SDL_Rect scaledRectDst;
-
-    if (rectSrc != NULL) {
-        scaledRectSrc.x = (int) (rectSrc->p.x * SCALE_X);
-        scaledRectSrc.y = (int) (rectSrc->p.y * SCALE_Y);
-        scaledRectSrc.w = (int) (rectSrc->w * SCALE_X);
-        scaledRectSrc.h = (int) (rectSrc->h * SCALE_Y);
-    }
-
-    if (rectDst != NULL) {
-        scaledRectDst.x = (int) (rectDst->p.x * SCALE_X);
-        scaledRectDst.y = (int) (rectDst->p.y * SCALE_Y);
-        scaledRectDst.w = (int) (rectDst->w * SCALE_X);
-        scaledRectDst.h = (int) (rectDst->h * SCALE_Y);
-    }
 
     if (flip)
-        SDL_RenderCopyEx(r, src, (rectSrc == NULL) ? NULL : &scaledRectSrc, (rectDst == NULL) ? NULL : &scaledRectDst, 0, NULL, SDL_FLIP_HORIZONTAL);
+        SDL_RenderCopyEx(mRenderer, src, NULL, NULL, 0, NULL, SDL_FLIP_HORIZONTAL);
     else
-        SDL_RenderCopyEx(r, src, (rectSrc == NULL) ? NULL : &scaledRectSrc, (rectDst == NULL) ? NULL : &scaledRectDst, 0, NULL, SDL_FLIP_NONE);
+        SDL_RenderCopyEx(mRenderer, src, NULL, NULL, 0, NULL, SDL_FLIP_NONE);
 
-    SDL_SetRenderTarget(r, originalTarget);
+    // recupero el target original
+    SDL_SetRenderTarget(mRenderer, originalTarget);
 }
 
-void VistaUtils::cleanTexture(SDL_Renderer* r, SDL_Texture* t){
-    SDL_Texture *originalTarget = SDL_GetRenderTarget(r);
-    SDL_SetRenderTarget(r, t);
+void VistaUtils::copyTexture(SDL_Texture *src, SDL_Texture *dst, Trect* srcRect, Trect* dstRect, Tdimension* srcDim, Tdimension* dstDim) {
+    // guardo el target original
+    SDL_Texture *originalTarget = SDL_GetRenderTarget(mRenderer);
 
-    SDL_SetRenderDrawColor(r, 0, 0, 0, 0);
-    SDL_RenderClear(r);
-
-    SDL_SetRenderTarget(r, originalTarget);
-}
-
-void VistaUtils::copyTextureNoScale(SDL_Renderer *r, SDL_Texture *src, SDL_Texture *dst, Trect* rectSrc, Trect* rectDst) {
-    SDL_Texture *originalTarget = SDL_GetRenderTarget(r);
-
-    SDL_SetRenderTarget(r, dst);
+    // cambio el target para que apunte a la textura dst
+    SDL_SetRenderTarget(mRenderer, dst);
 
     // Importante para que se generen las transparencias si se usa colorkey.
     SDL_SetTextureBlendMode(dst, SDL_BLENDMODE_BLEND);
 
-    SDL_Rect scaledRectSrc;
-    SDL_Rect scaledRectDst;
+    float scales[2];
 
-    if (rectSrc != NULL) {
-        scaledRectSrc.x = (int) (rectSrc->p.x);
-        scaledRectSrc.y = (int) (rectSrc->p.y);
-        scaledRectSrc.w = (int) (rectSrc->w);
-        scaledRectSrc.h = (int) (rectSrc->h);
+    getScales(src, srcDim, scales);
+    SDL_Rect sdlRectSrc;
+    if (srcRect != NULL) {
+        sdlRectSrc.w = (int) (srcRect->d.w * scales[0]);
+        sdlRectSrc.h = (int) (srcRect->d.h * scales[1]);
+        sdlRectSrc.x = (int) (srcRect->p.x * scales[0]);
+        sdlRectSrc.y = (int) (srcRect->p.y * scales[1]);
     }
 
-    if (rectDst != NULL) {
-        scaledRectDst.x = (int) (rectDst->p.x);
-        scaledRectDst.y = (int) (rectDst->p.y);
-        scaledRectDst.w = (int) (rectDst->w);
-        scaledRectDst.h = (int) (rectDst->h);
+    getScales(dst, dstDim, scales);
+    SDL_Rect sdlRectDst;
+    if (dstRect != NULL) {
+        sdlRectDst.w = (int) (dstRect->d.w * scales[0]);
+        sdlRectDst.h = (int) (dstRect->d.h * scales[1]);
+        sdlRectDst.x = (int) (dstRect->p.x * scales[0]);
+        sdlRectDst.y = (int) (dstRect->p.y * scales[1]);
     }
 
-    SDL_RenderCopyEx(r, src, (rectSrc == NULL) ? NULL : &scaledRectSrc, (rectDst == NULL) ? NULL : &scaledRectDst, 0, NULL, SDL_FLIP_NONE);
+    SDL_RenderCopy(mRenderer, src, (srcRect != NULL) ? &sdlRectSrc : NULL, (dstRect != NULL) ? &sdlRectDst : NULL);
 
-    SDL_SetRenderTarget(r, originalTarget);
+    // recupero el target original
+    SDL_SetRenderTarget(mRenderer, originalTarget);
+}
+
+/**
+ * Limpia la textura.
+ */
+void VistaUtils::cleanTexture(SDL_Texture* t){
+    SDL_Texture *originalTarget = SDL_GetRenderTarget(mRenderer);
+    SDL_SetRenderTarget(mRenderer, t);
+
+    SDL_SetRenderDrawColor(mRenderer, 0, 0, 0, 0);
+    SDL_RenderClear(mRenderer);
+
+    SDL_SetRenderTarget(mRenderer, originalTarget);
+}
+
+VistaUtils::~VistaUtils() {
+    for (unsigned i = 0; i < mAuxTextures.size(); i++){
+        SDL_DestroyTexture(mAuxTextures.at(i));
+    }
 }

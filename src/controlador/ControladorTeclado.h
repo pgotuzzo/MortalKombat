@@ -1,9 +1,10 @@
 #ifndef MORTALKOMBAT_CONTROLADOR_H
 #define MORTALKOMBAT_CONTROLADOR_H
 
-
 #include <vector>
 #include "../Common.h"
+
+using namespace std;
 
 class ControladorTeclado {
 private:
@@ -13,7 +14,7 @@ public:
     Tinput inputAnterior1;
     Tinput inputAnterior2;
     ControladorTeclado();
-    Tinputs getInputs();
+    vector<Tinput> getInputs();
 };
 
 

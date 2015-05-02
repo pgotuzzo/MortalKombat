@@ -1,47 +1,46 @@
 #include "PersonajeVista.h"
 
-PersonajeVista::PersonajeVista(SDL_Renderer* renderer, std::string spritesPath, float ancho, float alto, Tdireccion direction) {
-    mRenderer = renderer;
+PersonajeVista::PersonajeVista() {}
+
+PersonajeVista::PersonajeVista(VistaUtils* utils, std::string spritesPath, Tdimension dimension, Tdireccion direction) {
+    mUtils = utils;
     crearSprites(spritesPath);
-    mRect.w = ancho;
-    mRect.h = alto;
+    mRect.d = dimension;
     mDirection = direction;
-    mTexture = VistaUtils::createTexture(mRenderer, ancho, alto);
+    mTexture = mUtils->createTexture(mSprites[0].getDimension());
 }
 
 void PersonajeVista::crearSprites(std::string path) {
     mSprites = std::array<Sprite, TestadoPersonajeCount>();
     for (int s = 0; s < TestadoPersonajeCount; s++){
-
         TestadoPersonaje state = TestadoPersonaje(s);
         std::string spritesPath = path + "/" + TestadoPersonajeToString(state) + "/";
 
         switch (state){
             case AGACHADO:
             case SALTANDO_VERTICAL:{
-                mSprites[s] = Sprite(mRenderer, spritesPath, false);
+                mSprites[s] = Sprite(mUtils, spritesPath, false);
                 break;
             };
             default:
-                mSprites[s] = Sprite(mRenderer, spritesPath, true);
+                mSprites[s] = Sprite(mUtils, spritesPath, true);
         }
     }
 }
 
 void PersonajeVista::update(Tcambio tcambio) {
-    mRect.p.x = tcambio.posicion.x;
-    mRect.p.y = tcambio.posicion.y;
+    mRect.p = tcambio.posicion;
     if (mCurrentState != tcambio.estado){
         mCurrentState = tcambio.estado;
         mSprites[mCurrentState].restart();
     }
     mDirection = tcambio.direccion;
     mTarget = tcambio.sentido;
-    mRect.h = tcambio.alturaPJ;
+    mRect.d.h = tcambio.dPJ.h;
 }
 
 void PersonajeVista::getTexture(SDL_Texture* ventana, float x) {
-    VistaUtils::cleanTexture(mRenderer, mTexture);
+    mUtils->cleanTexture(mTexture);
     bool flip = (mDirection != Tdireccion::DERECHA);
 
     // El "sentido" del personaje es importante SOLO para las acciones de salto oblicuo o caminar
@@ -58,18 +57,10 @@ void PersonajeVista::getTexture(SDL_Texture* ventana, float x) {
         default:
             mSprites[mCurrentState].getNext(mTexture, flip);
     }
-
-    VistaUtils::Trect r = mRect;
+    Trect r = mRect;
     r.p.x = mRect.p.x - x;
-    VistaUtils::copyTexture(mRenderer, mTexture, ventana, NULL, &r);
+    mUtils->copyTexture(mTexture, ventana, NULL, &r, &mRect.d, NULL);
 }
-
-VistaUtils::Trect PersonajeVista::getRect() {
-    return mRect;
-}
-
-PersonajeVista::PersonajeVista() {}
-
 
 void PersonajeVista::freeTextures() {
     loguer->loguear("Elimina personaje", Log::LOG_DEB);

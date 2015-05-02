@@ -8,10 +8,11 @@
 
 class Capa {
 private:
-    SDL_Renderer* mRenderer;
+    VistaUtils* mUtils;
     SDL_Texture * mTexture;
+    float mAncho;
     float mVelocidadCapa;
-    VistaUtils::Trect mRect;
+    Trect mRect;
 
 public:
     Capa();
@@ -22,7 +23,7 @@ public:
     *  rectPantalla : contiene el tamaño de la pantalla y la posicion inicial de la
     *  capa en relacion a su tamaño total de la imagen
     */
-    Capa(SDL_Renderer *renderer, std::string dirPath, VistaUtils::Trect rectPantalla,float anchoCapa,float anchoEscenario);
+    Capa(VistaUtils* utils, std::string dirPath, Trect rectPantalla, float anchoCapa, float anchoEscenario);
 
 
     /*

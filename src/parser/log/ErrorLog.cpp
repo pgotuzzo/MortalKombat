@@ -2,8 +2,7 @@
 #include <fstream>
 
 ErrorLog::ErrorLog() {
-    //TODO Cambiar rutas relativas
-	archivo = "/home/MortalKombat/logs/error_log.txt";
+	archivo = "./logs/error_log.txt";
 	fecha = nullptr;
 	FILE* fp=fopen(archivo.c_str(),"r");
 	if(fp){

@@ -10,22 +10,22 @@ using namespace std;
 
 class Pantalla {
 private:
-    SDL_Window *mWindow;
-    SDL_Renderer *mRenderer;
-    vector<Capa> capas;
-    PersonajeVista personaje1,personaje2;
+    SDL_Window* mWindow;
+    SDL_Renderer* mRenderer;
+    VistaUtils* mUtils;
+    vector<Capa> mCapas;
+    vector<PersonajeVista> mPersonajes;
     int zIndex;
-    float altoPantalla,anchoPantalla;
+    Tdimension mDimension;
 
     float distTope;
     float mAnchoPersonaje;
     float mAnchoEscenario;
     float posEscenario;
 
-    /*
-     * Se inicia la ventana y el renderer.
-     */
-    void Inicializar(int anchoPx,int altoPx);
+    void InicializarSdl(Tdimension d);
+    void InicializarPersonajes(vector<Tpersonaje> personajes);
+    void InicializarCapas(vector<Tcapa> capas);
 
 public:
     /*
@@ -35,7 +35,7 @@ public:
      * escenario : formato del escenario.
      * personaje : formato del personaje.
      */
-    Pantalla(vector<Tcapa> capas, Tventana ventana, Tescenario escenario, Tpersonajes tpersonajes);
+    Pantalla(vector<Tcapa> capas, Tventana ventana, Tescenario escenario, vector<Tpersonaje> personajes);
 
     /*
      * Dibuja todos los objetos en pantalla.
@@ -46,7 +46,7 @@ public:
      * Actualiza todos los objetos de pantalla.
      * change : contiene los cambios a realizar.
      */
-    void update(Tcambios changes);
+    void update(vector<Tcambio> changes);
 
     virtual ~Pantalla();
 };
