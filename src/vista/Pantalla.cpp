@@ -3,15 +3,67 @@
 #include <SDL2/SDL_image.h>
 
 /*
- * Se inicia la ventana y el renderer.
+ * Crea los objectos referentes a SDL:
+ * - Window
+ * - Renderer
+ * - VistaUtils
+ *
+ * d    Dimensiones en pixeles
  */
-void Pantalla::Inicializar(int anchoPx,int altoPx) {
+void Pantalla::InicializarSdl(Tdimension d) {
     loguer->loguear("Inicia SDL", Log::LOG_DEB);
     if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
         loguer->loguear("Fallo la inicializacion de SDL.", Log::LOG_ERR);
 
-    mWindow = SDL_CreateWindow("MortalKombat", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, anchoPx, altoPx, SDL_WINDOW_SHOWN);
+    mWindow = SDL_CreateWindow("MortalKombat", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, d.w, d.h, SDL_WINDOW_SHOWN);
     mRenderer = SDL_CreateRenderer(mWindow, -1, SDL_RENDERER_ACCELERATED);
+
+    float scales[2] = {d.w / mDimension.w, d.h / mDimension.h};
+    mUtils = new VistaUtils(mRenderer, mDimension.w / mDimension.h, scales);
+}
+
+/**
+ * Crea los personjaes
+ *
+ * \observacion Para que se puedan inicializar los personajes, previamente se tuvo que inicializar los
+ *              componentes de SDL (mUtils)
+ */
+void Pantalla::InicializarPersonajes(vector<Tpersonaje> personajes) {
+    if (mUtils == nullptr){
+        loguer->loguear("No se pueden crear las vistas de los personajes sin antes inicializar SDL", Log::LOG_ERR);
+        throw new exception;
+    }
+
+    // zIndex y ancho del personaje igual para ambos personajes
+    zIndex = personajes[0].zIndex;
+    mAnchoPersonaje = personajes[0].d.w;
+
+    for (unsigned i = 0; i < personajes.size(); i++) {
+        PersonajeVista p = PersonajeVista(mUtils, personajes[i].sprites, personajes[i].d, personajes[i].orientacion);
+        mPersonajes.push_back(p);
+    }
+}
+
+/**
+ * Crea las capas
+ *
+ * \observacion Para que se puedan inicializar las capas, previamente se tuvo que inicializar los
+ *              componentes de SDL (mUtils)
+ */
+void Pantalla::InicializarCapas(vector<Tcapa> capas) {
+    if (mUtils == nullptr){
+        loguer->loguear("No se pueden crear las vistas de las capas sin antes inicializar SDL", Log::LOG_ERR);
+        throw new exception;
+    }
+
+    for (int i = 0; i < capas.size(); i++){
+        Trect rect;
+        rect.d = mDimension;
+        rect.p.x = (capas[i].ancho - mDimension.w)/2;
+        rect.p.y = 0;
+        Capa capa = Capa(mUtils, capas[i].dirCapa, rect, capas[i].ancho, mAnchoEscenario);
+        mCapas.push_back(capa);
+    }
 }
 
 /*
@@ -21,37 +73,21 @@ void Pantalla::Inicializar(int anchoPx,int altoPx) {
  * escenario : formato del escenario.
  * personaje : formato del personaje.
  */
-Pantalla::Pantalla(vector<Tcapa> tcapas, Tventana ventana, Tescenario escenario, Tpersonajes tpersonajes) {
-    // Setea los parametros de la pantalla
-	anchoPantalla = ventana.ancho;
-    altoPantalla = escenario.alto;
-
-    // Setea las escalas de relacion entre unidades y pixeles
-    VistaUtils::SCALE_X = ventana.anchopx / ventana.ancho;
-    VistaUtils::SCALE_Y = ventana.altopx / escenario.alto;
-
-    // Inicia la ventana y el renderer
-    Inicializar(ventana.anchopx,ventana.altopx);
-    zIndex = tpersonajes.zIndex;
-    personaje1 = PersonajeVista(mRenderer, tpersonajes.sprites[0], tpersonajes.ancho, tpersonajes.alto, tpersonajes.orientacion[0]);
-    personaje2 = PersonajeVista(mRenderer, tpersonajes.sprites[1], tpersonajes.ancho, tpersonajes.alto, tpersonajes.orientacion[1]);
-
+Pantalla::Pantalla(vector<Tcapa> capas, Tventana ventana, Tescenario escenario, vector<Tpersonaje> personajes) {
+	mDimension = {ventana.ancho, escenario.d.h};
+    mAnchoEscenario = escenario.d.w;
+    posEscenario = ( mAnchoEscenario - mDimension.w ) / 2;
     distTope = ventana.distTope;
-    mAnchoPersonaje = tpersonajes.ancho;
-    mAnchoEscenario = escenario.ancho;
-    posEscenario = ( mAnchoEscenario - anchoPantalla ) / 2;
 
-    // Crea las capas.
-    for (int i = 0; i < tcapas.size(); i++){
-        VistaUtils::Trect rect;
-        rect.h = altoPantalla;
-        rect.w = anchoPantalla;
-        rect.p.x = (tcapas[i].ancho - anchoPantalla)/2;
-        rect.p.y = 0;
-        Capa capa = Capa(mRenderer, tcapas[i].dirCapa, rect,tcapas[i].ancho,mAnchoEscenario);
-        capas.push_back(capa);
-    }
-}
+    // SDL
+    InicializarSdl(ventana.dimPx);
+
+    // Personajes
+    InicializarPersonajes(personajes);
+
+    // Capas
+    InicializarCapas(capas);
+};
 
 /*
  * Dibuja todos los objetos en pantalla.
@@ -60,11 +96,11 @@ void Pantalla::dibujar() {
 
     SDL_Texture* ventana = SDL_GetRenderTarget(mRenderer);
 
-    for (int i = 0; i < capas.size(); i++) {
-        capas[i].getTexture(ventana);
+    for (int i = 0; i < mCapas.size(); i++) {
+        mCapas[i].getTexture(ventana);
         if (i == zIndex) {
-            personaje1.getTexture(ventana, posEscenario);
-            personaje2.getTexture(ventana, posEscenario);
+            for (unsigned i = 0; i < mPersonajes.size(); i++)
+               mPersonajes[i].getTexture(ventana, posEscenario);
         }
     }
     SDL_RenderPresent(mRenderer);
@@ -75,12 +111,14 @@ void Pantalla::dibujar() {
  * Actualiza todos los objetos de pantalla.
  * change : contiene los cambios a realizar.
  */
-void Pantalla::update(Tcambios changes) {
-    personaje1.update(changes.cambio1);
-    personaje2.update(changes.cambio2);
-    float posPersonaje1X = changes.cambio1.posicion.x;
-    float posPersonaje2X = changes.cambio2.posicion.x;
-    float topeDerecha = posEscenario + anchoPantalla - distTope;
+void Pantalla::update(vector<Tcambio> changes) {
+    for (unsigned i = 0; i < mPersonajes.size(); i++)
+        mPersonajes[i].update(changes[i]);
+
+    // Se tienen en cuenta solo los primeros 2 personajes para modificar la posicion del escenario
+    float posPersonaje1X = changes[0].posicion.x;
+    float posPersonaje2X = changes[1].posicion.x;
+    float topeDerecha = posEscenario + mDimension.w - distTope;
     float topeIzquierda = posEscenario + distTope;
     bool moverIzq1 = topeIzquierda > posPersonaje1X && posPersonaje1X-distTope> 0;
     bool moverIzq2 = topeIzquierda > posPersonaje2X && posPersonaje2X-distTope> 0;
@@ -91,26 +129,28 @@ void Pantalla::update(Tcambios changes) {
     } else if (moverIzq2) {
         posEscenario = posPersonaje2X - distTope;
     } else if (moverDer1) {
-        posEscenario = posPersonaje1X + mAnchoPersonaje + distTope - anchoPantalla;
+        posEscenario = posPersonaje1X + mAnchoPersonaje + distTope - mDimension.w;
     } else if (moverDer2) {
-        posEscenario = posPersonaje2X + mAnchoPersonaje + distTope - anchoPantalla;
+        posEscenario = posPersonaje2X + mAnchoPersonaje + distTope - mDimension.w;
     }
 
-    for (int i = 0; i < capas.size(); i++) {
-        capas[i].ajustar(posEscenario);
+    for (int i = 0; i < mCapas.size(); i++) {
+        mCapas[i].ajustar(posEscenario);
     }
 }
 
 
 Pantalla::~Pantalla() {
     loguer->loguear("Destruccion de la pantalla", Log::LOG_DEB);
-    for (int i = 0; i < capas.size(); i++)
-        capas[i].freeTextures();
-    personaje1.freeTextures();
-    personaje2.freeTextures();
+    for (int i = 0; i < mCapas.size(); i++)
+        mCapas[i].freeTextures();
+    for (int i = 0; i < mPersonajes.size(); i++)
+        mPersonajes[i].freeTextures();
+    delete (mUtils);
     SDL_DestroyRenderer(mRenderer);
     SDL_DestroyWindow(mWindow);
     loguer->loguear("Cierra SDL", Log::LOG_DEB);
     SDL_Quit();
     IMG_Quit();
 }
+

@@ -3,52 +3,36 @@
 
 #include <SDL2/SDL_render.h>
 #include <string>
+#include <vector>
 #include "../Common.h"
 
 class VistaUtils {
-
 public:
-
-    struct Trect {
-        float w;
-        float h;
-        Posicion p;
-    };
-
     enum COLORKEY{
         BLANCO,
         NEGRO
     };
 
-    static float SCALE_X;
-    static float SCALE_Y;
-
-    static SDL_Texture* createTexture(SDL_Renderer* renderer, float width, float height);
-
-    static SDL_Texture* loadTexture(SDL_Renderer* r, std::string path, COLORKEY);
-
-    static SDL_Texture* createTexture(SDL_Renderer *renderer, float width, float height, string path);
-
-    static void copyTexture(SDL_Renderer* r, SDL_Texture* src, SDL_Texture* dst);
-
-    static void copyTexture(SDL_Renderer* r, SDL_Texture* src, SDL_Texture* dst, bool flip);
-
-    static void copyTexture(SDL_Renderer* r, SDL_Texture *src, SDL_Texture *dst, Trect* rectSrc, Trect* rectDst);
-
-    static void copyTexture(SDL_Renderer* r, SDL_Texture *src, SDL_Texture *dst, Trect* rectSrc, Trect* rectDst, bool flip);
-
-    static void copyTextureNoScale(SDL_Renderer* r, SDL_Texture *src, SDL_Texture *dst, Trect* rectSrc, Trect* rectDst);
-
-    /**
-     * Limpia la textura
-     */
-    static void cleanTexture(SDL_Renderer* r, SDL_Texture* t);
-
 private:
+    float mRatio;
+    float mScales[2]; // relacion = (pixel / unidad logica)
+    SDL_Renderer* mRenderer;
+    vector<SDL_Texture*> mAuxTextures;
 
-    static Uint32 getColorKeyValue(COLORKEY color, SDL_Surface* s);
+    Uint32 getColorKeyValue(COLORKEY color, SDL_Surface* s);
+    void getScales(SDL_Texture* texture, Tdimension* dimension, float scales[2]);
 
+public:
+    VistaUtils(SDL_Renderer* renderer, float ratio, float scales[2]);
+
+    SDL_Texture* createTexture(Tdimension dimension);
+    SDL_Texture* loadTexture(std::string path, COLORKEY);
+    void copyTexture(SDL_Texture* src, SDL_Texture* dst);
+    void copyTexture(SDL_Texture* src, SDL_Texture* dst, bool flip);
+    void copyTexture(SDL_Texture* src, SDL_Texture* dst, Trect* srcRect, Trect* dstRect, Tdimension* srcDim, Tdimension* dstDim);
+    void cleanTexture(SDL_Texture* t);
+
+    virtual ~VistaUtils();
 };
-
 
 #endif //MORTALKOMBAT_VISTAUTILS_H

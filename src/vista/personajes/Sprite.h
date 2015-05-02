@@ -4,10 +4,11 @@
 #include <string>
 #include <SDL2/SDL_render.h>
 #include <vector>
+#include "../VistaUtils.h"
 
 class Sprite {
 private:
-    SDL_Renderer* mRenderer;
+    VistaUtils* mUtils;
     std::vector<SDL_Texture *> mTextures;
     int mCurrent;
     bool mRepeat;
@@ -15,7 +16,8 @@ private:
 
 public:
     Sprite(){};
-    Sprite(SDL_Renderer* renderer, std::string dirPath, bool repeat);
+    Sprite(VistaUtils* utils, std::string dirPath, bool repeat);
+    Tdimension getDimension();
     long getCount();
     void restart();
     void getNext(SDL_Texture* texture, bool flip);
