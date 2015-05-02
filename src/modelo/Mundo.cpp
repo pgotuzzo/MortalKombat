@@ -12,12 +12,12 @@ Mundo::Mundo(config configuracion) {
 	Tescenario escenario = configuracion.getEscenario();
 	Tpersonaje pj = configuracion.getPersonaje();
 
-	anchoEscenario = escenario.ancho;
-	altoEscenario = escenario.alto;
+	anchoEscenario = escenario.d.w;
+	altoEscenario = escenario.d.h;
 	altoPiso = escenario.yPiso;
 
-	float altoPJ = pj.alto;
-	float anchoPJ = pj.ancho;
+	float altoPJ = pj.d.h;
+	float anchoPJ = pj.d.w;
 
 	float pos_x = anchoEscenario/2;
 	float pos_y = altoEscenario - altoPiso - altoPJ;
@@ -55,27 +55,32 @@ float Mundo::getAltoPiso(){
  * Personaje realiza su respectiva accion.
  * Se asigna todos los datos pertinentes de personaje a Tcambio.
  */
-Tcambios Mundo::actualizarMundo(Tinputs inputs) {
-	Tcambios c;
-	personaje1->realizarAccion(inputs.input1,anchoEscenario);
-	personaje2->realizarAccion(inputs.input2,anchoEscenario);
-	c.cambio1.posicion = personaje1->getPosicion();
-	if(personaje1->getDireccion()) c.cambio1.direccion = DERECHA;
-	else c.cambio1.direccion = IZQUIERDA;
-	if(personaje1->getSentido()) c.cambio1.sentido = ADELANTE;
-	else c.cambio1.sentido = ATRAS;
-	c.cambio1.estado = personaje1->getEstado();
-	c.cambio1.alturaPJ = personaje1->getAlturaPersonaje();
-	c.cambio1.anchoPJ = personaje1->getAnchoPersonaje();
+vector<Tcambio> Mundo::actualizarMundo(vector<Tinput> inputs) {
+	vector<Tcambio> c;
+	Tcambio cambio1, cambio2;
 
-	c.cambio2.posicion = personaje2->getPosicion();
-	c.cambio2.estado = personaje2->getEstado();
-	c.cambio2.alturaPJ = personaje2->getAlturaPersonaje();
-	c.cambio2.anchoPJ = personaje2->getAnchoPersonaje();
-	if(personaje2->getDireccion()) c.cambio2.direccion = DERECHA;
-	else c.cambio2.direccion = IZQUIERDA;
-	if(personaje2->getSentido()) c.cambio2.sentido = ADELANTE;
-	else c.cambio2.sentido = ATRAS;
+	personaje1->realizarAccion(inputs[0],anchoEscenario);
+	personaje2->realizarAccion(inputs[1],anchoEscenario);
+	cambio1.posicion = personaje1->getPosicion();
+	if(personaje1->getDireccion()) cambio1.direccion = DERECHA;
+	else cambio1.direccion = IZQUIERDA;
+	if(personaje1->getSentido()) cambio1.sentido = ADELANTE;
+	else cambio1.sentido = ATRAS;
+	cambio1.estado = personaje1->getEstado();
+	cambio1.dPJ.h = personaje1->getAlturaPersonaje();
+	cambio1.dPJ.w = personaje1->getAnchoPersonaje();
+
+	cambio2.posicion = personaje2->getPosicion();
+	cambio2.estado = personaje2->getEstado();
+	cambio2.dPJ.h = personaje2->getAlturaPersonaje();
+	cambio2.dPJ.w = personaje2->getAnchoPersonaje();
+	if(personaje2->getDireccion()) cambio2.direccion = DERECHA;
+	else cambio2.direccion = IZQUIERDA;
+	if(personaje2->getSentido()) cambio2.sentido = ADELANTE;
+	else cambio2.sentido = ATRAS;
+
+	c.push_back(cambio1);
+	c.push_back(cambio2);
 
 	return c;
 }

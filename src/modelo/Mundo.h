@@ -21,7 +21,7 @@ public:
 	float getAlto();
 	float getAltoPiso();
 
-	Tcambios actualizarMundo(Tinputs inputs);
+	vector<Tcambio> actualizarMundo(vector<Tinput> inputs);
 
 	virtual ~Mundo();
 };

@@ -53,9 +53,7 @@ struct Posicion{
         return Posicion(x - p.x, y - p.y);
     }
     bool operator==(Posicion p){
-        if ( (p.x == x) && (p.x == y) )
-            return true;
-        return false;
+        return (p.x == x) && (p.x == y);
     }
 
     void setX(float pos_x){
@@ -73,10 +71,32 @@ struct Posicion{
 
 };
 
+struct Tdimension{
+    float w;
+    float h;
+
+    Tdimension(){}
+
+    Tdimension(float w, float h){
+        this->w = w;
+        this->h = h;
+    }
+
+    Tdimension(int w, int h){
+        this->w = w;
+        this->h = h;
+    }
+};
+
+struct Trect {
+    Tdimension d;
+    Posicion p;
+};
+
 /**
  * Loguer
  */
-static Log* loguer = WarningLog::getInstance();
+static Log* loguer = DebugLog::getInstance();
 
 /**
  * Estructuras que se utilizan para
@@ -84,15 +104,13 @@ static Log* loguer = WarningLog::getInstance();
  *  escenario
  */
 struct Tventana {
-    int altopx;
-    int anchopx;
+    Tdimension dimPx;
     float ancho;
     float distTope;
 };
 
 struct Tescenario {
-    float ancho;
-    float alto;
+    Tdimension d;
     float yPiso;
 };
 
@@ -136,21 +154,12 @@ enum Tsentido{
     ADELANTE,
     ATRAS
 };
-//TODO borrar esto cuando ya no sirva mas
+
 struct Tpersonaje {
-    float ancho;
-    float alto;
+    Tdimension d;
     int zIndex;
     Tdireccion orientacion;
     std::string sprites;
-};
-
-struct Tpersonajes {
-    float ancho;
-    float alto;
-    int zIndex;
-    Tdireccion orientacion[2];
-    std::string sprites[2];
 };
 
 /**
@@ -164,13 +173,7 @@ struct Tcambio{
     TestadoPersonaje estado;
     Tdireccion direccion;
     Tsentido sentido;
-    float alturaPJ;
-    float anchoPJ;
-};
-
-struct Tcambios{
-    Tcambio cambio1;
-    Tcambio cambio2;
+    Tdimension dPJ;
 };
 
 /**
@@ -192,11 +195,6 @@ enum Tinput{
     // Cierre o reinicio del juego
     KEY_RESTART,
     KEY_EXIT
-};
-
-struct Tinputs{
-    Tinput input1;
-    Tinput input2;
 };
 
 /**
