@@ -14,7 +14,7 @@ Capa::Capa() {}
 */
 Capa::Capa(VistaUtils* utils, std::string dirPath, Trect rectPantalla, float anchoCapa, float anchoEscenario) {
     mUtils= utils;
-    mTexture = mUtils->loadTexture(dirPath, VistaUtils::BLANCO);
+    mTexture = mUtils->loadTexture(dirPath);
     mAncho = anchoCapa;
     mVelocidadCapa = (mAncho - rectPantalla.d.w)/(anchoEscenario - rectPantalla.d.w);
     mRect = rectPantalla;

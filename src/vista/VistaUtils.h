@@ -7,26 +7,24 @@
 #include "../Common.h"
 
 class VistaUtils {
-public:
-    enum COLORKEY{
-        BLANCO,
-        NEGRO
-    };
-
 private:
     float mRatio;
     float mScales[2]; // relacion = (pixel / unidad logica)
+    TcolorSettings mColorSettings = TcolorSettings(0, 0, 0);
     SDL_Renderer* mRenderer;
     vector<SDL_Texture*> mAuxTextures;
 
-    Uint32 getColorKeyValue(COLORKEY color, SDL_Surface* s);
     void getScales(SDL_Texture* texture, Tdimension* dimension, float scales[2]);
+    void changeColor(SDL_Surface* surface);
+    Uint32 getPixel(SDL_Surface* surface, int i);
+    void putPixel(SDL_Surface* surface, int i, Uint32 pixel);
 
 public:
     VistaUtils(SDL_Renderer* renderer, float ratio, float scales[2]);
 
+    void setColorSetting(TcolorSettings settings);
     SDL_Texture* createTexture(Tdimension dimension);
-    SDL_Texture* loadTexture(std::string path, COLORKEY);
+    SDL_Texture* loadTexture(std::string path);
     void copyTexture(SDL_Texture* src, SDL_Texture* dst);
     void copyTexture(SDL_Texture* src, SDL_Texture* dst, bool flip);
     void copyTexture(SDL_Texture* src, SDL_Texture* dst, Trect* srcRect, Trect* dstRect, Tdimension* srcDim, Tdimension* dstDim);

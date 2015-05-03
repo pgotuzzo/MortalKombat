@@ -1,4 +1,5 @@
 #include <SDL2/SDL_image.h>
+#include <cmath>
 #include "VistaUtils.h"
 
 /**
@@ -13,12 +14,8 @@ VistaUtils::VistaUtils(SDL_Renderer* renderer, float ratio, float scales[2]) {
     mScales[1] = scales[1];
 }
 
-Uint32 VistaUtils::getColorKeyValue(VistaUtils::COLORKEY color, SDL_Surface* s) {
-    switch (color){
-        case VistaUtils::BLANCO: return SDL_MapRGB(s->format, 255, 255, 255);
-        case VistaUtils::NEGRO: return SDL_MapRGB(s->format, 0, 0, 0);
-        default: return 0;
-    }
+void VistaUtils::setColorSetting(TcolorSettings settings) {
+    mColorSettings = settings;
 }
 
 /**
@@ -35,6 +32,104 @@ void VistaUtils::getScales(SDL_Texture *texture, Tdimension* dimension, float sc
         SDL_QueryTexture(texture, NULL, NULL, &w, &h);
         scales[0] = w / dimension->w;
         scales[1] = h / dimension->h;
+    }
+}
+
+
+Uint32 VistaUtils::getPixel(SDL_Surface *surface, int i){
+    int bpp = surface->format->BytesPerPixel;
+    Uint8 *p = (Uint8 *) surface->pixels + i * bpp;
+
+    switch(bpp) {
+        case 1: return *p;
+        case 2: return *(Uint16 *)p;
+        case 3: {
+            if (SDL_BYTEORDER == SDL_BIG_ENDIAN)
+                return p[0] << 16 | p[1] << 8 | p[2];
+            else
+                return p[0] | p[1] << 8 | p[2] << 16;
+        }
+        case 4: return *(Uint32 *)p;
+        default: return 0;
+    }
+}
+
+void VistaUtils::putPixel(SDL_Surface *surface, int i, Uint32 pixel) {
+    int bpp = surface->format->BytesPerPixel;
+    Uint8 *p = (Uint8 *)surface->pixels + i * bpp;
+
+    switch(bpp) {
+        case 1:
+            *p = (Uint8) pixel;
+            break;
+        case 2:
+            *(Uint16 *)p = (Uint16) pixel;
+            break;
+        case 3:
+            if(SDL_BYTEORDER == SDL_BIG_ENDIAN) {
+                p[0] = (Uint8) ((pixel >> 16) & 0xff);
+                p[1] = (Uint8) ((pixel >> 8) & 0xff);
+                p[2] = (Uint8) (pixel & 0xff);
+            } else {
+                p[0] = (Uint8) (pixel & 0xff);
+                p[1] = (Uint8) ((pixel >> 8) & 0xff);
+                p[2] = (Uint8) ((pixel >> 16) & 0xff);
+            }
+            break;
+        case 4: {
+            *(Uint32 *) p = pixel;
+            break;
+        }
+        default:
+            throw new exception;
+    }
+}
+
+/**
+ * Cambia el color pixel por pixel teniendo en cuenta
+ *  los valores seteados en el mColorSettings
+ */
+void VistaUtils::changeColor(SDL_Surface* surface) {
+    // Checkeo para hacer lock si es necesario
+    if( SDL_MUSTLOCK(surface) ) {
+        SDL_LockSurface( surface );
+    }
+
+    // cantidad de pixeles
+    int pixelNum = surface->w * surface->h;
+
+    // pixel transparente
+    Uint32 transparentPixel;
+    SDL_GetColorKey(surface, &transparentPixel);
+
+    for(int i = 0; i < pixelNum; i++){
+        Uint32 pixel = getPixel(surface, i);
+
+        if (pixel != transparentPixel) {
+
+            // obtengo el RGB del pixel y lo transformo en HSL
+            Uint8 r, g, b;
+            SDL_GetRGB(pixel, surface->format, &r, &g, &b);
+            TcolorHSL hsl = TcolorHSL::fromRGB(r, g, b);
+
+            // Si se encuentra dentro del rango a modificar
+            if ((hsl.h >= mColorSettings.hmin) &&
+                (hsl.h <= mColorSettings.hmax)) {
+
+                // modifico el hue
+                hsl.h = fmod(hsl.h + mColorSettings.delta, 360);
+
+                // creo un pixel con el nuevo color y reemplazo el existente
+                TcolorRGB rgb = TcolorRGB::fromHSL(hsl.h, hsl.s, hsl.l);
+                pixel = SDL_MapRGB(surface->format, rgb.r, rgb.g, rgb.b);
+                putPixel(surface, i, pixel);
+            }
+        }
+    }
+
+    // Checkeo para hacer unlock si es necesario
+    if( SDL_MUSTLOCK(surface) ) {
+        SDL_UnlockSurface( surface );
     }
 }
 
@@ -64,7 +159,7 @@ SDL_Texture *VistaUtils::createTexture(Tdimension dimension) {
 /**
  * Se crea una textura a partir de un path, respetando la relacion de aspecto.
  */
-SDL_Texture* VistaUtils::loadTexture(std::string path, VistaUtils::COLORKEY colorkey) {
+SDL_Texture* VistaUtils::loadTexture(std::string path) {
     SDL_Surface* surface = IMG_Load(path.c_str());
     if (surface == NULL){
         return nullptr;
@@ -72,8 +167,8 @@ SDL_Texture* VistaUtils::loadTexture(std::string path, VistaUtils::COLORKEY colo
         string message = "Carga textura desde " + path;
         loguer->loguear(message.c_str(), Log::LOG_DEB);
 
-        // setea el color que será reemplazado por transparencia
-        SDL_SetColorKey(surface, SDL_TRUE, getColorKeyValue(colorkey, surface) );
+        if (mColorSettings.delta != 0)
+            changeColor(surface);
 
         SDL_Texture* aux = SDL_CreateTextureFromSurface(mRenderer, surface);
         mAuxTextures.push_back(aux);

@@ -9,6 +9,7 @@
 #ifndef _MORTALKOMBAT_COMMON_H_
 #define _MORTALKOMBAT_COMMON_H_
 
+#include <cmath>
 #include <string>
 #include <iostream>
 #include "parser/log/WarningLog.h"
@@ -16,7 +17,13 @@
 #include "parser/log/ErrorLog.h"
 
 /**
- * Esta estructura, pseudo-clase cruza toda
+ * Constantes
+ */
+static const std::string SPRITES_FORMAT = ".png";
+static const float MIN_DISTANCE_FROM_BOUND = 50;
+
+/**
+ * Estas estructuras, pseudo-clases cruzan toda
  *  la aplicacion.
  */
 struct Posicion{
@@ -94,14 +101,123 @@ struct Trect {
 };
 
 /**
+ * Estructuras para la manipulacion de
+ *  los colores.
+ */
+struct TcolorHSL{
+    float h;
+    float s;
+    float l;
+
+    static TcolorHSL fromRGB(uint8_t R, uint8_t G, uint8_t B){
+        TcolorHSL color;
+        float r, g, b, max, min, delta, aux;
+
+        r = (float) R / 255;
+        g = (float) G / 255;
+        b = (float) B / 255;
+
+        aux = std::fmax(r, g);
+        max = fmax(aux, b);
+
+        aux = fmin(r, g);
+        min = fmin(aux, g);
+
+        delta = max - min;
+
+        // H
+        if (delta == 0){
+            color.h = 0;
+        } else if (max == r){
+            color.h = 60 * fmod( ( ( g - b ) / delta ), 6 );
+        } else if (max == g){
+            color.h = 60 * (( ( b - r ) / delta ) + 2 );
+        } else if (max == b){
+            color.h = 60 * (( ( r - g ) / delta ) + 4 );
+        }
+        color.h = (color.h >= 0) ? color.h : 360 + color.h;
+
+        // L
+        color.l = (max + min) / 2;
+
+        // S
+        color.s = (delta == 0) ? 0 : delta / ( 1 - fabs(max + min - 1) );
+
+        return color;
+    }
+};
+
+struct TcolorRGB{
+    uint8_t r;
+    uint8_t g;
+    uint8_t b;
+
+    static TcolorRGB fromHSL(float H, float S, float L){
+        TcolorRGB color;
+        float c, x, m, R = 0, G = 0, B = 0;
+
+        c = (1 - fabs(2*L - 1)) * S;
+        x = c * ( 1 - fabs( fmod( (H/60), 2 ) - 1) );
+        m = L - (c / 2);
+
+        if ( (H >= 0) && (H < 60) ){
+            R = c;
+            G = x;
+            B = 0;
+        }else if ( (H >= 60) && (H < 120) ){
+            R = x;
+            G = c;
+            B = 0;
+        }else if ( (H >= 120) && (H < 180) ){
+            R = 0;
+            G = c;
+            B = x;
+        }else if ( (H >= 180) && (H < 240) ){
+            R = 0;
+            G = x;
+            B = c;
+        }else if ( (H >= 240) && (H < 300) ) {
+            R = x;
+            G = 0;
+            B = c;
+        }else if ( (H >= 300) && (H < 360) ){
+            R = c;
+            G = 0;
+            B = x;
+        }
+        color.r = (uint8_t) ( 255 * (R + m) );
+        color.g = (uint8_t) ( 255 * (G + m) );
+        color.b = (uint8_t) ( 255 * (B + m) );
+
+        return color;
+    }
+};
+
+struct TcolorSettings{
+    float hmin;
+    float hmax;
+    float delta;
+
+    TcolorSettings(){}
+
+    TcolorSettings(float min, float max, float d){
+        hmin = (min < 0) ? - fmod(-min, 360) + 360 : fmod(min, 360);
+        hmax = (max < 0) ? - fmod(-max, 360) + 360 : fmod(max, 360);
+        delta = (d < 0) ? - fmod(-d, 360) + 360 : fmod(d, 360);
+    }
+
+};
+
+
+/**
  * Loguer
  */
 static Log* loguer = DebugLog::getInstance();
 
 /**
  * Estructuras que se utilizan para
- *  definir la pantalla (px) y el
- *  escenario
+ *  definir la pantalla (px),  escenario
+ *  y capa
  */
 struct Tventana {
     Tdimension dimPx;
@@ -160,6 +276,9 @@ struct Tpersonaje {
     int zIndex;
     Tdireccion orientacion;
     std::string sprites;
+
+    // para el personaje alternativo
+    TcolorSettings colorSettings;
 };
 
 /**
@@ -196,15 +315,6 @@ enum Tinput{
     KEY_RESTART,
     KEY_EXIT
 };
-
-/**
- * Se define esta constante por si se llega a
- *  necesitar cambiar la extension de las imagenes
- *  que se utilizan para los sprites.
- */
-static const std::string SPRITES_FORMAT = ".png";
-
-static const float MIN_DISTANCE_FROM_BOUND = 50;
 
 #endif //_MORTALKOMBAT_COMMON_H_
 

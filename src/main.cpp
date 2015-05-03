@@ -35,7 +35,11 @@ int main(int argc, char **argv) {
 
         Tescenario tescenario = configuracion.getEscenario();
 
+        // TODO - Cuando se implemente en el parser, se tiene que sacar!!!
         Tpersonaje tpersonaje = configuracion.getPersonaje();
+
+        tpersonaje.colorSettings = TcolorSettings(0, 359, 120);
+
         vector<Tpersonaje> tpersonajes;
         tpersonajes.push_back(tpersonaje);
         tpersonajes.push_back(tpersonaje);

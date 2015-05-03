@@ -6,17 +6,19 @@
 #include <vector>
 #include "../VistaUtils.h"
 
+using namespace std;
+
 class Sprite {
 private:
     VistaUtils* mUtils;
-    std::vector<SDL_Texture *> mTextures;
+    vector<SDL_Texture *> mTextures;
     int mCurrent;
     bool mRepeat;
     bool mFirstPass;
 
 public:
     Sprite(){};
-    Sprite(VistaUtils* utils, std::string dirPath, bool repeat);
+    Sprite(VistaUtils* utils, string dirPath, bool repeat);
     Tdimension getDimension();
     long getCount();
     void restart();

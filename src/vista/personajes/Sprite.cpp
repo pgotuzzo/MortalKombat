@@ -2,7 +2,7 @@
 #include "Sprite.h"
 #include "../VistaUtils.h"
 
-Sprite::Sprite(VistaUtils* utils, std::string dirPath, bool repeat) {
+Sprite::Sprite(VistaUtils* utils, string dirPath, bool repeat) {
     mCurrent = 0;
     mRepeat = repeat;
     mFirstPass = true;
@@ -11,16 +11,16 @@ Sprite::Sprite(VistaUtils* utils, std::string dirPath, bool repeat) {
 
     bool end = false;
     do{
-        std::string filePath;
-        std::string number; // number = XX ---> dos dígitos!!!
+        string filePath;
+        string number; // number = XX ---> dos dígitos!!!
 
         if(getCount() < 9){
-            number = "0" + std::to_string(getCount() + 1);
+            number = "0" + to_string(getCount() + 1);
         }else{
-            number = std::to_string(getCount() + 1);
+            number = to_string(getCount() + 1);
         }
         filePath = dirPath + number + SPRITES_FORMAT;
-        SDL_Texture* t = mUtils->loadTexture(filePath, VistaUtils::BLANCO);
+        SDL_Texture* t = mUtils->loadTexture(filePath);
         if (t == nullptr){
             end = true;
         }else {

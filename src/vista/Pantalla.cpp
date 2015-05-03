@@ -38,8 +38,16 @@ void Pantalla::InicializarPersonajes(vector<Tpersonaje> personajes) {
     zIndex = personajes[0].zIndex;
     mAnchoPersonaje = personajes[0].d.w;
 
+    // TODO - Mejorar la lógica, sobre todo si se van a tener mas de 2 personajes
     for (unsigned i = 0; i < personajes.size(); i++) {
-        PersonajeVista p = PersonajeVista(mUtils, personajes[i].sprites, personajes[i].d, personajes[i].orientacion);
+        PersonajeVista p;
+        if ((i != 0) && (personajes[i].sprites == personajes[0].sprites)){
+            mUtils->setColorSetting(personajes[i].colorSettings);
+            p = PersonajeVista(mUtils, personajes[i].sprites, personajes[i].d, personajes[i].orientacion);
+            mUtils->setColorSetting(TcolorSettings(0, 0, 0));
+        }else{
+            p = PersonajeVista(mUtils, personajes[i].sprites, personajes[i].d, personajes[i].orientacion);
+        }
         mPersonajes.push_back(p);
     }
 }
