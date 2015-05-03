@@ -72,7 +72,6 @@ struct Posicion{
     }
 
     void mostrarPar(){
-        std::cout << "ESTA ES LA POSICION" << std::endl;
         std::cout << "X: " << x << " - " << "Y: " << y << std::endl;
     }
 
@@ -245,7 +244,13 @@ enum TestadoPersonaje {
     CAMINANDO,
     SALTANDO_VERTICAL,
     SALTANDO_OBLICUO,
-    AGACHADO
+    AGACHADO,
+    PINIA_ALTA,
+    PINIA_BAJA,
+    PATADA_ALTA,
+    PATADA_BAJA,
+    PODER,
+    PROTECCION
 };
 
 static std::string TestadoPersonajeToString(TestadoPersonaje e) {
@@ -310,6 +315,14 @@ enum Tinput{
     KEY_IZQUIERDA,
     KEY_ARRIBA_DERECHA,
     KEY_ARRIBA_IZQUIERDA,
+
+    // Golpes Basicos
+            KEY_PINIA_ALTA,
+    KEY_PINIA_BAJA,
+    KEY_PATADA_ALTA,
+    KEY_PATADA_BAJA,
+    KEY_PROTECCION,
+    KEY_PODER,
 
     // Cierre o reinicio del juego
     KEY_RESTART,

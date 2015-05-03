@@ -1,6 +1,12 @@
+#include <functional>
 #include "../parser/config.h"
 #include "Mundo.h"
 
+const float delta = 5.00;
+const float deltaLejania = 80;
+const float deltaCero = 0;
+const float deltaParaPelea = 25.00;
+const float deltaParaPoder = 5.00;
 
 /* Constructor de Mundo.
  * Recibe la configuracion que se devuelve del parser.
@@ -29,9 +35,10 @@ Mundo::Mundo(config configuracion) {
 	if (direccion == DERECHA) dir = true;
 	else dir = false;
 
-	personaje1 = new Personaje(dir,Posicion(pos_x+anchoPJ,pos_y),altoPJ,anchoPJ, altoEscenario);
-	personaje2 = new Personaje(dir,Posicion(pos_x-anchoPJ,pos_y),altoPJ,anchoPJ, altoEscenario);
-
+	personaje1 = new Personaje(dir,Posicion(pos_x+anchoPJ,pos_y),altoPJ,anchoPJ);
+	personaje2 = new Personaje(dir,Posicion(pos_x-anchoPJ,pos_y),altoPJ,anchoPJ);
+	detector = DetectorDeColisiones();
+	anchoPantalla = configuracion.getVentana().ancho;
 }
 
 
@@ -55,10 +62,26 @@ float Mundo::getAltoPiso(){
  * Personaje realiza su respectiva accion.
  * Se asigna todos los datos pertinentes de personaje a Tcambio.
  */
+
+
 vector<Tcambio> Mundo::actualizarMundo(vector<Tinput> inputs) {
 	vector<Tcambio> c;
 	Tcambio cambio1, cambio2;
+	verificarDireccionDeLosPersonajes();
+	if(!detector.detectarLejania(personaje1,personaje2,anchoPantalla -(MIN_DISTANCE_FROM_BOUND*4))){
+		if(personaje1->estado == CAMINANDO){
+			if(personaje1->direccion) personaje1->pos = Posicion(personaje1->pos.getX()+2,personaje1->pos.getY());
+			else personaje1->pos = Posicion(personaje1->pos.getX()-2,personaje1->pos.getY());
+		}
+		if(personaje2->estado == CAMINANDO){
+			if(personaje2->direccion) personaje2->pos = Posicion(personaje2->pos.getX()+2,personaje2->pos.getY());
+			else personaje2->pos = Posicion(personaje2->pos.getX()-2,personaje2->pos.getY());
 
+		}
+	}
+
+	if(!detector.detectarLejania(personaje1,personaje2,anchoPantalla-deltaLejania))verificarQueNoSeVallaDeLaPantalla();
+	else VerificarSiPjsColisionanaEnElAire();
 	personaje1->realizarAccion(inputs[0],anchoEscenario);
 	personaje2->realizarAccion(inputs[1],anchoEscenario);
 	cambio1.posicion = personaje1->getPosicion();
@@ -82,6 +105,62 @@ vector<Tcambio> Mundo::actualizarMundo(vector<Tinput> inputs) {
 	c.push_back(cambio1);
 	c.push_back(cambio2);
 
+
+
+//TODO HACER MAS GENERICO, DEBERIAN METERSE TODOS LOS OBJETOS COLISIONABLES
+//Esto va a ser para cuando halla mas objetos colisionables por ejemplo poderes
+	vector<ObjetoColisionable*> objetosProximos;
+	vector<ObjetoColisionable*> objetos;
+	objetos.push_back(personaje1);
+	objetos.push_back(personaje2);
+	//cout<<endl<<"Objetos size: "<<objetos.size()<<endl;
+	objetosProximos = detector.detectorDeProximidad(objetos, deltaParaPelea);
+	string pj = "Objetos proximos:  "+to_string(objetosProximos.size());
+	loguer->loguear(pj.c_str(), Log::LOG_DEB);
+	if (!objetosProximos.empty()){
+		personaje1->solucionarColision(personaje2);
+		personaje2->solucionarColision(personaje1);
+		if(personaje1->lanzandoGolpe){
+			personaje2->mePegaron(personaje1->punchCreator.getGolpe()->danio);
+			string pj = "Vida personaje2:  "+to_string(personaje2->vida);
+			loguer->loguear(pj.c_str(), Log::LOG_DEB);
+		}
+		if(personaje2->lanzandoGolpe){
+			personaje1->mePegaron(personaje2->punchCreator.getGolpe()->danio);
+			string pj = "Vida personaje1:  "+to_string(personaje1->vida);
+			loguer->loguear(pj.c_str(), Log::LOG_DEB);
+		}
+		//cout<<"ELERTA DE PROXIMIDAD"<<endl;
+
+		/*for (int i=0; i<objetosProximos.size();i++){
+			objetosProximos[i]->solucionColision(objetos);
+		}*/
+	}
+
+
+
+	if (personaje1->lanzandoPoder){
+		vector<ObjetoColisionable*> personajePoder;
+		personajePoder.push_back(personaje2);
+		personajePoder.push_back(personaje1->poder);
+		objetosProximos = detector.detectorDeProximidad(personajePoder, deltaParaPoder);
+		if(!objetosProximos.empty()){
+			personaje1->poder->solucionarColision(personaje2);
+		}
+
+	}
+
+	if (personaje2->lanzandoPoder){
+		vector<ObjetoColisionable*> personajePoder1;
+		personajePoder1.push_back(personaje1);
+		personajePoder1.push_back(personaje2->poder);
+		objetosProximos = detector.detectorDeProximidad(personajePoder1, deltaParaPoder);
+		if(!objetosProximos.empty()){
+			personaje2->poder->solucionarColision(personaje1);
+		}
+
+	}
+
 	return c;
 }
 
@@ -91,3 +170,44 @@ Mundo::~Mundo() {
 	loguer->loguear("Se libera al personaje", Log::LOG_DEB);
 }
 
+void Mundo::verificarDireccionDeLosPersonajes() {
+	//direccion derecha igual true
+	if(personaje1->pos.getX() - personaje2->pos.getX() <= 0){
+		personaje1->setDireccion(true);
+		personaje2->setDireccion(false);
+
+	}	else{
+		personaje1->setDireccion(false);
+		personaje2->setDireccion(true);
+	}
+}
+
+void Mundo::VerificarSiPjsColisionanaEnElAire(){
+	if (personaje1->getEstado() != SALTANDO_OBLICUO) {
+		personaje1->enCaida = false;
+	}
+	if (personaje2->getEstado() != SALTANDO_OBLICUO) {
+		personaje2->enCaida = false;
+	}
+	if (personaje1->estado == SALTANDO_OBLICUO && personaje2->estado == SALTANDO_OBLICUO) {
+		if (detector.seVan(personaje1, personaje2, deltaCero)) {
+			personaje1->enCaida = true;
+			personaje2->enCaida = true;
+		}
+	}
+}
+
+
+
+void Mundo::verificarQueNoSeVallaDeLaPantalla() {
+		if(personaje1->estado == SALTANDO_OBLICUO) {
+			if (((!personaje1->getSentido())&&(personaje1->getDireccion()))||
+				((!personaje1->getSentido())&&(!personaje1->getDireccion())))
+			personaje1->enCaida = true;
+		}else personaje1->enCaida = false;
+		if(personaje2->estado == SALTANDO_OBLICUO) {
+			if (((!personaje2->getSentido())&&(personaje2->getDireccion()))||
+				((!personaje2->getSentido())&&(!personaje2->getDireccion())))
+				personaje2->enCaida = true;
+		}else personaje2->enCaida = false;
+}

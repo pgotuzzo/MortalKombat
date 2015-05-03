@@ -50,6 +50,7 @@ void Pantalla::InicializarPersonajes(vector<Tpersonaje> personajes) {
         }
         mPersonajes.push_back(p);
     }
+
 }
 
 /**

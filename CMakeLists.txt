@@ -68,6 +68,15 @@ set(SOURCE_FILES
     src/main.cpp
     src/controlador/ControladorTeclado.cpp
     src/controlador/ControladorTeclado.h
+    src/modelo/DetectorDeColisiones.cpp
+    src/modelo/DetectorDeColisiones.h
+    src/modelo/ObjetoColisionable.h
+    src/modelo/Poder.h
+    src/modelo/Poder.cpp
+    src/modelo/Golpe.cpp
+    src/modelo/Golpe.h
+    src/modelo/CreadorDeGolpes.h
+    src/modelo/CreadorDeGolpes.cpp
     )
 
 add_executable(MortalKombat ${SOURCE_FILES})

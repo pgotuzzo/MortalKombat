@@ -35,6 +35,7 @@ void SaltoOblicuo::setEstado(bool nuevoEstado,Posicion nuevaPosicion,bool sentid
     float b = pow(posInicial.getX()+posFinal.getX(),2) / 4;
     float c = posInicial.getX() * posFinal.getX();
     a = alturaSalto/ (b - c); // a de la funcion parabolica para que se respete el maximo y ancho que se quiere.
+	primeraVez = true;
 }
 
 bool SaltoOblicuo::getEstado() {
@@ -44,25 +45,36 @@ bool SaltoOblicuo::getEstado() {
 /*
  * Se devuelve la posicion del personaje luego de un intervalo de salto hecho.
  */
-Posicion SaltoOblicuo::realizarAccion(Posicion pos){
+Posicion SaltoOblicuo::realizarAccion(Posicion pos,bool EnCaida){
 
 	float x = posImg.getX() + (coeficiente * intervaloSalto);
-
-	//Representa la altura del pj dado que ahora tomamos su cabeza como referencia.
-	// y al evaluar el x en la funcion parabolica
 	float y = posInicial.getY() - (-a * (x - posInicial.getX()) * (x - posFinal.getX()));
 	posImg.setX(x);
 	posImg.setY(y);
-
-	// Si se llega al piso o mas abajo desactivo el salto y devuelvo la posicion final del personaje.
-	if (posImg.getY() >= posInicial.getY()){
+	if(!EnCaida){
+		//Representa la altura del pj dado que ahora tomamos su cabeza como referencia.
+		// y al evaluar el x en la funcion parabolica
+		// Si se llega al piso o mas abajo desactivo el salto y devuelvo la posicion final del personaje.
+		if (posImg.getY() >= posInicial.getY()){
 			estado = false;
 			return posFinal;
 		}
-	return posImg;
+		return posImg;
+	}
+	else{
+		if(primeraVez){
+			posCaida = pos;
+			primeraVez = false;
+		}
+		if (posImg.getY() >= posInicial.getY()){
+			estado = false;
+			primeraVez = false;
+			return Posicion(posCaida.getX(),posFinal.getY());
+		}
+		return Posicion(posCaida.getX(),posImg.getY());
+	}
+
 }
 
 
-SaltoOblicuo::~SaltoOblicuo() {
-}
-
+SaltoOblicuo::~SaltoOblicuo() {}
