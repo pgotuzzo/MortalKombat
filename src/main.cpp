@@ -3,7 +3,10 @@
 #include "vista/Pantalla.h"
 #include "parser/config.h"
 #include "modelo/Mundo.h"
+#include "controlador/ControladorJoystick.h"
 #include "controlador/ControladorTeclado.h"
+
+
 
 const float delay = 45;
 
@@ -54,7 +57,9 @@ int main(int argc, char **argv) {
         loguer->loguear("Finaliza la creacion del mundo", Log::LOG_DEB);
         loguer->loguear("Inicia la creacion del controlador", Log::LOG_DEB);
 
+
         ControladorTeclado controlador = ControladorTeclado();
+        //ControladorJoystick controlador = ControladorJoystick();
 
         loguer->loguear("Finaliza la creacion del controlador", Log::LOG_DEB);
         loguer->loguear("-------------- GameLoop ----------------------------", Log::LOG_DEB);

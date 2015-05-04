@@ -20,7 +20,7 @@
  * Constantes
  */
 static const std::string SPRITES_FORMAT = ".png";
-static const float MIN_DISTANCE_FROM_BOUND = 50;
+static const float MIN_DISTANCE_FROM_BOUND = 20;
 
 /**
  * Estas estructuras, pseudo-clases cruzan toda
