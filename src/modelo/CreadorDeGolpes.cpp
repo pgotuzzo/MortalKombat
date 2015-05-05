@@ -23,7 +23,7 @@ void CreadorDeGolpes::crearGolpe(TestadoPersonaje tipoDeGolpe, Posicion posPJ, f
         case (PINIA_BAJA):
             ancho = anchoPJ / 2;
             altura = altoPJ / 6;
-            pos.setY(posPJ.getY()+altoPJ / 3);
+            pos.setY(posPJ.getY());
             danio = 7;
             break;
         case (PATADA_ALTA):
@@ -35,7 +35,7 @@ void CreadorDeGolpes::crearGolpe(TestadoPersonaje tipoDeGolpe, Posicion posPJ, f
         case (PATADA_BAJA):
             ancho = anchoPJ;
             altura = altoPJ / 5;
-            pos.setY(posPJ.getY()+altoPJ / 3);
+            pos.setY(posPJ.getY());
             danio = 12;
             break;
         default:

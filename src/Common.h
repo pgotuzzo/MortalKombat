@@ -92,11 +92,22 @@ struct Tdimension{
         this->w = w;
         this->h = h;
     }
+    Tdimension operator=(Tdimension d){
+        w = d.w;
+        h = d.h;
+        return d;
+    }
 };
 
 struct Trect {
     Tdimension d;
     Posicion p;
+
+    Trect operator=(Trect rect){
+        d = rect.d;
+        p = rect.p;
+        return rect;
+    }
 };
 
 /**

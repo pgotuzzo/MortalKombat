@@ -37,7 +37,7 @@ Mundo::Mundo(config configuracion) {
 
 	personaje1 = new Personaje(dir,Posicion(pos_x+anchoPJ,pos_y),altoPJ,anchoPJ);
 	personaje2 = new Personaje(dir,Posicion(pos_x-anchoPJ,pos_y),altoPJ,anchoPJ);
-	detector = DetectorDeColisiones();
+	colisionador = Colisionador();
 	anchoPantalla = configuracion.getVentana().ancho;
 }
 
@@ -67,8 +67,12 @@ float Mundo::getAltoPiso(){
 vector<Tcambio> Mundo::actualizarMundo(vector<Tinput> inputs) {
 	vector<Tcambio> c;
 	Tcambio cambio1, cambio2;
+
+	//Verifica y da vuelta la direccion de los personajes si se pasan
 	verificarDireccionDeLosPersonajes();
-	if(!detector.detectarLejania(personaje1,personaje2,anchoPantalla -(MIN_DISTANCE_FROM_BOUND*4))){
+
+	//Verifica que no se vayan de una distancia maxima
+	if(!colisionador.detectarLejania(personaje1,personaje2,anchoPantalla -(MIN_DISTANCE_FROM_BOUND*4))){
 		if(personaje1->estado == CAMINANDO){
 			if(personaje1->direccion) personaje1->pos = Posicion(personaje1->pos.getX()+2,personaje1->pos.getY());
 			else personaje1->pos = Posicion(personaje1->pos.getX()-2,personaje1->pos.getY());
@@ -80,88 +84,76 @@ vector<Tcambio> Mundo::actualizarMundo(vector<Tinput> inputs) {
 		}
 	}
 
-	if(!detector.detectarLejania(personaje1,personaje2,anchoPantalla-deltaLejania))verificarQueNoSeVallaDeLaPantalla();
+	//Choque de saltos oblicuos en el aire
+	if(!colisionador.detectarLejania(personaje1,personaje2,anchoPantalla-deltaLejania))verificarQueNoSeVallaDeLaPantalla();
 	else VerificarSiPjsColisionanaEnElAire();
+
+	// Los personajes realizan sus acciones
 	personaje1->realizarAccion(inputs[0],anchoEscenario);
 	personaje2->realizarAccion(inputs[1],anchoEscenario);
-	cambio1.posicion = personaje1->getPosicion();
-	if(personaje1->getDireccion()) cambio1.direccion = DERECHA;
-	else cambio1.direccion = IZQUIERDA;
-	if(personaje1->getSentido()) cambio1.sentido = ADELANTE;
-	else cambio1.sentido = ATRAS;
-	cambio1.estado = personaje1->getEstado();
-	cambio1.dPJ.h = personaje1->getAlturaPersonaje();
-	cambio1.dPJ.w = personaje1->getAnchoPersonaje();
-
-	cambio2.posicion = personaje2->getPosicion();
-	cambio2.estado = personaje2->getEstado();
-	cambio2.dPJ.h = personaje2->getAlturaPersonaje();
-	cambio2.dPJ.w = personaje2->getAnchoPersonaje();
-	if(personaje2->getDireccion()) cambio2.direccion = DERECHA;
-	else cambio2.direccion = IZQUIERDA;
-	if(personaje2->getSentido()) cambio2.sentido = ADELANTE;
-	else cambio2.sentido = ATRAS;
-
-	c.push_back(cambio1);
-	c.push_back(cambio2);
 
 
 
-//TODO HACER MAS GENERICO, DEBERIAN METERSE TODOS LOS OBJETOS COLISIONABLES
-//Esto va a ser para cuando halla mas objetos colisionables por ejemplo poderes
+
+	//Colision entre personajes (empujar)
 	vector<ObjetoColisionable*> objetosProximos;
 	vector<ObjetoColisionable*> objetos;
 	objetos.push_back(personaje1);
 	objetos.push_back(personaje2);
-	//cout<<endl<<"Objetos size: "<<objetos.size()<<endl;
-	objetosProximos = detector.detectorDeProximidad(objetos, deltaParaPelea);
-	string pj = "Objetos proximos:  "+to_string(objetosProximos.size());
-	loguer->loguear(pj.c_str(), Log::LOG_DEB);
+	objetosProximos = colisionador.detectorDeProximidad(objetos, 2.0);
 	if (!objetosProximos.empty()){
-		personaje1->solucionarColision(personaje2);
-		personaje2->solucionarColision(personaje1);
-		if(personaje1->lanzandoGolpe){
-			personaje2->mePegaron(personaje1->punchCreator.getGolpe()->danio);
-			string pj = "Vida personaje2:  "+to_string(personaje2->vida);
-			loguer->loguear(pj.c_str(), Log::LOG_DEB);
-		}
-		if(personaje2->lanzandoGolpe){
-			personaje1->mePegaron(personaje2->punchCreator.getGolpe()->danio);
-			string pj = "Vida personaje1:  "+to_string(personaje1->vida);
-			loguer->loguear(pj.c_str(), Log::LOG_DEB);
-		}
-		//cout<<"ELERTA DE PROXIMIDAD"<<endl;
-
-		/*for (int i=0; i<objetosProximos.size();i++){
-			objetosProximos[i]->solucionColision(objetos);
-		}*/
+		colisionador.solucionarColision(personaje1,personaje2);
 	}
 
+	//Colision entre el personaje y el golpe
+	verificarColision(personaje2->lanzandoGolpe,personaje1,personaje2->punchCreator.getGolpe(),false);
+	verificarColision(personaje1->lanzandoGolpe,personaje2,personaje1->punchCreator.getGolpe(),false);
+
+	//Colision entre el personaje y el poder
+	verificarColision(personaje2->lanzandoPoder,personaje1,personaje2->poder,true);
+	verificarColision(personaje1->lanzandoPoder,personaje2,personaje1->poder,true);
 
 
-	if (personaje1->lanzandoPoder){
-		vector<ObjetoColisionable*> personajePoder;
-		personajePoder.push_back(personaje2);
-		personajePoder.push_back(personaje1->poder);
-		objetosProximos = detector.detectorDeProximidad(personajePoder, deltaParaPoder);
-		if(!objetosProximos.empty()){
-			personaje1->poder->solucionarColision(personaje2);
-		}
-
-	}
-
-	if (personaje2->lanzandoPoder){
-		vector<ObjetoColisionable*> personajePoder1;
-		personajePoder1.push_back(personaje1);
-		personajePoder1.push_back(personaje2->poder);
-		objetosProximos = detector.detectorDeProximidad(personajePoder1, deltaParaPoder);
-		if(!objetosProximos.empty()){
-			personaje2->poder->solucionarColision(personaje1);
-		}
-
-	}
+	//Se actualizan a los personajes
+	cambio1 = actualizarPJ(personaje1);
+	cambio2 = actualizarPJ(personaje2);
+	c.push_back(cambio1);
+	c.push_back(cambio2);
 
 	return c;
+}
+
+
+void Mundo::verificarColision(bool generaViolencia, Personaje *PJ, ObjetoColisionable *objeto, bool esPoder) {
+	Colisionador colisionador;
+	if (generaViolencia) {
+		vector<ObjetoColisionable *> objetos;
+		vector<ObjetoColisionable *> objetosProximos;
+		objetos.push_back(PJ);
+		objetos.push_back(objeto);
+		objetosProximos = colisionador.detectorDeProximidad(objetos, objeto->ancho/2);
+		if (!objetosProximos.empty()) {
+			if (esPoder) {
+				colisionador.solucionarColision(PJ, (Poder *) objeto);
+			}
+			else colisionador.solucionarColision(PJ, (Golpe *) objeto);
+		}
+	}
+}
+
+Tcambio Mundo::actualizarPJ(Personaje *PJ) {
+	Tcambio cambio;
+	cambio.posicion = PJ->getPosicion();
+	if(PJ->getDireccion()) cambio.direccion = DERECHA;
+	else cambio.direccion = IZQUIERDA;
+	if(PJ->getSentido()) cambio.sentido = ADELANTE;
+	else cambio.sentido = ATRAS;
+	cambio.estado = PJ->getEstado();
+	cambio.dPJ.h = PJ->getAlturaPersonaje();
+	cambio.dPJ.w = PJ->getAnchoPersonaje();
+
+	return cambio;
+
 }
 
 Mundo::~Mundo() {
@@ -190,7 +182,7 @@ void Mundo::VerificarSiPjsColisionanaEnElAire(){
 		personaje2->enCaida = false;
 	}
 	if (personaje1->estado == SALTANDO_OBLICUO && personaje2->estado == SALTANDO_OBLICUO) {
-		if (detector.seVan(personaje1, personaje2, deltaCero)) {
+		if (colisionador.seVan(personaje1, personaje2, deltaCero)) {
 			personaje1->enCaida = true;
 			personaje2->enCaida = true;
 		}

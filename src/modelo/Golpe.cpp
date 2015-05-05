@@ -1,7 +1,7 @@
 
 
 #include "Golpe.h"
-#include "DetectorDeColisiones.h"
+#include "Colisionador.h"
 
 Golpe::Golpe(){
 

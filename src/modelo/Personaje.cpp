@@ -8,7 +8,7 @@
 #include "acciones/Agachar.h"
 #include "acciones/Caminar.h"
 #include "acciones/SaltoOblicuo.h"
-#include "DetectorDeColisiones.h"
+#include "Colisionador.h"
 
 
 const float factorDeRestroceso = 2;
@@ -267,7 +267,6 @@ void Personaje::realizarAccion(Tinput orden,float anchoEscenario){
 		case (KEY_PODER):
 			//estado = PODER;
 			if (!lanzandoPoder){
-				cout<<"Se creo poder"<<endl;
 				poder = new Poder(pos,ancho,altura);//TODO: No se tiene que crear cada vez que se apreta la tecla
 			}
 			poder->activar(direccion,0,true);
@@ -335,7 +334,7 @@ Personaje::~Personaje() {
 
 void Personaje::solucionColision(vector<ObjetoColisionable*>  objetosProximos) {
 
-	DetectorDeColisiones detector = DetectorDeColisiones();
+	Colisionador detector = Colisionador();
 	vector<ObjetoColisionable*> objetosColisionados;
 	//Como quiero saber si realmente estan colisionando le mando un delta 0.0
 	objetosColisionados = detector.detectorDeProximidad(objetosProximos,0.0);
@@ -377,7 +376,7 @@ void Personaje::mePegaron(float danioGolpe) {
 	else vida = 0;
 }
 void Personaje::solucionarColision(ObjetoColisionable *enemigo) {
-	DetectorDeColisiones detector = DetectorDeColisiones();
+	Colisionador detector = Colisionador();
 	vector<ObjetoColisionable*> objetosProximos;
 	vector<ObjetoColisionable*> personajeYPoder;
 	objetosProximos.push_back(this);

@@ -3,7 +3,7 @@
 
 #include "../parser/config.h"
 #include "Personaje.h"
-#include "DetectorDeColisiones.h"
+#include "Colisionador.h"
 #include "../Common.h"
 
 class Mundo {
@@ -16,7 +16,7 @@ private:
 	float anchoPantalla;
 
 public:
-	DetectorDeColisiones detector;
+	Colisionador colisionador;
 	Mundo(config configuracion);
 
 	Personaje* getPersonaje();
@@ -33,6 +33,10 @@ public:
 	void VerificarSiPjsColisionanaEnElAire();
 
 	void verificarQueNoSeVallaDeLaPantalla();
+
+	void verificarColision(bool generaViolencia, Personaje* PJ, ObjetoColisionable* objeto,bool esPoder);
+
+	Tcambio actualizarPJ(Personaje* PJ);
 };
 
 #endif /* SRC_MODELO_MUNDO_H_ */
