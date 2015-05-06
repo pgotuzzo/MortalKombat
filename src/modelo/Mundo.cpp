@@ -71,19 +71,6 @@ vector<Tcambio> Mundo::actualizarMundo(vector<Tinput> inputs) {
 	//Verifica y da vuelta la direccion de los personajes si se pasan
 	verificarDireccionDeLosPersonajes();
 
-	//Verifica que no se vayan de una distancia maxima
-	if(!colisionador.detectarLejania(personaje1,personaje2,anchoPantalla -(MIN_DISTANCE_FROM_BOUND*4))){
-		if(personaje1->estado == CAMINANDO){
-			if(personaje1->direccion) personaje1->pos = Posicion(personaje1->pos.getX()+2,personaje1->pos.getY());
-			else personaje1->pos = Posicion(personaje1->pos.getX()-2,personaje1->pos.getY());
-		}
-		if(personaje2->estado == CAMINANDO){
-			if(personaje2->direccion) personaje2->pos = Posicion(personaje2->pos.getX()+2,personaje2->pos.getY());
-			else personaje2->pos = Posicion(personaje2->pos.getX()-2,personaje2->pos.getY());
-
-		}
-	}
-
 	//Choque de saltos oblicuos en el aire
 	if(!colisionador.detectarLejania(personaje1,personaje2,anchoPantalla-deltaLejania))verificarQueNoSeVallaDeLaPantalla();
 	else VerificarSiPjsColisionanaEnElAire();
@@ -91,9 +78,6 @@ vector<Tcambio> Mundo::actualizarMundo(vector<Tinput> inputs) {
 	// Los personajes realizan sus acciones
 	personaje1->realizarAccion(inputs[0],anchoEscenario);
 	personaje2->realizarAccion(inputs[1],anchoEscenario);
-
-
-
 
 	//Colision entre personajes (empujar)
 	vector<ObjetoColisionable*> objetosProximos;
@@ -202,14 +186,29 @@ void Mundo::VerificarSiPjsColisionanaEnElAire(){
 
 
 void Mundo::verificarQueNoSeVallaDeLaPantalla() {
-		if(personaje1->estado == SALTANDO_OBLICUO) {
-			if (((!personaje1->getSentido())&&(personaje1->getDireccion()))||
-				((!personaje1->getSentido())&&(!personaje1->getDireccion())))
-			personaje1->enCaida = true;
-		}else personaje1->enCaida = false;
-		if(personaje2->estado == SALTANDO_OBLICUO) {
-			if (((!personaje2->getSentido())&&(personaje2->getDireccion()))||
-				((!personaje2->getSentido())&&(!personaje2->getDireccion())))
-				personaje2->enCaida = true;
-		}else personaje2->enCaida = false;
+
+	// No se vayan caminando
+	if(!colisionador.detectarLejania(personaje1,personaje2,anchoPantalla -(MIN_DISTANCE_FROM_BOUND*4))){
+		if(personaje1->estado == CAMINANDO){
+			if(personaje1->direccion) personaje1->pos = Posicion(personaje1->pos.getX()+2,personaje1->pos.getY());
+			else personaje1->pos = Posicion(personaje1->pos.getX()-2,personaje1->pos.getY());
+		}
+		if(personaje2->estado == CAMINANDO){
+			if(personaje2->direccion) personaje2->pos = Posicion(personaje2->pos.getX()+2,personaje2->pos.getY());
+			else personaje2->pos = Posicion(personaje2->pos.getX()-2,personaje2->pos.getY());
+
+		}
+	}
+
+	//No se vayan saltando oblicuamente
+	if(personaje1->estado == SALTANDO_OBLICUO) {
+		if (((!personaje1->getSentido())&&(personaje1->getDireccion()))||
+			((!personaje1->getSentido())&&(!personaje1->getDireccion())))
+		personaje1->enCaida = true;
+	}else personaje1->enCaida = false;
+	if(personaje2->estado == SALTANDO_OBLICUO) {
+		if (((!personaje2->getSentido())&&(personaje2->getDireccion()))||
+			((!personaje2->getSentido())&&(!personaje2->getDireccion())))
+			personaje2->enCaida = true;
+	}else personaje2->enCaida = false;
 }

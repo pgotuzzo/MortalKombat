@@ -4,8 +4,8 @@
 using namespace std;
 
 // Constantes para regular el salto oblicuo
-const float alturaSalto = 60;
-const float longitudSalto = 60;
+const float alturaSalto = 70;
+const float longitudSalto = 70;
 const float intervaloSalto = 3; // longitudSalto / intervaloSalto = numero de loops = numero de puntos
 
 

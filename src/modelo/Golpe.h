@@ -20,6 +20,8 @@ public:
 
     void activar(TestadoPersonaje tipoDeGolpe, Posicion posPJ,bool direccion);
 
+    float getAltura();
+
     virtual ~Golpe();
 
 

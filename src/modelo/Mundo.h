@@ -37,6 +37,7 @@ public:
 	void verificarColision(bool generaViolencia, Personaje* PJ, ObjetoColisionable* objeto,bool esPoder);
 
 	Tcambio actualizarPJ(Personaje* PJ);
+
 };
 
 #endif /* SRC_MODELO_MUNDO_H_ */

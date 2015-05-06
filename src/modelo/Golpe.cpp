@@ -65,5 +65,9 @@ void Golpe::activar(TestadoPersonaje tipoDeGolpe, Posicion posPJ,bool direccion)
     else pos.setX(posPJ.getX() - anchoPJ / 2 - ancho / 2);
 }
 
+float Golpe::getAltura() {
+    return altura;
+}
+
 Golpe::~Golpe() {
 }

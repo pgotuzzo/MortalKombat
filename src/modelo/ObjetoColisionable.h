@@ -13,9 +13,7 @@ public:
     float altura;
     float ancho;
 
-    void solucionColision(vector<ObjetoColisionable*>  objetosProximos);
-    void determinarAccionPorColision(ObjetoColisionable* primerObjeto, ObjetoColisionable* segundoObjeto);
-    void solucionarColision(ObjetoColisionable* enemigo);
+    virtual float getAltura() = 0;
 
     virtual ~ObjetoColisionable() {}
 
@@ -23,6 +21,5 @@ public:
 
 
 #endif //MORTALKOMBAT_OBJETOCOLISIONABLE_H
-
 
 

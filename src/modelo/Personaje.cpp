@@ -8,7 +8,6 @@
 #include "acciones/Agachar.h"
 #include "acciones/Caminar.h"
 #include "acciones/SaltoOblicuo.h"
-#include "Colisionador.h"
 
 
 const float factorDeRestroceso = 2;
@@ -45,9 +44,11 @@ Personaje::Personaje(bool direccion,Posicion posInicial,float alto,float ancho){
 
 	golpe = new Golpe(this->ancho,this->altura);
 
-	poder = new Poder();
+	poder = new Poder(this->ancho,this->altura);
 
 	lanzandoGolpe = false;
+	lanzandoPoder = false;
+	protegiendose = false;
 
 	vida = 100;
 }
@@ -102,7 +103,7 @@ void Personaje::ejecutarAcionesActivadas(Accion **accionesEnCurso,float anchoEsc
 		pos = verificarPuntoEnX(accionesEnCurso[3]->realizarAccion(pos,enCaida),anchoEscenario);
 	}
 	if (poder->estado){
-		poder->avanzar(avanceDelPoder);
+		poder->avanzar(poder->ancho);
 	}
 }
 
@@ -126,6 +127,8 @@ void Personaje::realizarAccion(Tinput orden,float anchoEscenario){
 							estado = PARADO;
 							lanzandoGolpe = false;
 							lanzandoPoder = false;
+							protegiendose = false;
+
 						}
 					}
 				}
@@ -136,13 +139,17 @@ void Personaje::realizarAccion(Tinput orden,float anchoEscenario){
 			if (!accionesEnCurso[0]->getEstado()) {
 				if (!accionesEnCurso[3]->getEstado()) {
 					if (!accionesEnCurso[1]->getEstado()) {
-						//Activo el estado de saltar verticalmente
-						loguer->loguear("El personaje salta verticalmente", Log::LOG_DEB);
-						accionesEnCurso[0]->setEstado(activado, pos);
-						estado = SALTANDO_VERTICAL;
-						parado = false;
-						lanzandoGolpe = false;
-						lanzandoPoder = false;
+						if(!poder->estado) {
+
+							//Activo el estado de saltar verticalmente
+							loguer->loguear("El personaje salta verticalmente", Log::LOG_DEB);
+							accionesEnCurso[0]->setEstado(activado, pos);
+							estado = SALTANDO_VERTICAL;
+							parado = false;
+							lanzandoGolpe = false;
+							lanzandoPoder = false;
+							protegiendose = false;
+						}
 					}
 				}
 			}
@@ -152,12 +159,15 @@ void Personaje::realizarAccion(Tinput orden,float anchoEscenario){
 			//activo el estado de agachar
 			if (!accionesEnCurso[0]->getEstado()) {
 				if (!accionesEnCurso[3]->getEstado()) {
-					loguer->loguear("El personaje se encuentra agachado", Log::LOG_DEB);
-					accionesEnCurso[1]->setEstado(activado, pos);
-					estado = AGACHADO;
-					parado = false;
-					lanzandoGolpe = false;
-					lanzandoPoder = false;
+					if(!poder->estado) {
+						loguer->loguear("El personaje se encuentra agachado", Log::LOG_DEB);
+						accionesEnCurso[1]->setEstado(activado, pos);
+						estado = AGACHADO;
+						parado = false;
+						lanzandoGolpe = false;
+						lanzandoPoder = false;
+						protegiendose = false;
+					}
 				}
 			}
 			break;
@@ -167,14 +177,17 @@ void Personaje::realizarAccion(Tinput orden,float anchoEscenario){
 			if (!accionesEnCurso[0]->getEstado()) {
 				if (!accionesEnCurso[3]->getEstado()) {
 					if (!accionesEnCurso[1]->getEstado()) {
-						//activo el estado avanzar
-						sentido = direccion;
-						loguer->loguear("El personaje camina hacia la derecha", Log::LOG_DEB);
-						accionesEnCurso[2]->setEstado(activado, true);
-						estado = CAMINANDO;
-						parado = false;
-						lanzandoGolpe = false;
-						lanzandoPoder = false;
+						if(!poder->estado) {
+							//activo el estado avanzar
+							sentido = direccion;
+							loguer->loguear("El personaje camina hacia la derecha", Log::LOG_DEB);
+							accionesEnCurso[2]->setEstado(activado, true);
+							estado = CAMINANDO;
+							parado = false;
+							lanzandoGolpe = false;
+							lanzandoPoder = false;
+							protegiendose = false;
+						}
 					}
 				}
 			}
@@ -184,14 +197,17 @@ void Personaje::realizarAccion(Tinput orden,float anchoEscenario){
 			if (!accionesEnCurso[0]->getEstado()) {
 				if (!accionesEnCurso[3]->getEstado()) {
 					if (!accionesEnCurso[1]->getEstado()) {
-						//activo el estado avanzar
-						sentido = !direccion;
-						loguer->loguear("El personaje camina hacia la izquierda", Log::LOG_DEB);
-						accionesEnCurso[2]->setEstado(activado, false);
-						estado = CAMINANDO;
-						parado = false;
-						lanzandoGolpe = false;
-						lanzandoPoder = false;
+						if(!poder->estado) {
+							//activo el estado avanzar
+							sentido = !direccion;
+							loguer->loguear("El personaje camina hacia la izquierda", Log::LOG_DEB);
+							accionesEnCurso[2]->setEstado(activado, false);
+							estado = CAMINANDO;
+							parado = false;
+							lanzandoGolpe = false;
+							lanzandoPoder = false;
+							protegiendose = false;
+						}
 					}
 				}
 			}
@@ -201,14 +217,17 @@ void Personaje::realizarAccion(Tinput orden,float anchoEscenario){
 			if (!accionesEnCurso[0]->getEstado()) {
 				if (!accionesEnCurso[3]->getEstado()) {
 					if (!accionesEnCurso[1]->getEstado()) {
-						//Activo el estado de saltar oblicuamente
-						sentido = direccion;
-						loguer->loguear("El personaje salta a la derecha", Log::LOG_DEB);
-						accionesEnCurso[3]->setEstado(activado, pos, true);
-						estado = SALTANDO_OBLICUO;
-						parado = false;
-						lanzandoGolpe = false;
-						lanzandoPoder = false;
+						if(!poder->estado) {
+							//Activo el estado de saltar oblicuamente
+							sentido = direccion;
+							loguer->loguear("El personaje salta a la derecha", Log::LOG_DEB);
+							accionesEnCurso[3]->setEstado(activado, pos, true);
+							estado = SALTANDO_OBLICUO;
+							parado = false;
+							lanzandoGolpe = false;
+							lanzandoPoder = false;
+							protegiendose = false;
+						}
 					}
 				}
 			}
@@ -219,71 +238,95 @@ void Personaje::realizarAccion(Tinput orden,float anchoEscenario){
 			if (!accionesEnCurso[0]->getEstado()) {
 				if (!accionesEnCurso[3]->getEstado()) {
 					if (!accionesEnCurso[1]->getEstado()) {
-						//Activo el estado de saltar oblicuamente
-						sentido = !direccion;
-						loguer->loguear("El personaje salta a la izquierda", Log::LOG_DEB);
-						accionesEnCurso[3]->setEstado(activado, pos, false);
-						estado = SALTANDO_OBLICUO;
-						parado = false;
-						lanzandoGolpe = false;
-						lanzandoPoder = false;
+						if(!poder->estado) {
+							//Activo el estado de saltar oblicuamente
+							sentido = !direccion;
+							loguer->loguear("El personaje salta a la izquierda", Log::LOG_DEB);
+							accionesEnCurso[3]->setEstado(activado, pos, false);
+							estado = SALTANDO_OBLICUO;
+							parado = false;
+							lanzandoGolpe = false;
+							lanzandoPoder = false;
+							protegiendose = false;
+						}
 					}
 				}
 			}
 			break;
 
 		case (KEY_PINIA_ALTA):
-			golpe->activar(PINIA_ALTA,this->pos,this->direccion);
-			//estado = PINIA_ALTA;
-			parado = false;
-			lanzandoGolpe = true;
-			lanzandoPoder = false;
+			if(!poder->estado) {
+				golpe->activar(PINIA_ALTA, this->pos, this->direccion);
+				//estado = PINIA_ALTA;
+				parado = false;
+				lanzandoGolpe = true;
+				lanzandoPoder = false;
+				protegiendose = false;
+			}
 			break;
 
 		case (KEY_PINIA_BAJA):
-			golpe->activar(PINIA_BAJA,this->pos,this->direccion);
-			//estado = PINIA_BAJA;
-			parado = false;
-			lanzandoGolpe = true;
-			lanzandoPoder = false;
+			if(!poder->estado) {
+				golpe->activar(PINIA_BAJA, this->pos, this->direccion);
+				//estado = PINIA_BAJA;
+				parado = false;
+				lanzandoGolpe = true;
+				lanzandoPoder = false;
+				protegiendose = false;
+			}
 			break;
 
 		case (KEY_PATADA_ALTA):
-			golpe->activar(PATADA_ALTA,this->pos,this->direccion);
-			//estado = PATADA_ALTA;
-			parado = false;
-			lanzandoGolpe = true;
-			lanzandoPoder = false;
+			if(!poder->estado) {
+				golpe->activar(PATADA_ALTA, this->pos, this->direccion);
+				//estado = PATADA_ALTA;
+				parado = false;
+				lanzandoGolpe = true;
+				lanzandoPoder = false;
+				protegiendose = false;
+			}
 			break;
 
 		case (KEY_PATADA_BAJA):
-			golpe->activar(PATADA_BAJA,this->pos,this->direccion);
-			//estado = PATADA_BAJA;
-			parado = false;
-			lanzandoGolpe = true;
-			lanzandoPoder = false;
+			if(!poder->estado) {
+				golpe->activar(PATADA_BAJA, this->pos, this->direccion);
+				//estado = PATADA_BAJA;
+				parado = false;
+				lanzandoGolpe = true;
+				lanzandoPoder = false;
+				protegiendose = false;
+			}
 			break;
 
 		case (KEY_PODER):
-			//estado = PODER;
-			if (!lanzandoPoder){
-				poder = new Poder(pos,ancho,altura);//TODO: No se tiene que crear cada vez que se apreta la tecla
+			if(estado==PARADO) {
+				if (!poder->estado) {
+					poder->activar(this->pos, this->direccion, 0,
+								   true);//TODO: No se tiene que crear cada vez que se apreta la tecla
+					//estado = PODER;
+				}
+				lanzandoGolpe = false;
+				lanzandoPoder = true;
+				protegiendose = false;
 			}
-			poder->activar(direccion,0,true);
-			lanzandoGolpe = false;
-			lanzandoPoder = true;
 			break;
 
 		case (KEY_PROTECCION):
-			//estado = PROTECCION;
-			lanzandoGolpe = false;
-			lanzandoPoder = false;
+			if(estado == PARADO || estado == AGACHADO || estado == CAMINANDO) {
+				if (!poder->estado) {
+					//estado = PROTECCION;
+					lanzandoGolpe = false;
+					lanzandoPoder = false;
+					protegiendose = true;
+				}
+			}
 			break;
 
 		default:
 			estado = PARADO;
 			lanzandoGolpe = false;
 			lanzandoPoder = false;
+			protegiendose = false;
 			break;
 	}
 
@@ -316,6 +359,12 @@ float Personaje::getAlturaPersonaje() {
 	// si esta saltando oblicuamente devuelve la mitad de la altura del personaje.
 	if (accionesEnCurso[3]->getEstado()) return altura / 2;
 	return altura;
+}
+
+float Personaje::getAltura() {
+	if (accionesEnCurso[3]->getEstado()) return altura / 2;
+	return altura;
+
 }
 
 float Personaje::getAnchoPersonaje() {

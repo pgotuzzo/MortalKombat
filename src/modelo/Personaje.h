@@ -31,6 +31,7 @@ public:
 
 	bool lanzandoGolpe;
 	bool lanzandoPoder;
+	bool protegiendose;
 
 	Poder* poder;
 	Golpe* golpe;
@@ -49,6 +50,8 @@ public:
 
 	Posicion getPosicion();
 	TestadoPersonaje getEstado();
+
+	float getAltura();
 
 	void setDireccion(bool direccion);
 	float getAlturaPersonaje();

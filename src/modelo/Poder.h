@@ -12,12 +12,16 @@ public:
     bool direccion;
     bool estado;
 
-    Poder();
-    Poder(Posicion posPJ,float anchoPJ, float altoPJ);
+    float altoPJ;
+    float anchoPJ;
 
-    void activar(float direccion,float danio,bool nuevoEstado);
+    Poder(float anchoPJ, float altoPJ);
+
+    void activar(Posicion posPJ,float direccion,float danio,bool nuevoEstado);
 
     void avanzar(float avance);
+
+    float getAltura();
 
     void solucionColision(vector<ObjetoColisionable*>  objetosProximos);
     void determinarAccionPorColision(ObjetoColisionable* primerObjeto, ObjetoColisionable* segundoObjeto);
