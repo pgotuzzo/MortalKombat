@@ -12,6 +12,8 @@ const float delay = 45;
 
 int main(int argc, char **argv) {
 
+    loguer->borrar();
+
     string jsonPath = (argv[1] == nullptr) ? string("") : argv[1];
 
     loguer->loguear("------------------INICIO DEL JUEGO--------------------------", Log::LOG_DEB);

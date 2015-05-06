@@ -106,12 +106,18 @@ vector<Tcambio> Mundo::actualizarMundo(vector<Tinput> inputs) {
 	}
 
 	//Colision entre el personaje y el golpe
-	verificarColision(personaje2->lanzandoGolpe,personaje1,personaje2->punchCreator.getGolpe(),false);
-	verificarColision(personaje1->lanzandoGolpe,personaje2,personaje1->punchCreator.getGolpe(),false);
+	bool esPoder = true;
+
+	verificarColision(personaje2->lanzandoGolpe,personaje1,personaje2->golpe,!esPoder);
+	string mensajePJ1 = "Vida del personaje 1: " + to_string(personaje1->vida);
+	if(personaje1->vida < 100 && personaje1->vida > 0)loguer->loguear(mensajePJ1.c_str(),Log::LOG_DEB);
+	verificarColision(personaje1->lanzandoGolpe,personaje2,personaje1->golpe,!esPoder);
+	string mensajePJ2 = "Vida del personaje 2: " + to_string(personaje2->vida);
+	if(personaje2->vida < 100 && personaje2->vida > 0)loguer->loguear(mensajePJ2.c_str(),Log::LOG_DEB);
 
 	//Colision entre el personaje y el poder
-	verificarColision(personaje2->lanzandoPoder,personaje1,personaje2->poder,true);
-	verificarColision(personaje1->lanzandoPoder,personaje2,personaje1->poder,true);
+	verificarColision(personaje2->lanzandoPoder,personaje1,personaje2->poder,esPoder);
+	verificarColision(personaje1->lanzandoPoder,personaje2,personaje1->poder,esPoder);
 
 
 	//Se actualizan a los personajes
@@ -131,7 +137,7 @@ void Mundo::verificarColision(bool generaViolencia, Personaje *PJ, ObjetoColisio
 		vector<ObjetoColisionable *> objetosProximos;
 		objetos.push_back(PJ);
 		objetos.push_back(objeto);
-		objetosProximos = colisionador.detectorDeProximidad(objetos, objeto->ancho/2);
+		objetosProximos = colisionador.detectorDeProximidad(objetos, objeto->ancho);
 		if (!objetosProximos.empty()) {
 			if (esPoder) {
 				colisionador.solucionarColision(PJ, (Poder *) objeto);
@@ -157,9 +163,13 @@ Tcambio Mundo::actualizarPJ(Personaje *PJ) {
 }
 
 Mundo::~Mundo() {
+	if(personaje1->vida == 0) loguer->loguear("El personaje 1 esta muerto",Log::LOG_DEB);
+	else loguer->loguear("El personaje 1 sobrevivio",Log::LOG_DEB);
+	if(personaje2->vida == 0) loguer->loguear("El personaje 2 esta muerto",Log::LOG_DEB);
+	else loguer->loguear("El personaje 2 sobrevivio",Log::LOG_DEB);
 	delete personaje1;
 	delete personaje2;
-	loguer->loguear("Se libera al personaje", Log::LOG_DEB);
+	loguer->loguear("Se libero a los personajes", Log::LOG_DEB);
 }
 
 void Mundo::verificarDireccionDeLosPersonajes() {

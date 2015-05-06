@@ -10,18 +10,17 @@ class Golpe: public ObjetoColisionable{
 
 public:
     float danio;
+    bool estado;
 
-    Golpe();
+    float anchoPJ;
+    float altoPJ;
 
-    Golpe(Posicion posicionGolpe, float anchoGolpe, float alturaGolpe,float danio);
 
+    Golpe(float anchoPJ, float altoPJ);
 
-    void solucionColision(vector<ObjetoColisionable*>  objetosProximos);
-    void determinarAccionPorColision(ObjetoColisionable* primerObjeto, ObjetoColisionable* segundoObjeto);
+    void activar(TestadoPersonaje tipoDeGolpe, Posicion posPJ,bool direccion);
 
-    void solucionarColision(ObjetoColisionable* enemigo);
-
-   virtual ~Golpe();
+    virtual ~Golpe();
 
 
 };

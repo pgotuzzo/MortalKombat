@@ -13,10 +13,11 @@ public:
     float altura;
     float ancho;
 
-    virtual void solucionColision(vector<ObjetoColisionable*>  objetosProximos) = 0;
-    virtual void determinarAccionPorColision(ObjetoColisionable* primerObjeto, ObjetoColisionable* segundoObjeto)= 0;
+    void solucionColision(vector<ObjetoColisionable*>  objetosProximos);
+    void determinarAccionPorColision(ObjetoColisionable* primerObjeto, ObjetoColisionable* segundoObjeto);
+    void solucionarColision(ObjetoColisionable* enemigo);
+
     virtual ~ObjetoColisionable() {}
-    virtual void solucionarColision(ObjetoColisionable* enemigo) = 0;
 
 };
 

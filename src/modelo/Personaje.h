@@ -10,8 +10,8 @@
 #include "Accion.h"
 #include "../Common.h"
 #include "ObjetoColisionable.h"
-#include "CreadorDeGolpes.h"
 #include "Poder.h"
+#include "Golpe.h"
 
 
 using namespace std;
@@ -29,12 +29,11 @@ public:
 	Accion* accionesEnCurso[4];
 	float vida;
 
-	CreadorDeGolpes punchCreator;
-
 	bool lanzandoGolpe;
 	bool lanzandoPoder;
 
 	Poder* poder;
+	Golpe* golpe;
 
 
 	void mePegaron(float danioGolpe);
@@ -48,8 +47,6 @@ public:
 	Personaje(bool direccion,Posicion posInicial,float alto,float ancho);
 	void realizarAccion(Tinput orden,float anchoEscenario);
 
-	void solucionColision(vector<ObjetoColisionable*>  objetosProximos);
-	void determinarAccionPorColision(ObjetoColisionable* primerObjeto, ObjetoColisionable* segundoObjeto);
 	Posicion getPosicion();
 	TestadoPersonaje getEstado();
 
@@ -60,7 +57,6 @@ public:
 	bool getSentido();
 
 	virtual ~Personaje();
-	void solucionarColision(ObjetoColisionable* enemigo);
 
 };
 #endif /* PERSONAJE_H_ */

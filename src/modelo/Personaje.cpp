@@ -43,7 +43,7 @@ Personaje::Personaje(bool direccion,Posicion posInicial,float alto,float ancho){
 
 	enCaida = false;
 
-	punchCreator = CreadorDeGolpes();
+	golpe = new Golpe(this->ancho,this->altura);
 
 	poder = new Poder();
 
@@ -233,7 +233,7 @@ void Personaje::realizarAccion(Tinput orden,float anchoEscenario){
 			break;
 
 		case (KEY_PINIA_ALTA):
-			punchCreator.crearGolpe(PINIA_ALTA, pos, ancho, altura, direccion);
+			golpe->activar(PINIA_ALTA,this->pos,this->direccion);
 			//estado = PINIA_ALTA;
 			parado = false;
 			lanzandoGolpe = true;
@@ -241,7 +241,7 @@ void Personaje::realizarAccion(Tinput orden,float anchoEscenario){
 			break;
 
 		case (KEY_PINIA_BAJA):
-			punchCreator.crearGolpe(PINIA_BAJA, pos, ancho, altura, direccion);
+			golpe->activar(PINIA_BAJA,this->pos,this->direccion);
 			//estado = PINIA_BAJA;
 			parado = false;
 			lanzandoGolpe = true;
@@ -249,7 +249,7 @@ void Personaje::realizarAccion(Tinput orden,float anchoEscenario){
 			break;
 
 		case (KEY_PATADA_ALTA):
-			punchCreator.crearGolpe(PATADA_ALTA, pos, ancho, altura, direccion);
+			golpe->activar(PATADA_ALTA,this->pos,this->direccion);
 			//estado = PATADA_ALTA;
 			parado = false;
 			lanzandoGolpe = true;
@@ -257,7 +257,7 @@ void Personaje::realizarAccion(Tinput orden,float anchoEscenario){
 			break;
 
 		case (KEY_PATADA_BAJA):
-			punchCreator.crearGolpe(PATADA_BAJA, pos, ancho, altura, direccion);
+			golpe->activar(PATADA_BAJA,this->pos,this->direccion);
 			//estado = PATADA_BAJA;
 			parado = false;
 			lanzandoGolpe = true;
@@ -332,41 +332,6 @@ Personaje::~Personaje() {
 
 }
 
-void Personaje::solucionColision(vector<ObjetoColisionable*>  objetosProximos) {
-
-	Colisionador detector = Colisionador();
-	vector<ObjetoColisionable*> objetosColisionados;
-	//Como quiero saber si realmente estan colisionando le mando un delta 0.0
-	objetosColisionados = detector.detectorDeProximidad(objetosProximos,0.0);
-	if(!objetosColisionados.empty()){
-		//for (int i = 0; i<=objetosColisionados.size();i = i+2){
-		determinarAccionPorColision(objetosColisionados[0], objetosColisionados[1]);
-		//}
-	}
-}
-
-
-//TODO: DEBEMOS CONTEMPLAR EL CASO EN QUE SALTEN Y CHOQUEN EN EL AIRE
-// IDEA: generar un un estado "CaidaLibre" que se accione solo cuando chocan en el aire
-//       que al setearse desactive todos los otros estados y dure hasta que llegue al piso.
-// es solo una sugerencia.
-
-void Personaje::determinarAccionPorColision(ObjetoColisionable *primerObjeto, ObjetoColisionable *segundoObjeto) {
-	//cout<<endl<<"CHOCAMOS VIEJA NO ME IMPORTA NADA"<<endl<<endl;
-
-
-	if ((primerObjeto->pos.getX() - segundoObjeto->pos.getX()) <= 0){
-		primerObjeto->pos.setX(primerObjeto->pos.getX() - factorDeRestroceso);
-		segundoObjeto->pos.setX(segundoObjeto->pos.getX() + factorDeRestroceso);
-	}	else{
-			primerObjeto->pos.setX(primerObjeto->pos.getX() + factorDeRestroceso);
-			segundoObjeto->pos.setX(segundoObjeto->pos.getX() - factorDeRestroceso);
-
-
-	};
-
-}
-
 void Personaje::setDireccion(bool direccion) {
 	this->direccion = direccion;
 
@@ -374,32 +339,4 @@ void Personaje::setDireccion(bool direccion) {
 void Personaje::mePegaron(float danioGolpe) {
 	if (vida > danioGolpe) vida = vida - danioGolpe;
 	else vida = 0;
-}
-void Personaje::solucionarColision(ObjetoColisionable *enemigo) {
-	Colisionador detector = Colisionador();
-	vector<ObjetoColisionable*> objetosProximos;
-	vector<ObjetoColisionable*> personajeYPoder;
-	objetosProximos.push_back(this);
-	objetosProximos.push_back(enemigo);
-
-	vector<ObjetoColisionable*> objetosColisionados;
-
-	if(lanzandoGolpe){
-		cout<<"Se estan pegando"<<endl;
-	}
-
-
-	else{
-		objetosColisionados = detector.detectorDeProximidad(objetosProximos,2.0);
-		if(!objetosColisionados.empty()){
-			if ((this->pos.getX() - enemigo->pos.getX()) <= 0) {
-				this->pos.setX(this->pos.getX() - factorDeRestroceso);
-				enemigo->pos.setX(enemigo->pos.getX() + factorDeRestroceso);
-			} else {
-				this->pos.setX(this->pos.getX() + factorDeRestroceso);
-				enemigo->pos.setX(enemigo->pos.getX() - factorDeRestroceso);
-			};
-		}
-
-	}
 }

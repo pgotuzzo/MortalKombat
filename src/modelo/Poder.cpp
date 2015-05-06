@@ -47,29 +47,3 @@ Poder::~Poder() {
 
 
 }
-
-void Poder::solucionColision(vector<ObjetoColisionable*>  objetosProximos){
-
-}
-
-void Poder::determinarAccionPorColision(ObjetoColisionable* primerObjeto, ObjetoColisionable* segundoObjeto){
-
-
-
-}
-
-void Poder::solucionarColision(ObjetoColisionable* enemigo) {
-    this->estado = false;
-    cout<<"PODERRRR"<<endl;
-    float distancia;
-    if(direccion){
-        distancia = enemigo->pos.getX() - pos.getX() - enemigo->ancho/2 - ancho/2;
-    }
-    else distancia = pos.getX() - enemigo->pos.getX() - enemigo->ancho/2 - ancho/2;
-
-    pos = Posicion(pos.getX()+distancia,pos.getY());
-
-    //Lo congela al enemigo
-
-
-}
