@@ -25,6 +25,8 @@ public:
 	bool direccion;
 	bool sentido;
 	float yPiso;
+	float alturaParado;
+	Posicion posInicial;
 	TestadoPersonaje estado;
 	Accion* accionesEnCurso[4];
 	float vida;
@@ -53,6 +55,7 @@ public:
 
 	float getAltura();
 
+	void setEstado(TestadoPersonaje estado);
 	void setDireccion(bool direccion);
 	float getAlturaPersonaje();
 	float getAnchoPersonaje();

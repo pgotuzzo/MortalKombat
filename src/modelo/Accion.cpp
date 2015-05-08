@@ -35,4 +35,8 @@ Posicion Accion::realizarAccion(Posicion pos, bool dir) {
 	return pos;
 }
 
+void Accion::setAnchoDePaso(float nuevoAnchoDePaso){}
+
+void Accion::setAnchoDePasoDefault(){}
+
 

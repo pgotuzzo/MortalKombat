@@ -11,11 +11,16 @@ private:
 
 public:
 	Caminar();
+	float anchoDePaso;
 
 	bool getEstado();
 	void setEstado(bool nuevoEstado, bool nuevaDireccion);
 
+	void setAnchoDePaso(float nuevoAnchoDePaso);
+	void setAnchoDePasoDefault();
+
 	Posicion realizarAccion(Posicion pos);
+	Posicion realizarAccion(Posicion pos, bool dir);
 
 	virtual ~Caminar();
 };

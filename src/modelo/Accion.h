@@ -27,6 +27,11 @@ public:
 
 	virtual Posicion realizarAccion(Posicion pos,bool dir);
 
+	virtual void setAnchoDePaso(float nuevoAnchoDePaso);
+
+	virtual void setAnchoDePasoDefault();
+
+
 	virtual ~Accion();
 };
 

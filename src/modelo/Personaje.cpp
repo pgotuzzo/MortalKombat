@@ -26,8 +26,10 @@ Personaje::Personaje(bool direccion,Posicion posInicial,float alto,float ancho){
 	this->sentido = true;
 	parado = true;
 	estado = PARADO;
+	this->posInicial = posInicial;
 	pos = posInicial;
 	posAnt = posInicial;
+	alturaParado = alto;
 	this->altura = alto;
 	this->ancho = ancho;
 	yPiso = altura + pos.getY();
@@ -103,7 +105,7 @@ void Personaje::ejecutarAcionesActivadas(Accion **accionesEnCurso,float anchoEsc
 		pos = verificarPuntoEnX(accionesEnCurso[3]->realizarAccion(pos,enCaida),anchoEscenario);
 	}
 	if (poder->estado){
-		poder->avanzar(poder->ancho);
+		poder->avanzar(this->ancho/2);
 	}
 }
 
@@ -299,7 +301,7 @@ void Personaje::realizarAccion(Tinput orden,float anchoEscenario){
 			break;
 
 		case (KEY_PODER):
-			if(estado==PARADO) {
+			if(estado==PARADO || estado == SALTANDO_VERTICAL) {
 				if (!poder->estado) {
 					poder->activar(this->pos, this->direccion, 0,
 								   true);//TODO: No se tiene que crear cada vez que se apreta la tecla
@@ -341,6 +343,17 @@ bool Personaje::getSentido() {
 
 bool Personaje::getDireccion() {
 	return direccion;
+}
+
+void Personaje::setEstado(TestadoPersonaje estado) {
+	this->estado = estado;
+	if (estado == AGACHADO || estado == SALTANDO_OBLICUO){
+		altura = altura/2;
+		pos.setY(posInicial.getY()+altura);
+	}
+	altura = alturaParado;
+	pos.setY(posInicial.getY()-alturaParado/2);
+
 }
 
 

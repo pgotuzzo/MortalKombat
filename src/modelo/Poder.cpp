@@ -41,11 +41,20 @@ void Poder::activar(Posicion posPJ,float direccion, float danio, bool nuevoEstad
 }
 
 void Poder::avanzar(float avance) {
+    pos.mostrarPar();
     if(estado) {
-        if (direccion)pos = pos + Posicion(avance, 0);
-        else pos = pos - Posicion(avance, 0);
+        if (direccion){
+            cout<<"Costado derecho poder: "<<pos.getX()+ancho/2<<endl;
+            pos = pos + Posicion(avance, 0);
+        }
+        else{
+            cout<<"Costado izquierdo poder: "<<pos.getX()-ancho/2<<endl;
+            pos = pos - Posicion(avance, 0);
+        }
     }
+
 }
+
 
 float Poder::getAltura() {
     return altura;

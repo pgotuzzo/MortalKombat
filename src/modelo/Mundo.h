@@ -3,8 +3,8 @@
 
 #include "../parser/config.h"
 #include "Personaje.h"
-#include "Colisionador.h"
 #include "../Common.h"
+#include "Colisionador.h"
 
 class Mundo {
 private:

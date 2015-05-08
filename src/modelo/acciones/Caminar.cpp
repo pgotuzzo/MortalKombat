@@ -15,8 +15,17 @@ const float ancho_paso = 2;
 Caminar::Caminar() {
 	estado = false;
 	direccion = true; // se la define para que camine a la derecha, igual despues se setea.
+	this->anchoDePaso = ancho_paso;
 }
 
+void Caminar::setAnchoDePaso(float nuevoAnchoDePaso) {
+	this->anchoDePaso = nuevoAnchoDePaso;
+}
+
+
+void Caminar::setAnchoDePasoDefault() {
+	this->anchoDePaso = ancho_paso;
+}
 /*
  * Se setea la direccion para caminar y el estado.
  */
@@ -33,13 +42,32 @@ bool Caminar::getEstado(){
  * Se realiza la accion de caminar.
  */
 Posicion Caminar::realizarAccion(Posicion pos){
-	Posicion p = Posicion(ancho_paso, 0);
-	if (direccion){
+	Posicion p = Posicion(anchoDePaso, 0);
+	if (direccion) {
 		estado = false;
 		return pos + p;
 	}
 	estado = false;
 	return pos - p;
+}
+
+Posicion Caminar::realizarAccion(Posicion pos, bool dir) {
+	if (dir) {
+		Posicion posAux;
+		Posicion p = Posicion(0, 0);
+		if (direccion) {
+			estado = false;
+			posAux = pos+p;
+			cout<<"Derecha"<<endl;
+			posAux.mostrarPar();
+			return posAux;
+		}
+		estado = false;
+		posAux = pos-p;
+		cout<<"Izquierda"<<endl;
+		posAux.mostrarPar();
+		return posAux;
+	}
 }
 
 Caminar::~Caminar() {
