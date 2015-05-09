@@ -214,7 +214,7 @@ void Colisionador::solucionarColision(Personaje* PJ1, Personaje* PJ2){
     }
 
     //Colision entre un pj saltando oblicuamente y otro que esta parado (que no se superpongan luego dle salto)
-    if(PJ1->estado == SALTANDO_OBLICUO && PJ1->sentido == true && PJ2->estado == PARADO && seProdujoColision(PJ1,PJ2)){
+    if(PJ1->estado == SALTANDO_OBLICUO && PJ1->sentido == true && (PJ2->estado == PARADO || PJ2->estado == AGACHADO) && seProdujoColision(PJ1,PJ2)){
         cout<<"gola3"<<endl;
         if ((PJ1->pos.getX() - PJ2->pos.getX()) <= 0) {
             PJ2->pos.setX(PJ2->pos.getX() + distanciaColisionadaenX(PJ1,PJ2));
