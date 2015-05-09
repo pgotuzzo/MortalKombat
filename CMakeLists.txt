@@ -59,6 +59,8 @@ set(SOURCE_FILES
     src/vista/personajes/Sprite.cpp
     src/vista/personajes/Sprite.h
     src/vista/Capa.cpp
+    src/vista/CapaInfo.h
+    src/vista/CapaInfo.cpp
     src/vista/Capa.h
     src/vista/Pantalla.cpp
     src/vista/Pantalla.h
@@ -77,7 +79,7 @@ set(SOURCE_FILES
     src/modelo/Golpe.h
     )
 
-add_executable(MortalKombat ${SOURCE_FILES})
+add_executable(MortalKombat ${SOURCE_FILES} src/vista/CapaInfo.cpp src/vista/CapaInfo.h)
 
 # Bibliotecas
 target_link_libraries(MortalKombat
