@@ -256,12 +256,29 @@ enum TestadoPersonaje {
     SALTANDO_VERTICAL,
     SALTANDO_OBLICUO,
     AGACHADO,
-    PINIA_ALTA,
+
     PINIA_BAJA,
-    PATADA_ALTA,
+    PINIA_BAJA_AGACHADO,
+
+    PINIA_ALTA,
+    PINIA_ALTA_AGACHADO, //gancho
+
+    PINIA_SALTO,
+
     PATADA_BAJA,
-    PODER,
-    PROTECCION
+    PATADA_BAJA_ATRAS,
+
+    PATADA_AGACHADO,
+    PATADA_SALTO_VERTICAL,
+    PATADA_SALTO, //oblicuo
+
+    PATADA_ALTA,
+    PATADA_ALTA_ATRAS,
+
+    PROTECCION,
+    PROTECCION_AGACHADO,
+
+    PODER
 };
 
 static std::string TestadoPersonajeToString(TestadoPersonaje e) {
@@ -271,11 +288,26 @@ static std::string TestadoPersonajeToString(TestadoPersonaje e) {
         case TestadoPersonaje::SALTANDO_VERTICAL: return "salto_vertical";
         case TestadoPersonaje::SALTANDO_OBLICUO: return "salto_oblicuo";
         case TestadoPersonaje::AGACHADO: return "agachado";
+        case TestadoPersonaje::PINIA_BAJA: return "pinia_baja";
+        case TestadoPersonaje::PINIA_BAJA_AGACHADO: return "pinia_baja_agachado";
+        case TestadoPersonaje::PINIA_ALTA: return "pinia_alta";
+        case TestadoPersonaje::PINIA_ALTA_AGACHADO: return "pinia_alta_agachado";
+        case TestadoPersonaje::PINIA_SALTO: return "pinia_salto";
+        case TestadoPersonaje::PATADA_BAJA: return "patada_baja";
+        case TestadoPersonaje::PATADA_BAJA_ATRAS: return "patada_baja_atras";
+        case TestadoPersonaje::PATADA_AGACHADO: return "patada_agachado";
+        case TestadoPersonaje::PATADA_SALTO_VERTICAL: return "patada_salto_vertical";
+        case TestadoPersonaje::PATADA_SALTO: return "patada_salto";
+        case TestadoPersonaje::PATADA_ALTA: return "patada_alta";
+        case TestadoPersonaje::PATADA_ALTA_ATRAS: return "patada_alta_atras";
+        case TestadoPersonaje::PROTECCION: return "proteccion";
+        case TestadoPersonaje::PROTECCION_AGACHADO: return "proteccion_agachado";
+        case TestadoPersonaje::PODER: return "lanzando_poder";
     }
     return NULL;
 }
 
-static const int TestadoPersonajeCount = 5;
+static const int TestadoPersonajeCount = 20;
 
 enum Tdireccion{
     DERECHA,
@@ -328,7 +360,7 @@ enum Tinput{
     KEY_ARRIBA_IZQUIERDA,
 
     // Golpes Basicos
-            KEY_PINIA_ALTA,
+    KEY_PINIA_ALTA,
     KEY_PINIA_BAJA,
     KEY_PATADA_ALTA,
     KEY_PATADA_BAJA,
