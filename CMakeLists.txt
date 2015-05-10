@@ -77,6 +77,8 @@ set(SOURCE_FILES
     src/modelo/Golpe.h
     src/controlador/ControladorTeclado.cpp
     src/controlador/ControladorTeclado.h
+    src/controlador/ControladorJoystick.cpp
+    src/controlador/ControladorJoystick.h
     )
 
 add_executable(MortalKombat ${SOURCE_FILES}  )

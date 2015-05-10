@@ -16,30 +16,41 @@ const float deltaParaPoder = 5.00;
  */
 Mundo::Mundo(config configuracion) {
 	Tescenario escenario = configuracion.getEscenario();
-	Tpersonaje pj = configuracion.getPersonaje();
+	vector<Tpersonaje> personajes = configuracion.getPersonajes();
+
+	Tpersonaje PJ1 = personajes[0];
+	Tpersonaje PJ2 = personajes[1];
 
 	anchoEscenario = escenario.d.w;
 	altoEscenario = escenario.d.h;
 	altoPiso = escenario.yPiso;
 
-	float altoPJ = pj.d.h;
-	float anchoPJ = pj.d.w;
+	float altoPJ1 = PJ1.d.h;
+	float anchoPJ1 = PJ1.d.w;
+	float altoPJ2 = PJ2.d.h;
+	float anchoPJ2 = PJ2.d.w;
 
 	float pos_x = anchoEscenario/2;
-	float pos_y = altoEscenario - altoPiso - altoPJ;
+	float pos_y1 = altoEscenario - altoPiso - altoPJ1;
+	float pos_y2 = altoEscenario - altoPiso - altoPJ2;
 
-	Tdireccion direccion = configuracion.getPersonaje().orientacion;
+	Tdireccion direccion1 = PJ1.orientacion;
+	Tdireccion direccion2 = PJ2.orientacion;
 
-	bool dir;
+	bool dir1, dir2;
 
-	if (direccion == DERECHA) dir = true;
-	else dir = false;
+	if (direccion1 == DERECHA) dir1 = true;
+	else dir1 = false;
+
+	if(direccion2 == DERECHA) dir2 = true;
+	else dir2 = false;
+
 
 	//TODO: EL PJ1 Y PJ2 EMPIEZAN EN LADOS OPUESTOS - lo dejamos asi por los controles del teclado
 
-	personaje1 = new Personaje(dir,Posicion(pos_x+anchoPJ,pos_y),altoPJ,anchoPJ);
+	personaje1 = new Personaje(dir1,Posicion(pos_x+anchoPJ1,pos_y1),altoPJ1,anchoPJ1);
 	cout<<"Costado izquierdo personaje 1: "<<personaje1->pos.getX() - personaje1->ancho/2<<endl;
-	personaje2 = new Personaje(dir,Posicion(pos_x-anchoPJ,pos_y),altoPJ,anchoPJ);
+	personaje2 = new Personaje(dir2,Posicion(pos_x-anchoPJ2,pos_y2),altoPJ2,anchoPJ2);
 	cout<<"Costado derecho personaje 2: "<<personaje2->pos.getX() + personaje2->ancho/2<<endl;
 	colisionador = Colisionador();
 	colisionador.setEscenario(anchoEscenario);
