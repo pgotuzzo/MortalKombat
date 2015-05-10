@@ -49,6 +49,7 @@ public:
 
 	Personaje(bool direccion,Posicion posInicial,float alto,float ancho);
 	void realizarAccion(Tinput orden,float anchoEscenario);
+	TestadoPersonaje generarEstado(Tinput input);
 
 	Posicion getPosicion();
 	TestadoPersonaje getEstado();
@@ -64,5 +65,8 @@ public:
 
 	virtual ~Personaje();
 
+	void caminar(bool sent, bool direc);
+
+	void saltarOblicuamente(bool sent, bool direc);
 };
 #endif /* PERSONAJE_H_ */

@@ -343,33 +343,43 @@ struct Tcambio{
     Tdimension dPJ;
 };
 
-/**
- * Enum con todos los posibles inputs que el
- *  juego debe ser capaz de manejar.
- */
-enum Tinput{
-    // Teclas no utilizadas
+
+enum class TinputMovimiento{
     KEY_NADA,
 
-    // Movimientos Basicos
     KEY_ARRIBA,
     KEY_ABAJO,
     KEY_DERECHA,
     KEY_IZQUIERDA,
     KEY_ARRIBA_DERECHA,
-    KEY_ARRIBA_IZQUIERDA,
+    KEY_ARRIBA_IZQUIERDA
+};
 
-    // Golpes Basicos
+enum class TinputAccion{
+    KEY_NADA,
+
     KEY_PINIA_ALTA,
     KEY_PINIA_BAJA,
     KEY_PATADA_ALTA,
     KEY_PATADA_BAJA,
     KEY_PROTECCION,
-    KEY_PODER,
+    KEY_PODER
+};
 
-    // Cierre o reinicio del juego
+enum class TinputGame{
+    KEY_NADA,
     KEY_RESTART,
     KEY_EXIT
+};
+
+/**
+ * Struct con todos los posibles inputs que el
+ *  juego debe ser capaz de manejar.
+ */
+struct Tinput{
+    TinputMovimiento movimiento=TinputMovimiento::KEY_NADA;
+    TinputAccion accion=TinputAccion::KEY_NADA;
+    TinputGame game= TinputGame::KEY_NADA;
 };
 
 #endif //_MORTALKOMBAT_COMMON_H_

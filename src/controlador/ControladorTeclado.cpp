@@ -3,202 +3,756 @@
 #include "ControladorTeclado.h"
 
 ControladorTeclado::ControladorTeclado() {
-	inputAnterior1 = KEY_NADA;
-	inputAnterior2 = KEY_NADA;
 }
 
 /*
  * Devuelve la tecla anterior si se repite o la tecla nada si no se repite
  */
 Tinput ControladorTeclado::esAnterior1(const Uint8 *state) {
-	switch (inputAnterior1) {
-		case KEY_IZQUIERDA: {
-			if (state[SDL_SCANCODE_UP] && state[SDL_SCANCODE_LEFT]) return inputAnterior1 = KEY_ARRIBA_IZQUIERDA;
-			else if (state[SDL_SCANCODE_LEFT]) return inputAnterior1 = KEY_IZQUIERDA; break;
+	bool sigue=false;
+	Tinput aux;
+	switch (inputAnterior1.movimiento) {
+		case TinputMovimiento::KEY_IZQUIERDA: {
+			if (state[SDL_SCANCODE_UP] && state[SDL_SCANCODE_LEFT]&&(state[SDL_SCANCODE_U] ||state[SDL_SCANCODE_I]||state[SDL_SCANCODE_J]||state[SDL_SCANCODE_K]||state[SDL_SCANCODE_O]||state[SDL_SCANCODE_L])){
+				if(state[SDL_SCANCODE_J]||state[SDL_SCANCODE_K]){
+					inputAnterior1.movimiento=TinputMovimiento::KEY_ARRIBA_IZQUIERDA;
+					inputAnterior1.accion=TinputAccion::KEY_PATADA_ALTA;
+					return inputAnterior1;
+				} else {
+					inputAnterior1.movimiento=TinputMovimiento::KEY_ARRIBA_IZQUIERDA;
+					inputAnterior1.accion=TinputAccion::KEY_PINIA_ALTA;
+					return inputAnterior1;
+				}
+
+			}else if(state[SDL_SCANCODE_UP] && state[SDL_SCANCODE_LEFT]){
+				inputAnterior1.movimiento=TinputMovimiento::KEY_ARRIBA_IZQUIERDA;
+				return inputAnterior1;
+			}else if (state[SDL_SCANCODE_LEFT]&&state[SDL_SCANCODE_U]){
+				inputAnterior1.movimiento=TinputMovimiento::KEY_IZQUIERDA;
+				inputAnterior1.accion=TinputAccion::KEY_PINIA_ALTA;
+				return inputAnterior1;
+			}else if (state[SDL_SCANCODE_LEFT]&&state[SDL_SCANCODE_I]){
+				inputAnterior1.movimiento=TinputMovimiento::KEY_IZQUIERDA;
+				inputAnterior1.accion=TinputAccion::KEY_PINIA_BAJA;
+				return inputAnterior1;
+			}else if (state[SDL_SCANCODE_LEFT]&&state[SDL_SCANCODE_J]){
+				inputAnterior1.movimiento=TinputMovimiento::KEY_IZQUIERDA;
+				inputAnterior1.accion=TinputAccion::KEY_PATADA_ALTA;
+				return inputAnterior1;
+			}else if (state[SDL_SCANCODE_LEFT]&&state[SDL_SCANCODE_K]){
+				inputAnterior1.movimiento=TinputMovimiento::KEY_IZQUIERDA;
+				inputAnterior1.accion=TinputAccion::KEY_PATADA_BAJA;
+				return inputAnterior1;
+			}
+			else if (state[SDL_SCANCODE_LEFT]){
+				inputAnterior1.movimiento=TinputMovimiento::KEY_IZQUIERDA;
+				return inputAnterior1; break;
+			}
 		};
-		case KEY_DERECHA: {
-			if (state[SDL_SCANCODE_UP] && state[SDL_SCANCODE_RIGHT]) return inputAnterior1 = KEY_ARRIBA_DERECHA;
-			else if (state[SDL_SCANCODE_RIGHT]) return inputAnterior1 = KEY_DERECHA; break;
+		case TinputMovimiento::KEY_DERECHA: {
+			if (state[SDL_SCANCODE_UP] && state[SDL_SCANCODE_RIGHT]&&(state[SDL_SCANCODE_U] ||state[SDL_SCANCODE_I]||state[SDL_SCANCODE_J]||state[SDL_SCANCODE_K]||state[SDL_SCANCODE_O]||state[SDL_SCANCODE_L])){
+				if(state[SDL_SCANCODE_J]||state[SDL_SCANCODE_K]){
+					inputAnterior1.movimiento=TinputMovimiento::KEY_ARRIBA_DERECHA;
+					inputAnterior1.accion=TinputAccion::KEY_PATADA_ALTA;
+					return inputAnterior1;
+				} else {
+					inputAnterior1.movimiento=TinputMovimiento::KEY_ARRIBA_DERECHA;
+					inputAnterior1.accion=TinputAccion::KEY_PINIA_ALTA;
+					return inputAnterior1;
+				}
+
+			}else if(state[SDL_SCANCODE_UP] && state[SDL_SCANCODE_RIGHT]){
+				inputAnterior1.movimiento=TinputMovimiento::KEY_ARRIBA_DERECHA;
+				return inputAnterior1;
+			}else if (state[SDL_SCANCODE_RIGHT]&&state[SDL_SCANCODE_U]){
+				inputAnterior1.movimiento=TinputMovimiento::KEY_DERECHA;
+				inputAnterior1.accion=TinputAccion::KEY_PINIA_ALTA;
+				return inputAnterior1;
+			}else if (state[SDL_SCANCODE_RIGHT]&&state[SDL_SCANCODE_I]){
+				inputAnterior1.movimiento=TinputMovimiento::KEY_DERECHA;
+				inputAnterior1.accion=TinputAccion::KEY_PINIA_BAJA;
+				return inputAnterior1;
+			}else if (state[SDL_SCANCODE_RIGHT]&&state[SDL_SCANCODE_J]){
+				inputAnterior1.movimiento=TinputMovimiento::KEY_DERECHA;
+				inputAnterior1.accion=TinputAccion::KEY_PATADA_ALTA;
+				return inputAnterior1;
+			}else if (state[SDL_SCANCODE_RIGHT]&&state[SDL_SCANCODE_K]){
+				inputAnterior1.movimiento=TinputMovimiento::KEY_DERECHA;
+				inputAnterior1.accion=TinputAccion::KEY_PATADA_BAJA;
+				return inputAnterior1;
+			}else if (state[SDL_SCANCODE_RIGHT]){
+				inputAnterior1.movimiento=TinputMovimiento::KEY_DERECHA;
+				return inputAnterior1; break;
+			}
 		};
-		case KEY_ARRIBA: {
-			if (state[SDL_SCANCODE_UP] && state[SDL_SCANCODE_RIGHT]) return inputAnterior1 = KEY_ARRIBA_DERECHA;
-			else if (state[SDL_SCANCODE_UP] && state[SDL_SCANCODE_LEFT]) return inputAnterior1 = KEY_ARRIBA_IZQUIERDA;
-			else if (state[SDL_SCANCODE_UP]) return inputAnterior1 = KEY_ARRIBA; break;
+		case TinputMovimiento::KEY_ARRIBA: {
+			if (state[SDL_SCANCODE_UP] && state[SDL_SCANCODE_RIGHT]&&(state[SDL_SCANCODE_U] ||state[SDL_SCANCODE_I]||state[SDL_SCANCODE_J]||state[SDL_SCANCODE_K]||state[SDL_SCANCODE_O]||state[SDL_SCANCODE_L])){
+				if(state[SDL_SCANCODE_J]||state[SDL_SCANCODE_K]){
+					inputAnterior1.movimiento=TinputMovimiento::KEY_ARRIBA_DERECHA;
+					inputAnterior1.accion=TinputAccion::KEY_PATADA_ALTA;
+					return inputAnterior1;
+				} else {
+					inputAnterior1.movimiento=TinputMovimiento::KEY_ARRIBA_DERECHA;
+					inputAnterior1.accion=TinputAccion::KEY_PINIA_ALTA;
+					return inputAnterior1;
+				}
+			} else if (state[SDL_SCANCODE_UP] && state[SDL_SCANCODE_LEFT]&&(state[SDL_SCANCODE_U] ||state[SDL_SCANCODE_I]||state[SDL_SCANCODE_J]||state[SDL_SCANCODE_K]||state[SDL_SCANCODE_O]||state[SDL_SCANCODE_L])){
+				if(state[SDL_SCANCODE_J]||state[SDL_SCANCODE_K]){
+					inputAnterior1.movimiento=TinputMovimiento::KEY_ARRIBA_IZQUIERDA;
+					inputAnterior1.accion=TinputAccion::KEY_PATADA_ALTA;
+					return inputAnterior1;
+				} else {
+					inputAnterior1.movimiento=TinputMovimiento::KEY_ARRIBA_IZQUIERDA;
+					inputAnterior1.accion=TinputAccion::KEY_PINIA_ALTA;
+					return inputAnterior1;
+				}
+			}else if(state[SDL_SCANCODE_UP] && state[SDL_SCANCODE_RIGHT]){
+				inputAnterior1.movimiento=TinputMovimiento::KEY_ARRIBA_DERECHA;
+				return inputAnterior1;
+			}else if(state[SDL_SCANCODE_UP] && state[SDL_SCANCODE_LEFT]){
+				inputAnterior1.movimiento=TinputMovimiento::KEY_ARRIBA_IZQUIERDA;
+				return inputAnterior1;
+			}else if(state[SDL_SCANCODE_UP] && state[SDL_SCANCODE_U]){
+				inputAnterior1.movimiento=TinputMovimiento::KEY_ARRIBA;
+				inputAnterior1.accion=TinputAccion::KEY_PINIA_ALTA;
+				return inputAnterior1;
+			}else if(state[SDL_SCANCODE_UP] && state[SDL_SCANCODE_I]){
+				inputAnterior1.movimiento=TinputMovimiento::KEY_ARRIBA;
+				inputAnterior1.accion=TinputAccion::KEY_PINIA_BAJA;
+				return inputAnterior1;
+			}else if(state[SDL_SCANCODE_UP] && state[SDL_SCANCODE_J]){
+				inputAnterior1.movimiento=TinputMovimiento::KEY_ARRIBA;
+				inputAnterior1.accion=TinputAccion::KEY_PATADA_ALTA;
+				return inputAnterior1;
+			}else if(state[SDL_SCANCODE_UP] && state[SDL_SCANCODE_K]){
+				inputAnterior1.movimiento=TinputMovimiento::KEY_ARRIBA;
+				inputAnterior1.accion=TinputAccion::KEY_PATADA_BAJA;
+				return inputAnterior1;
+			}else if(state[SDL_SCANCODE_UP] && state[SDL_SCANCODE_L]){
+				inputAnterior1.movimiento=TinputMovimiento::KEY_ARRIBA;
+				inputAnterior1.accion=TinputAccion::KEY_PODER;
+				return inputAnterior1;
+			}else if(state[SDL_SCANCODE_UP]){
+				inputAnterior1.movimiento=TinputMovimiento::KEY_ARRIBA;
+				return inputAnterior1;break;
+			}break;
 		};
-		case KEY_ABAJO: {
-			if (state[SDL_SCANCODE_DOWN]) return inputAnterior1 = KEY_ABAJO; break;
+		case TinputMovimiento::KEY_ABAJO: {
+			if(state[SDL_SCANCODE_DOWN] && state[SDL_SCANCODE_U]){
+				inputAnterior1.movimiento=TinputMovimiento::KEY_ABAJO;
+				inputAnterior1.accion=TinputAccion::KEY_PINIA_ALTA;
+				return inputAnterior1;
+			}else if(state[SDL_SCANCODE_DOWN] && state[SDL_SCANCODE_I]){
+				inputAnterior1.movimiento=TinputMovimiento::KEY_ABAJO;
+				inputAnterior1.accion=TinputAccion::KEY_PINIA_BAJA;
+				return inputAnterior1;
+			}else if(state[SDL_SCANCODE_DOWN] && state[SDL_SCANCODE_J]){
+				inputAnterior1.movimiento=TinputMovimiento::KEY_ABAJO;
+				inputAnterior1.accion=TinputAccion::KEY_PATADA_ALTA;
+				return inputAnterior1;
+			}else if(state[SDL_SCANCODE_DOWN] && state[SDL_SCANCODE_K]){
+				inputAnterior1.movimiento=TinputMovimiento::KEY_ABAJO;
+				inputAnterior1.accion=TinputAccion::KEY_PATADA_BAJA;
+				return inputAnterior1;
+			}else if(state[SDL_SCANCODE_DOWN] && state[SDL_SCANCODE_L]){
+				inputAnterior1.movimiento=TinputMovimiento::KEY_ABAJO;
+				inputAnterior1.accion=TinputAccion::KEY_PODER;
+				return inputAnterior1;
+			}else if(state[SDL_SCANCODE_DOWN] && state[SDL_SCANCODE_O]){
+				inputAnterior1.movimiento=TinputMovimiento::KEY_ABAJO;
+				inputAnterior1.accion=TinputAccion::KEY_PROTECCION;
+				return inputAnterior1;
+			}else if(state[SDL_SCANCODE_DOWN]){
+				inputAnterior1.movimiento=TinputMovimiento::KEY_ABAJO;
+				return inputAnterior1;break;
+			}
 		};
-		case KEY_ARRIBA_DERECHA: {
-			if (state[SDL_SCANCODE_UP] && state[SDL_SCANCODE_RIGHT]) return inputAnterior1 = KEY_ARRIBA_DERECHA;
-			else if (state[SDL_SCANCODE_RIGHT]) return inputAnterior1 = KEY_DERECHA; break;
+		case TinputMovimiento::KEY_ARRIBA_DERECHA: {
+			if (state[SDL_SCANCODE_UP] && state[SDL_SCANCODE_RIGHT]&&(!state[SDL_SCANCODE_U]&&!state[SDL_SCANCODE_I]&&!state[SDL_SCANCODE_J]&&!state[SDL_SCANCODE_K]&&!state[SDL_SCANCODE_O]&&!state[SDL_SCANCODE_L])){
+				inputAnterior1.movimiento=TinputMovimiento::KEY_ARRIBA_DERECHA;
+				return inputAnterior1;
+			}else if (state[SDL_SCANCODE_RIGHT]){
+				inputAnterior1.movimiento=TinputMovimiento::KEY_DERECHA;
+				return inputAnterior1;break;
+			}
 		};
-		case KEY_ARRIBA_IZQUIERDA: {
-			if (state[SDL_SCANCODE_UP] && state[SDL_SCANCODE_LEFT]) return inputAnterior1 = KEY_ARRIBA_IZQUIERDA;
-			else if (state[SDL_SCANCODE_LEFT]) return inputAnterior1 = KEY_IZQUIERDA; break;
+		case TinputMovimiento::KEY_ARRIBA_IZQUIERDA: {
+			if (state[SDL_SCANCODE_UP] && state[SDL_SCANCODE_LEFT]&&(!state[SDL_SCANCODE_U]&&!state[SDL_SCANCODE_I]&&!state[SDL_SCANCODE_J]&&!state[SDL_SCANCODE_K]&&!state[SDL_SCANCODE_O]&&!state[SDL_SCANCODE_L])){
+				inputAnterior1.movimiento=TinputMovimiento::KEY_ARRIBA_IZQUIERDA;
+				return inputAnterior1;
+			}else if (state[SDL_SCANCODE_LEFT]){
+				inputAnterior1.movimiento=TinputMovimiento::KEY_IZQUIERDA;
+				return inputAnterior1;break;
+			}
 		};
-		case KEY_PINIA_ALTA: {
-			if (state[SDL_SCANCODE_U]) return inputAnterior1 = KEY_PINIA_ALTA; break;
-		};
-		case KEY_PINIA_BAJA: {
-			if (state[SDL_SCANCODE_I]) return inputAnterior1 = KEY_PINIA_BAJA; break;
-		};
-		case KEY_PATADA_ALTA: {
-			if (state[SDL_SCANCODE_J]) return inputAnterior1 = KEY_PATADA_ALTA; break;
-		};
-		case KEY_PATADA_BAJA: {
-			if (state[SDL_SCANCODE_K]) return inputAnterior1 = KEY_PATADA_BAJA; break;
-		};
-		case KEY_PROTECCION: {
-			if (state[SDL_SCANCODE_O]) return inputAnterior1 = KEY_PROTECCION; break;
-		};
-		case KEY_PODER: {
-			if (state[SDL_SCANCODE_L]) return inputAnterior1 = KEY_PODER; break;
-		};
+		default: sigue=true;
 	}
-	return KEY_NADA;
+	if (sigue)
+		switch(inputAnterior1.accion){
+			case TinputAccion::KEY_PINIA_ALTA: {
+				if (state[SDL_SCANCODE_U]){
+					inputAnterior1.accion= TinputAccion::KEY_PINIA_ALTA;
+					return inputAnterior1;
+					break;
+				}
+			};
+			case TinputAccion:: KEY_PINIA_BAJA: {
+				if (state[SDL_SCANCODE_I]){
+					inputAnterior1.accion = TinputAccion::KEY_PINIA_BAJA;
+					return inputAnterior1; break;
+				}
+			};
+			case TinputAccion::KEY_PATADA_ALTA: {
+				if (state[SDL_SCANCODE_J]){
+					inputAnterior1.accion = TinputAccion::KEY_PATADA_ALTA;
+					return inputAnterior1; break;
+				}
+			};
+			case TinputAccion::KEY_PATADA_BAJA: {
+				if (state[SDL_SCANCODE_K]) {
+					inputAnterior1.accion = TinputAccion::KEY_PATADA_BAJA;
+					return inputAnterior1; break;
+				}
+			};
+			case TinputAccion:: KEY_PROTECCION: {
+				if (state[SDL_SCANCODE_O]) {
+					inputAnterior1.accion =TinputAccion:: KEY_PROTECCION;
+					return inputAnterior1; break;
+				}
+			};
+			case TinputAccion::KEY_PODER: {
+				if (state[SDL_SCANCODE_L]) {
+					inputAnterior1.accion = TinputAccion::KEY_PODER;
+					return inputAnterior1; break;
+				}
+			};
+		}
+	return aux;
 }
 /*
  * Devuelve la tecla anterior si se repite o la tecla nada si no se repite
  */
 Tinput ControladorTeclado::esAnterior2(const Uint8 *state) {
-	switch (inputAnterior2) {
-		case KEY_IZQUIERDA: {
-			if (state[SDL_SCANCODE_W] && state[SDL_SCANCODE_A]) return inputAnterior2 = KEY_ARRIBA_IZQUIERDA;
-			else if (state[SDL_SCANCODE_A]) return inputAnterior2 = KEY_IZQUIERDA; break;
+	bool sigue=false;
+	Tinput aux;
+	switch (inputAnterior2.movimiento) {
+		case TinputMovimiento::KEY_IZQUIERDA: {
+			if (state[SDL_SCANCODE_W] && state[SDL_SCANCODE_A]&&(state[SDL_SCANCODE_F] ||state[SDL_SCANCODE_G]||state[SDL_SCANCODE_V]||state[SDL_SCANCODE_B]||state[SDL_SCANCODE_H]||state[SDL_SCANCODE_N])){
+				if(state[SDL_SCANCODE_V]||state[SDL_SCANCODE_B]){
+					inputAnterior2.movimiento=TinputMovimiento::KEY_ARRIBA_IZQUIERDA;
+					inputAnterior2.accion=TinputAccion::KEY_PATADA_ALTA;
+					return inputAnterior2;
+				} else {
+					inputAnterior2.movimiento=TinputMovimiento::KEY_ARRIBA_IZQUIERDA;
+					inputAnterior2.accion=TinputAccion::KEY_PINIA_ALTA;
+					return inputAnterior2;
+				}
+
+			}else if(state[SDL_SCANCODE_W] && state[SDL_SCANCODE_A]){
+				inputAnterior2.movimiento=TinputMovimiento::KEY_ARRIBA_IZQUIERDA;
+				return inputAnterior2;
+			}else if (state[SDL_SCANCODE_A]&&state[SDL_SCANCODE_F]){
+				inputAnterior2.movimiento=TinputMovimiento::KEY_IZQUIERDA;
+				inputAnterior2.accion=TinputAccion::KEY_PINIA_ALTA;
+				return inputAnterior2;
+			}else if (state[SDL_SCANCODE_A]&&state[SDL_SCANCODE_G]){
+				inputAnterior2.movimiento=TinputMovimiento::KEY_IZQUIERDA;
+				inputAnterior2.accion=TinputAccion::KEY_PINIA_BAJA;
+				return inputAnterior2;
+			}else if (state[SDL_SCANCODE_A]&&state[SDL_SCANCODE_V]){
+				inputAnterior2.movimiento=TinputMovimiento::KEY_IZQUIERDA;
+				inputAnterior2.accion=TinputAccion::KEY_PATADA_ALTA;
+				return inputAnterior2;
+			}else if (state[SDL_SCANCODE_A]&&state[SDL_SCANCODE_B]){
+				inputAnterior2.movimiento=TinputMovimiento::KEY_IZQUIERDA;
+				inputAnterior2.accion=TinputAccion::KEY_PATADA_BAJA;
+				return inputAnterior2;
+			}
+			else if (state[SDL_SCANCODE_A]){
+				inputAnterior1.movimiento=TinputMovimiento::KEY_IZQUIERDA;
+				return inputAnterior2; break;
+			}
 		};
-		case KEY_DERECHA: {
-			if (state[SDL_SCANCODE_W] && state[SDL_SCANCODE_D]) return inputAnterior2 = KEY_ARRIBA_DERECHA;
-			else if (state[SDL_SCANCODE_D]) return inputAnterior2 = KEY_DERECHA; break;
+		case TinputMovimiento::KEY_DERECHA: {
+			if (state[SDL_SCANCODE_W] && state[SDL_SCANCODE_D]&&(state[SDL_SCANCODE_F] ||state[SDL_SCANCODE_G]||state[SDL_SCANCODE_V]||state[SDL_SCANCODE_B]||state[SDL_SCANCODE_H]||state[SDL_SCANCODE_N])){
+				if(state[SDL_SCANCODE_V]||state[SDL_SCANCODE_B]){
+					inputAnterior2.movimiento=TinputMovimiento::KEY_ARRIBA_DERECHA;
+					inputAnterior2.accion=TinputAccion::KEY_PATADA_ALTA;
+					return inputAnterior2;
+				} else {
+					inputAnterior2.movimiento=TinputMovimiento::KEY_ARRIBA_DERECHA;
+					inputAnterior2.accion=TinputAccion::KEY_PINIA_ALTA;
+					return inputAnterior2;
+				}
+
+			}else if(state[SDL_SCANCODE_W] && state[SDL_SCANCODE_D]){
+				inputAnterior2.movimiento=TinputMovimiento::KEY_ARRIBA_DERECHA;
+				return inputAnterior2;
+			}else if (state[SDL_SCANCODE_D]&&state[SDL_SCANCODE_F]){
+				inputAnterior2.movimiento=TinputMovimiento::KEY_DERECHA;
+				inputAnterior2.accion=TinputAccion::KEY_PINIA_ALTA;
+				return inputAnterior2;
+			}else if (state[SDL_SCANCODE_D]&&state[SDL_SCANCODE_G]){
+				inputAnterior2.movimiento=TinputMovimiento::KEY_DERECHA;
+				inputAnterior2.accion=TinputAccion::KEY_PINIA_BAJA;
+				return inputAnterior2;
+			}else if (state[SDL_SCANCODE_D]&&state[SDL_SCANCODE_V]){
+				inputAnterior2.movimiento=TinputMovimiento::KEY_DERECHA;
+				inputAnterior2.accion=TinputAccion::KEY_PATADA_ALTA;
+				return inputAnterior2;
+			}else if (state[SDL_SCANCODE_D]&&state[SDL_SCANCODE_B]){
+				inputAnterior2.movimiento=TinputMovimiento::KEY_DERECHA;
+				inputAnterior2.accion=TinputAccion::KEY_PATADA_BAJA;
+				return inputAnterior2;
+			}else if (state[SDL_SCANCODE_D]){
+				inputAnterior2.movimiento=TinputMovimiento::KEY_DERECHA;
+				return inputAnterior2; break;
+			}
 		};
-		case KEY_ARRIBA: {
-			if (state[SDL_SCANCODE_W] && state[SDL_SCANCODE_D]) return inputAnterior2 = KEY_ARRIBA_DERECHA;
-			else if (state[SDL_SCANCODE_W] && state[SDL_SCANCODE_A]) return inputAnterior2 = KEY_ARRIBA_IZQUIERDA;
-			else if (state[SDL_SCANCODE_W]) return inputAnterior2 = KEY_ARRIBA; break;
+		case TinputMovimiento::KEY_ARRIBA: {
+			if (state[SDL_SCANCODE_W] && state[SDL_SCANCODE_D]&&(state[SDL_SCANCODE_F] ||state[SDL_SCANCODE_G]||state[SDL_SCANCODE_V]||state[SDL_SCANCODE_B]||state[SDL_SCANCODE_H]||state[SDL_SCANCODE_N])){
+				if(state[SDL_SCANCODE_V]||state[SDL_SCANCODE_B]){
+					inputAnterior2.movimiento=TinputMovimiento::KEY_ARRIBA_DERECHA;
+					inputAnterior2.accion=TinputAccion::KEY_PATADA_ALTA;
+					return inputAnterior2;
+				} else {
+					inputAnterior2.movimiento=TinputMovimiento::KEY_ARRIBA_DERECHA;
+					inputAnterior2.accion=TinputAccion::KEY_PINIA_ALTA;
+					return inputAnterior2;
+				}
+			} else if (state[SDL_SCANCODE_W] && state[SDL_SCANCODE_A]&&(state[SDL_SCANCODE_F] ||state[SDL_SCANCODE_G]||state[SDL_SCANCODE_V]||state[SDL_SCANCODE_B]||state[SDL_SCANCODE_H]||state[SDL_SCANCODE_N])){
+				if(state[SDL_SCANCODE_V]||state[SDL_SCANCODE_B]){
+					inputAnterior2.movimiento=TinputMovimiento::KEY_ARRIBA_IZQUIERDA;
+					inputAnterior2.accion=TinputAccion::KEY_PATADA_ALTA;
+					return inputAnterior1;
+				} else {
+					inputAnterior2.movimiento=TinputMovimiento::KEY_ARRIBA_IZQUIERDA;
+					inputAnterior2.accion=TinputAccion::KEY_PINIA_ALTA;
+					return inputAnterior2;
+				}
+			}else if(state[SDL_SCANCODE_W] && state[SDL_SCANCODE_D]){
+				inputAnterior2.movimiento=TinputMovimiento::KEY_ARRIBA_DERECHA;
+				return inputAnterior2;
+			}else if(state[SDL_SCANCODE_W] && state[SDL_SCANCODE_A]){
+				inputAnterior2.movimiento=TinputMovimiento::KEY_ARRIBA_IZQUIERDA;
+				return inputAnterior2;
+			}else if(state[SDL_SCANCODE_W] && state[SDL_SCANCODE_F]){
+				inputAnterior2.movimiento=TinputMovimiento::KEY_ARRIBA;
+				inputAnterior2.accion=TinputAccion::KEY_PINIA_ALTA;
+				return inputAnterior2;
+			}else if(state[SDL_SCANCODE_W] && state[SDL_SCANCODE_G]){
+				inputAnterior2.movimiento=TinputMovimiento::KEY_ARRIBA;
+				inputAnterior2.accion=TinputAccion::KEY_PINIA_BAJA;
+				return inputAnterior2;
+			}else if(state[SDL_SCANCODE_W] && state[SDL_SCANCODE_V]){
+				inputAnterior2.movimiento=TinputMovimiento::KEY_ARRIBA;
+				inputAnterior2.accion=TinputAccion::KEY_PATADA_ALTA;
+				return inputAnterior2;
+			}else if(state[SDL_SCANCODE_W] && state[SDL_SCANCODE_B]){
+				inputAnterior2.movimiento=TinputMovimiento::KEY_ARRIBA;
+				inputAnterior2.accion=TinputAccion::KEY_PATADA_BAJA;
+				return inputAnterior2;
+			}else if(state[SDL_SCANCODE_W] && state[SDL_SCANCODE_N]){
+				inputAnterior2.movimiento=TinputMovimiento::KEY_ARRIBA;
+				inputAnterior2.accion=TinputAccion::KEY_PODER;
+				return inputAnterior2;
+			}else if(state[SDL_SCANCODE_W]){
+				inputAnterior2.movimiento=TinputMovimiento::KEY_ARRIBA;
+				return inputAnterior2;break;
+			}break;
 		};
-		case KEY_ABAJO: {
-			if (state[SDL_SCANCODE_S]) return inputAnterior2 = KEY_ABAJO; break;
+		case TinputMovimiento::KEY_ABAJO: {
+			if(state[SDL_SCANCODE_S] && state[SDL_SCANCODE_F]){
+				inputAnterior2.movimiento=TinputMovimiento::KEY_ABAJO;
+				inputAnterior2.accion=TinputAccion::KEY_PINIA_ALTA;
+				return inputAnterior2;
+			}else if(state[SDL_SCANCODE_S] && state[SDL_SCANCODE_G]){
+				inputAnterior2.movimiento=TinputMovimiento::KEY_ABAJO;
+				inputAnterior2.accion=TinputAccion::KEY_PINIA_BAJA;
+				return inputAnterior2;
+			}else if(state[SDL_SCANCODE_S] && state[SDL_SCANCODE_V]){
+				inputAnterior2.movimiento=TinputMovimiento::KEY_ABAJO;
+				inputAnterior2.accion=TinputAccion::KEY_PATADA_ALTA;
+				return inputAnterior2;
+			}else if(state[SDL_SCANCODE_S] && state[SDL_SCANCODE_B]){
+				inputAnterior2.movimiento=TinputMovimiento::KEY_ABAJO;
+				inputAnterior2.accion=TinputAccion::KEY_PATADA_BAJA;
+				return inputAnterior2;
+			}else if(state[SDL_SCANCODE_S] && state[SDL_SCANCODE_N]){
+				inputAnterior2.movimiento=TinputMovimiento::KEY_ABAJO;
+				inputAnterior2.accion=TinputAccion::KEY_PODER;
+				return inputAnterior2;
+			}else if(state[SDL_SCANCODE_S] && state[SDL_SCANCODE_H]){
+				inputAnterior2.movimiento=TinputMovimiento::KEY_ABAJO;
+				inputAnterior2.accion=TinputAccion::KEY_PROTECCION;
+				return inputAnterior2;
+			}else if(state[SDL_SCANCODE_S]){
+				inputAnterior2.movimiento=TinputMovimiento::KEY_ABAJO;
+				return inputAnterior2;break;
+			}
 		};
-		case KEY_ARRIBA_DERECHA: {
-			if (state[SDL_SCANCODE_W] && state[SDL_SCANCODE_D]) return inputAnterior2 = KEY_ARRIBA_DERECHA;
-			else if (state[SDL_SCANCODE_D]) return inputAnterior2 = KEY_DERECHA; break;
+		case TinputMovimiento::KEY_ARRIBA_DERECHA: {
+			if (state[SDL_SCANCODE_W] && state[SDL_SCANCODE_D]&&(!state[SDL_SCANCODE_F]&&!state[SDL_SCANCODE_G]&&!state[SDL_SCANCODE_V]&&!state[SDL_SCANCODE_B]&&!state[SDL_SCANCODE_H]&&!state[SDL_SCANCODE_N])){
+				inputAnterior2.movimiento=TinputMovimiento::KEY_ARRIBA_DERECHA;
+				return inputAnterior2;
+			}else if (state[SDL_SCANCODE_D]){
+				inputAnterior2.movimiento=TinputMovimiento::KEY_DERECHA;
+				return inputAnterior2;break;
+			}
 		};
-		case KEY_ARRIBA_IZQUIERDA: {
-			if (state[SDL_SCANCODE_W] && state[SDL_SCANCODE_A]) return inputAnterior2 = KEY_ARRIBA_IZQUIERDA;
-			else if (state[SDL_SCANCODE_A]) return inputAnterior2 = KEY_IZQUIERDA; break;
+		case TinputMovimiento::KEY_ARRIBA_IZQUIERDA: {
+			if (state[SDL_SCANCODE_W] && state[SDL_SCANCODE_A]&&(!state[SDL_SCANCODE_F]&&!state[SDL_SCANCODE_G]&&!state[SDL_SCANCODE_V]&&!state[SDL_SCANCODE_B]&&!state[SDL_SCANCODE_H]&&!state[SDL_SCANCODE_N])){
+				inputAnterior2.movimiento=TinputMovimiento::KEY_ARRIBA_IZQUIERDA;
+				return inputAnterior2;
+			}else if (state[SDL_SCANCODE_A]){
+				inputAnterior2.movimiento=TinputMovimiento::KEY_IZQUIERDA;
+				return inputAnterior2;break;
+			}
 		};
-		case KEY_PINIA_ALTA: {
-			if (state[SDL_SCANCODE_F]) return inputAnterior2 = KEY_PINIA_ALTA; break;
-		};
-		case KEY_PINIA_BAJA: {
-			if (state[SDL_SCANCODE_G]) return inputAnterior2 = KEY_PINIA_BAJA; break;
-		};
-		case KEY_PATADA_ALTA: {
-			if (state[SDL_SCANCODE_V]) return inputAnterior2 = KEY_PATADA_ALTA; break;
-		};
-		case KEY_PATADA_BAJA: {
-			if (state[SDL_SCANCODE_B]) return inputAnterior2 = KEY_PATADA_BAJA; break;
-		};
-		case KEY_PROTECCION: {
-			if (state[SDL_SCANCODE_H]) return inputAnterior2 = KEY_PROTECCION; break;
-		};
-		case KEY_PODER: {
-			if (state[SDL_SCANCODE_N]) return inputAnterior2 = KEY_PODER; break;
-		};
+		default: sigue=true;
 	}
-	return KEY_NADA;
+	if (sigue)
+		switch(inputAnterior1.accion){
+			case TinputAccion::KEY_PINIA_ALTA: {
+				if (state[SDL_SCANCODE_F]){
+					inputAnterior2.accion= TinputAccion::KEY_PINIA_ALTA;
+					return inputAnterior2;
+					break;
+				}
+			};
+			case TinputAccion:: KEY_PINIA_BAJA: {
+				if (state[SDL_SCANCODE_G]){
+					inputAnterior2.accion = TinputAccion::KEY_PINIA_BAJA;
+					return inputAnterior2; break;
+				}
+			};
+			case TinputAccion::KEY_PATADA_ALTA: {
+				if (state[SDL_SCANCODE_V]){
+					inputAnterior2.accion = TinputAccion::KEY_PATADA_ALTA;
+					return inputAnterior2; break;
+				}
+			};
+			case TinputAccion::KEY_PATADA_BAJA: {
+				if (state[SDL_SCANCODE_B]) {
+					inputAnterior2.accion = TinputAccion::KEY_PATADA_BAJA;
+					return inputAnterior2; break;
+				}
+			};
+			case TinputAccion:: KEY_PROTECCION: {
+				if (state[SDL_SCANCODE_H]) {
+					inputAnterior2.accion =TinputAccion:: KEY_PROTECCION;
+					return inputAnterior2; break;
+				}
+			};
+			case TinputAccion::KEY_PODER: {
+				if (state[SDL_SCANCODE_N]) {
+					inputAnterior2.accion = TinputAccion::KEY_PODER;
+					return inputAnterior2; break;
+				}
+			};
+		}
+	return aux;
 }
 
 vector<Tinput> ControladorTeclado::getInputs() {
 
 	const Uint8 *state = SDL_GetKeyboardState(NULL);
-	vector<Tinput> inputs = {Tinput(), Tinput()};
-
+	vector<Tinput> inputs;
+	Tinput aux;
 	SDL_Event event;
 	while (SDL_PollEvent(&event) != 0) {}
 	SDL_PollEvent(&event);
 	switch (event.type) {
 		case SDL_QUIT:
-			inputs[0] = KEY_EXIT;
+			aux.game=TinputGame::KEY_EXIT;
+			inputs.clear();
+			inputs.push_back(aux);
 			return inputs;
 
 			// Solo captura el evento cuando suelta R
 		case SDL_KEYUP: {
 			if (event.key.keysym.sym == SDLK_r) {
-				inputs[0] = KEY_RESTART;
+				aux.game=TinputGame::KEY_RESTART;
+				inputs.clear();
+				inputs.push_back(aux);
 				return inputs;
 			}
 		};
 		default:
 			Tinput anterior1 = esAnterior1(state);
 			Tinput anterior2 = esAnterior2(state);
-			if (anterior1 != KEY_NADA && anterior2 != KEY_NADA) {
-				inputs[0] = anterior1;
-				inputs[1] = anterior2;
+			if ((anterior1.accion !=TinputAccion:: KEY_NADA || anterior1.movimiento != TinputMovimiento::KEY_NADA) &&(anterior2.accion != TinputAccion::KEY_NADA|| anterior2.movimiento != TinputMovimiento::KEY_NADA)) {
+				inputs.clear();
+				inputs.push_back(anterior1);
+				inputs.push_back(anterior2);
 				return inputs;
-			} else if (anterior1 != KEY_NADA) {
-				inputs[0] = anterior1;
-				if (state[SDL_SCANCODE_D]) inputAnterior2 = KEY_DERECHA;
-				else if (state[SDL_SCANCODE_A]) inputAnterior2 = KEY_IZQUIERDA;
-				else if (state[SDL_SCANCODE_W]) inputAnterior2 = KEY_ARRIBA;
-				else if (state[SDL_SCANCODE_S]) inputAnterior2 = KEY_ABAJO;
-				else if (state[SDL_SCANCODE_W] && state[SDL_SCANCODE_D]) inputAnterior2 = KEY_ARRIBA_DERECHA;
-				else if (state[SDL_SCANCODE_W] && state[SDL_SCANCODE_A]) inputAnterior2 = KEY_ARRIBA_IZQUIERDA;
-				else if (state[SDL_SCANCODE_F]) inputAnterior2 = KEY_PINIA_ALTA;
-				else if (state[SDL_SCANCODE_G]) inputAnterior2 = KEY_PINIA_BAJA;
-				else if (state[SDL_SCANCODE_V]) inputAnterior2 = KEY_PATADA_ALTA;
-				else if (state[SDL_SCANCODE_B]) inputAnterior2 = KEY_PATADA_BAJA;
-				else if (state[SDL_SCANCODE_H]) inputAnterior2 = KEY_PROTECCION;
-				else if (state[SDL_SCANCODE_N]) inputAnterior2 = KEY_PODER;
-				else inputAnterior2 = KEY_NADA;
-				inputs[1] = inputAnterior2;
+			} else if (anterior1.accion != TinputAccion::KEY_NADA ||anterior1.movimiento != TinputMovimiento::KEY_NADA ) {
+				inputs.clear();
+				inputAnterior2.accion=TinputAccion::KEY_NADA;inputAnterior2.movimiento=TinputMovimiento::KEY_NADA;inputAnterior2.game=TinputGame::KEY_NADA;
+				if (state[SDL_SCANCODE_D]) inputAnterior2.movimiento = TinputMovimiento::KEY_DERECHA;
+				else if (state[SDL_SCANCODE_A]) inputAnterior2.movimiento = TinputMovimiento::KEY_IZQUIERDA;
+				else if (state[SDL_SCANCODE_W]) inputAnterior2.movimiento = TinputMovimiento::KEY_ARRIBA;
+				else if (state[SDL_SCANCODE_S]) inputAnterior2.movimiento = TinputMovimiento::KEY_ABAJO;
+				else if (state[SDL_SCANCODE_W] && state[SDL_SCANCODE_D]) inputAnterior2.movimiento = TinputMovimiento::KEY_ARRIBA_DERECHA;
+				else if (state[SDL_SCANCODE_W] && state[SDL_SCANCODE_A]) inputAnterior2.movimiento = TinputMovimiento::KEY_ARRIBA_IZQUIERDA;
+				else if (state[SDL_SCANCODE_F]) inputAnterior2.accion = TinputAccion::KEY_PINIA_ALTA;
+				else if (state[SDL_SCANCODE_G]) inputAnterior2.accion = TinputAccion::KEY_PINIA_BAJA;
+				else if (state[SDL_SCANCODE_V]) inputAnterior2.accion =TinputAccion:: KEY_PATADA_ALTA;
+				else if (state[SDL_SCANCODE_B]) inputAnterior2.accion = TinputAccion::KEY_PATADA_BAJA;
+				else if (state[SDL_SCANCODE_H]) inputAnterior2.accion= TinputAccion::KEY_PROTECCION;
+				else if (state[SDL_SCANCODE_N]) inputAnterior2.accion = TinputAccion::KEY_PODER;
+				else if (state[SDL_SCANCODE_W]&&state[SDL_SCANCODE_F]){
+					inputAnterior2.movimiento = TinputMovimiento::KEY_ARRIBA;
+					inputAnterior2.accion=TinputAccion::KEY_PINIA_ALTA;
+				}else if (state[SDL_SCANCODE_W]&&state[SDL_SCANCODE_G]){
+					inputAnterior2.movimiento = TinputMovimiento::KEY_ARRIBA;
+					inputAnterior2.accion=TinputAccion::KEY_PINIA_BAJA;
+				}else if (state[SDL_SCANCODE_W]&&state[SDL_SCANCODE_V]){
+					inputAnterior2.movimiento = TinputMovimiento::KEY_ARRIBA;
+					inputAnterior2.accion=TinputAccion::KEY_PATADA_ALTA;
+				}else if (state[SDL_SCANCODE_W]&&state[SDL_SCANCODE_B]){
+					inputAnterior2.movimiento = TinputMovimiento::KEY_ARRIBA;
+					inputAnterior2.accion=TinputAccion::KEY_PATADA_BAJA;
+				}else if (state[SDL_SCANCODE_W]&&state[SDL_SCANCODE_H]){
+					inputAnterior2.movimiento = TinputMovimiento::KEY_ARRIBA;
+					inputAnterior2.accion=TinputAccion::KEY_PODER;
+				}else if (state[SDL_SCANCODE_W]&&state[SDL_SCANCODE_N]){
+					inputAnterior2.movimiento = TinputMovimiento::KEY_ARRIBA;
+					inputAnterior2.accion=TinputAccion::KEY_PROTECCION;
+				}else if (state[SDL_SCANCODE_S]&&state[SDL_SCANCODE_F]){
+					inputAnterior2.movimiento = TinputMovimiento::KEY_ABAJO;
+					inputAnterior2.accion=TinputAccion::KEY_PINIA_ALTA;
+				}else if (state[SDL_SCANCODE_S]&&state[SDL_SCANCODE_G]){
+					inputAnterior2.movimiento = TinputMovimiento::KEY_ABAJO;
+					inputAnterior2.accion=TinputAccion::KEY_PINIA_BAJA;
+				}else if (state[SDL_SCANCODE_S]&&state[SDL_SCANCODE_V]){
+					inputAnterior2.movimiento = TinputMovimiento::KEY_ABAJO;
+					inputAnterior2.accion=TinputAccion::KEY_PATADA_ALTA;
+				}else if (state[SDL_SCANCODE_S]&&state[SDL_SCANCODE_B]){
+					inputAnterior2.movimiento = TinputMovimiento::KEY_ABAJO;
+					inputAnterior2.accion=TinputAccion::KEY_PATADA_BAJA;
+				}else if (state[SDL_SCANCODE_S]&&state[SDL_SCANCODE_H]){
+					inputAnterior2.movimiento = TinputMovimiento::KEY_ABAJO;
+					inputAnterior2.accion=TinputAccion::KEY_PODER;
+				}else if (state[SDL_SCANCODE_S]&&state[SDL_SCANCODE_N]){
+					inputAnterior2.movimiento = TinputMovimiento::KEY_ABAJO;
+					inputAnterior2.accion=TinputAccion::KEY_PROTECCION;
+				}else if(state[SDL_SCANCODE_W]&&state[SDL_SCANCODE_A]&&(state[SDL_SCANCODE_F]||state[SDL_SCANCODE_G])){
+					inputAnterior2.movimiento = TinputMovimiento::KEY_ARRIBA_IZQUIERDA;
+					inputAnterior2.accion=TinputAccion::KEY_PINIA_BAJA;
+				}else if(state[SDL_SCANCODE_W]&&state[SDL_SCANCODE_A]&&(state[SDL_SCANCODE_V]||state[SDL_SCANCODE_B])){
+					inputAnterior2.movimiento = TinputMovimiento::KEY_ARRIBA_IZQUIERDA;
+					inputAnterior2.accion=TinputAccion::KEY_PATADA_BAJA;
+				}else if(state[SDL_SCANCODE_W]&&state[SDL_SCANCODE_D]&&(state[SDL_SCANCODE_V]||state[SDL_SCANCODE_B])){
+					inputAnterior2.movimiento = TinputMovimiento::KEY_ARRIBA_DERECHA;
+					inputAnterior2.accion=TinputAccion::KEY_PATADA_BAJA;
+				}else if(state[SDL_SCANCODE_W]&&state[SDL_SCANCODE_D]&&(state[SDL_SCANCODE_F]||state[SDL_SCANCODE_G])){
+					inputAnterior2.movimiento = TinputMovimiento::KEY_ARRIBA_DERECHA;
+					inputAnterior2.accion=TinputAccion::KEY_PINIA_BAJA;
+				}
+				else {inputAnterior2.accion=TinputAccion::KEY_NADA;inputAnterior2.movimiento=TinputMovimiento::KEY_NADA;inputAnterior2.game=TinputGame::KEY_NADA;}
+				inputs.push_back(anterior1);
+				inputs.push_back(inputAnterior2);
 				return inputs;
 
-			} else if (anterior2 != KEY_NADA) {
-				inputs[1] = anterior2;
-				if (state[SDL_SCANCODE_RIGHT]) inputAnterior1 = KEY_DERECHA;
-				else if (state[SDL_SCANCODE_LEFT]) inputAnterior1 = KEY_IZQUIERDA;
-				else if (state[SDL_SCANCODE_UP]) inputAnterior1 = KEY_ARRIBA;
-				else if (state[SDL_SCANCODE_DOWN]) inputAnterior1 = KEY_ABAJO;
-				else if (state[SDL_SCANCODE_UP] && state[SDL_SCANCODE_RIGHT]) inputAnterior1 = KEY_ARRIBA_DERECHA;
-				else if (state[SDL_SCANCODE_UP] && state[SDL_SCANCODE_LEFT]) inputAnterior1 = KEY_ARRIBA_IZQUIERDA;
-				else if (state[SDL_SCANCODE_U]) inputAnterior1 = KEY_PINIA_ALTA;
-				else if (state[SDL_SCANCODE_I]) inputAnterior1 = KEY_PINIA_BAJA;
-				else if (state[SDL_SCANCODE_J]) inputAnterior1 = KEY_PATADA_ALTA;
-				else if (state[SDL_SCANCODE_K]) inputAnterior1 = KEY_PATADA_BAJA;
-				else if (state[SDL_SCANCODE_O]) inputAnterior1 = KEY_PROTECCION;
-				else if (state[SDL_SCANCODE_L]) inputAnterior1 = KEY_PODER;
-				else inputAnterior1 = KEY_NADA;
-				inputs[0] = inputAnterior1;
+			} else if (anterior2.accion != TinputAccion::KEY_NADA ||anterior2.movimiento != TinputMovimiento::KEY_NADA ) {
+				inputs.clear();
+				inputAnterior1.accion=TinputAccion::KEY_NADA;inputAnterior1.movimiento=TinputMovimiento::KEY_NADA;inputAnterior1.game=TinputGame::KEY_NADA;
+				if (state[SDL_SCANCODE_RIGHT]) inputAnterior1.movimiento = TinputMovimiento::KEY_DERECHA;
+				else if (state[SDL_SCANCODE_LEFT]) inputAnterior1.movimiento = TinputMovimiento::KEY_IZQUIERDA;
+				else if (state[SDL_SCANCODE_UP]) inputAnterior1.movimiento = TinputMovimiento::KEY_ARRIBA;
+				else if (state[SDL_SCANCODE_DOWN]) inputAnterior1.movimiento = TinputMovimiento::KEY_ABAJO;
+				else if (state[SDL_SCANCODE_UP] && state[SDL_SCANCODE_RIGHT]) inputAnterior1.movimiento = TinputMovimiento::KEY_ARRIBA_DERECHA;
+				else if (state[SDL_SCANCODE_UP] && state[SDL_SCANCODE_LEFT]) inputAnterior1.movimiento = TinputMovimiento::KEY_ARRIBA_IZQUIERDA;
+				else if (state[SDL_SCANCODE_U]) inputAnterior1.accion = TinputAccion::KEY_PINIA_ALTA;
+				else if (state[SDL_SCANCODE_I]) inputAnterior1.accion = TinputAccion::KEY_PINIA_BAJA;
+				else if (state[SDL_SCANCODE_J]) inputAnterior1.accion =TinputAccion:: KEY_PATADA_ALTA;
+				else if (state[SDL_SCANCODE_K]) inputAnterior1.accion = TinputAccion::KEY_PATADA_BAJA;
+				else if (state[SDL_SCANCODE_O]) inputAnterior1.accion= TinputAccion::KEY_PROTECCION;
+				else if (state[SDL_SCANCODE_L]) inputAnterior1.accion = TinputAccion::KEY_PODER;
+				else if (state[SDL_SCANCODE_UP]&&state[SDL_SCANCODE_U]){
+					inputAnterior1.movimiento = TinputMovimiento::KEY_ARRIBA;
+					inputAnterior1.accion=TinputAccion::KEY_PINIA_ALTA;
+				}else if (state[SDL_SCANCODE_UP]&&state[SDL_SCANCODE_I]){
+					inputAnterior1.movimiento = TinputMovimiento::KEY_ARRIBA;
+					inputAnterior1.accion=TinputAccion::KEY_PINIA_BAJA;
+				}else if (state[SDL_SCANCODE_UP]&&state[SDL_SCANCODE_J]){
+					inputAnterior1.movimiento = TinputMovimiento::KEY_ARRIBA;
+					inputAnterior1.accion=TinputAccion::KEY_PATADA_ALTA;
+				}else if (state[SDL_SCANCODE_UP]&&state[SDL_SCANCODE_K]){
+					inputAnterior1.movimiento = TinputMovimiento::KEY_ARRIBA;
+					inputAnterior1.accion=TinputAccion::KEY_PATADA_BAJA;
+				}else if (state[SDL_SCANCODE_UP]&&state[SDL_SCANCODE_O]){
+					inputAnterior1.movimiento = TinputMovimiento::KEY_ARRIBA;
+					inputAnterior1.accion=TinputAccion::KEY_PODER;
+				}else if (state[SDL_SCANCODE_UP]&&state[SDL_SCANCODE_L]){
+					inputAnterior1.movimiento = TinputMovimiento::KEY_ARRIBA;
+					inputAnterior1.accion=TinputAccion::KEY_PROTECCION;
+				}else if (state[SDL_SCANCODE_DOWN]&&state[SDL_SCANCODE_U]){
+					inputAnterior1.movimiento = TinputMovimiento::KEY_ABAJO;
+					inputAnterior1.accion=TinputAccion::KEY_PINIA_ALTA;
+				}else if (state[SDL_SCANCODE_DOWN]&&state[SDL_SCANCODE_I]){
+					inputAnterior1.movimiento = TinputMovimiento::KEY_ABAJO;
+					inputAnterior1.accion=TinputAccion::KEY_PINIA_BAJA;
+				}else if (state[SDL_SCANCODE_DOWN]&&state[SDL_SCANCODE_J]){
+					inputAnterior1.movimiento = TinputMovimiento::KEY_ABAJO;
+					inputAnterior1.accion=TinputAccion::KEY_PATADA_ALTA;
+				}else if (state[SDL_SCANCODE_DOWN]&&state[SDL_SCANCODE_K]){
+					inputAnterior1.movimiento = TinputMovimiento::KEY_ABAJO;
+					inputAnterior1.accion=TinputAccion::KEY_PATADA_BAJA;
+				}else if (state[SDL_SCANCODE_DOWN]&&state[SDL_SCANCODE_O]){
+					inputAnterior1.movimiento = TinputMovimiento::KEY_ABAJO;
+					inputAnterior1.accion=TinputAccion::KEY_PODER;
+				}else if (state[SDL_SCANCODE_DOWN]&&state[SDL_SCANCODE_L]){
+					inputAnterior1.movimiento = TinputMovimiento::KEY_ABAJO;
+					inputAnterior1.accion=TinputAccion::KEY_PROTECCION;
+				}else if(state[SDL_SCANCODE_UP]&&state[SDL_SCANCODE_LEFT]&&(state[SDL_SCANCODE_U]||state[SDL_SCANCODE_I])){
+					inputAnterior1.movimiento = TinputMovimiento::KEY_ARRIBA_IZQUIERDA;
+					inputAnterior1.accion=TinputAccion::KEY_PINIA_BAJA;
+				}else if(state[SDL_SCANCODE_UP]&&state[SDL_SCANCODE_LEFT]&&(state[SDL_SCANCODE_J]||state[SDL_SCANCODE_K])){
+					inputAnterior1.movimiento = TinputMovimiento::KEY_ARRIBA_IZQUIERDA;
+					inputAnterior1.accion=TinputAccion::KEY_PATADA_BAJA;
+				}else if(state[SDL_SCANCODE_UP]&&state[SDL_SCANCODE_RIGHT]&&(state[SDL_SCANCODE_J]||state[SDL_SCANCODE_K])){
+					inputAnterior1.movimiento = TinputMovimiento::KEY_ARRIBA_DERECHA;
+					inputAnterior1.accion=TinputAccion::KEY_PATADA_BAJA;
+				}else if(state[SDL_SCANCODE_UP]&&state[SDL_SCANCODE_RIGHT]&&(state[SDL_SCANCODE_U]||state[SDL_SCANCODE_I])){
+					inputAnterior1.movimiento = TinputMovimiento::KEY_ARRIBA_DERECHA;
+					inputAnterior1.accion=TinputAccion::KEY_PINIA_BAJA;
+				}
+				else {inputAnterior1.accion=TinputAccion::KEY_NADA;inputAnterior1.movimiento=TinputMovimiento::KEY_NADA;inputAnterior1.game=TinputGame::KEY_NADA;}
+				inputs.push_back(inputAnterior1);
+				inputs.push_back(anterior2);
 				return inputs;
 			} else {
-				if (state[SDL_SCANCODE_RIGHT]) inputAnterior1 = KEY_DERECHA;
-				else if (state[SDL_SCANCODE_LEFT]) inputAnterior1 = KEY_IZQUIERDA;
-				else if (state[SDL_SCANCODE_UP]) inputAnterior1 = KEY_ARRIBA;
-				else if (state[SDL_SCANCODE_DOWN]) inputAnterior1 = KEY_ABAJO;
-				else if (state[SDL_SCANCODE_UP] && state[SDL_SCANCODE_RIGHT]) inputAnterior1 = KEY_ARRIBA_DERECHA;
-				else if (state[SDL_SCANCODE_UP] && state[SDL_SCANCODE_LEFT]) inputAnterior1 = KEY_ARRIBA_IZQUIERDA;
-				else if (state[SDL_SCANCODE_U]) inputAnterior1 = KEY_PINIA_ALTA;
-				else if (state[SDL_SCANCODE_I]) inputAnterior1 = KEY_PINIA_BAJA;
-				else if (state[SDL_SCANCODE_J]) inputAnterior1 = KEY_PATADA_ALTA;
-				else if (state[SDL_SCANCODE_K]) inputAnterior1 = KEY_PATADA_BAJA;
-				else if (state[SDL_SCANCODE_O]) inputAnterior1 = KEY_PROTECCION;
-				else if (state[SDL_SCANCODE_L]) inputAnterior1 = KEY_PODER;
-				else inputAnterior1 = KEY_NADA;
-				if (state[SDL_SCANCODE_D]) inputAnterior2 = KEY_DERECHA;
-				else if (state[SDL_SCANCODE_A]) inputAnterior2 = KEY_IZQUIERDA;
-				else if (state[SDL_SCANCODE_W]) inputAnterior2 = KEY_ARRIBA;
-				else if (state[SDL_SCANCODE_S]) inputAnterior2 = KEY_ABAJO;
-				else if (state[SDL_SCANCODE_W] && state[SDL_SCANCODE_D]) inputAnterior2 = KEY_ARRIBA_DERECHA;
-				else if (state[SDL_SCANCODE_W] && state[SDL_SCANCODE_A]) inputAnterior2 = KEY_ARRIBA_IZQUIERDA;
-				else if (state[SDL_SCANCODE_F]) inputAnterior2 = KEY_PINIA_ALTA;
-				else if (state[SDL_SCANCODE_G]) inputAnterior2 = KEY_PINIA_BAJA;
-				else if (state[SDL_SCANCODE_V]) inputAnterior2 = KEY_PATADA_ALTA;
-				else if (state[SDL_SCANCODE_B]) inputAnterior2 = KEY_PATADA_BAJA;
-				else if (state[SDL_SCANCODE_H]) inputAnterior2 = KEY_PROTECCION;
-				else if (state[SDL_SCANCODE_N]) inputAnterior2 = KEY_PODER;
-				else inputAnterior2 = KEY_NADA;
-				inputs[0] = inputAnterior1;
-				inputs[1] = inputAnterior2;
+				inputs.clear();
+				inputAnterior1.accion=TinputAccion::KEY_NADA;inputAnterior1.movimiento=TinputMovimiento::KEY_NADA;inputAnterior1.game=TinputGame::KEY_NADA;
+				if (state[SDL_SCANCODE_RIGHT]) inputAnterior1.movimiento = TinputMovimiento::KEY_DERECHA;
+				else if (state[SDL_SCANCODE_LEFT]) inputAnterior1.movimiento = TinputMovimiento::KEY_IZQUIERDA;
+				else if (state[SDL_SCANCODE_UP]) inputAnterior1.movimiento = TinputMovimiento::KEY_ARRIBA;
+				else if (state[SDL_SCANCODE_DOWN]) inputAnterior1.movimiento = TinputMovimiento::KEY_ABAJO;
+				else if (state[SDL_SCANCODE_UP] && state[SDL_SCANCODE_RIGHT]) inputAnterior1.movimiento = TinputMovimiento::KEY_ARRIBA_DERECHA;
+				else if (state[SDL_SCANCODE_UP] && state[SDL_SCANCODE_LEFT]) inputAnterior1.movimiento = TinputMovimiento::KEY_ARRIBA_IZQUIERDA;
+				else if (state[SDL_SCANCODE_U]) inputAnterior1.accion = TinputAccion::KEY_PINIA_ALTA;
+				else if (state[SDL_SCANCODE_I]) inputAnterior1.accion = TinputAccion::KEY_PINIA_BAJA;
+				else if (state[SDL_SCANCODE_J]) inputAnterior1.accion =TinputAccion:: KEY_PATADA_ALTA;
+				else if (state[SDL_SCANCODE_K]) inputAnterior1.accion = TinputAccion::KEY_PATADA_BAJA;
+				else if (state[SDL_SCANCODE_O]) inputAnterior1.accion= TinputAccion::KEY_PROTECCION;
+				else if (state[SDL_SCANCODE_L]) inputAnterior1.accion = TinputAccion::KEY_PODER;
+				else if (state[SDL_SCANCODE_UP]&&state[SDL_SCANCODE_U]){
+					inputAnterior1.movimiento = TinputMovimiento::KEY_ARRIBA;
+					inputAnterior1.accion=TinputAccion::KEY_PINIA_ALTA;
+				}else if (state[SDL_SCANCODE_UP]&&state[SDL_SCANCODE_I]){
+					inputAnterior1.movimiento = TinputMovimiento::KEY_ARRIBA;
+					inputAnterior1.accion=TinputAccion::KEY_PINIA_BAJA;
+				}else if (state[SDL_SCANCODE_UP]&&state[SDL_SCANCODE_J]){
+					inputAnterior1.movimiento = TinputMovimiento::KEY_ARRIBA;
+					inputAnterior1.accion=TinputAccion::KEY_PATADA_ALTA;
+				}else if (state[SDL_SCANCODE_UP]&&state[SDL_SCANCODE_K]){
+					inputAnterior1.movimiento = TinputMovimiento::KEY_ARRIBA;
+					inputAnterior1.accion=TinputAccion::KEY_PATADA_BAJA;
+				}else if (state[SDL_SCANCODE_UP]&&state[SDL_SCANCODE_O]){
+					inputAnterior1.movimiento = TinputMovimiento::KEY_ARRIBA;
+					inputAnterior1.accion=TinputAccion::KEY_PODER;
+				}else if (state[SDL_SCANCODE_UP]&&state[SDL_SCANCODE_L]){
+					inputAnterior1.movimiento = TinputMovimiento::KEY_ARRIBA;
+					inputAnterior1.accion=TinputAccion::KEY_PROTECCION;
+				}else if (state[SDL_SCANCODE_DOWN]&&state[SDL_SCANCODE_U]){
+					inputAnterior1.movimiento = TinputMovimiento::KEY_ABAJO;
+					inputAnterior1.accion=TinputAccion::KEY_PINIA_ALTA;
+				}else if (state[SDL_SCANCODE_DOWN]&&state[SDL_SCANCODE_I]){
+					inputAnterior1.movimiento = TinputMovimiento::KEY_ABAJO;
+					inputAnterior1.accion=TinputAccion::KEY_PINIA_BAJA;
+				}else if (state[SDL_SCANCODE_DOWN]&&state[SDL_SCANCODE_J]){
+					inputAnterior1.movimiento = TinputMovimiento::KEY_ABAJO;
+					inputAnterior1.accion=TinputAccion::KEY_PATADA_ALTA;
+				}else if (state[SDL_SCANCODE_DOWN]&&state[SDL_SCANCODE_K]){
+					inputAnterior1.movimiento = TinputMovimiento::KEY_ABAJO;
+					inputAnterior1.accion=TinputAccion::KEY_PATADA_BAJA;
+				}else if (state[SDL_SCANCODE_DOWN]&&state[SDL_SCANCODE_O]){
+					inputAnterior1.movimiento = TinputMovimiento::KEY_ABAJO;
+					inputAnterior1.accion=TinputAccion::KEY_PODER;
+				}else if (state[SDL_SCANCODE_DOWN]&&state[SDL_SCANCODE_L]){
+					inputAnterior1.movimiento = TinputMovimiento::KEY_ABAJO;
+					inputAnterior1.accion=TinputAccion::KEY_PROTECCION;
+				}else if(state[SDL_SCANCODE_UP]&&state[SDL_SCANCODE_LEFT]&&(state[SDL_SCANCODE_U]||state[SDL_SCANCODE_I])){
+					inputAnterior1.movimiento = TinputMovimiento::KEY_ARRIBA_IZQUIERDA;
+					inputAnterior1.accion=TinputAccion::KEY_PINIA_BAJA;
+				}else if(state[SDL_SCANCODE_UP]&&state[SDL_SCANCODE_LEFT]&&(state[SDL_SCANCODE_J]||state[SDL_SCANCODE_K])){
+					inputAnterior1.movimiento = TinputMovimiento::KEY_ARRIBA_IZQUIERDA;
+					inputAnterior1.accion=TinputAccion::KEY_PATADA_BAJA;
+				}else if(state[SDL_SCANCODE_UP]&&state[SDL_SCANCODE_RIGHT]&&(state[SDL_SCANCODE_J]||state[SDL_SCANCODE_K])){
+					inputAnterior1.movimiento = TinputMovimiento::KEY_ARRIBA_DERECHA;
+					inputAnterior1.accion=TinputAccion::KEY_PATADA_BAJA;
+				}else if(state[SDL_SCANCODE_UP]&&state[SDL_SCANCODE_RIGHT]&&(state[SDL_SCANCODE_U]||state[SDL_SCANCODE_I])){
+					inputAnterior1.movimiento = TinputMovimiento::KEY_ARRIBA_DERECHA;
+					inputAnterior1.accion=TinputAccion::KEY_PINIA_BAJA;
+				}
+				else {inputAnterior1.accion=TinputAccion::KEY_NADA;inputAnterior1.movimiento=TinputMovimiento::KEY_NADA;inputAnterior1.game=TinputGame::KEY_NADA;}
+				inputAnterior2.accion=TinputAccion::KEY_NADA;inputAnterior2.movimiento=TinputMovimiento::KEY_NADA;inputAnterior2.game=TinputGame::KEY_NADA;
+				if (state[SDL_SCANCODE_D]) inputAnterior2.movimiento = TinputMovimiento::KEY_DERECHA;
+				else if (state[SDL_SCANCODE_A]) inputAnterior2.movimiento = TinputMovimiento::KEY_IZQUIERDA;
+				else if (state[SDL_SCANCODE_W]) inputAnterior2.movimiento = TinputMovimiento::KEY_ARRIBA;
+				else if (state[SDL_SCANCODE_S]) inputAnterior2.movimiento = TinputMovimiento::KEY_ABAJO;
+				else if (state[SDL_SCANCODE_W] && state[SDL_SCANCODE_D]) inputAnterior2.movimiento = TinputMovimiento::KEY_ARRIBA_DERECHA;
+				else if (state[SDL_SCANCODE_W] && state[SDL_SCANCODE_A]) inputAnterior2.movimiento = TinputMovimiento::KEY_ARRIBA_IZQUIERDA;
+				else if (state[SDL_SCANCODE_F]) inputAnterior2.accion = TinputAccion::KEY_PINIA_ALTA;
+				else if (state[SDL_SCANCODE_G]) inputAnterior2.accion = TinputAccion::KEY_PINIA_BAJA;
+				else if (state[SDL_SCANCODE_V]) inputAnterior2.accion =TinputAccion:: KEY_PATADA_ALTA;
+				else if (state[SDL_SCANCODE_B]) inputAnterior2.accion = TinputAccion::KEY_PATADA_BAJA;
+				else if (state[SDL_SCANCODE_H]) inputAnterior2.accion= TinputAccion::KEY_PROTECCION;
+				else if (state[SDL_SCANCODE_N]) inputAnterior2.accion = TinputAccion::KEY_PODER;
+				else if (state[SDL_SCANCODE_W]&&state[SDL_SCANCODE_F]){
+					inputAnterior2.movimiento = TinputMovimiento::KEY_ARRIBA;
+					inputAnterior2.accion=TinputAccion::KEY_PINIA_ALTA;
+				}else if (state[SDL_SCANCODE_W]&&state[SDL_SCANCODE_G]){
+					inputAnterior2.movimiento = TinputMovimiento::KEY_ARRIBA;
+					inputAnterior2.accion=TinputAccion::KEY_PINIA_BAJA;
+				}else if (state[SDL_SCANCODE_W]&&state[SDL_SCANCODE_V]){
+					inputAnterior2.movimiento = TinputMovimiento::KEY_ARRIBA;
+					inputAnterior2.accion=TinputAccion::KEY_PATADA_ALTA;
+				}else if (state[SDL_SCANCODE_W]&&state[SDL_SCANCODE_B]){
+					inputAnterior2.movimiento = TinputMovimiento::KEY_ARRIBA;
+					inputAnterior2.accion=TinputAccion::KEY_PATADA_BAJA;
+				}else if (state[SDL_SCANCODE_W]&&state[SDL_SCANCODE_H]){
+					inputAnterior2.movimiento = TinputMovimiento::KEY_ARRIBA;
+					inputAnterior2.accion=TinputAccion::KEY_PODER;
+				}else if (state[SDL_SCANCODE_W]&&state[SDL_SCANCODE_N]){
+					inputAnterior2.movimiento = TinputMovimiento::KEY_ARRIBA;
+					inputAnterior2.accion=TinputAccion::KEY_PROTECCION;
+				}else if (state[SDL_SCANCODE_S]&&state[SDL_SCANCODE_F]){
+					inputAnterior2.movimiento = TinputMovimiento::KEY_ABAJO;
+					inputAnterior2.accion=TinputAccion::KEY_PINIA_ALTA;
+				}else if (state[SDL_SCANCODE_S]&&state[SDL_SCANCODE_G]){
+					inputAnterior2.movimiento = TinputMovimiento::KEY_ABAJO;
+					inputAnterior2.accion=TinputAccion::KEY_PINIA_BAJA;
+				}else if (state[SDL_SCANCODE_S]&&state[SDL_SCANCODE_V]){
+					inputAnterior2.movimiento = TinputMovimiento::KEY_ABAJO;
+					inputAnterior2.accion=TinputAccion::KEY_PATADA_ALTA;
+				}else if (state[SDL_SCANCODE_S]&&state[SDL_SCANCODE_B]){
+					inputAnterior2.movimiento = TinputMovimiento::KEY_ABAJO;
+					inputAnterior2.accion=TinputAccion::KEY_PATADA_BAJA;
+				}else if (state[SDL_SCANCODE_S]&&state[SDL_SCANCODE_H]){
+					inputAnterior2.movimiento = TinputMovimiento::KEY_ABAJO;
+					inputAnterior2.accion=TinputAccion::KEY_PODER;
+				}else if (state[SDL_SCANCODE_S]&&state[SDL_SCANCODE_N]){
+					inputAnterior2.movimiento = TinputMovimiento::KEY_ABAJO;
+					inputAnterior2.accion=TinputAccion::KEY_PROTECCION;
+				}else if(state[SDL_SCANCODE_W]&&state[SDL_SCANCODE_A]&&(state[SDL_SCANCODE_F]||state[SDL_SCANCODE_G])){
+					inputAnterior2.movimiento = TinputMovimiento::KEY_ARRIBA_IZQUIERDA;
+					inputAnterior2.accion=TinputAccion::KEY_PINIA_BAJA;
+				}else if(state[SDL_SCANCODE_W]&&state[SDL_SCANCODE_A]&&(state[SDL_SCANCODE_V]||state[SDL_SCANCODE_B])){
+					inputAnterior2.movimiento = TinputMovimiento::KEY_ARRIBA_IZQUIERDA;
+					inputAnterior2.accion=TinputAccion::KEY_PATADA_BAJA;
+				}else if(state[SDL_SCANCODE_W]&&state[SDL_SCANCODE_D]&&(state[SDL_SCANCODE_V]||state[SDL_SCANCODE_B])){
+					inputAnterior2.movimiento = TinputMovimiento::KEY_ARRIBA_DERECHA;
+					inputAnterior2.accion=TinputAccion::KEY_PATADA_BAJA;
+				}else if(state[SDL_SCANCODE_W]&&state[SDL_SCANCODE_D]&&(state[SDL_SCANCODE_F]||state[SDL_SCANCODE_G])){
+					inputAnterior2.movimiento = TinputMovimiento::KEY_ARRIBA_DERECHA;
+					inputAnterior2.accion=TinputAccion::KEY_PINIA_BAJA;
+				}
+				else {inputAnterior2.accion=TinputAccion::KEY_NADA;inputAnterior2.movimiento=TinputMovimiento::KEY_NADA;inputAnterior2.game=TinputGame::KEY_NADA;}
+				inputs.push_back(inputAnterior1);
+				inputs.push_back(inputAnterior2);
 				return inputs;
 			}
 	}

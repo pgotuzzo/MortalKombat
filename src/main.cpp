@@ -22,6 +22,8 @@ int main(int argc, char **argv) {
     clock_t t1, t2;
     float timeloop;
 
+
+
     while (!endGame) {
 
         bool restart = false;
@@ -60,12 +62,12 @@ int main(int argc, char **argv) {
         loguer->loguear("Inicia la creacion del controlador", Log::LOG_DEB);
 
 
+        //TODO: Modificar los dos controladores para que devuelvan los nuevos inputs del struct Tinput
         ControladorTeclado controlador = ControladorTeclado();
         //ControladorJoystick controlador = ControladorJoystick();
 
         loguer->loguear("Finaliza la creacion del controlador", Log::LOG_DEB);
         loguer->loguear("-------------- GameLoop ----------------------------", Log::LOG_DEB);
-
 
         while ( !restart && !endGame ) {
             t1 = clock();
@@ -73,16 +75,16 @@ int main(int argc, char **argv) {
             // INPUT
             vector<Tinput> inputs = controlador.getInputs();
 
-            switch (inputs[0]){
+            switch (inputs[0].game){
                 //PARA RESTABLECER EL JUEGO
-                case KEY_RESTART:{
+                case TinputGame::KEY_RESTART:{
                     restart = true;
                     delete(pantalla);
                     delete(mundo);
                     break;
                 };
                     //SI SE DESEA SALIR DEL JUEGO
-                case KEY_EXIT:{
+                case TinputGame::KEY_EXIT:{
                     endGame = true;
                     delete(pantalla);
                     delete(mundo);

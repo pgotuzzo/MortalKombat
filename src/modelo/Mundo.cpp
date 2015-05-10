@@ -82,8 +82,12 @@ vector<Tcambio> Mundo::actualizarMundo(vector<Tinput> inputs) {
 	personaje2->accionesEnCurso[2]->setAnchoDePasoDefault();
 
 	//Choque de saltos oblicuos en el aire
-	if(!colisionador.detectarLejania(personaje1,personaje2,anchoPantalla-(MIN_DISTANCE_FROM_BOUND*4)))verificarQueNoSeVallaDeLaPantalla();
-	else VerificarSiPjsColisionanaEnElAire();
+	if(!colisionador.detectarLejania(personaje1,personaje2,anchoPantalla-(MIN_DISTANCE_FROM_BOUND*4))){
+		verificarQueNoSeVallaDeLaPantalla();
+	}
+	else {
+		VerificarSiPjsColisionanaEnElAire();
+	}
 
 	//Colision entre personajes (empujar)
 	if (colisionador.sonProximos(personaje1,personaje2,-1)){

@@ -69,5 +69,9 @@ float Golpe::getAltura() {
     return altura;
 }
 
+void Golpe::setAlturaPJ(float altura) {
+    this->altoPJ = altura;
+}
+
 Golpe::~Golpe() {
 }
