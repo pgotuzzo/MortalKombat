@@ -137,21 +137,33 @@ void Colisionador::solucionarColision(Personaje* PJ1, Personaje* PJ2){
         };
     }
     else{
+        Tinput inputDerecha;
+        inputDerecha.movimiento = TinputMovimiento::KEY_DERECHA;
+        inputDerecha.accion = TinputAccion::KEY_NADA;
+
+        Tinput inputIzquierda;
+        inputIzquierda.movimiento = TinputMovimiento::KEY_IZQUIERDA;
+        inputDerecha.accion = TinputAccion::KEY_NADA;
+
+        Tinput inputAgachado;
+        inputAgachado.movimiento = TinputMovimiento::KEY_ABAJO;
+        inputAgachado.accion = TinputAccion::KEY_NADA;
+
         if ((PJ1->pos.getX() - PJ2->pos.getX()) <= 0 ) {
             //Un pj empuja a otro que esta protegido. TODO: Falta que se proteja agachado
             if(PJ1->protegiendose || PJ2->protegiendose) {
                 if(PJ1->estado == CAMINANDO && PJ1->sentido == true){
                     if (PJ2->estado ==PARADO) {
                         PJ2->accionesEnCurso[2]->setAnchoDePaso(factorDeRetrocesoConProteccion);
-                        PJ2->realizarAccion(KEY_DERECHA, anchoEsc);
+                        PJ2->realizarAccion(inputDerecha, anchoEsc);
                         PJ2->estado = PARADO;
                         PJ1->accionesEnCurso[2]->setAnchoDePaso(factorDeRetrocesoConProteccion);
                         PJ2->accionesEnCurso[2]->setAnchoDePasoDefault();
                     }
                     else if (PJ2->estado ==AGACHADO) {
                         PJ2->accionesEnCurso[2]->setAnchoDePaso(factorDeRetrocesoConProteccion);
-                        PJ2->realizarAccion(KEY_DERECHA, anchoEsc);
-                        PJ2->realizarAccion(KEY_ABAJO,anchoEsc);
+                        PJ2->realizarAccion(inputDerecha, anchoEsc);
+                        PJ2->realizarAccion(inputAgachado,anchoEsc);
                         PJ1->accionesEnCurso[2]->setAnchoDePaso(factorDeRetrocesoConProteccion);
                         PJ2->accionesEnCurso[2]->setAnchoDePasoDefault();
                     }
@@ -160,15 +172,15 @@ void Colisionador::solucionarColision(Personaje* PJ1, Personaje* PJ2){
                 else if(PJ2->estado == CAMINANDO && PJ2->sentido == true){
                     if (PJ1->estado == PARADO) {
                         PJ1->accionesEnCurso[2]->setAnchoDePaso(factorDeRetrocesoConProteccion);
-                        PJ1->realizarAccion(KEY_IZQUIERDA, anchoEsc);
+                        PJ1->realizarAccion(inputIzquierda, anchoEsc);
                         PJ1->estado = PARADO;
                         PJ2->accionesEnCurso[2]->setAnchoDePaso(factorDeRetrocesoConProteccion);
                         PJ1->accionesEnCurso[2]->setAnchoDePasoDefault();
                     }
                     else if (PJ1->estado == AGACHADO) {
                         PJ1->accionesEnCurso[2]->setAnchoDePaso(factorDeRetrocesoConProteccion);
-                        PJ1->realizarAccion(KEY_IZQUIERDA, anchoEsc);
-                        PJ1->realizarAccion(KEY_ABAJO,anchoEsc);
+                        PJ1->realizarAccion(inputIzquierda, anchoEsc);
+                        PJ1->realizarAccion(inputAgachado,anchoEsc);
                         PJ2->accionesEnCurso[2]->setAnchoDePaso(factorDeRetrocesoConProteccion);
                         PJ1->accionesEnCurso[2]->setAnchoDePasoDefault();
                     }
@@ -180,15 +192,15 @@ void Colisionador::solucionarColision(Personaje* PJ1, Personaje* PJ2){
                 if(PJ1->estado == CAMINANDO && PJ1->sentido == true){
                     if(PJ2->estado == PARADO) {
                         PJ2->accionesEnCurso[2]->setAnchoDePaso(factorDeRestrocesoSinProteccion);
-                        PJ2->realizarAccion(KEY_DERECHA, anchoEsc);
+                        PJ2->realizarAccion(inputDerecha, anchoEsc);
                         PJ2->estado = PARADO;
                         PJ1->accionesEnCurso[2]->setAnchoDePaso(factorDeRestrocesoSinProteccion);
                         PJ2->accionesEnCurso[2]->setAnchoDePasoDefault();
                     }
                     else if(PJ2->estado == AGACHADO) {
                         PJ2->accionesEnCurso[2]->setAnchoDePaso(factorDeRestrocesoSinProteccion);
-                        PJ2->realizarAccion(KEY_DERECHA, anchoEsc);
-                        PJ2->realizarAccion(KEY_ABAJO,anchoEsc);
+                        PJ2->realizarAccion(inputDerecha, anchoEsc);
+                        PJ2->realizarAccion(inputAgachado,anchoEsc);
                         PJ1->accionesEnCurso[2]->setAnchoDePaso(factorDeRestrocesoSinProteccion);
                         PJ2->accionesEnCurso[2]->setAnchoDePasoDefault();
                     }
@@ -196,15 +208,15 @@ void Colisionador::solucionarColision(Personaje* PJ1, Personaje* PJ2){
                 else if(PJ2->estado == CAMINANDO && PJ2->sentido == true){
                     if (PJ1->estado == PARADO){
                         PJ1->accionesEnCurso[2]->setAnchoDePaso(factorDeRestrocesoSinProteccion);
-                        PJ1->realizarAccion(KEY_IZQUIERDA, anchoEsc);
+                        PJ1->realizarAccion(inputIzquierda, anchoEsc);
                         PJ1->estado = PARADO;
                         PJ2->accionesEnCurso[2]->setAnchoDePaso(factorDeRestrocesoSinProteccion);
                         PJ1->accionesEnCurso[2]->setAnchoDePasoDefault();
                     }
                     else if (PJ1->estado == AGACHADO){
                         PJ1->accionesEnCurso[2]->setAnchoDePaso(factorDeRestrocesoSinProteccion);
-                        PJ1->realizarAccion(KEY_IZQUIERDA, anchoEsc);
-                        PJ1->realizarAccion(KEY_ABAJO,anchoEsc);
+                        PJ1->realizarAccion(inputIzquierda, anchoEsc);
+                        PJ1->realizarAccion(inputAgachado,anchoEsc);
                         PJ2->accionesEnCurso[2]->setAnchoDePaso(factorDeRestrocesoSinProteccion);
                         PJ1->accionesEnCurso[2]->setAnchoDePasoDefault();
                     }
@@ -214,7 +226,7 @@ void Colisionador::solucionarColision(Personaje* PJ1, Personaje* PJ2){
     }
 
     //Colision entre un pj saltando oblicuamente y otro que esta parado (que no se superpongan luego dle salto)
-    if(PJ1->estado == SALTANDO_OBLICUO && PJ1->sentido == true && PJ2->estado == PARADO && seProdujoColision(PJ1,PJ2)){
+    if(PJ1->estado == SALTANDO_OBLICUO && PJ1->sentido == true && (PJ2->estado == PARADO || PJ2->estado == AGACHADO) && seProdujoColision(PJ1,PJ2)){
         cout<<"gola3"<<endl;
         if ((PJ1->pos.getX() - PJ2->pos.getX()) <= 0) {
             PJ2->pos.setX(PJ2->pos.getX() + distanciaColisionadaenX(PJ1,PJ2));

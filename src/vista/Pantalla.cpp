@@ -73,6 +73,8 @@ void Pantalla::InicializarCapas(vector<Tcapa> capas) {
         Capa capa = Capa(mUtils, capas[i].dirCapa, rect, capas[i].ancho, mAnchoEscenario);
         mCapas.push_back(capa);
     }
+
+    capaInfo = CapaInfo( mUtils, mDimension);
 }
 
 /*
@@ -96,6 +98,7 @@ Pantalla::Pantalla(vector<Tcapa> capas, Tventana ventana, Tescenario escenario, 
 
     // Capas
     InicializarCapas(capas);
+    elcuentacuentaameo=0;
 };
 
 /*
@@ -112,6 +115,7 @@ void Pantalla::dibujar() {
                mPersonajes[i].getTexture(ventana, posEscenario);
         }
     }
+    capaInfo.getTexture(ventana);
     SDL_RenderPresent(mRenderer);
 
 }
@@ -146,6 +150,12 @@ void Pantalla::update(vector<Tcambio> changes) {
     for (int i = 0; i < mCapas.size(); i++) {
         mCapas[i].ajustar(posEscenario);
     }
+    if (elcuentacuentaameo=20000) {
+        porcv1 = rand()/ float(RAND_MAX);
+        porcv2 = rand()/ float(RAND_MAX);
+        elcuentacuentaameo = 0;
+    }
+    capaInfo.update(porcv1,porcv2);
 }
 
 

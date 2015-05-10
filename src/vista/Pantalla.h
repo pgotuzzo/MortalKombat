@@ -4,6 +4,7 @@
 #include <SDL2/SDL_render.h>
 #include <vector>
 #include "Capa.h"
+#include "CapaInfo.h"
 #include "personajes/PersonajeVista.h"
 
 using namespace std;
@@ -17,6 +18,7 @@ private:
     vector<PersonajeVista> mPersonajes;
     int zIndex;
     Tdimension mDimension;
+    CapaInfo capaInfo;
 
     float distTope;
     float mAnchoPersonaje;
@@ -26,6 +28,9 @@ private:
     void InicializarSdl(Tdimension d);
     void InicializarPersonajes(vector<Tpersonaje> personajes);
     void InicializarCapas(vector<Tcapa> capas);
+
+    float porcv2,porcv1;
+    int elcuentacuentaameo;
 
 public:
     /*

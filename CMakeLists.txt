@@ -59,6 +59,8 @@ set(SOURCE_FILES
     src/vista/personajes/Sprite.cpp
     src/vista/personajes/Sprite.h
     src/vista/Capa.cpp
+    src/vista/CapaInfo.h
+    src/vista/CapaInfo.cpp
     src/vista/Capa.h
     src/vista/Pantalla.cpp
     src/vista/Pantalla.h
@@ -66,8 +68,6 @@ set(SOURCE_FILES
     src/vista/VistaUtils.h
     src/Common.h
     src/main.cpp
-    src/controlador/ControladorTeclado.cpp
-    src/controlador/ControladorTeclado.h
     src/modelo/Colisionador.cpp
     src/modelo/Colisionador.h
     src/modelo/ObjetoColisionable.h
@@ -75,9 +75,13 @@ set(SOURCE_FILES
     src/modelo/Poder.cpp
     src/modelo/Golpe.cpp
     src/modelo/Golpe.h
+    src/controlador/ControladorTeclado.cpp
+    src/controlador/ControladorTeclado.h
+    src/controlador/ControladorJoystick.cpp
+    src/controlador/ControladorJoystick.h
     )
 
-add_executable(MortalKombat ${SOURCE_FILES})
+add_executable(MortalKombat ${SOURCE_FILES}  )
 
 # Bibliotecas
 target_link_libraries(MortalKombat

@@ -11,6 +11,7 @@
 
 #include <cmath>
 #include <string>
+#include <cstring>
 #include <iostream>
 #include "parser/log/WarningLog.h"
 #include "parser/log/DebugLog.h"
@@ -240,6 +241,60 @@ struct Tescenario {
     float yPiso;
 };
 
+struct Tpelea {
+    string player1;
+    string player2;
+
+    void valida(){
+
+        if(strcmp(player1.c_str(),"scorpion")&&strcmp(player1.c_str(),"subzero")){
+            loguer->loguear("Nombre no valido, se carga por defecto",Log::Tlog::LOG_WAR);
+            player1="scorpion";
+        }
+        if(strcmp(player2.c_str(),"scorpion")&&strcmp(player2.c_str(),"subzero")){
+            loguer->loguear("Nombre no valido, se carga por defecto",Log::Tlog::LOG_WAR);
+            player2="scorpion";
+        }
+    }
+};
+
+struct Tbotones{
+    int highPunch;
+    int lowPunch;
+    int lowKick;
+    int highKick;
+    int poder;
+    int proteccion;
+
+    bool valorCorrecto(int num){
+        if(num>=10&&num<=15)
+            return true;
+        else
+            return false;
+    }
+
+    bool seRepiten(){
+        bool repite;
+        repite=(highPunch==lowPunch||highPunch==lowKick||highPunch==highKick||lowPunch==lowKick||lowPunch==highKick||lowKick==highKick);
+        return repite;
+    }
+
+    void valida(){
+        bool correcto=valorCorrecto(highPunch)&&valorCorrecto(lowPunch)
+                      &&valorCorrecto(lowKick)&&valorCorrecto(highKick)
+                      &&!seRepiten();
+
+        if(!correcto){
+            string mensajeError="Error de configuración de botones. Se cargan por defecto";
+            loguer->loguear(mensajeError.c_str(),Log::Tlog::LOG_WAR);
+            highKick=12; 		lowPunch=15;
+            highPunch=13;		poder=11;
+            lowKick=14;			proteccion=10;
+
+        }
+    }
+};
+
 struct Tcapa {
     std::string dirCapa;
     float ancho;
@@ -322,12 +377,15 @@ enum Tsentido{
 struct Tpersonaje {
     Tdimension d;
     int zIndex;
-    Tdireccion orientacion;
+    Tdireccion orientacion=DERECHA;
+    std::string nombre;
     std::string sprites;
 
     // para el personaje alternativo
     TcolorSettings colorSettings;
 };
+
+
 
 /**
  * Estructura que media entre el modelo y
@@ -347,30 +405,44 @@ struct Tcambio{
  * Enum con todos los posibles inputs que el
  *  juego debe ser capaz de manejar.
  */
-enum Tinput{
-    // Teclas no utilizadas
+
+enum class TinputMovimiento{
     KEY_NADA,
 
-    // Movimientos Basicos
     KEY_ARRIBA,
     KEY_ABAJO,
     KEY_DERECHA,
     KEY_IZQUIERDA,
     KEY_ARRIBA_DERECHA,
-    KEY_ARRIBA_IZQUIERDA,
+    KEY_ARRIBA_IZQUIERDA
+};
 
-    // Golpes Basicos
+enum class TinputAccion{
+    KEY_NADA,
+
     KEY_PINIA_ALTA,
     KEY_PINIA_BAJA,
     KEY_PATADA_ALTA,
     KEY_PATADA_BAJA,
     KEY_PROTECCION,
-    KEY_PODER,
+    KEY_PODER
+};
 
-    // Cierre o reinicio del juego
+enum class TinputGame{
+    KEY_NADA,
+
     KEY_RESTART,
     KEY_EXIT
 };
 
-#endif //_MORTALKOMBAT_COMMON_H_
+/**
+ * Struct con todos los posibles inputs que el
+ *  juego debe ser capaz de manejar.
+ */
+struct Tinput{
+    TinputMovimiento movimiento=TinputMovimiento::KEY_NADA;
+    TinputAccion accion=TinputAccion::KEY_NADA;
+    TinputGame game= TinputGame::KEY_NADA;
+};
 
+#endif //_MORTALKOMBAT_COMMON_H_

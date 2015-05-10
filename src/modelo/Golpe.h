@@ -22,6 +22,8 @@ public:
 
     float getAltura();
 
+    void setAlturaPJ(float altura);
+
     virtual ~Golpe();
 
 

@@ -27,10 +27,17 @@ private:
     SDL_Haptic *haptic=NULL;
     SDL_HapticEffect effect;
     int effect_id=0;
+
+    int lowKick;
+    int highKick;
+    int lowPunch;
+    int highPunch;
+    int poder;
+    int proteccion;
 public:
     Tinput inputAnterior1;
     Tinput inputAnterior2;
-    ControladorJoystick();
+    ControladorJoystick(Tbotones);
     vector<Tinput> getInputs();
 
 };

@@ -2,9 +2,15 @@
 #include "ControladorJoystick.h"
 
 
-ControladorJoystick::ControladorJoystick() {
-    inputAnterior1 = KEY_NADA;
-    inputAnterior2 = KEY_NADA;
+ControladorJoystick::ControladorJoystick(Tbotones botones) {
+
+
+    highKick=botones.highKick;
+    highPunch=botones.highPunch;
+    lowKick=botones.lowKick;
+    lowPunch=botones.lowPunch;
+    poder=botones.poder;
+    proteccion=botones.proteccion;
 
     if( SDL_NumJoysticks() < 1 ){
         string mensajeError="No hay joystick conectado.";
@@ -38,70 +44,252 @@ Tinput ControladorJoystick::inputAnteriorX(SDL_Joystick*playerX){
  */
 Tinput ControladorJoystick::esAnterior(SDL_Joystick* playerX) {
     Tinput aux=inputAnteriorX(playerX);
-    switch (aux) {
-        case KEY_IZQUIERDA: {
-            if (SDL_JoystickGetButton(playerX, 4) && SDL_JoystickGetButton(playerX, 7)){
-                guardarAnteriorX(playerX,KEY_ARRIBA_IZQUIERDA);
-                return KEY_ARRIBA_IZQUIERDA;
-            }
-            else if (SDL_JoystickGetButton(playerX, 7)){
-                guardarAnteriorX(playerX,KEY_IZQUIERDA);
-                return KEY_IZQUIERDA; break;
-            }
-        };
-        case KEY_DERECHA: {
-            if (SDL_JoystickGetButton(playerX, 4) && SDL_JoystickGetButton(playerX, 5)){
-                guardarAnteriorX(playerX,KEY_ARRIBA_DERECHA);
-                return KEY_ARRIBA_DERECHA;
-            }
-            else if (SDL_JoystickGetButton(playerX, 5)){
-                guardarAnteriorX(playerX,KEY_DERECHA);
-                return KEY_DERECHA; break;
-            }
-        };
-        case KEY_ARRIBA: {
-            if (SDL_JoystickGetButton(playerX, 4) && SDL_JoystickGetButton(playerX, 5)){
-                guardarAnteriorX(playerX,KEY_ARRIBA_DERECHA);
-                return KEY_ARRIBA_DERECHA;
-            }
-            else if (SDL_JoystickGetButton(playerX, 4) && SDL_JoystickGetButton(playerX, 7)){
-                guardarAnteriorX(playerX,KEY_ARRIBA_IZQUIERDA);
-                return KEY_ARRIBA_IZQUIERDA;
-            }
-            else if (SDL_JoystickGetButton(playerX, 4)){
-                guardarAnteriorX(playerX,KEY_ARRIBA);
-                return KEY_ARRIBA; break;
-            }
-        };
-        case KEY_ABAJO: {
-            if (SDL_JoystickGetButton(playerX, 6)){
-                guardarAnteriorX(playerX,KEY_ABAJO);
-                return KEY_ABAJO; break;
-            }
-        };
-        case KEY_ARRIBA_DERECHA: {
-            if (SDL_JoystickGetButton(playerX, 4) && SDL_JoystickGetButton(playerX, 5)) {
-                guardarAnteriorX(playerX,KEY_ARRIBA_DERECHA);
-                return KEY_ARRIBA_DERECHA;
-            }
-            else if (SDL_JoystickGetButton(playerX, 5)) {
-                guardarAnteriorX(playerX,KEY_DERECHA);
-                return KEY_DERECHA; break;
-            }
-        };
-        case KEY_ARRIBA_IZQUIERDA: {
-            if (SDL_JoystickGetButton(playerX, 4) && SDL_JoystickGetButton(playerX, 7)) {
-                guardarAnteriorX(playerX,KEY_ARRIBA_IZQUIERDA);
-                return KEY_ARRIBA_IZQUIERDA;
-            }
-            else if (SDL_JoystickGetButton(playerX, 7)) {
-                guardarAnteriorX(playerX,KEY_IZQUIERDA);
-                return KEY_IZQUIERDA; break;
+    Tinput retorno;
+    switch (aux.movimiento) {
+        case TinputMovimiento::KEY_IZQUIERDA: {
+            if (SDL_JoystickGetButton(playerX, FLECHA_ARRIBA) && SDL_JoystickGetButton(playerX, FLECHA_IZQUIERDA)&& (SDL_JoystickGetButton(playerX, lowKick) || SDL_JoystickGetButton(playerX, highKick) || SDL_JoystickGetButton(playerX, lowPunch) || SDL_JoystickGetButton(playerX, highPunch) || SDL_JoystickGetButton(playerX, proteccion)|| SDL_JoystickGetButton(playerX, poder))){
+                if((SDL_JoystickGetButton(playerX, lowKick)||SDL_JoystickGetButton(playerX, highKick))){
+                    retorno.movimiento=TinputMovimiento::KEY_ARRIBA_IZQUIERDA;
+                    cout<<"11111111111"<<endl;
+                    retorno.accion=TinputAccion::KEY_PATADA_ALTA;
+                    guardarAnteriorX(playerX,retorno);
+                    return retorno;
+                }else {
+                    retorno.movimiento=TinputMovimiento::KEY_ARRIBA_IZQUIERDA;
+                    retorno.accion=TinputAccion::KEY_PINIA_ALTA;
+                    cout<<"2222222222"<<endl;
+                    guardarAnteriorX(playerX,retorno);
+                    return retorno;
+                }
+            } else if(SDL_JoystickGetButton(playerX, FLECHA_ARRIBA) && SDL_JoystickGetButton(playerX, FLECHA_IZQUIERDA)){
+                retorno.movimiento=TinputMovimiento::KEY_ARRIBA_IZQUIERDA;
+                cout<<"3333333333"<<endl;
+                guardarAnteriorX(playerX,retorno);
+                return retorno;
+            }else if (SDL_JoystickGetButton(playerX, FLECHA_IZQUIERDA)&&SDL_JoystickGetButton(playerX, lowKick)){
+                retorno.movimiento=TinputMovimiento::KEY_IZQUIERDA;
+                retorno.accion=TinputAccion::KEY_PATADA_BAJA;
+                cout<<"444444444444444"<<endl;
+                guardarAnteriorX(playerX,retorno);
+                return retorno;
+            }else if (SDL_JoystickGetButton(playerX, FLECHA_IZQUIERDA)&&SDL_JoystickGetButton(playerX, highKick)){
+                retorno.movimiento=TinputMovimiento::KEY_IZQUIERDA;
+                cout<<"55555555555555"<<endl;
+                retorno.accion=TinputAccion::KEY_PATADA_ALTA;
+                guardarAnteriorX(playerX,retorno);
+                return retorno;
+            }else if (SDL_JoystickGetButton(playerX, FLECHA_IZQUIERDA)&&SDL_JoystickGetButton(playerX, highPunch)){
+                retorno.movimiento=TinputMovimiento::KEY_IZQUIERDA;
+                cout<<"6666666666666666666"<<endl;
+                retorno.accion=TinputAccion::KEY_PINIA_ALTA;
+                guardarAnteriorX(playerX,retorno);
+                return retorno;
+            }else if (SDL_JoystickGetButton(playerX, FLECHA_IZQUIERDA)&&SDL_JoystickGetButton(playerX, lowPunch)){
+                retorno.movimiento=TinputMovimiento::KEY_IZQUIERDA;
+                cout<<"777777777777777"<<endl;
+                retorno.accion=TinputAccion::KEY_PINIA_BAJA;
+                guardarAnteriorX(playerX,retorno);
+                return retorno;
+            }else if (SDL_JoystickGetButton(playerX, FLECHA_IZQUIERDA)){
+                retorno.movimiento=TinputMovimiento::KEY_IZQUIERDA;
+                cout<<"88888888888888"<<endl;
+                guardarAnteriorX(playerX,retorno);
+                return retorno;break;
             }
         };
+        case TinputMovimiento::KEY_DERECHA:{
+            if (SDL_JoystickGetButton(playerX, FLECHA_ARRIBA) && SDL_JoystickGetButton(playerX, FLECHA_DERECHA)&& (SDL_JoystickGetButton(playerX, lowKick) || SDL_JoystickGetButton(playerX, highKick) || SDL_JoystickGetButton(playerX, lowPunch) || SDL_JoystickGetButton(playerX, highPunch))){
+                if(SDL_JoystickGetButton(playerX, lowKick)||SDL_JoystickGetButton(playerX, highKick)){
+                    retorno.movimiento=TinputMovimiento::KEY_ARRIBA_DERECHA;
+                    retorno.accion=TinputAccion::KEY_PATADA_ALTA;
+                    cout<<"99999999999999"<<endl;
+                    guardarAnteriorX(playerX,retorno);
+                    return retorno;
+                }else {
+                    retorno.movimiento=TinputMovimiento::KEY_ARRIBA_DERECHA;
+                    retorno.accion=TinputAccion::KEY_PINIA_ALTA;
+                    cout<<"aaaaaaaaaaaaaaaaa"<<endl;
+                    guardarAnteriorX(playerX,retorno);
+                    return retorno;
+                }
+            } else if(SDL_JoystickGetButton(playerX, FLECHA_ARRIBA) && SDL_JoystickGetButton(playerX, FLECHA_DERECHA)){
+                retorno.movimiento=TinputMovimiento::KEY_ARRIBA_DERECHA;
+                cout<<"bbbbbbbbbbbbbbbbbbbbbb"<<endl;
+                guardarAnteriorX(playerX,retorno);break;
+                return retorno;
+            }else if (SDL_JoystickGetButton(playerX, FLECHA_DERECHA)&&SDL_JoystickGetButton(playerX, lowKick)){
+                retorno.movimiento=TinputMovimiento::KEY_DERECHA;
+                cout<<"cccccccccccccccccccc"<<endl;
+                retorno.accion=TinputAccion::KEY_PATADA_BAJA;
+                guardarAnteriorX(playerX,retorno);
+                return retorno;
+            }else if (SDL_JoystickGetButton(playerX, FLECHA_DERECHA)&&SDL_JoystickGetButton(playerX, highKick)){
+                retorno.movimiento=TinputMovimiento::KEY_DERECHA;
+                retorno.accion=TinputAccion::KEY_PATADA_ALTA;
+                cout<<"dddddddddddddddddddddd"<<endl;
+                guardarAnteriorX(playerX,retorno);
+                return retorno;
+            }else if (SDL_JoystickGetButton(playerX, FLECHA_DERECHA)&&SDL_JoystickGetButton(playerX, highPunch)){
+                retorno.movimiento=TinputMovimiento::KEY_DERECHA;
+                retorno.accion=TinputAccion::KEY_PINIA_ALTA;
+                cout<<"eeeeeeeeeeeeeeeeeeeee"<<endl;
+                guardarAnteriorX(playerX,retorno);
+                return retorno;
+            }else if (SDL_JoystickGetButton(playerX, FLECHA_DERECHA)&&SDL_JoystickGetButton(playerX, lowPunch)){
+                retorno.movimiento=TinputMovimiento::KEY_DERECHA;
+                cout<<"ffffffffffffffffffffffffff"<<endl;
+                retorno.accion=TinputAccion::KEY_PINIA_BAJA;
+                guardarAnteriorX(playerX,retorno);
+                return retorno;
+            }else if (SDL_JoystickGetButton(playerX, FLECHA_DERECHA)){
+                retorno.movimiento=TinputMovimiento::KEY_DERECHA;
+                cout<<"gggggggggggggggggggggggg"<<endl;
+                guardarAnteriorX(playerX,retorno);
+                return retorno;break;
+            }
+        };
+        case TinputMovimiento::KEY_ARRIBA: {
+            if (SDL_JoystickGetButton(playerX, FLECHA_ARRIBA) && SDL_JoystickGetButton(playerX, FLECHA_DERECHA)&& (SDL_JoystickGetButton(playerX, lowKick) || SDL_JoystickGetButton(playerX, highKick) || SDL_JoystickGetButton(playerX, lowPunch) || SDL_JoystickGetButton(playerX, highPunch))){
+                if(SDL_JoystickGetButton(playerX, lowKick)||SDL_JoystickGetButton(playerX, highKick)){
+                    retorno.movimiento=TinputMovimiento::KEY_ARRIBA_DERECHA;
+                    retorno.accion=TinputAccion::KEY_PATADA_ALTA;
+                    cout<<"hhhhhhhhhhhhh"<<endl;
+                    guardarAnteriorX(playerX,retorno);
+                    return retorno;
+                }else {
+                    retorno.movimiento=TinputMovimiento::KEY_ARRIBA_DERECHA;
+                    retorno.accion=TinputAccion::KEY_PINIA_ALTA;
+                    cout<<"iiiiiiiiiiiiiiiiiiiii"<<endl;
+                    guardarAnteriorX(playerX,retorno);
+                    return retorno;
+                }
+            }else if (SDL_JoystickGetButton(playerX, FLECHA_ARRIBA) && SDL_JoystickGetButton(playerX, FLECHA_IZQUIERDA)&& (SDL_JoystickGetButton(playerX, lowKick) || SDL_JoystickGetButton(playerX, highKick) || SDL_JoystickGetButton(playerX, lowPunch) || SDL_JoystickGetButton(playerX, highPunch))){
+                if(SDL_JoystickGetButton(playerX, lowKick)||SDL_JoystickGetButton(playerX, highKick)){
+                    retorno.movimiento=TinputMovimiento::KEY_ARRIBA_IZQUIERDA;
+                    retorno.accion=TinputAccion::KEY_PATADA_ALTA;
+                    cout<<"kkkkkkkkkkkkkkkkkkk"<<endl;
+                    guardarAnteriorX(playerX,retorno);
+                    return retorno;
+                }else {
+                    retorno.movimiento=TinputMovimiento::KEY_ARRIBA_IZQUIERDA;
+                    retorno.accion=TinputAccion::KEY_PINIA_ALTA;
+                    cout<<"mmmmmmmmmmmm"<<endl;
+                    guardarAnteriorX(playerX,retorno);
+                    return retorno;
+                }
+            } else if(SDL_JoystickGetButton(playerX, FLECHA_ARRIBA) && SDL_JoystickGetButton(playerX, FLECHA_DERECHA)){
+                retorno.movimiento=TinputMovimiento::KEY_ARRIBA_DERECHA;
+                cout<<"jjjjjjjjjjjjjjjjj"<<endl;
+                guardarAnteriorX(playerX,retorno);
+                return retorno;
+            } else if(SDL_JoystickGetButton(playerX, FLECHA_ARRIBA) && SDL_JoystickGetButton(playerX, FLECHA_IZQUIERDA)){
+                retorno.movimiento=TinputMovimiento::KEY_ARRIBA_IZQUIERDA;
+                cout<<"ooooooooooooooooo"<<endl;
+                guardarAnteriorX(playerX,retorno);
+                return retorno;
+            }else if(SDL_JoystickGetButton(playerX, FLECHA_ARRIBA)&&SDL_JoystickGetButton(playerX, lowKick)){
+                retorno.movimiento=TinputMovimiento::KEY_ARRIBA;
+                cout<<"ppppppppppppppppppppppp"<<endl;
+                retorno.accion=TinputAccion::KEY_PATADA_BAJA;
+                guardarAnteriorX(playerX,retorno);
+                return retorno;
+            }else if (SDL_JoystickGetButton(playerX, FLECHA_ARRIBA)&&SDL_JoystickGetButton(playerX, highKick)){
+                retorno.movimiento=TinputMovimiento::KEY_ARRIBA;
+                cout<<"rrrrrrrrrrrrrrrrrrrrrrr"<<endl;
+                retorno.accion=TinputAccion::KEY_PATADA_ALTA;
+                guardarAnteriorX(playerX,retorno);
+                return retorno;
+            }else if (SDL_JoystickGetButton(playerX, FLECHA_ARRIBA)&&SDL_JoystickGetButton(playerX, highPunch)){
+                retorno.movimiento=TinputMovimiento::KEY_ARRIBA;
+                cout<<"ssssssssssssssssssssssss"<<endl;
+                retorno.accion=TinputAccion::KEY_PINIA_ALTA;
+                guardarAnteriorX(playerX,retorno);
+                return retorno;
+            }else if (SDL_JoystickGetButton(playerX, FLECHA_ARRIBA)&&SDL_JoystickGetButton(playerX, lowPunch)){
+                retorno.movimiento=TinputMovimiento::KEY_ARRIBA;
+                retorno.accion=TinputAccion::KEY_PINIA_BAJA;
+                cout<<"uuuuuuuuuuuuuuuuuuu"<<endl;
+                guardarAnteriorX(playerX,retorno);
+                return retorno;
+            }else if (SDL_JoystickGetButton(playerX, FLECHA_ARRIBA)){
+                retorno.movimiento=TinputMovimiento::KEY_ARRIBA;
+                guardarAnteriorX(playerX,retorno);
+                cout<<"wwwwwwwwwwwww"<<endl;
+                return retorno;break;
+            }
+        };
+        case TinputMovimiento::KEY_ABAJO: {
+            if (SDL_JoystickGetButton(playerX, FLECHA_ABAJO)&&SDL_JoystickGetButton(playerX, lowKick)){
+                retorno.movimiento=TinputMovimiento::KEY_ABAJO;
+                cout<<"xxxxxxxxxxxxxxxxxx"<<endl;
+                retorno.accion=TinputAccion::KEY_PATADA_BAJA;
+                guardarAnteriorX(playerX,retorno);
+                return retorno;
+            }else if (SDL_JoystickGetButton(playerX, FLECHA_ABAJO)&&SDL_JoystickGetButton(playerX, highKick)){
+                retorno.movimiento=TinputMovimiento::KEY_ABAJO;
+                retorno.accion=TinputAccion::KEY_PATADA_ALTA;
+                cout<<"yyyyyyyyyyyyyyyyyyyy"<<endl;
+                guardarAnteriorX(playerX,retorno);
+                return retorno;
+            }else if (SDL_JoystickGetButton(playerX, FLECHA_ABAJO)&&SDL_JoystickGetButton(playerX, highPunch)){
+                retorno.movimiento=TinputMovimiento::KEY_ABAJO;
+                retorno.accion=TinputAccion::KEY_PINIA_ALTA;
+                cout<<"zzzzzzzzzzzzzzzzz"<<endl;
+                guardarAnteriorX(playerX,retorno);
+                return retorno;
+            }else if (SDL_JoystickGetButton(playerX, FLECHA_ABAJO)&&SDL_JoystickGetButton(playerX, lowPunch)){
+                retorno.movimiento=TinputMovimiento::KEY_ABAJO;
+                retorno.accion=TinputAccion::KEY_PINIA_BAJA;
+                cout<<"111111111110000000000000"<<endl;
+                guardarAnteriorX(playerX,retorno);
+                return retorno;
+            }else if (SDL_JoystickGetButton(playerX, FLECHA_ABAJO)&&SDL_JoystickGetButton(playerX, proteccion)){
+                retorno.movimiento=TinputMovimiento::KEY_ABAJO;
+                retorno.accion=TinputAccion::KEY_PROTECCION;
+                cout<<"111111111119999999999999"<<endl;
+                guardarAnteriorX(playerX,retorno);
+                return retorno;
+            }else if (SDL_JoystickGetButton(playerX, FLECHA_ABAJO)){
+                retorno.movimiento=TinputMovimiento::KEY_ABAJO;
+                cout<<"111111111112222222222222222222"<<endl;
+                guardarAnteriorX(playerX,retorno);
+                return retorno;break;
+            }
+        };
+        case TinputMovimiento::KEY_ARRIBA_DERECHA: {
+            if (SDL_JoystickGetButton(playerX, FLECHA_ARRIBA) && SDL_JoystickGetButton(playerX, FLECHA_DERECHA)&& (!SDL_JoystickGetButton(playerX, lowKick) && !SDL_JoystickGetButton(playerX, highKick) && !SDL_JoystickGetButton(playerX, lowPunch) && !SDL_JoystickGetButton(playerX, highPunch) && !SDL_JoystickGetButton(playerX, proteccion)&& !SDL_JoystickGetButton(playerX, poder))) {
+                retorno.movimiento=TinputMovimiento::KEY_ARRIBA_DERECHA;
+                cout<<"111111111113333333333333333"<<endl;
+                guardarAnteriorX(playerX,retorno);
+                return retorno;
+            }else if (SDL_JoystickGetButton(playerX, FLECHA_DERECHA)) {
+                retorno.movimiento=TinputMovimiento::KEY_DERECHA;
+                cout<<"11111111111444444444444444444"<<endl;
+                guardarAnteriorX(playerX,retorno);
+                return retorno;break;
+            }
+
+        };
+        case TinputMovimiento::KEY_ARRIBA_IZQUIERDA: {
+            if (SDL_JoystickGetButton(playerX, FLECHA_ARRIBA) && SDL_JoystickGetButton(playerX, 7)&& (!SDL_JoystickGetButton(playerX, lowKick) && !SDL_JoystickGetButton(playerX, highKick) && !SDL_JoystickGetButton(playerX, lowPunch) && !SDL_JoystickGetButton(playerX, highPunch) && !SDL_JoystickGetButton(playerX, proteccion)&& !SDL_JoystickGetButton(playerX, poder))) {
+                retorno.movimiento=TinputMovimiento::KEY_ARRIBA_IZQUIERDA;
+                cout<<"1111111111155555555555555555"<<endl;
+                guardarAnteriorX(playerX,retorno);
+                return retorno;
+            }
+            else if (SDL_JoystickGetButton(playerX, FLECHA_IZQUIERDA)) {
+                retorno.movimiento=TinputMovimiento::KEY_IZQUIERDA;
+                cout<<"111111111116666666666666666"<<endl;
+                guardarAnteriorX(playerX,retorno);
+                return retorno;break;
+            }
+        };
+
+
     }
-    return KEY_NADA;
+    return retorno;
 }
+
 
 void ControladorJoystick::guardarAnteriorX(SDL_Joystick* playerX,Tinput anterior){
     if(playerX==player1)
@@ -112,59 +300,125 @@ void ControladorJoystick::guardarAnteriorX(SDL_Joystick* playerX,Tinput anterior
 }
 
 void ControladorJoystick::setInputAnteriorX(SDL_Joystick* playerX,Tinput& auxInputX){
+    auxInputX.accion=TinputAccion::KEY_NADA;auxInputX.movimiento=TinputMovimiento::KEY_NADA;auxInputX.game=TinputGame::KEY_NADA;
+    if (SDL_JoystickGetButton(playerX, FLECHA_DERECHA)) auxInputX.movimiento = TinputMovimiento::KEY_DERECHA;
+    else if (SDL_JoystickGetButton(playerX, FLECHA_IZQUIERDA)) auxInputX.movimiento = TinputMovimiento::KEY_IZQUIERDA;
+    else if (SDL_JoystickGetButton(playerX, FLECHA_ARRIBA)) auxInputX.movimiento = TinputMovimiento::KEY_ARRIBA;
+    else if (SDL_JoystickGetButton(playerX, FLECHA_ABAJO)) auxInputX.movimiento = TinputMovimiento::KEY_ABAJO;
+    else if (SDL_JoystickGetButton(playerX, lowKick)) auxInputX.accion = TinputAccion::KEY_PATADA_BAJA;
+    else if (SDL_JoystickGetButton(playerX, highKick)) auxInputX.accion = TinputAccion::KEY_PATADA_ALTA;
+    else if (SDL_JoystickGetButton(playerX, highPunch)) auxInputX.accion = TinputAccion::KEY_PINIA_ALTA;
+    else if (SDL_JoystickGetButton(playerX, lowPunch)) auxInputX.accion = TinputAccion::KEY_PINIA_BAJA;
+    else if (SDL_JoystickGetButton(playerX, FLECHA_ARRIBA)&&SDL_JoystickGetButton(playerX, lowKick)){
+        auxInputX.movimiento = TinputMovimiento::KEY_ARRIBA;
+        auxInputX.accion=TinputAccion::KEY_PATADA_BAJA;
+    }
+    else if (SDL_JoystickGetButton(playerX, FLECHA_ARRIBA)&&SDL_JoystickGetButton(playerX, highKick)){
+        auxInputX.movimiento = TinputMovimiento::KEY_ARRIBA;
+        auxInputX.accion=TinputAccion::KEY_PATADA_ALTA;
+    }
+    else if (SDL_JoystickGetButton(playerX, FLECHA_ARRIBA)&&SDL_JoystickGetButton(playerX, lowPunch)){
+        auxInputX.movimiento = TinputMovimiento::KEY_ARRIBA;
+        auxInputX.accion=TinputAccion::KEY_PINIA_BAJA;
+    }
+    else if (SDL_JoystickGetButton(playerX, FLECHA_ARRIBA)&&SDL_JoystickGetButton(playerX, highPunch)){
+        auxInputX.movimiento = TinputMovimiento::KEY_ARRIBA;
+        auxInputX.accion=TinputAccion::KEY_PINIA_ALTA;
+    }
+    else if (SDL_JoystickGetButton(playerX, FLECHA_ABAJO)&&SDL_JoystickGetButton(playerX, lowPunch)){
+        auxInputX.movimiento =TinputMovimiento:: KEY_ABAJO;
+        auxInputX.accion=TinputAccion::KEY_PINIA_BAJA;
+    }
+    else if (SDL_JoystickGetButton(playerX, FLECHA_ABAJO)&&SDL_JoystickGetButton(playerX, highPunch)){
+        auxInputX.movimiento = TinputMovimiento::KEY_ABAJO;
+        auxInputX.accion=TinputAccion::KEY_PINIA_ALTA;
+    }
+    else if (SDL_JoystickGetButton(playerX, FLECHA_ABAJO)&&SDL_JoystickGetButton(playerX, lowKick)){
+        auxInputX.movimiento =TinputMovimiento:: KEY_ABAJO;
+        auxInputX.accion=TinputAccion::KEY_PATADA_BAJA;
+    }
+    else if (SDL_JoystickGetButton(playerX, FLECHA_ABAJO)&&SDL_JoystickGetButton(playerX, highKick)){
+        auxInputX.movimiento = TinputMovimiento::KEY_ABAJO;
+        auxInputX.accion=TinputAccion::KEY_PATADA_ALTA;
+    }
 
-    if (SDL_JoystickGetButton(playerX, FLECHA_DERECHA)) auxInputX = KEY_DERECHA;
-    else if (SDL_JoystickGetButton(playerX, FLECHA_IZQUIERDA)) auxInputX = KEY_IZQUIERDA;
-    else if (SDL_JoystickGetButton(playerX, FLECHA_ARRIBA)) auxInputX = KEY_ARRIBA;
-    else if (SDL_JoystickGetButton(playerX, FLECHA_ABAJO)) auxInputX = KEY_ABAJO;
-    else if (SDL_JoystickGetButton(playerX, FLECHA_ARRIBA) && SDL_JoystickGetButton(player2, FLECHA_DERECHA)) auxInputX = KEY_ARRIBA_DERECHA;
-    else if (SDL_JoystickGetButton(playerX, FLECHA_ARRIBA) && SDL_JoystickGetButton(player2, FLECHA_IZQUIERDA)) auxInputX = KEY_ARRIBA_IZQUIERDA;
-    else auxInputX = KEY_NADA;
+    else if (SDL_JoystickGetButton(playerX, FLECHA_ARRIBA) && SDL_JoystickGetButton(playerX, FLECHA_DERECHA)) auxInputX.movimiento = TinputMovimiento::KEY_ARRIBA_DERECHA;
+    else if (SDL_JoystickGetButton(playerX, FLECHA_ARRIBA) && SDL_JoystickGetButton(playerX, FLECHA_IZQUIERDA)) auxInputX.movimiento = TinputMovimiento::KEY_ARRIBA_IZQUIERDA;
+    else if (SDL_JoystickGetButton(playerX, FLECHA_ARRIBA) && SDL_JoystickGetButton(playerX, FLECHA_DERECHA)&&(SDL_JoystickGetButton(playerX, lowKick)||SDL_JoystickGetButton(playerX, highKick))){
+        auxInputX.movimiento =TinputMovimiento:: KEY_ARRIBA_DERECHA;
+        auxInputX.accion=TinputAccion::KEY_PATADA_BAJA;
+    }
+    else if (SDL_JoystickGetButton(playerX, FLECHA_ARRIBA) && SDL_JoystickGetButton(playerX, FLECHA_DERECHA)&&(SDL_JoystickGetButton(playerX, lowPunch)||SDL_JoystickGetButton(playerX, highPunch))){
+        auxInputX.movimiento = TinputMovimiento::KEY_ARRIBA_DERECHA;
+        auxInputX.accion=TinputAccion::KEY_PINIA_BAJA;
+    }
+    else if (SDL_JoystickGetButton(playerX, FLECHA_ARRIBA) && SDL_JoystickGetButton(playerX, FLECHA_IZQUIERDA)&&(SDL_JoystickGetButton(playerX, lowPunch)||SDL_JoystickGetButton(playerX, highPunch))){
+        auxInputX.movimiento =TinputMovimiento:: KEY_ARRIBA_IZQUIERDA;
+        auxInputX.accion=TinputAccion::KEY_PINIA_BAJA;
+    }
+    else if (SDL_JoystickGetButton(playerX, FLECHA_ARRIBA) && SDL_JoystickGetButton(playerX, FLECHA_IZQUIERDA)&&(SDL_JoystickGetButton(playerX, lowKick)||SDL_JoystickGetButton(playerX, highKick))){
+        auxInputX.movimiento = TinputMovimiento::KEY_ARRIBA_IZQUIERDA;
+        auxInputX.accion=TinputAccion::KEY_PATADA_BAJA;
+    }
+    else {auxInputX.movimiento = TinputMovimiento::KEY_NADA;
+        auxInputX.accion = TinputAccion::KEY_NADA;
+        auxInputX.game = TinputGame::KEY_NADA;
+    }
 
 }
 
 vector<Tinput> ControladorJoystick::getInputs() {
 
-    vector<Tinput> inputs = {Tinput(), Tinput()};
+    vector<Tinput> inputs;
 
 
     SDL_Event event;
+    Tinput aux;
     while (SDL_PollEvent(&event) != 0) {}
     SDL_PollEvent(&event);
     switch (event.type) {
         case SDL_QUIT:
-            inputs[0] = KEY_EXIT;
+            aux.game=TinputGame::KEY_EXIT;
+            inputs.clear();
+            inputs.push_back(aux);
             return inputs;
 
             // Solo captura el evento cuando suelta R
         case SDL_JOYBUTTONUP:{ if (event.jbutton.button == 0) {
-                inputs[0] = KEY_RESTART;
+                aux.game=TinputGame::KEY_RESTART;
+                inputs.clear();
+                inputs.push_back(aux);
                 return inputs;
             }
         };
+
         default:
             Tinput anterior1 = esAnterior(player1);
             Tinput anterior2 = esAnterior(player2);
-            if (anterior1 != KEY_NADA && anterior2 != KEY_NADA) {
-                inputs[0] = anterior1;
-                inputs[1] = anterior2;
+            if ((anterior1.accion !=TinputAccion:: KEY_NADA || anterior1.movimiento != TinputMovimiento::KEY_NADA) &&(anterior2.accion != TinputAccion::KEY_NADA|| anterior2.movimiento != TinputMovimiento::KEY_NADA)) {
+                inputs.clear();
+                inputs.push_back(anterior1);
+                inputs.push_back(anterior2);
                 return inputs;
-            } else if (anterior1 != KEY_NADA) {
-                inputs[0] = anterior1;
+            } else if (anterior1.accion != TinputAccion::KEY_NADA ||anterior1.movimiento != TinputMovimiento::KEY_NADA ) {
+                inputs.clear();
                 setInputAnteriorX(player2,inputAnterior2);
-                inputs[1] = inputAnterior2;
+                inputs.push_back(anterior1);
+                inputs.push_back(inputAnterior2);
                 return inputs;
 
-            } else if (anterior2 != KEY_NADA) {
-                inputs[1] = anterior2;
+            } else if (anterior2.accion != TinputAccion::KEY_NADA || anterior2.movimiento != TinputMovimiento::KEY_NADA ) {
+                inputs.clear();
                 setInputAnteriorX(player1,inputAnterior1);
-                inputs[0] = inputAnterior1;
+                inputs.push_back(inputAnterior1);
+                inputs.push_back(anterior2);
                 return inputs;
             } else {
                 setInputAnteriorX(player1,inputAnterior1);
                 setInputAnteriorX(player2,inputAnterior2);
-                inputs[0] = inputAnterior1;
-                inputs[1] = inputAnterior2;
+                inputs.clear();
+                inputs.push_back(inputAnterior1);
+                inputs.push_back(inputAnterior2);
                 return inputs;
             }
     }

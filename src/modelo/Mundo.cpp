@@ -16,30 +16,41 @@ const float deltaParaPoder = 5.00;
  */
 Mundo::Mundo(config configuracion) {
 	Tescenario escenario = configuracion.getEscenario();
-	Tpersonaje pj = configuracion.getPersonaje();
+	vector<Tpersonaje> personajes = configuracion.getPersonajes();
+
+	Tpersonaje PJ1 = personajes[0];
+	Tpersonaje PJ2 = personajes[1];
 
 	anchoEscenario = escenario.d.w;
 	altoEscenario = escenario.d.h;
 	altoPiso = escenario.yPiso;
 
-	float altoPJ = pj.d.h;
-	float anchoPJ = pj.d.w;
+	float altoPJ1 = PJ1.d.h;
+	float anchoPJ1 = PJ1.d.w;
+	float altoPJ2 = PJ2.d.h;
+	float anchoPJ2 = PJ2.d.w;
 
 	float pos_x = anchoEscenario/2;
-	float pos_y = altoEscenario - altoPiso - altoPJ;
+	float pos_y1 = altoEscenario - altoPiso - altoPJ1;
+	float pos_y2 = altoEscenario - altoPiso - altoPJ2;
 
-	Tdireccion direccion = configuracion.getPersonaje().orientacion;
+	Tdireccion direccion1 = PJ1.orientacion;
+	Tdireccion direccion2 = PJ2.orientacion;
 
-	bool dir;
+	bool dir1, dir2;
 
-	if (direccion == DERECHA) dir = true;
-	else dir = false;
+	if (direccion1 == DERECHA) dir1 = true;
+	else dir1 = false;
+
+	if(direccion2 == DERECHA) dir2 = true;
+	else dir2 = false;
+
 
 	//TODO: EL PJ1 Y PJ2 EMPIEZAN EN LADOS OPUESTOS - lo dejamos asi por los controles del teclado
 
-	personaje1 = new Personaje(dir,Posicion(pos_x+anchoPJ,pos_y),altoPJ,anchoPJ);
+	personaje1 = new Personaje(dir1,Posicion(pos_x+anchoPJ1,pos_y1),altoPJ1,anchoPJ1);
 	cout<<"Costado izquierdo personaje 1: "<<personaje1->pos.getX() - personaje1->ancho/2<<endl;
-	personaje2 = new Personaje(dir,Posicion(pos_x-anchoPJ,pos_y),altoPJ,anchoPJ);
+	personaje2 = new Personaje(dir2,Posicion(pos_x-anchoPJ2,pos_y2),altoPJ2,anchoPJ2);
 	cout<<"Costado derecho personaje 2: "<<personaje2->pos.getX() + personaje2->ancho/2<<endl;
 	colisionador = Colisionador();
 	colisionador.setEscenario(anchoEscenario);
@@ -74,16 +85,20 @@ vector<Tcambio> Mundo::actualizarMundo(vector<Tinput> inputs) {
 	//Verifica y da vuelta la direccion de los personajes si se pasan
 	verificarDireccionDeLosPersonajes();
 
-	//Choque de saltos oblicuos en el aire
-	if(!colisionador.detectarLejania(personaje1,personaje2,anchoPantalla-deltaLejania))verificarQueNoSeVallaDeLaPantalla();
-	else VerificarSiPjsColisionanaEnElAire();
-
 	// Los personajes realizan sus acciones
 	personaje1->realizarAccion(inputs[0],anchoEscenario);
 	personaje2->realizarAccion(inputs[1],anchoEscenario);
 
 	personaje1->accionesEnCurso[2]->setAnchoDePasoDefault();
 	personaje2->accionesEnCurso[2]->setAnchoDePasoDefault();
+
+	//Choque de saltos oblicuos en el aire
+	if(!colisionador.detectarLejania(personaje1,personaje2,anchoPantalla-(MIN_DISTANCE_FROM_BOUND*4))){
+		verificarQueNoSeVallaDeLaPantalla();
+	}
+	else {
+		VerificarSiPjsColisionanaEnElAire();
+	}
 
 	//Colision entre personajes (empujar)
 	if (colisionador.sonProximos(personaje1,personaje2,-1)){
@@ -194,28 +209,64 @@ void Mundo::VerificarSiPjsColisionanaEnElAire(){
 void Mundo::verificarQueNoSeVallaDeLaPantalla() {
 
 	// No se vayan caminando
-	if(!colisionador.detectarLejania(personaje1,personaje2,anchoPantalla -(MIN_DISTANCE_FROM_BOUND*4))){
-		if(personaje1->estado == CAMINANDO){
-			if(personaje1->direccion) personaje1->pos = Posicion(personaje1->pos.getX()+2,personaje1->pos.getY());
-			else personaje1->pos = Posicion(personaje1->pos.getX()-2,personaje1->pos.getY());
+	if(personaje1->estado == CAMINANDO){
+		if(personaje1->direccion) {
+			personaje1->pos = personaje1->posAnt;
 		}
-		if(personaje2->estado == CAMINANDO){
-			if(personaje2->direccion) personaje2->pos = Posicion(personaje2->pos.getX()+2,personaje2->pos.getY());
-			else personaje2->pos = Posicion(personaje2->pos.getX()-2,personaje2->pos.getY());
-
+		else {
+			personaje1->pos = personaje1->posAnt;
 		}
 	}
-	//No se vayan saltando oblicuamente
-	if(personaje1->estado == SALTANDO_OBLICUO) {
-		if (((!personaje1->getSentido())&&(personaje1->getDireccion()))||
-			((!personaje1->getSentido())&&(!personaje1->getDireccion())))
-			personaje1->enCaida = true;
-	}else personaje1->enCaida = false;
-	if(personaje2->estado == SALTANDO_OBLICUO) {
-		if (((!personaje2->getSentido())&&(personaje2->getDireccion()))||
-			((!personaje2->getSentido())&&(!personaje2->getDireccion())))
+	if(personaje2->estado == CAMINANDO){
+		if(personaje2->direccion) {
+			personaje2->pos = personaje2->posAnt;
+		}
+		else {
+			personaje2->pos = personaje2->posAnt;
+		}
+
+	}
+	if (personaje1->estado == SALTANDO_OBLICUO && !personaje1->sentido){
+		personaje1->enCaida = true;
+		personaje1->pos.setX(personaje1->posAnt.getX());
+		if(personaje2->estado == SALTANDO_OBLICUO && !personaje2->sentido){
 			personaje2->enCaida = true;
-	}else personaje2->enCaida = false;
+			personaje2->pos.setX(personaje2->posAnt.getX());
+		}
+		if (personaje2->estado == CAMINANDO && !personaje2->sentido){
+			cout<<"Entro"<<endl;
+			if(personaje2->direccion) {
+				personaje2->pos = personaje2->posAnt;
+			}
+			else {
+				personaje2->pos = personaje2->posAnt;
+			}
+		}
+
+	}
+
+	if (personaje2->estado == SALTANDO_OBLICUO && !personaje2->sentido){
+		personaje2->enCaida = true;
+		personaje2->pos.setX(personaje2->posAnt.getX());
+		if (personaje1->estado == CAMINANDO && !personaje1->sentido){
+			if(personaje1->direccion) {
+				personaje1->pos = personaje1->posAnt;
+			}
+			else {
+				personaje1->pos = personaje1->posAnt;
+			}
+		}
+
+	}
+	if ((personaje1->getEstado() != SALTANDO_OBLICUO) || personaje1->sentido) {
+		personaje1->enCaida = false;
+		personaje2->enCaida = false;
+	}
+	if ((personaje2->getEstado() != SALTANDO_OBLICUO) || personaje2->sentido) {
+		personaje1->enCaida = false;
+		personaje2->enCaida = false;
+	}
+
 
 
 }
