@@ -606,10 +606,10 @@ int config::cantSprites(TestadoPersonaje e){
 			cant=8;
 			break;
 		case SALTANDO_OBLICUO:
-			cant=10;
+			cant=9;
 			break;
 		case SALTANDO_VERTICAL:
-			cant=5;
+			cant=3;
 			break;
 	}
 	return cant;
