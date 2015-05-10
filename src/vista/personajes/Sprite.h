@@ -12,6 +12,8 @@ class Sprite {
 private:
     VistaUtils* mUtils;
     vector<SDL_Texture *> mTextures;
+    vector<int> mDisabled;
+    vector<int> mToDisable;
     int mCurrent;
     bool mRepeat;
     bool mFirstPass;
@@ -19,11 +21,11 @@ private:
 public:
     Sprite(){};
     Sprite(VistaUtils* utils, string dirPath, bool repeat);
-    Tdimension getDimension();
     long getCount();
     void restart();
-    void getNext(SDL_Texture* texture, bool flip);
-    void getBefore(SDL_Texture* texture, bool flip);
+    SDL_Texture* getNext();
+    SDL_Texture* getBefore();
+    void disable(int index);
 
     void freeTextures();
 };

@@ -28,6 +28,8 @@ public:
     void copyTexture(SDL_Texture* src, SDL_Texture* dst);
     void copyTexture(SDL_Texture* src, SDL_Texture* dst, bool flip);
     void copyTexture(SDL_Texture* src, SDL_Texture* dst, Trect* srcRect, Trect* dstRect, Tdimension* srcDim, Tdimension* dstDim);
+    void copyTexture(SDL_Texture* src, SDL_Texture* dst, Trect* srcRect, Trect* dstRect, Tdimension* srcDim, Tdimension* dstDim, bool flip);
+    Tdimension getDimension(SDL_Texture* tIndex, Tdimension* dIndex, SDL_Texture *texture);
     void cleanTexture(SDL_Texture* t);
 
     virtual ~VistaUtils();

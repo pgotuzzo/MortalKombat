@@ -211,6 +211,10 @@ void VistaUtils::copyTexture(SDL_Texture *src, SDL_Texture *dst, bool flip) {
 }
 
 void VistaUtils::copyTexture(SDL_Texture *src, SDL_Texture *dst, Trect* srcRect, Trect* dstRect, Tdimension* srcDim, Tdimension* dstDim) {
+    copyTexture(src, dst, srcRect, dstRect, srcDim, dstDim, false);
+}
+
+void VistaUtils::copyTexture(SDL_Texture *src, SDL_Texture *dst, Trect* srcRect, Trect* dstRect, Tdimension* srcDim, Tdimension* dstDim, bool flip) {
     // guardo el target original
     SDL_Texture *originalTarget = SDL_GetRenderTarget(mRenderer);
 
@@ -240,7 +244,14 @@ void VistaUtils::copyTexture(SDL_Texture *src, SDL_Texture *dst, Trect* srcRect,
         sdlRectDst.y = (int) (dstRect->p.y * scales[1]);
     }
 
-    SDL_RenderCopy(mRenderer, src, (srcRect != NULL) ? &sdlRectSrc : NULL, (dstRect != NULL) ? &sdlRectDst : NULL);
+    SDL_RenderCopyEx(mRenderer,
+                     src,
+                     (srcRect != NULL) ? &sdlRectSrc : NULL,
+                     (dstRect != NULL) ? &sdlRectDst : NULL,
+                     NULL,
+                     NULL,
+                     (flip) ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE
+    );
 
     // recupero el target original
     SDL_SetRenderTarget(mRenderer, originalTarget);
@@ -259,8 +270,25 @@ void VistaUtils::cleanTexture(SDL_Texture* t){
     SDL_SetRenderTarget(mRenderer, originalTarget);
 }
 
+/**
+ * Obtiene la dimension en unidades lógicas de una textura, comparandola con otra
+ *  de la cual conocemos sus dimensiones.
+ */
+Tdimension VistaUtils::getDimension(SDL_Texture* tIndex, Tdimension* dIndex, SDL_Texture *texture) {
+    float scales[2];
+    getScales(tIndex, dIndex, scales);
+
+    int w, h;
+    SDL_QueryTexture(texture, NULL, NULL, &w, &h);
+
+    Tdimension dimension = {w / scales[0], h / scales[1]};
+
+    return dimension;
+}
+
 VistaUtils::~VistaUtils() {
     for (unsigned i = 0; i < mAuxTextures.size(); i++){
         SDL_DestroyTexture(mAuxTextures.at(i));
     }
 }
+

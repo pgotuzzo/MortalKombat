@@ -19,7 +19,7 @@
 /**
  * Constantes
  */
-static const std::string SPRITES_FORMAT = ".png";
+static const string SPRITES_FORMAT = ".png";
 static const float MIN_DISTANCE_FROM_BOUND = 20;
 
 /**
@@ -250,6 +250,8 @@ struct Tcapa {
  * Estructuras y enums propios de los
  *  Personajes
  */
+static const int TestadoPersonajeCount = 20;
+
 enum TestadoPersonaje {
     PARADO,
     CAMINANDO,
@@ -281,7 +283,7 @@ enum TestadoPersonaje {
     PODER
 };
 
-static std::string TestadoPersonajeToString(TestadoPersonaje e) {
+static string TestadoPersonajeToString(TestadoPersonaje e){
     switch (e) {
         case TestadoPersonaje::PARADO: return "parado";
         case TestadoPersonaje::CAMINANDO: return "caminando";
@@ -306,8 +308,6 @@ static std::string TestadoPersonajeToString(TestadoPersonaje e) {
     }
     return NULL;
 }
-
-static const int TestadoPersonajeCount = 20;
 
 enum Tdireccion{
     DERECHA,

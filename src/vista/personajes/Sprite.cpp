@@ -1,13 +1,14 @@
 #include <SDL2/SDL_image.h>
+#include <algorithm>
 #include "Sprite.h"
-#include "../VistaUtils.h"
 
 Sprite::Sprite(VistaUtils* utils, string dirPath, bool repeat) {
     mCurrent = 0;
     mRepeat = repeat;
     mFirstPass = true;
     mUtils = utils;
-    mTextures = std::vector<SDL_Texture *>();
+    mTextures = vector<SDL_Texture *>();
+    mDisabled = vector<int>();
 
     bool end = false;
     do{
@@ -37,19 +38,46 @@ long Sprite::getCount() {
 void Sprite::restart() {
     mCurrent = 0;
     mFirstPass = true;
+    mDisabled.clear();
 }
 
-void Sprite::getNext(SDL_Texture* texture, bool flip) {
-    mUtils->copyTexture(mTextures[mCurrent], texture, flip);
+SDL_Texture* Sprite::getNext() {
+    bool show = true;
+    SDL_Texture *t = mTextures[mCurrent];
+
+    for (int i = 0; i < mDisabled.size(); i++) {
+        if (mDisabled[i] == mCurrent) {
+            show = false;
+        }
+    }
+    for(int i = 0; i < mToDisable.size(); i++){
+        if(mToDisable[i] == mCurrent)
+            mDisabled.push_back(mCurrent);
+    }
+
     if (mCurrent < getCount() - 1) {
         mCurrent++;
-    } else if (mRepeat){
+    } else if (mRepeat) {
         mCurrent = 0;
     }
+
+    return (show) ? t : getNext();
 }
 
-void Sprite::getBefore(SDL_Texture *texture, bool flip) {
-    mUtils->copyTexture(mTextures[mCurrent], texture, flip);
+SDL_Texture* Sprite::getBefore() {
+    bool show = true;
+    SDL_Texture* t = mTextures[mCurrent];
+
+    for (int i = 0; i < mDisabled.size(); i++) {
+        if (mDisabled[i] == mCurrent) {
+            show = false;
+        }
+    }
+    for(int i = 0; i < mToDisable.size(); i++){
+        if(mToDisable[i] == mCurrent)
+            mDisabled.push_back(mCurrent);
+    }
+
     if (mCurrent == 0){
         mCurrent = (int) getCount() - 1;
     } else if ( ( mCurrent > 0 ) && ( mCurrent < getCount() - 1 ) ){
@@ -58,6 +86,8 @@ void Sprite::getBefore(SDL_Texture *texture, bool flip) {
         mCurrent--;
         mFirstPass = mRepeat;
     }
+
+    return (show) ? t : getBefore();
 }
 
 void Sprite::freeTextures() {
@@ -70,8 +100,6 @@ void Sprite::freeTextures() {
     loguer->loguear("Finaliza la eliminacion del vector de Sprites", Log::LOG_DEB);
 }
 
-Tdimension Sprite::getDimension() {
-    int w, h;
-    SDL_QueryTexture(mTextures[0], NULL, NULL, &w, &h);
-    return {w,h};
+void Sprite::disable(int index) {
+    mToDisable.push_back(index);
 }
