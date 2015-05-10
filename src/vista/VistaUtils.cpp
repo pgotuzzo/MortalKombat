@@ -248,7 +248,7 @@ void VistaUtils::copyTexture(SDL_Texture *src, SDL_Texture *dst, Trect* srcRect,
                      src,
                      (srcRect != NULL) ? &sdlRectSrc : NULL,
                      (dstRect != NULL) ? &sdlRectDst : NULL,
-                     NULL,
+                     0,
                      NULL,
                      (flip) ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE
     );
