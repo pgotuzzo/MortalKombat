@@ -150,89 +150,78 @@ void Colisionador::solucionarColision(Personaje* PJ1, Personaje* PJ2){
         inputAgachado.accion = TinputAccion::KEY_NADA;
 
         if ((PJ1->pos.getX() - PJ2->pos.getX()) <= 0 ) {
-            //Un pj empuja a otro que esta protegido. TODO: Falta que se proteja agachado
-            if(PJ1->protegiendose || PJ2->protegiendose) {
-                if(PJ1->estado == CAMINANDO && PJ1->sentido == true){
-                    if (PJ2->estado ==PARADO) {
-                        PJ2->accionesEnCurso[2]->setAnchoDePaso(factorDeRetrocesoConProteccion);
-                        PJ2->realizarAccion(inputDerecha, anchoEsc);
-                        PJ2->estado = PARADO;
-                        PJ1->accionesEnCurso[2]->setAnchoDePaso(factorDeRetrocesoConProteccion);
-                        PJ2->accionesEnCurso[2]->setAnchoDePasoDefault();
-                    }
-                    else if (PJ2->estado ==AGACHADO) {
-                        PJ2->accionesEnCurso[2]->setAnchoDePaso(factorDeRetrocesoConProteccion);
-                        PJ2->realizarAccion(inputDerecha, anchoEsc);
-                        PJ2->realizarAccion(inputAgachado,anchoEsc);
-                        PJ1->accionesEnCurso[2]->setAnchoDePaso(factorDeRetrocesoConProteccion);
-                        PJ2->accionesEnCurso[2]->setAnchoDePasoDefault();
-                    }
-
+            cout<<"gola2"<<endl;
+            if(PJ1->estado == CAMINANDO && PJ1->sentido == true){
+                if(PJ2->estado == PARADO) {
+                    PJ2->accionesEnCurso[2]->setAnchoDePaso(factorDeRestrocesoSinProteccion);
+                    PJ2->realizarAccion(inputDerecha,anchoEsc);
+                    PJ2->estado = PARADO;
+                    PJ1->accionesEnCurso[2]->setAnchoDePaso(factorDeRestrocesoSinProteccion);
+                    PJ2->accionesEnCurso[2]->setAnchoDePasoDefault();
                 }
-                else if(PJ2->estado == CAMINANDO && PJ2->sentido == true){
-                    if (PJ1->estado == PARADO) {
-                        PJ1->accionesEnCurso[2]->setAnchoDePaso(factorDeRetrocesoConProteccion);
-                        PJ1->realizarAccion(inputIzquierda, anchoEsc);
-                        PJ1->estado = PARADO;
-                        PJ2->accionesEnCurso[2]->setAnchoDePaso(factorDeRetrocesoConProteccion);
-                        PJ1->accionesEnCurso[2]->setAnchoDePasoDefault();
-                    }
-                    else if (PJ1->estado == AGACHADO) {
-                        PJ1->accionesEnCurso[2]->setAnchoDePaso(factorDeRetrocesoConProteccion);
-                        PJ1->realizarAccion(inputIzquierda, anchoEsc);
-                        PJ1->realizarAccion(inputAgachado,anchoEsc);
-                        PJ2->accionesEnCurso[2]->setAnchoDePaso(factorDeRetrocesoConProteccion);
-                        PJ1->accionesEnCurso[2]->setAnchoDePasoDefault();
-                    }
+                else if(PJ2->estado == AGACHADO) {
+                    PJ2->accionesEnCurso[2]->setAnchoDePaso(factorDeRestrocesoSinProteccion);
+                    PJ2->realizarAccion(inputDerecha, anchoEsc);
+                    PJ2->realizarAccion(inputAgachado,anchoEsc);
+                    PJ1->accionesEnCurso[2]->setAnchoDePaso(factorDeRestrocesoSinProteccion);
+                    PJ2->accionesEnCurso[2]->setAnchoDePasoDefault();
+                }
+                else if (PJ2->estado == PROTECCION) {
+                    PJ2->accionesEnCurso[2]->setAnchoDePaso(factorDeRetrocesoConProteccion);
+                    PJ2->realizarAccion(inputDerecha, anchoEsc);
+                    PJ2->estado = PROTECCION;
+                    PJ1->accionesEnCurso[2]->setAnchoDePaso(factorDeRetrocesoConProteccion);
+                    PJ2->accionesEnCurso[2]->setAnchoDePasoDefault();
+                }
+                else if (PJ2->estado ==PROTECCION_AGACHADO) {
+                    PJ2->accionesEnCurso[2]->setAnchoDePaso(factorDeRetrocesoConProteccion);
+                    PJ2->realizarAccion(inputDerecha, anchoEsc);
+                    PJ2->estado = PROTECCION_AGACHADO;
+                    PJ1->accionesEnCurso[2]->setAnchoDePaso(factorDeRetrocesoConProteccion);
+                    PJ2->accionesEnCurso[2]->setAnchoDePasoDefault();
                 }
             }
-            // Un pj empuja a otro (sin proteccion). Vale para parado y agachado
-            else{
-                cout<<"gola2"<<endl;
-                if(PJ1->estado == CAMINANDO && PJ1->sentido == true){
-                    if(PJ2->estado == PARADO) {
-                        PJ2->accionesEnCurso[2]->setAnchoDePaso(factorDeRestrocesoSinProteccion);
-                        PJ2->realizarAccion(inputDerecha, anchoEsc);
-                        PJ2->estado = PARADO;
-                        PJ1->accionesEnCurso[2]->setAnchoDePaso(factorDeRestrocesoSinProteccion);
-                        PJ2->accionesEnCurso[2]->setAnchoDePasoDefault();
-                    }
-                    else if(PJ2->estado == AGACHADO) {
-                        PJ2->accionesEnCurso[2]->setAnchoDePaso(factorDeRestrocesoSinProteccion);
-                        PJ2->realizarAccion(inputDerecha, anchoEsc);
-                        PJ2->realizarAccion(inputAgachado,anchoEsc);
-                        PJ1->accionesEnCurso[2]->setAnchoDePaso(factorDeRestrocesoSinProteccion);
-                        PJ2->accionesEnCurso[2]->setAnchoDePasoDefault();
-                    }
+            else if(PJ2->estado == CAMINANDO && PJ2->sentido == true){
+                if (PJ1->estado == PARADO){
+                    PJ1->accionesEnCurso[2]->setAnchoDePaso(factorDeRestrocesoSinProteccion);
+                    PJ1->realizarAccion(inputIzquierda, anchoEsc);
+                    PJ1->estado = PARADO;
+                    PJ2->accionesEnCurso[2]->setAnchoDePaso(factorDeRestrocesoSinProteccion);
+                    PJ1->accionesEnCurso[2]->setAnchoDePasoDefault();
                 }
-                else if(PJ2->estado == CAMINANDO && PJ2->sentido == true){
-                    if (PJ1->estado == PARADO){
-                        PJ1->accionesEnCurso[2]->setAnchoDePaso(factorDeRestrocesoSinProteccion);
-                        PJ1->realizarAccion(inputIzquierda, anchoEsc);
-                        PJ1->estado = PARADO;
-                        PJ2->accionesEnCurso[2]->setAnchoDePaso(factorDeRestrocesoSinProteccion);
-                        PJ1->accionesEnCurso[2]->setAnchoDePasoDefault();
-                    }
-                    else if (PJ1->estado == AGACHADO){
-                        PJ1->accionesEnCurso[2]->setAnchoDePaso(factorDeRestrocesoSinProteccion);
-                        PJ1->realizarAccion(inputIzquierda, anchoEsc);
-                        PJ1->realizarAccion(inputAgachado,anchoEsc);
-                        PJ2->accionesEnCurso[2]->setAnchoDePaso(factorDeRestrocesoSinProteccion);
-                        PJ1->accionesEnCurso[2]->setAnchoDePasoDefault();
-                    }
+                else if (PJ1->estado == AGACHADO){
+                    PJ1->accionesEnCurso[2]->setAnchoDePaso(factorDeRestrocesoSinProteccion);
+                    PJ1->realizarAccion(inputIzquierda, anchoEsc);
+                    PJ1->realizarAccion(inputAgachado,anchoEsc);
+                    PJ2->accionesEnCurso[2]->setAnchoDePaso(factorDeRestrocesoSinProteccion);
+                    PJ1->accionesEnCurso[2]->setAnchoDePasoDefault();
+                }
+                else if (PJ1->estado == PROTECCION) {
+                    PJ1->accionesEnCurso[2]->setAnchoDePaso(factorDeRetrocesoConProteccion);
+                    PJ1->realizarAccion(inputIzquierda, anchoEsc);
+                    PJ1->estado = PROTECCION;
+                    PJ2->accionesEnCurso[2]->setAnchoDePaso(factorDeRetrocesoConProteccion);
+                    PJ1->accionesEnCurso[2]->setAnchoDePasoDefault();
+                }
+                else if (PJ1->estado == PROTECCION_AGACHADO) {
+                    PJ1->accionesEnCurso[2]->setAnchoDePaso(factorDeRetrocesoConProteccion);
+                    PJ1->realizarAccion(inputIzquierda, anchoEsc);
+                    PJ1->estado = PROTECCION_AGACHADO;
+                    PJ2->accionesEnCurso[2]->setAnchoDePaso(factorDeRetrocesoConProteccion);
+                    PJ1->accionesEnCurso[2]->setAnchoDePasoDefault();
                 }
             }
         }
+
     }
+
 
     //Colision entre un pj saltando oblicuamente y otro que esta parado (que no se superpongan luego dle salto)
     if(PJ1->estado == SALTANDO_OBLICUO && PJ1->sentido == true && (PJ2->estado == PARADO || PJ2->estado == AGACHADO) && seProdujoColision(PJ1,PJ2)){
         cout<<"gola3"<<endl;
         if ((PJ1->pos.getX() - PJ2->pos.getX()) <= 0) {
             PJ2->pos.setX(PJ2->pos.getX() + distanciaColisionadaenX(PJ1,PJ2));
-        } else {
-            PJ2->pos.setX(PJ2->pos.getX() - distanciaColisionadaenX(PJ2,PJ1));
-        };
+        }
     }
 
     //Colision entre un pj saltando oblicuamente y otro caminando
@@ -240,9 +229,7 @@ void Colisionador::solucionarColision(Personaje* PJ1, Personaje* PJ2){
         cout<<"gola3"<<endl;
         if ((PJ1->pos.getX() - PJ2->pos.getX()) <= 0) {
             PJ2->pos.setX(PJ2->pos.getX() + distanciaColisionadaenX(PJ1,PJ2));
-        } else {
-            PJ2->pos.setX(PJ2->pos.getX() - distanciaColisionadaenX(PJ2,PJ1));
-        };
+        }
     }
 
     //Colision entre un pj Saltando vertical y otro caminando
@@ -264,6 +251,12 @@ void Colisionador::solucionarColision(Personaje* PJ1, Personaje* PJ2){
             PJ2->enCaida = true;
             PJ2->pos.setX(PJ2->pos.getX() - distanciaColisionadaenX(PJ2,PJ1));
         };
+    }
+
+    if(seProdujoColision(PJ1,PJ2)) {
+        if ((PJ1->pos.getX() - PJ2->pos.getX()) <= 0) {
+            PJ2->pos.setX(PJ2->pos.getX() + distanciaColisionadaenX(PJ1, PJ2));
+        }
     }
 }
 

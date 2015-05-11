@@ -28,6 +28,7 @@ public:
 	float alturaParado;
 	Posicion posInicial;
 	TestadoPersonaje estado;
+	Tinput inputAnterior;
 	Accion* accionesEnCurso[4];
 	float vida;
 
@@ -45,7 +46,6 @@ public:
 	Posicion verificarPuntoEnY(Posicion posicionActual);
 
 	void ejecutarAcionesActivadas(Accion **accionesEnCurso,float anchoEscenario);
-
 
 	Personaje(bool direccion,Posicion posInicial,float alto,float ancho);
 	void realizarAccion(Tinput orden,float anchoEscenario);
@@ -65,8 +65,8 @@ public:
 
 	virtual ~Personaje();
 
-	void caminar(bool sent, bool direc);
+	void caminar(bool direc);
 
-	void saltarOblicuamente(bool sent, bool direc);
+	void saltarOblicuamente(bool direc);
 };
 #endif /* PERSONAJE_H_ */

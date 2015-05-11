@@ -399,6 +399,12 @@ struct Tcambio{
     Tdireccion direccion;
     Tsentido sentido;
     Tdimension dPJ;
+
+    float vida;
+
+    // Para el poder
+    Tdimension dPoder;
+    Posicion posicionPoder;
 };
 
 /**

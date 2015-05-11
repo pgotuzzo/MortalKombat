@@ -161,6 +161,12 @@ Tcambio Mundo::actualizarPJ(Personaje *PJ) {
 	cambio.dPJ.h = PJ->getAlturaPersonaje();
 	cambio.dPJ.w = PJ->getAnchoPersonaje();
 
+	cambio.vida = PJ->vida;
+
+	cambio.dPoder.h = PJ->poder->altura;
+	cambio.dPoder.w = PJ->poder->ancho;
+	cambio.posicionPoder = PJ->poder->pos;
+
 	return cambio;
 
 }
@@ -198,6 +204,15 @@ void Mundo::VerificarSiPjsColisionanaEnElAire(){
 		if (colisionador.seVan(personaje1, personaje2, deltaCero)) {
 			personaje1->enCaida = true;
 			personaje2->enCaida = true;
+			if (colisionador.seProdujoColision(personaje1, personaje2)) {
+				if ((personaje1->pos.getX() - personaje2->pos.getX()) <= 0) {
+					personaje2->pos.setX(
+							personaje2->pos.getX() + colisionador.distanciaColisionadaenX(personaje1, personaje2));
+				} else {
+					personaje2->pos.setX(
+							personaje2->pos.getX() - colisionador.distanciaColisionadaenX(personaje2, personaje1));
+				};
+			}
 		}
 	}
 
