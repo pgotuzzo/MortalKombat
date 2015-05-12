@@ -32,6 +32,10 @@ public:
 	Accion* accionesEnCurso[4];
 	float vida;
 
+	int loopsGolpe;
+	int loopsPiniaAlta;
+	int loopsPiniaBaja;
+
 	bool lanzandoGolpe;
 	bool lanzandoPoder;
 	bool protegiendose;
@@ -50,6 +54,7 @@ public:
 	Personaje(bool direccion,Posicion posInicial,float alto,float ancho);
 	void realizarAccion(Tinput orden,float anchoEscenario);
 	TestadoPersonaje generarEstado(Tinput input);
+	bool seguirPegando(TestadoPersonaje estadoInput);
 
 	Posicion getPosicion();
 	TestadoPersonaje getEstado();
@@ -68,5 +73,7 @@ public:
 	void caminar(bool direc);
 
 	void saltarOblicuamente(bool direc);
+
+	bool puedoRealizarAccion(TestadoPersonaje est);
 };
 #endif /* PERSONAJE_H_ */

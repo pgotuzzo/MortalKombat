@@ -17,9 +17,13 @@ const float deltaParaPoder = 5.00;
 Mundo::Mundo(config configuracion) {
 	Tescenario escenario = configuracion.getEscenario();
 	vector<Tpersonaje> personajes = configuracion.getPersonajes();
+	float anchoVentana = configuracion.getVentana().ancho;
+
+	cout<<anchoVentana<<endl;
 
 	Tpersonaje PJ1 = personajes[0];
 	Tpersonaje PJ2 = personajes[1];
+
 
 	anchoEscenario = escenario.d.w;
 	altoEscenario = escenario.d.h;
@@ -48,9 +52,9 @@ Mundo::Mundo(config configuracion) {
 
 	//TODO: EL PJ1 Y PJ2 EMPIEZAN EN LADOS OPUESTOS - lo dejamos asi por los controles del teclado
 
-	personaje1 = new Personaje(dir1,Posicion(pos_x+anchoPJ1,pos_y1),altoPJ1,anchoPJ1);
+	personaje1 = new Personaje(dir1,Posicion(pos_x+anchoVentana/2-anchoPJ1-MIN_DISTANCE_FROM_BOUND,pos_y1),altoPJ1,anchoPJ1);
 	cout<<"Costado izquierdo personaje 1: "<<personaje1->pos.getX() - personaje1->ancho/2<<endl;
-	personaje2 = new Personaje(dir2,Posicion(pos_x-anchoPJ2,pos_y2),altoPJ2,anchoPJ2);
+	personaje2 = new Personaje(dir2,Posicion(pos_x-anchoVentana/2+MIN_DISTANCE_FROM_BOUND,pos_y2),altoPJ2,anchoPJ2);
 	cout<<"Costado derecho personaje 2: "<<personaje2->pos.getX() + personaje2->ancho/2<<endl;
 	colisionador = Colisionador();
 	colisionador.setEscenario(anchoEscenario);
@@ -92,8 +96,9 @@ vector<Tcambio> Mundo::actualizarMundo(vector<Tinput> inputs) {
 	personaje1->accionesEnCurso[2]->setAnchoDePasoDefault();
 	personaje2->accionesEnCurso[2]->setAnchoDePasoDefault();
 
+
 	//Choque de saltos oblicuos en el aire
-	if(!colisionador.detectarLejania(personaje1,personaje2,anchoPantalla-(MIN_DISTANCE_FROM_BOUND*4))){
+	if(!colisionador.sonCercanos(personaje1, personaje2, anchoPantalla - (MIN_DISTANCE_FROM_BOUND * 2)-personaje1->ancho - personaje2->ancho)){
 		verificarQueNoSeVallaDeLaPantalla();
 	}
 	else {
@@ -101,17 +106,17 @@ vector<Tcambio> Mundo::actualizarMundo(vector<Tinput> inputs) {
 	}
 
 	//Colision entre personajes (empujar)
-	if (colisionador.sonProximos(personaje1,personaje2,-1)){
+	if (colisionador.sonProximos(personaje1,personaje2,0)){
 		colisionador.solucionarColision(personaje1,personaje2);
 		colisionador.solucionarColision(personaje2,personaje1);
 	}
 
 	//Colision entre el personaje y el golpe
 	bool esPoder = true;
-	verificarColision(personaje2->lanzandoGolpe,personaje1,personaje2->golpe,!esPoder);
+	verificarColision(personaje2->lanzandoGolpe,personaje2->estado,personaje1,personaje2->golpe,!esPoder);
 	string mensajePJ1 = "Vida del personaje 1: " + to_string(personaje1->vida);
 	if(personaje1->vida < 100 && personaje1->vida > 0)loguer->loguear(mensajePJ1.c_str(),Log::LOG_DEB);
-	verificarColision(personaje1->lanzandoGolpe,personaje2,personaje1->golpe,!esPoder);
+	verificarColision(personaje1->lanzandoGolpe,personaje1->estado,personaje2,personaje1->golpe,!esPoder);
 	string mensajePJ2 = "Vida del personaje 2: " + to_string(personaje2->vida);
 	if(personaje2->vida < 100 && personaje2->vida > 0)loguer->loguear(mensajePJ2.c_str(),Log::LOG_DEB);
 
@@ -124,12 +129,16 @@ vector<Tcambio> Mundo::actualizarMundo(vector<Tinput> inputs) {
 		cout<<"personaje que lanza el poder"<<endl;
 		personaje2->pos.mostrarPar();
 	}
-	verificarColision(personaje2->lanzandoPoder,personaje1,personaje2->poder,esPoder);
-	verificarColision(personaje1->lanzandoPoder,personaje2,personaje1->poder,esPoder);
+	verificarColision(personaje2->lanzandoPoder,personaje2->estado,personaje1,personaje2->poder,esPoder);
+	verificarColision(personaje1->lanzandoPoder,personaje1->estado,personaje2,personaje1->poder,esPoder);
 
 	//Se actualizan a los personajes
 	cambio1 = actualizarPJ(personaje1);
 	cambio2 = actualizarPJ(personaje2);
+
+	/*cout<<"PERSONAJE1"<<endl;
+	personaje1->pos.mostrarPar();*/
+
 	c.push_back(cambio1);
 	c.push_back(cambio2);
 
@@ -137,15 +146,27 @@ vector<Tcambio> Mundo::actualizarMundo(vector<Tinput> inputs) {
 }
 
 
-void Mundo::verificarColision(bool generaViolencia, Personaje *PJ, ObjetoColisionable *objeto, bool esPoder) {
+void Mundo::verificarColision(bool generaViolencia,TestadoPersonaje estadoViolento,Personaje* PJ,ObjetoColisionable *objeto, bool esPoder) {
 	if (generaViolencia) {
-		if (colisionador.sonProximos(PJ,objeto,2)) {
-			if (esPoder) {
-				cout<<"Personaje que recibe el poder"<<endl;
-				PJ->pos.mostrarPar();
-				colisionador.solucionarColision(PJ, (Poder *) objeto);
+		switch (estadoViolento){
+			case (PATADA_ALTA_ATRAS):
+				if (colisionador.sonProximos(personaje1,personaje2,8) && !esPoder) {
+				//cout<<"Personaje que recibe el poder"<<endl;
+				//PJ->pos.mostrarPar();
+				colisionador.solucionarColision(PJ, (Golpe *) objeto);
 			}
-			else colisionador.solucionarColision(PJ, (Golpe *) objeto);
+				break;
+			default:
+				if (colisionador.sonProximos(personaje1,personaje2,2) && !esPoder) {
+					//cout<<"Personaje que recibe el poder"<<endl;
+					//PJ->pos.mostrarPar();
+					colisionador.solucionarColision(PJ, (Golpe *) objeto);
+				}
+				break;
+		}
+		if(colisionador.sonProximos(PJ,objeto,0) && esPoder) {
+			//cout<<"Personaje que recibe el poder"<<endl;
+			colisionador.solucionarColision(PJ, (Poder *) objeto);
 		}
 	}
 }
@@ -196,24 +217,26 @@ void Mundo::verificarDireccionDeLosPersonajes() {
 void Mundo::VerificarSiPjsColisionanaEnElAire(){
 	if ((personaje1->getEstado() != SALTANDO_OBLICUO) || (personaje1->sentido == false)) {
 		personaje1->enCaida = false;
-	}
-	if ((personaje2->getEstado() != SALTANDO_OBLICUO) || (personaje2->sentido == false)) {
 		personaje2->enCaida = false;
 	}
-	if (personaje1->estado == SALTANDO_OBLICUO && personaje1->sentido == true && personaje2->estado == SALTANDO_OBLICUO && personaje2->sentido == true) {
-		if (colisionador.seVan(personaje1, personaje2, deltaCero)) {
-			personaje1->enCaida = true;
-			personaje2->enCaida = true;
-			if (colisionador.seProdujoColision(personaje1, personaje2)) {
-				if ((personaje1->pos.getX() - personaje2->pos.getX()) <= 0) {
-					personaje2->pos.setX(
-							personaje2->pos.getX() + colisionador.distanciaColisionadaenX(personaje1, personaje2));
-				} else {
-					personaje2->pos.setX(
-							personaje2->pos.getX() - colisionador.distanciaColisionadaenX(personaje2, personaje1));
-				};
+	if ((personaje2->getEstado() != SALTANDO_OBLICUO) || (personaje2->sentido == false)) {
+		personaje1->enCaida = false;
+		personaje2->enCaida = false;
+	}
+	if (colisionador.sonCercanos(personaje1, personaje2, deltaCero)) {
+		if (personaje1->estado == SALTANDO_OBLICUO && personaje1->sentido == true && personaje2->estado == SALTANDO_OBLICUO && personaje2->sentido == true) {
+				personaje1->enCaida = true;
+				personaje2->enCaida = true;
+				if (colisionador.seProdujoColision(personaje1, personaje2)) {
+					if ((personaje1->pos.getX() - personaje2->pos.getX()) <= 0) {
+						personaje2->pos.setX(
+								personaje2->pos.getX() + colisionador.distanciaColisionadaenX(personaje1, personaje2));
+					} else {
+						personaje2->pos.setX(
+								personaje2->pos.getX() - colisionador.distanciaColisionadaenX(personaje2, personaje1));
+					};
+				}
 			}
-		}
 	}
 
 
@@ -224,60 +247,40 @@ void Mundo::VerificarSiPjsColisionanaEnElAire(){
 void Mundo::verificarQueNoSeVallaDeLaPantalla() {
 
 	// No se vayan caminando
-	if(personaje1->estado == CAMINANDO){
-		if(personaje1->direccion) {
-			personaje1->pos = personaje1->posAnt;
+	if(personaje1->estado == CAMINANDO && !personaje1->sentido){
+			personaje1->pos.setX(personaje1->posAnt.getX());
 		}
-		else {
-			personaje1->pos = personaje1->posAnt;
+	if(personaje2->estado == CAMINANDO && !personaje2->sentido){
+		personaje2->pos.setX(personaje2->posAnt.getX());
 		}
-	}
-	if(personaje2->estado == CAMINANDO){
-		if(personaje2->direccion) {
-			personaje2->pos = personaje2->posAnt;
-		}
-		else {
-			personaje2->pos = personaje2->posAnt;
-		}
-
-	}
-	if (personaje1->estado == SALTANDO_OBLICUO && !personaje1->sentido){
+	if ((personaje1->estado == SALTANDO_OBLICUO || personaje1->estado == PINIA_SALTO || personaje1->estado == PATADA_SALTO) && !personaje1->sentido){
 		personaje1->enCaida = true;
 		personaje1->pos.setX(personaje1->posAnt.getX());
-		if(personaje2->estado == SALTANDO_OBLICUO && !personaje2->sentido){
+		if((personaje2->estado == SALTANDO_OBLICUO || personaje2->estado == PINIA_SALTO || personaje2->estado == PATADA_SALTO) && !personaje2->sentido){
 			personaje2->enCaida = true;
 			personaje2->pos.setX(personaje2->posAnt.getX());
 		}
 		if (personaje2->estado == CAMINANDO && !personaje2->sentido){
-			cout<<"Entro"<<endl;
-			if(personaje2->direccion) {
-				personaje2->pos = personaje2->posAnt;
-			}
-			else {
-				personaje2->pos = personaje2->posAnt;
-			}
+			//personaje2->pos = personaje2->posAnt;
+			personaje2->pos.setX(personaje2->posAnt.getX());
 		}
 
 	}
 
-	if (personaje2->estado == SALTANDO_OBLICUO && !personaje2->sentido){
+	if ((personaje2->estado == SALTANDO_OBLICUO || personaje2->estado == PINIA_SALTO || personaje2->estado == PATADA_SALTO) && !personaje2->sentido){
 		personaje2->enCaida = true;
 		personaje2->pos.setX(personaje2->posAnt.getX());
-		if (personaje1->estado == CAMINANDO && !personaje1->sentido){
-			if(personaje1->direccion) {
-				personaje1->pos = personaje1->posAnt;
-			}
-			else {
-				personaje1->pos = personaje1->posAnt;
-			}
+		if (personaje1->estado == CAMINANDO && !personaje1->sentido) {
+			personaje1->pos.setX(personaje1->posAnt.getX());
+			//personaje1->pos = personaje1->posAnt;
 		}
 
 	}
-	if ((personaje1->getEstado() != SALTANDO_OBLICUO) || personaje1->sentido) {
+	if (((personaje1->getEstado() != SALTANDO_OBLICUO || personaje1->estado != PINIA_SALTO || personaje1->estado != PATADA_SALTO)) || personaje1->sentido) {
 		personaje1->enCaida = false;
 		personaje2->enCaida = false;
 	}
-	if ((personaje2->getEstado() != SALTANDO_OBLICUO) || personaje2->sentido) {
+	if (((personaje2->getEstado() != SALTANDO_OBLICUO) || personaje2->estado != PINIA_SALTO || personaje2->estado != PATADA_SALTO) || personaje2->sentido) {
 		personaje1->enCaida = false;
 		personaje2->enCaida = false;
 	}

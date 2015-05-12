@@ -34,7 +34,7 @@ public:
 
 	void verificarQueNoSeVallaDeLaPantalla();
 
-	void verificarColision(bool generaViolencia, Personaje* PJ, ObjetoColisionable* objeto,bool esPoder);
+	void verificarColision(bool generaViolencia,TestadoPersonaje estadoViolento,Personaje* PJ,ObjetoColisionable* objeto,bool esPoder);
 
 	Tcambio actualizarPJ(Personaje* PJ);
 

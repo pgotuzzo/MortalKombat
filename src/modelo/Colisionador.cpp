@@ -15,9 +15,13 @@ void Colisionador::setEscenario(float ancho) {
 
 bool Colisionador::sonProximos(ObjetoColisionable* primerObjeto, ObjetoColisionable* segundoObjeto, float delta) {
     //Aqui debe ocurrir la magia de la deteccion de las proximidades entre dos objetos
-    float anchoRectanguloMinimo = pow((primerObjeto->ancho/2)+(segundoObjeto->ancho/2)+(delta),2);
-    float distanciaPuntos = pow((primerObjeto->pos.getX() - segundoObjeto->pos.getX()),2);
+    //float anchoRectanguloMinimo = pow((primerObjeto->ancho/2)+(segundoObjeto->ancho/2)+(delta),2);
+    //float distanciaPuntos = pow((primerObjeto->pos.getX() - segundoObjeto->pos.getX()),2);
 
+    float distanciaEntrePjs;
+
+    if(primerObjeto->pos.getX() <= segundoObjeto->pos.getX())distanciaEntrePjs = segundoObjeto->pos.getX() - primerObjeto->pos.getX() - primerObjeto->ancho;
+    else distanciaEntrePjs = primerObjeto->pos.getX() - segundoObjeto->pos.getX() - segundoObjeto->ancho;
 
 
     /*float bordeIzqObjeto1 = primerObjeto->pos.getX() - primerObjeto->ancho/2;
@@ -31,7 +35,7 @@ bool Colisionador::sonProximos(ObjetoColisionable* primerObjeto, ObjetoColisiona
     float pisoDos = techoDos + segundoObjeto->getAltura();
 
     //Ajusta el choque entre pj
-    if ((distanciaPuntos <= anchoRectanguloMinimo)) {
+    if ((distanciaEntrePjs <= delta)) {
         if(techoUno > pisoDos || techoDos > pisoUno )    return false;
             return true;
     }
@@ -81,13 +85,19 @@ bool Colisionador::seVan(Personaje* PJ1, Personaje* PJ2, float delta) {
     return distanciaPuntos <= anchoRectanguloMinimo;
 }
 
-bool Colisionador::detectarLejania(Personaje* PJ1, Personaje* PJ2, float delta) {
+/*
+ * Devuelve true si la distancia entre los personajes es menor o igual al delta.
+ * En caso contrario False.
+ */
+bool Colisionador::sonCercanos(Personaje *PJ1, Personaje *PJ2, float delta) {
     //Aqui debe ocurrir la magia de la deteccion de las proximidades entre dos objetos
-    float anchoRectanguloMinimo =(float) pow(delta,2);
 
-    float distanciaPuntos = (float)pow((PJ1->pos.getX() - PJ2->pos.getX()),2);
+    float distanciaEntrePjs;
 
-    return distanciaPuntos <= anchoRectanguloMinimo;
+    if(PJ1->pos.getX() <= PJ2->pos.getX())distanciaEntrePjs = PJ2->pos.getX() - PJ1->pos.getX() - PJ1->ancho;
+    else distanciaEntrePjs = PJ1->pos.getX() - PJ2->pos.getX() - PJ2->ancho;
+
+    return distanciaEntrePjs <= delta;
 }
 
 bool Colisionador::seProdujoColision(ObjetoColisionable* rectangulo1, ObjetoColisionable* rectangulo2){
@@ -127,7 +137,6 @@ void Colisionador::solucionarColision(Personaje* PJ1, Personaje* PJ2){
 
     //Los dos caminando en sentido contrario
     if(PJ1->sentido == true && PJ1->estado == CAMINANDO && PJ2->sentido == true && PJ2->estado == CAMINANDO){
-        cout<<"gola1"<<endl;
         if ((PJ1->pos.getX() - PJ2->pos.getX()) <= 0) {
             PJ1->pos.setX(PJ1->pos.getX() - 1);
             PJ2->pos.setX(PJ2->pos.getX() + 1);
@@ -150,7 +159,6 @@ void Colisionador::solucionarColision(Personaje* PJ1, Personaje* PJ2){
         inputAgachado.accion = TinputAccion::KEY_NADA;
 
         if ((PJ1->pos.getX() - PJ2->pos.getX()) <= 0 ) {
-            cout<<"gola2"<<endl;
             if(PJ1->estado == CAMINANDO && PJ1->sentido == true){
                 if(PJ2->estado == PARADO) {
                     PJ2->accionesEnCurso[2]->setAnchoDePaso(factorDeRestrocesoSinProteccion);
@@ -218,7 +226,6 @@ void Colisionador::solucionarColision(Personaje* PJ1, Personaje* PJ2){
 
     //Colision entre un pj saltando oblicuamente y otro que esta parado (que no se superpongan luego dle salto)
     if(PJ1->estado == SALTANDO_OBLICUO && PJ1->sentido == true && (PJ2->estado == PARADO || PJ2->estado == AGACHADO) && seProdujoColision(PJ1,PJ2)){
-        cout<<"gola3"<<endl;
         if ((PJ1->pos.getX() - PJ2->pos.getX()) <= 0) {
             PJ2->pos.setX(PJ2->pos.getX() + distanciaColisionadaenX(PJ1,PJ2));
         }
@@ -226,7 +233,6 @@ void Colisionador::solucionarColision(Personaje* PJ1, Personaje* PJ2){
 
     //Colision entre un pj saltando oblicuamente y otro caminando
     if(PJ1->estado == SALTANDO_OBLICUO && PJ1->sentido == true && PJ2->estado == CAMINANDO && seProdujoColision(PJ1,PJ2)){
-        cout<<"gola3"<<endl;
         if ((PJ1->pos.getX() - PJ2->pos.getX()) <= 0) {
             PJ2->pos.setX(PJ2->pos.getX() + distanciaColisionadaenX(PJ1,PJ2));
         }
@@ -243,7 +249,6 @@ void Colisionador::solucionarColision(Personaje* PJ1, Personaje* PJ2){
 
     // Colision entre un pj saltando vertical y otro saltando oblicuamente
     if(PJ1->estado == SALTANDO_VERTICAL && PJ2->estado == SALTANDO_OBLICUO && PJ2->sentido == true && seProdujoColision(PJ1,PJ2)){
-        cout<<"gola4"<<endl;
         if ((PJ1->pos.getX() - PJ2->pos.getX()) <= 0) {
             PJ2->enCaida = true;
             PJ2->pos.setX(PJ2->pos.getX() + distanciaColisionadaenX(PJ1,PJ2));
@@ -268,6 +273,7 @@ void Colisionador::solucionarColision(Personaje *PJ, Golpe *golpeOponente) {
 void Colisionador::solucionarColision(Personaje *PJ, Poder *poderOponente) {
 
     poderOponente->estado = false;
+    PJ->mePegaron(poderOponente->danio);
     cout<<"PODERRRR"<<endl;
     float posX;
     cout<<"COSTADOO: "<<poderOponente->pos.getX() + poderOponente->ancho/2<<endl;

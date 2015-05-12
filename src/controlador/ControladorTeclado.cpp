@@ -26,6 +26,7 @@ Tinput ControladorTeclado::esAnterior1(const Uint8 *state) {
 
 			}else if(state[SDL_SCANCODE_UP] && state[SDL_SCANCODE_LEFT]){
 				inputAnterior1.movimiento=TinputMovimiento::KEY_ARRIBA_IZQUIERDA;
+				inputAnterior1.accion=TinputAccion::KEY_NADA;
 				return inputAnterior1;
 			}else if (state[SDL_SCANCODE_LEFT]&&state[SDL_SCANCODE_U]){
 				inputAnterior1.movimiento=TinputMovimiento::KEY_IZQUIERDA;
@@ -46,6 +47,7 @@ Tinput ControladorTeclado::esAnterior1(const Uint8 *state) {
 			}
 			else if (state[SDL_SCANCODE_LEFT]){
 				inputAnterior1.movimiento=TinputMovimiento::KEY_IZQUIERDA;
+				inputAnterior1.accion=TinputAccion::KEY_NADA;
 				return inputAnterior1; break;
 			}
 		};
@@ -63,6 +65,7 @@ Tinput ControladorTeclado::esAnterior1(const Uint8 *state) {
 
 			}else if(state[SDL_SCANCODE_UP] && state[SDL_SCANCODE_RIGHT]){
 				inputAnterior1.movimiento=TinputMovimiento::KEY_ARRIBA_DERECHA;
+				inputAnterior1.accion=TinputAccion::KEY_NADA;
 				return inputAnterior1;
 			}else if (state[SDL_SCANCODE_RIGHT]&&state[SDL_SCANCODE_U]){
 				inputAnterior1.movimiento=TinputMovimiento::KEY_DERECHA;
@@ -82,6 +85,7 @@ Tinput ControladorTeclado::esAnterior1(const Uint8 *state) {
 				return inputAnterior1;
 			}else if (state[SDL_SCANCODE_RIGHT]){
 				inputAnterior1.movimiento=TinputMovimiento::KEY_DERECHA;
+				inputAnterior1.accion=TinputAccion::KEY_NADA;
 				return inputAnterior1; break;
 			}
 		};
@@ -108,9 +112,11 @@ Tinput ControladorTeclado::esAnterior1(const Uint8 *state) {
 				}
 			}else if(state[SDL_SCANCODE_UP] && state[SDL_SCANCODE_RIGHT]){
 				inputAnterior1.movimiento=TinputMovimiento::KEY_ARRIBA_DERECHA;
+				inputAnterior1.accion=TinputAccion::KEY_NADA;
 				return inputAnterior1;
 			}else if(state[SDL_SCANCODE_UP] && state[SDL_SCANCODE_LEFT]){
 				inputAnterior1.movimiento=TinputMovimiento::KEY_ARRIBA_IZQUIERDA;
+				inputAnterior1.accion=TinputAccion::KEY_NADA;
 				return inputAnterior1;
 			}else if(state[SDL_SCANCODE_UP] && state[SDL_SCANCODE_U]){
 				inputAnterior1.movimiento=TinputMovimiento::KEY_ARRIBA;
@@ -134,6 +140,7 @@ Tinput ControladorTeclado::esAnterior1(const Uint8 *state) {
 				return inputAnterior1;
 			}else if(state[SDL_SCANCODE_UP]){
 				inputAnterior1.movimiento=TinputMovimiento::KEY_ARRIBA;
+				inputAnterior1.accion=TinputAccion::KEY_NADA;
 				return inputAnterior1;break;
 			}break;
 		};
@@ -154,22 +161,22 @@ Tinput ControladorTeclado::esAnterior1(const Uint8 *state) {
 				inputAnterior1.movimiento=TinputMovimiento::KEY_ABAJO;
 				inputAnterior1.accion=TinputAccion::KEY_PATADA_BAJA;
 				return inputAnterior1;
-			}else if(state[SDL_SCANCODE_DOWN] && state[SDL_SCANCODE_L]){
-				inputAnterior1.movimiento=TinputMovimiento::KEY_ABAJO;
-				inputAnterior1.accion=TinputAccion::KEY_PODER;
-				return inputAnterior1;
 			}else if(state[SDL_SCANCODE_DOWN] && state[SDL_SCANCODE_O]){
 				inputAnterior1.movimiento=TinputMovimiento::KEY_ABAJO;
 				inputAnterior1.accion=TinputAccion::KEY_PROTECCION;
+				cout<<"111111"<<endl;
 				return inputAnterior1;
 			}else if(state[SDL_SCANCODE_DOWN]){
 				inputAnterior1.movimiento=TinputMovimiento::KEY_ABAJO;
+				inputAnterior1.accion=TinputAccion::KEY_NADA;
+				cout<<"222222222"<<endl;
 				return inputAnterior1;break;
 			}
 		};
 		case TinputMovimiento::KEY_ARRIBA_DERECHA: {
 			if (state[SDL_SCANCODE_UP] && state[SDL_SCANCODE_RIGHT]&&(!state[SDL_SCANCODE_U]&&!state[SDL_SCANCODE_I]&&!state[SDL_SCANCODE_J]&&!state[SDL_SCANCODE_K]&&!state[SDL_SCANCODE_O]&&!state[SDL_SCANCODE_L])){
 				inputAnterior1.movimiento=TinputMovimiento::KEY_ARRIBA_DERECHA;
+				inputAnterior1.accion=TinputAccion::KEY_NADA;
 				return inputAnterior1;
 			}else if (state[SDL_SCANCODE_RIGHT]){
 				inputAnterior1.movimiento=TinputMovimiento::KEY_DERECHA;
@@ -179,9 +186,11 @@ Tinput ControladorTeclado::esAnterior1(const Uint8 *state) {
 		case TinputMovimiento::KEY_ARRIBA_IZQUIERDA: {
 			if (state[SDL_SCANCODE_UP] && state[SDL_SCANCODE_LEFT]&&(!state[SDL_SCANCODE_U]&&!state[SDL_SCANCODE_I]&&!state[SDL_SCANCODE_J]&&!state[SDL_SCANCODE_K]&&!state[SDL_SCANCODE_O]&&!state[SDL_SCANCODE_L])){
 				inputAnterior1.movimiento=TinputMovimiento::KEY_ARRIBA_IZQUIERDA;
+				inputAnterior1.accion=TinputAccion::KEY_NADA;
 				return inputAnterior1;
 			}else if (state[SDL_SCANCODE_LEFT]){
 				inputAnterior1.movimiento=TinputMovimiento::KEY_IZQUIERDA;
+				inputAnterior1.accion=TinputAccion::KEY_NADA;
 				return inputAnterior1;break;
 			}
 		};
@@ -250,6 +259,7 @@ Tinput ControladorTeclado::esAnterior2(const Uint8 *state) {
 
 			}else if(state[SDL_SCANCODE_W] && state[SDL_SCANCODE_A]){
 				inputAnterior2.movimiento=TinputMovimiento::KEY_ARRIBA_IZQUIERDA;
+				inputAnterior2.accion=TinputAccion::KEY_NADA;
 				return inputAnterior2;
 			}else if (state[SDL_SCANCODE_A]&&state[SDL_SCANCODE_F]){
 				inputAnterior2.movimiento=TinputMovimiento::KEY_IZQUIERDA;
@@ -269,7 +279,8 @@ Tinput ControladorTeclado::esAnterior2(const Uint8 *state) {
 				return inputAnterior2;
 			}
 			else if (state[SDL_SCANCODE_A]){
-				inputAnterior1.movimiento=TinputMovimiento::KEY_IZQUIERDA;
+				inputAnterior2.movimiento=TinputMovimiento::KEY_IZQUIERDA;
+				inputAnterior2.accion=TinputAccion::KEY_NADA;
 				return inputAnterior2; break;
 			}
 		};
@@ -287,6 +298,7 @@ Tinput ControladorTeclado::esAnterior2(const Uint8 *state) {
 
 			}else if(state[SDL_SCANCODE_W] && state[SDL_SCANCODE_D]){
 				inputAnterior2.movimiento=TinputMovimiento::KEY_ARRIBA_DERECHA;
+				inputAnterior2.accion=TinputAccion::KEY_NADA;
 				return inputAnterior2;
 			}else if (state[SDL_SCANCODE_D]&&state[SDL_SCANCODE_F]){
 				inputAnterior2.movimiento=TinputMovimiento::KEY_DERECHA;
@@ -306,6 +318,7 @@ Tinput ControladorTeclado::esAnterior2(const Uint8 *state) {
 				return inputAnterior2;
 			}else if (state[SDL_SCANCODE_D]){
 				inputAnterior2.movimiento=TinputMovimiento::KEY_DERECHA;
+				inputAnterior2.accion=TinputAccion::KEY_NADA;
 				return inputAnterior2; break;
 			}
 		};
@@ -332,9 +345,11 @@ Tinput ControladorTeclado::esAnterior2(const Uint8 *state) {
 				}
 			}else if(state[SDL_SCANCODE_W] && state[SDL_SCANCODE_D]){
 				inputAnterior2.movimiento=TinputMovimiento::KEY_ARRIBA_DERECHA;
+				inputAnterior2.accion=TinputAccion::KEY_NADA;
 				return inputAnterior2;
 			}else if(state[SDL_SCANCODE_W] && state[SDL_SCANCODE_A]){
 				inputAnterior2.movimiento=TinputMovimiento::KEY_ARRIBA_IZQUIERDA;
+				inputAnterior2.accion=TinputAccion::KEY_NADA;
 				return inputAnterior2;
 			}else if(state[SDL_SCANCODE_W] && state[SDL_SCANCODE_F]){
 				inputAnterior2.movimiento=TinputMovimiento::KEY_ARRIBA;
@@ -358,6 +373,7 @@ Tinput ControladorTeclado::esAnterior2(const Uint8 *state) {
 				return inputAnterior2;
 			}else if(state[SDL_SCANCODE_W]){
 				inputAnterior2.movimiento=TinputMovimiento::KEY_ARRIBA;
+				inputAnterior2.accion=TinputAccion::KEY_NADA;
 				return inputAnterior2;break;
 			}break;
 		};
@@ -388,6 +404,7 @@ Tinput ControladorTeclado::esAnterior2(const Uint8 *state) {
 				return inputAnterior2;
 			}else if(state[SDL_SCANCODE_S]){
 				inputAnterior2.movimiento=TinputMovimiento::KEY_ABAJO;
+				inputAnterior2.accion=TinputAccion::KEY_NADA;
 				return inputAnterior2;break;
 			}
 		};
@@ -495,12 +512,30 @@ vector<Tinput> ControladorTeclado::getInputs() {
 				else if (state[SDL_SCANCODE_S]) inputAnterior2.movimiento = TinputMovimiento::KEY_ABAJO;
 				else if (state[SDL_SCANCODE_W] && state[SDL_SCANCODE_D]) inputAnterior2.movimiento = TinputMovimiento::KEY_ARRIBA_DERECHA;
 				else if (state[SDL_SCANCODE_W] && state[SDL_SCANCODE_A]) inputAnterior2.movimiento = TinputMovimiento::KEY_ARRIBA_IZQUIERDA;
-				else if (state[SDL_SCANCODE_F]) inputAnterior2.accion = TinputAccion::KEY_PINIA_ALTA;
-				else if (state[SDL_SCANCODE_G]) inputAnterior2.accion = TinputAccion::KEY_PINIA_BAJA;
-				else if (state[SDL_SCANCODE_V]) inputAnterior2.accion =TinputAccion:: KEY_PATADA_ALTA;
-				else if (state[SDL_SCANCODE_B]) inputAnterior2.accion = TinputAccion::KEY_PATADA_BAJA;
-				else if (state[SDL_SCANCODE_H]) inputAnterior2.accion= TinputAccion::KEY_PROTECCION;
-				else if (state[SDL_SCANCODE_N]) inputAnterior2.accion = TinputAccion::KEY_PODER;
+				else if (state[SDL_SCANCODE_F]){
+					inputAnterior2.accion = TinputAccion::KEY_PINIA_ALTA;
+					inputAnterior2.movimiento = TinputMovimiento::KEY_NADA;
+				}
+				else if (state[SDL_SCANCODE_G]){
+					inputAnterior2.accion = TinputAccion::KEY_PINIA_BAJA;
+					inputAnterior2.movimiento = TinputMovimiento::KEY_NADA;
+				}
+				else if (state[SDL_SCANCODE_V]){
+					inputAnterior2.accion =TinputAccion:: KEY_PATADA_ALTA;
+					inputAnterior2.movimiento = TinputMovimiento::KEY_NADA;
+				}
+				else if (state[SDL_SCANCODE_B]){
+					inputAnterior2.accion = TinputAccion::KEY_PATADA_BAJA;
+					inputAnterior2.movimiento = TinputMovimiento::KEY_NADA;
+				}
+				else if (state[SDL_SCANCODE_H]) {
+					inputAnterior2.accion= TinputAccion::KEY_PROTECCION;
+					inputAnterior2.movimiento = TinputMovimiento::KEY_NADA;
+				}
+				else if (state[SDL_SCANCODE_N]) {
+					inputAnterior2.accion = TinputAccion::KEY_PODER;
+					inputAnterior2.movimiento = TinputMovimiento::KEY_NADA;
+				}
 				else if (state[SDL_SCANCODE_W]&&state[SDL_SCANCODE_F]){
 					inputAnterior2.movimiento = TinputMovimiento::KEY_ARRIBA;
 					inputAnterior2.accion=TinputAccion::KEY_PINIA_ALTA;
@@ -515,10 +550,10 @@ vector<Tinput> ControladorTeclado::getInputs() {
 					inputAnterior2.accion=TinputAccion::KEY_PATADA_BAJA;
 				}else if (state[SDL_SCANCODE_W]&&state[SDL_SCANCODE_H]){
 					inputAnterior2.movimiento = TinputMovimiento::KEY_ARRIBA;
-					inputAnterior2.accion=TinputAccion::KEY_PROTECCION;
+					inputAnterior2.accion=TinputAccion::KEY_PODER;
 				}else if (state[SDL_SCANCODE_W]&&state[SDL_SCANCODE_N]){
 					inputAnterior2.movimiento = TinputMovimiento::KEY_ARRIBA;
-					inputAnterior2.accion=TinputAccion::KEY_PODER;
+					inputAnterior2.accion=TinputAccion::KEY_PROTECCION;
 				}else if (state[SDL_SCANCODE_S]&&state[SDL_SCANCODE_F]){
 					inputAnterior2.movimiento = TinputMovimiento::KEY_ABAJO;
 					inputAnterior2.accion=TinputAccion::KEY_PINIA_ALTA;
@@ -533,10 +568,10 @@ vector<Tinput> ControladorTeclado::getInputs() {
 					inputAnterior2.accion=TinputAccion::KEY_PATADA_BAJA;
 				}else if (state[SDL_SCANCODE_S]&&state[SDL_SCANCODE_H]){
 					inputAnterior2.movimiento = TinputMovimiento::KEY_ABAJO;
-					inputAnterior2.accion=TinputAccion::KEY_PROTECCION;
+					inputAnterior2.accion=TinputAccion::KEY_PODER;
 				}else if (state[SDL_SCANCODE_S]&&state[SDL_SCANCODE_N]){
 					inputAnterior2.movimiento = TinputMovimiento::KEY_ABAJO;
-					inputAnterior2.accion=TinputAccion::KEY_PODER;
+					inputAnterior2.accion=TinputAccion::KEY_PROTECCION;
 				}else if(state[SDL_SCANCODE_W]&&state[SDL_SCANCODE_A]&&(state[SDL_SCANCODE_F]||state[SDL_SCANCODE_G])){
 					inputAnterior2.movimiento = TinputMovimiento::KEY_ARRIBA_IZQUIERDA;
 					inputAnterior2.accion=TinputAccion::KEY_PINIA_BAJA;
@@ -564,12 +599,30 @@ vector<Tinput> ControladorTeclado::getInputs() {
 				else if (state[SDL_SCANCODE_DOWN]) inputAnterior1.movimiento = TinputMovimiento::KEY_ABAJO;
 				else if (state[SDL_SCANCODE_UP] && state[SDL_SCANCODE_RIGHT]) inputAnterior1.movimiento = TinputMovimiento::KEY_ARRIBA_DERECHA;
 				else if (state[SDL_SCANCODE_UP] && state[SDL_SCANCODE_LEFT]) inputAnterior1.movimiento = TinputMovimiento::KEY_ARRIBA_IZQUIERDA;
-				else if (state[SDL_SCANCODE_U]) inputAnterior1.accion = TinputAccion::KEY_PINIA_ALTA;
-				else if (state[SDL_SCANCODE_I]) inputAnterior1.accion = TinputAccion::KEY_PINIA_BAJA;
-				else if (state[SDL_SCANCODE_J]) inputAnterior1.accion =TinputAccion:: KEY_PATADA_ALTA;
-				else if (state[SDL_SCANCODE_K]) inputAnterior1.accion = TinputAccion::KEY_PATADA_BAJA;
-				else if (state[SDL_SCANCODE_O]) inputAnterior1.accion= TinputAccion::KEY_PROTECCION;
-				else if (state[SDL_SCANCODE_L]) inputAnterior1.accion = TinputAccion::KEY_PODER;
+				else if (state[SDL_SCANCODE_U]){
+					inputAnterior1.accion = TinputAccion::KEY_PINIA_ALTA;
+					inputAnterior1.movimiento = TinputMovimiento::KEY_NADA;
+				}
+				else if (state[SDL_SCANCODE_I]){
+					inputAnterior1.accion = TinputAccion::KEY_PINIA_BAJA;
+					inputAnterior1.movimiento = TinputMovimiento::KEY_NADA;
+				}
+				else if (state[SDL_SCANCODE_J]){
+					inputAnterior1.accion =TinputAccion:: KEY_PATADA_ALTA;
+					inputAnterior1.movimiento = TinputMovimiento::KEY_NADA;
+				}
+				else if (state[SDL_SCANCODE_K]){
+					inputAnterior1.accion = TinputAccion::KEY_PATADA_BAJA;
+					inputAnterior1.movimiento = TinputMovimiento::KEY_NADA;
+				}
+				else if (state[SDL_SCANCODE_O]){
+					inputAnterior1.accion= TinputAccion::KEY_PROTECCION;
+					inputAnterior1.movimiento = TinputMovimiento::KEY_NADA;
+				}
+				else if (state[SDL_SCANCODE_L]){
+					inputAnterior1.movimiento = TinputMovimiento::KEY_NADA;
+					inputAnterior1.accion = TinputAccion::KEY_PODER;
+				}
 				else if (state[SDL_SCANCODE_UP]&&state[SDL_SCANCODE_U]){
 					inputAnterior1.movimiento = TinputMovimiento::KEY_ARRIBA;
 					inputAnterior1.accion=TinputAccion::KEY_PINIA_ALTA;
@@ -584,10 +637,10 @@ vector<Tinput> ControladorTeclado::getInputs() {
 					inputAnterior1.accion=TinputAccion::KEY_PATADA_BAJA;
 				}else if (state[SDL_SCANCODE_UP]&&state[SDL_SCANCODE_O]){
 					inputAnterior1.movimiento = TinputMovimiento::KEY_ARRIBA;
-					inputAnterior1.accion=TinputAccion::KEY_PROTECCION;
+					inputAnterior1.accion=TinputAccion::KEY_PODER;
 				}else if (state[SDL_SCANCODE_UP]&&state[SDL_SCANCODE_L]){
 					inputAnterior1.movimiento = TinputMovimiento::KEY_ARRIBA;
-					inputAnterior1.accion=TinputAccion::KEY_PODER;
+					inputAnterior1.accion=TinputAccion::KEY_PROTECCION;
 				}else if (state[SDL_SCANCODE_DOWN]&&state[SDL_SCANCODE_U]){
 					inputAnterior1.movimiento = TinputMovimiento::KEY_ABAJO;
 					inputAnterior1.accion=TinputAccion::KEY_PINIA_ALTA;
@@ -602,10 +655,10 @@ vector<Tinput> ControladorTeclado::getInputs() {
 					inputAnterior1.accion=TinputAccion::KEY_PATADA_BAJA;
 				}else if (state[SDL_SCANCODE_DOWN]&&state[SDL_SCANCODE_O]){
 					inputAnterior1.movimiento = TinputMovimiento::KEY_ABAJO;
-					inputAnterior1.accion=TinputAccion::KEY_PROTECCION;
+					inputAnterior1.accion=TinputAccion::KEY_PODER;
 				}else if (state[SDL_SCANCODE_DOWN]&&state[SDL_SCANCODE_L]){
 					inputAnterior1.movimiento = TinputMovimiento::KEY_ABAJO;
-					inputAnterior1.accion=TinputAccion::KEY_PODER;
+					inputAnterior1.accion=TinputAccion::KEY_PROTECCION;
 				}else if(state[SDL_SCANCODE_UP]&&state[SDL_SCANCODE_LEFT]&&(state[SDL_SCANCODE_U]||state[SDL_SCANCODE_I])){
 					inputAnterior1.movimiento = TinputMovimiento::KEY_ARRIBA_IZQUIERDA;
 					inputAnterior1.accion=TinputAccion::KEY_PINIA_BAJA;
@@ -652,10 +705,10 @@ vector<Tinput> ControladorTeclado::getInputs() {
 					inputAnterior1.accion=TinputAccion::KEY_PATADA_BAJA;
 				}else if (state[SDL_SCANCODE_UP]&&state[SDL_SCANCODE_O]){
 					inputAnterior1.movimiento = TinputMovimiento::KEY_ARRIBA;
-					inputAnterior1.accion=TinputAccion::KEY_PROTECCION;
+					inputAnterior1.accion=TinputAccion::KEY_PODER;
 				}else if (state[SDL_SCANCODE_UP]&&state[SDL_SCANCODE_L]){
 					inputAnterior1.movimiento = TinputMovimiento::KEY_ARRIBA;
-					inputAnterior1.accion=TinputAccion::KEY_PODER;
+					inputAnterior1.accion=TinputAccion::KEY_PROTECCION;
 				}else if (state[SDL_SCANCODE_DOWN]&&state[SDL_SCANCODE_U]){
 					inputAnterior1.movimiento = TinputMovimiento::KEY_ABAJO;
 					inputAnterior1.accion=TinputAccion::KEY_PINIA_ALTA;
@@ -670,10 +723,10 @@ vector<Tinput> ControladorTeclado::getInputs() {
 					inputAnterior1.accion=TinputAccion::KEY_PATADA_BAJA;
 				}else if (state[SDL_SCANCODE_DOWN]&&state[SDL_SCANCODE_O]){
 					inputAnterior1.movimiento = TinputMovimiento::KEY_ABAJO;
-					inputAnterior1.accion=TinputAccion::KEY_PROTECCION;
+					inputAnterior1.accion=TinputAccion::KEY_PODER;
 				}else if (state[SDL_SCANCODE_DOWN]&&state[SDL_SCANCODE_L]){
 					inputAnterior1.movimiento = TinputMovimiento::KEY_ABAJO;
-					inputAnterior1.accion=TinputAccion::KEY_PODER;
+					inputAnterior1.accion=TinputAccion::KEY_PROTECCION;
 				}else if(state[SDL_SCANCODE_UP]&&state[SDL_SCANCODE_LEFT]&&(state[SDL_SCANCODE_U]||state[SDL_SCANCODE_I])){
 					inputAnterior1.movimiento = TinputMovimiento::KEY_ARRIBA_IZQUIERDA;
 					inputAnterior1.accion=TinputAccion::KEY_PINIA_BAJA;
@@ -715,10 +768,10 @@ vector<Tinput> ControladorTeclado::getInputs() {
 					inputAnterior2.accion=TinputAccion::KEY_PATADA_BAJA;
 				}else if (state[SDL_SCANCODE_W]&&state[SDL_SCANCODE_H]){
 					inputAnterior2.movimiento = TinputMovimiento::KEY_ARRIBA;
-					inputAnterior2.accion=TinputAccion::KEY_PROTECCION;
+					inputAnterior2.accion=TinputAccion::KEY_PODER;
 				}else if (state[SDL_SCANCODE_W]&&state[SDL_SCANCODE_N]){
 					inputAnterior2.movimiento = TinputMovimiento::KEY_ARRIBA;
-					inputAnterior2.accion=TinputAccion::KEY_PODER;
+					inputAnterior2.accion=TinputAccion::KEY_PROTECCION;
 				}else if (state[SDL_SCANCODE_S]&&state[SDL_SCANCODE_F]){
 					inputAnterior2.movimiento = TinputMovimiento::KEY_ABAJO;
 					inputAnterior2.accion=TinputAccion::KEY_PINIA_ALTA;
@@ -733,10 +786,10 @@ vector<Tinput> ControladorTeclado::getInputs() {
 					inputAnterior2.accion=TinputAccion::KEY_PATADA_BAJA;
 				}else if (state[SDL_SCANCODE_S]&&state[SDL_SCANCODE_H]){
 					inputAnterior2.movimiento = TinputMovimiento::KEY_ABAJO;
-					inputAnterior2.accion=TinputAccion::KEY_PROTECCION;
+					inputAnterior2.accion=TinputAccion::KEY_PODER;
 				}else if (state[SDL_SCANCODE_S]&&state[SDL_SCANCODE_N]){
 					inputAnterior2.movimiento = TinputMovimiento::KEY_ABAJO;
-					inputAnterior2.accion=TinputAccion::KEY_PODER;
+					inputAnterior2.accion=TinputAccion::KEY_PROTECCION;
 				}else if(state[SDL_SCANCODE_W]&&state[SDL_SCANCODE_A]&&(state[SDL_SCANCODE_F]||state[SDL_SCANCODE_G])){
 					inputAnterior2.movimiento = TinputMovimiento::KEY_ARRIBA_IZQUIERDA;
 					inputAnterior2.accion=TinputAccion::KEY_PINIA_BAJA;

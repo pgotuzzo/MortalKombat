@@ -29,8 +29,6 @@ public:
     bool seProdujoColision(ObjetoColisionable* rectangulo1, ObjetoColisionable* rectangulo2);
     virtual ~Colisionador();
 
-    bool detectarLejania(Personaje *PJ1, Personaje *PJ2, float delta);
+    bool sonCercanos(Personaje *PJ1, Personaje *PJ2, float delta);
 };
-
-
 #endif //MORTALKOMBAT_COLISIONADOR_H

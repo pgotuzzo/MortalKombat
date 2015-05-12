@@ -13,6 +13,7 @@
 const float factorDeRestroceso = 2;
 const bool activado = true;
 const float avanceDelPoder = 5;
+const float danioPoder = 5;
 
 
 /*
@@ -39,6 +40,10 @@ Personaje::Personaje(bool direccion,Posicion posInicial,float alto,float ancho){
 	accionesEnCurso[1] = new Agachar(&altura, pos.getY() + altura);
 	accionesEnCurso[2] = new Caminar();
 	accionesEnCurso[3] = new SaltoOblicuo(altura);
+
+	loopsGolpe = 0;
+	loopsPiniaAlta = 0;
+	loopsPiniaBaja = 0;
 
 	string pj = "Se crea personaje con ancho "+to_string(ancho)+" y alto "+to_string(alto);
 	loguer->loguear(pj.c_str(), Log::LOG_DEB);
@@ -247,6 +252,41 @@ TestadoPersonaje Personaje::generarEstado(Tinput input) {
 }
 
 
+bool Personaje::seguirPegando(TestadoPersonaje estadoInput) {
+	if(estado == PINIA_ALTA && (estadoInput == PARADO || estadoInput == CAMINANDO) && loopsPiniaAlta > 0){
+		return true;
+	}
+	if(estado == PINIA_ALTA_AGACHADO && estadoInput == AGACHADO && loopsGolpe > 0){
+		return true;
+	}
+	if(estado == PINIA_BAJA && (estadoInput == PARADO || estadoInput == CAMINANDO) && loopsPiniaBaja>0){
+		return true;
+	}
+	if(estado == PINIA_BAJA_AGACHADO && estadoInput == AGACHADO && loopsGolpe > 0){
+		return true;
+	}
+	if(estado == PATADA_ALTA && (estadoInput == PARADO || estadoInput == CAMINANDO) && loopsGolpe > 0){
+		return true;
+	}
+	if(estado == PATADA_AGACHADO && estadoInput == AGACHADO && loopsGolpe > 0){
+		return true;
+	}
+	if(estado == PATADA_ALTA_ATRAS && estadoInput == CAMINANDO && !sentido && loopsGolpe > 0){
+		return true;
+	}
+	if(estado == PATADA_BAJA && (estadoInput == PARADO || estadoInput == CAMINANDO) && loopsGolpe > 0){
+		return true;
+	}
+	if(estado == PATADA_BAJA_ATRAS && estadoInput == CAMINANDO && !sentido && loopsGolpe > 0){
+		return true;
+	}
+	if(estado == PODER && (estadoInput == PARADO || estadoInput == SALTANDO_VERTICAL) && loopsGolpe >0){
+		return true;
+	}
+	return false;
+}
+
+
 /*
  * Dependiendo de la orden que se reciba se activara la accion correspondiente.
  * Por default se siguen ejecutando las acciones que se venian ejecutando de antes.
@@ -254,251 +294,274 @@ TestadoPersonaje Personaje::generarEstado(Tinput input) {
  * se puede agachar mientras esta saltando verticalmente.
  */
 void Personaje::realizarAccion(Tinput orden,float anchoEscenario) {
-
 	posAnt = pos;
 	golpe->setAlturaPJ(altura);
 	TestadoPersonaje estadoInput = generarEstado(orden);
-	switch (estadoInput){
-		case AGACHADO:
-			//activo el estado de agachar
-			if (!accionesEnCurso[0]->getEstado()) {
-				if (!accionesEnCurso[3]->getEstado()) {
-					if(!poder->estado) {
-						loguer->loguear("El personaje se encuentra agachado", Log::LOG_DEB);
-						accionesEnCurso[1]->setEstado(activado, pos);
-						estado = AGACHADO;
-						parado = false;
-						lanzandoGolpe = false;
-						lanzandoPoder = false;
-					}
-				}
-			}
-			break;
-		case PARADO:
-			if (!accionesEnCurso[0]->getEstado()) {
-				if (!accionesEnCurso[3]->getEstado()) {
-					if (!accionesEnCurso[1]->getEstado()) {
-						if(!poder->estado) {
-							//loguer->loguear("El personaje se encuentra parado", Log::LOG_DEB);
-							parado = true;
-							estado = PARADO;
-							lanzandoGolpe = false;
-							lanzandoPoder = false;
-							protegiendose = false;
-
-						}
-					}
-				}
-			}
-			break;
-		case CAMINANDO:
-			if (orden.movimiento == TinputMovimiento::KEY_DERECHA)caminar(true);
-			else if (orden.movimiento == TinputMovimiento::KEY_IZQUIERDA)caminar(false);
-			break;
-		case SALTANDO_VERTICAL:
-			if (!accionesEnCurso[0]->getEstado()) {
-				if (!accionesEnCurso[3]->getEstado()) {
-					if (!accionesEnCurso[1]->getEstado()) {
-						if(!protegiendose) {
-							//Activo el estado de saltar verticalmente. Puede realizar el poder durante el salto vertical
-							loguer->loguear("El personaje salta verticalmente", Log::LOG_DEB);
-							accionesEnCurso[0]->setEstado(activado, pos);
-							estado = SALTANDO_VERTICAL;
+	if(!seguirPegando(estadoInput)) {
+		switch (estadoInput) {
+			case AGACHADO:
+				//activo el estado de agachar
+				if (!accionesEnCurso[0]->getEstado()) {
+					if (!accionesEnCurso[3]->getEstado()) {
+						if (!poder->estado) {
+							loguer->loguear("El personaje se encuentra agachado", Log::LOG_DEB);
+							accionesEnCurso[1]->setEstado(activado, pos);
+							estado = AGACHADO;
 							parado = false;
 							lanzandoGolpe = false;
 							lanzandoPoder = false;
-							protegiendose = false;
 						}
 					}
 				}
-			}
-			break;
-		case SALTANDO_OBLICUO:
-			if(orden.movimiento == TinputMovimiento::KEY_ARRIBA_DERECHA)saltarOblicuamente(true);
-			else if(orden.movimiento == TinputMovimiento::KEY_ARRIBA_IZQUIERDA)saltarOblicuamente(false);
-			break;
-		case PROTECCION:
-			// TODO: Hacer que se mantenga agachado sin mantengo abajo y solte proteccion
-			if(orden.movimiento != TinputMovimiento::KEY_ABAJO){
-				estado = PROTECCION;
-			}
-			if(estado == PARADO){
-				estado = PROTECCION;
-			}
-			if (estado == AGACHADO){
-				estado = PROTECCION_AGACHADO;
-			}
-			parado = false;
-			lanzandoGolpe = false;
-			lanzandoPoder = false;
-			protegiendose = true;
-			break;
-		case PODER:
-			if(estado == PARADO || estado == SALTANDO_VERTICAL) {
-				if (!poder->estado) {
-					poder->activar(this->pos, this->direccion, 0,true);
-					estado = PODER;
+				break;
+			case PARADO:
+				if (!accionesEnCurso[0]->getEstado()) {
+					if (!accionesEnCurso[3]->getEstado()) {
+						if (!accionesEnCurso[1]->getEstado()) {
+							if (!poder->estado) {
+								//loguer->loguear("El personaje se encuentra parado", Log::LOG_DEB);
+								parado = true;
+								estado = PARADO;
+								lanzandoGolpe = false;
+								lanzandoPoder = false;
+								protegiendose = false;
+
+							}
+						}
+					}
 				}
-				parado = false;
-				lanzandoGolpe = false;
-				lanzandoPoder = true;
-				protegiendose = false;
-			}
-			break;
-		case PINIA_ALTA:
-			if(!poder->estado) {
-				if (estado == PARADO || estado == CAMINANDO) {
+				break;
+			case CAMINANDO:
+				if (orden.movimiento == TinputMovimiento::KEY_DERECHA)caminar(true);
+				else if (orden.movimiento == TinputMovimiento::KEY_IZQUIERDA)caminar(false);
+				break;
+			case SALTANDO_VERTICAL:
+				if (!accionesEnCurso[0]->getEstado()) {
+					if (!accionesEnCurso[3]->getEstado()) {
+						if (!accionesEnCurso[1]->getEstado()) {
+							if (!protegiendose) {
+								//Activo el estado de saltar verticalmente. Puede realizar el poder durante el salto vertical
+								loguer->loguear("El personaje salta verticalmente", Log::LOG_DEB);
+								accionesEnCurso[0]->setEstado(activado, pos);
+								estado = SALTANDO_VERTICAL;
+								parado = false;
+								lanzandoGolpe = false;
+								lanzandoPoder = false;
+								protegiendose = false;
+							}
+						}
+					}
+				}
+				break;
+			case SALTANDO_OBLICUO:
+				if (orden.movimiento == TinputMovimiento::KEY_ARRIBA_DERECHA)saltarOblicuamente(true);
+				else if (orden.movimiento == TinputMovimiento::KEY_ARRIBA_IZQUIERDA)saltarOblicuamente(false);
+				break;
+			case PROTECCION:
+				// TODO: Hacer que se mantenga agachado sin mantengo abajo y solte proteccion
+				if (estado != SALTANDO_OBLICUO && estado != SALTANDO_VERTICAL) {
+					if (orden.movimiento != TinputMovimiento::KEY_ABAJO) {
+						estado = PROTECCION;
+					}
+					if (estado == PARADO || estado == CAMINANDO) {
+						estado = PROTECCION;
+					}
+					if (estado == AGACHADO) {
+						estado = PROTECCION_AGACHADO;
+					}
+					parado = false;
+					lanzandoGolpe = false;
+					lanzandoPoder = false;
+					protegiendose = true;
+				}
+				break;
+			case PODER:
+				if (estado == PARADO || estado == SALTANDO_VERTICAL) {
+					if (!poder->estado) {
+						loopsGolpe = 3;
+						poder->activar(this->pos, this->direccion, danioPoder, true);
+						estado = PODER;
+					}
+					parado = false;
+					lanzandoGolpe = false;
+					lanzandoPoder = true;
+					protegiendose = false;
+				}
+				break;
+			case PINIA_ALTA:
+				if(loopsPiniaAlta > 0){
+					loopsPiniaAlta = loopsPiniaAlta + 3;
+				}
+				if (!poder->estado) {
+					if (estado == PARADO || estado == CAMINANDO) {
+						loopsPiniaAlta = 4;
 						golpe->activar(PINIA_ALTA, this->pos, this->direccion);
 						estado = PINIA_ALTA;
 						parado = false;
 						lanzandoGolpe = true;
 						lanzandoPoder = false;
 						protegiendose = false;
+					}
+					if (estado == AGACHADO) {
+						loopsGolpe = 5;
+						estado = PINIA_ALTA_AGACHADO;
+						golpe->setAlturaPJ(altura / 2);
+						golpe->activar(PINIA_ALTA, Posicion(pos.getX(), pos.getY() / 2), direccion);
+						parado = false;
+						lanzandoGolpe = true;
+						lanzandoPoder = false;
+						protegiendose = false;
+					}
+					if (accionesEnCurso[0]->getEstado() || accionesEnCurso[3]->getEstado()) {
+						estado = PINIA_SALTO;
+						golpe->activar(PINIA_BAJA, pos, direccion);
+						parado = false;
+						lanzandoGolpe = true;
+						lanzandoPoder = false;
+						protegiendose = false;
+					}
 				}
-				if (estado == AGACHADO) {
-					estado = PINIA_ALTA_AGACHADO;
-					golpe->setAlturaPJ(altura/2);
-					golpe->activar(PINIA_ALTA,Posicion(pos.getX(),pos.getY()/2),direccion);
-					parado = false;
-					lanzandoGolpe = true;
-					lanzandoPoder = false;
-					protegiendose = false;
+				break;
+			case PINIA_BAJA:
+				if(loopsPiniaBaja > 0){
+					loopsPiniaBaja = loopsPiniaBaja + 3;
 				}
-				if(accionesEnCurso[0]->getEstado() || accionesEnCurso[3]->getEstado()){
-					estado = PINIA_SALTO;
-					golpe->activar(PINIA_BAJA,pos,direccion);
-					parado = false;
-					lanzandoGolpe = true;
-					lanzandoPoder = false;
-					protegiendose = false;
+				if (!poder->estado) {
+					if (estado == PARADO || estado == CAMINANDO) {
+						loopsPiniaBaja = 4;
+						golpe->activar(PINIA_BAJA, this->pos, this->direccion);
+						estado = PINIA_BAJA;
+						parado = false;
+						lanzandoGolpe = true;
+						lanzandoPoder = false;
+						protegiendose = false;
+					}
+					if (estado == AGACHADO) {
+						loopsGolpe = 4;
+						estado = PINIA_BAJA_AGACHADO;
+						golpe->setAlturaPJ(altura / 2);
+						golpe->activar(PINIA_BAJA, Posicion(pos.getX(), pos.getY() / 2), direccion);
+						parado = false;
+						lanzandoGolpe = true;
+						lanzandoPoder = false;
+						protegiendose = false;
+					}
+					if (accionesEnCurso[0]->getEstado() || accionesEnCurso[3]->getEstado()) {
+						estado = PINIA_SALTO;
+						golpe->activar(PINIA_BAJA, pos, direccion);
+						parado = false;
+						lanzandoGolpe = true;
+						lanzandoPoder = false;
+						protegiendose = false;
+					}
 				}
-			}
-			break;
-		case PINIA_BAJA:
-			if(!poder->estado) {
-				if (estado == PARADO || estado == CAMINANDO) {
-					golpe->activar(PINIA_BAJA, this->pos, this->direccion);
-					estado = PINIA_BAJA;
-					parado = false;
-					lanzandoGolpe = true;
-					lanzandoPoder = false;
-					protegiendose = false;
+				break;
+			case PATADA_ALTA:
+				if (!poder->estado) {
+					if (estado == PARADO || (estado == CAMINANDO && sentido)) {
+						loopsGolpe = 12;
+						golpe->activar(PATADA_ALTA, this->pos, this->direccion);
+						estado = PATADA_ALTA;
+						parado = false;
+						lanzandoGolpe = true;
+						lanzandoPoder = false;
+						protegiendose = false;
+					}
+					if (estado == AGACHADO) {
+						loopsGolpe = 4;
+						estado = PATADA_AGACHADO;
+						golpe->setAlturaPJ(altura / 2);
+						golpe->activar(PATADA_BAJA, Posicion(pos.getX(), pos.getY() / 2), direccion);
+						parado = false;
+						lanzandoGolpe = true;
+						lanzandoPoder = false;
+						protegiendose = false;
+					}
+					if (accionesEnCurso[0]->getEstado()) {
+						estado = PATADA_SALTO_VERTICAL;
+						golpe->activar(PATADA_ALTA, pos, direccion);
+						parado = false;
+						lanzandoGolpe = true;
+						lanzandoPoder = false;
+						protegiendose = false;
+					}
+					if (accionesEnCurso[3]->getEstado()) {
+						estado = PATADA_SALTO;
+						golpe->activar(PATADA_BAJA, pos, direccion);
+						parado = false;
+						lanzandoGolpe = true;
+						lanzandoPoder = false;
+						protegiendose = false;
+					}
+					if (estado == CAMINANDO && !sentido) {
+						loopsGolpe = 8;
+						estado = PATADA_ALTA_ATRAS;
+						golpe->activar(PATADA_ALTA, pos, direccion);
+						parado = false;
+						lanzandoGolpe = true;
+						lanzandoPoder = false;
+						protegiendose = false;
+					}
 				}
-				if (estado == AGACHADO) {
-					estado = PINIA_BAJA_AGACHADO;
-					golpe->setAlturaPJ(altura/2);
-					golpe->activar(PINIA_BAJA,Posicion(pos.getX(),pos.getY()/2),direccion);
-					parado = false;
-					lanzandoGolpe = true;
-					lanzandoPoder = false;
-					protegiendose = false;
+				break;
+			case PATADA_BAJA:
+				if (!poder->estado) {
+					if (estado == PARADO || (estado == CAMINANDO && sentido)) {
+						loopsGolpe = 12;
+						golpe->activar(PATADA_BAJA, this->pos, this->direccion);
+						estado = PATADA_BAJA;
+						parado = false;
+						lanzandoGolpe = true;
+						lanzandoPoder = false;
+						protegiendose = false;
+					}
+					if (estado == AGACHADO) {
+						loopsGolpe = 4;
+						estado = PATADA_AGACHADO;
+						golpe->setAlturaPJ(altura / 2);
+						golpe->activar(PATADA_BAJA, Posicion(pos.getX(), pos.getY() / 2), direccion);
+						parado = false;
+						lanzandoGolpe = true;
+						lanzandoPoder = false;
+						protegiendose = false;
+					}
+					if (accionesEnCurso[0]->getEstado()) {
+						estado = PATADA_SALTO_VERTICAL;
+						golpe->activar(PATADA_ALTA, pos, direccion);
+						parado = false;
+						lanzandoGolpe = true;
+						lanzandoPoder = false;
+						protegiendose = false;
+					}
+					if (accionesEnCurso[3]->getEstado()) {
+						estado = PATADA_SALTO;
+						golpe->activar(PATADA_BAJA, pos, direccion);
+						parado = false;
+						lanzandoGolpe = true;
+						lanzandoPoder = false;
+						protegiendose = false;
+					}
+					if (estado == CAMINANDO && !sentido) {
+						loopsGolpe = 8;
+						estado = PATADA_BAJA_ATRAS;
+						golpe->setAlturaPJ(altura / 2);
+						golpe->activar(PATADA_BAJA, Posicion(pos.getX(), pos.getY() + 6 / 7 * altura), direccion);
+						parado = false;
+						lanzandoGolpe = true;
+						lanzandoPoder = false;
+						protegiendose = false;
+					}
 				}
-				if(accionesEnCurso[0]->getEstado() || accionesEnCurso[3]->getEstado()){
-					estado = PINIA_SALTO;
-					golpe->activar(PINIA_BAJA,pos,direccion);
-					parado = false;
-					lanzandoGolpe = true;
-					lanzandoPoder = false;
-					protegiendose = false;
-				}
-			}
-			break;
-		case PATADA_ALTA:
-			if(!poder->estado) {
-				if (estado == PARADO || (estado == CAMINANDO && sentido)) {
-					golpe->activar(PATADA_ALTA, this->pos, this->direccion);
-					estado = PATADA_ALTA;
-					parado = false;
-					lanzandoGolpe = true;
-					lanzandoPoder = false;
-					protegiendose = false;
-				}
-				if (estado == AGACHADO) {
-					estado = PATADA_AGACHADO;
-					golpe->setAlturaPJ(altura/2);
-					golpe->activar(PATADA_BAJA,Posicion(pos.getX(),pos.getY()/2),direccion);
-					parado = false;
-					lanzandoGolpe = true;
-					lanzandoPoder = false;
-					protegiendose = false;
-				}
-				if(accionesEnCurso[0]->getEstado()){
-					estado = PATADA_SALTO_VERTICAL;
-					golpe->activar(PATADA_ALTA,pos,direccion);
-					parado = false;
-					lanzandoGolpe = true;
-					lanzandoPoder = false;
-					protegiendose = false;
-				}
-				if(accionesEnCurso[3]->getEstado()){
-					estado = PATADA_SALTO;
-					golpe->activar(PATADA_BAJA,pos,direccion);
-					parado = false;
-					lanzandoGolpe = true;
-					lanzandoPoder = false;
-					protegiendose = false;
-				}
-				if(estado == CAMINANDO && !sentido){
-					estado = PATADA_ALTA_ATRAS;
-					golpe->activar(PATADA_ALTA,pos,direccion);
-					parado = false;
-					lanzandoGolpe = true;
-					lanzandoPoder = false;
-					protegiendose = false;
-				}
-			}
-			break;
-		case PATADA_BAJA:
-			if(!poder->estado) {
-				if (estado == PARADO || (estado == CAMINANDO && sentido)) {
-					golpe->activar(PATADA_BAJA, this->pos, this->direccion);
-					estado = PATADA_BAJA;
-					parado = false;
-					lanzandoGolpe = true;
-					lanzandoPoder = false;
-					protegiendose = false;
-				}
-				if (estado == AGACHADO) {
-					estado = PATADA_AGACHADO;
-					golpe->setAlturaPJ(altura/2);
-					golpe->activar(PATADA_BAJA,Posicion(pos.getX(),pos.getY()/2),direccion);
-					parado = false;
-					lanzandoGolpe = true;
-					lanzandoPoder = false;
-					protegiendose = false;
-				}
-				if(accionesEnCurso[0]->getEstado()){
-					estado = PATADA_SALTO_VERTICAL;
-					golpe->activar(PATADA_ALTA,pos,direccion);
-					parado = false;
-					lanzandoGolpe = true;
-					lanzandoPoder = false;
-					protegiendose = false;
-				}
-				if(accionesEnCurso[3]->getEstado()){
-					estado = PATADA_SALTO;
-					golpe->activar(PATADA_BAJA,pos,direccion);
-					parado = false;
-					lanzandoGolpe = true;
-					lanzandoPoder = false;
-					protegiendose = false;
-				}
-				if(estado == CAMINANDO && !sentido){
-					estado = PATADA_BAJA_ATRAS;
-					golpe->setAlturaPJ(altura/2);
-					golpe->activar(PATADA_BAJA,Posicion(pos.getX(),pos.getY()+6/7*altura),direccion);
-					parado = false;
-					lanzandoGolpe = true;
-					lanzandoPoder = false;
-					protegiendose = false;
-				}
-			}
-			break;
-		default:
-			cout<<"Entro al default"<<endl;
-			break;
+				break;
+			default:
+				cout << "Entro al default" << endl;
+				break;
 
+		}
 	}
+	if(loopsGolpe > 0) loopsGolpe--;
+	if(loopsPiniaAlta>0) loopsPiniaAlta--;
+	if(loopsPiniaBaja>0) loopsPiniaBaja--;
 	inputAnterior = orden;
 
 	ejecutarAcionesActivadas(accionesEnCurso,anchoEscenario);
@@ -580,7 +643,7 @@ void Personaje::caminar(bool direc) {
 	if (!accionesEnCurso[0]->getEstado()) {
 		if (!accionesEnCurso[3]->getEstado()) {
 			if (!accionesEnCurso[1]->getEstado()) {
-				if(!poder->estado) {
+				if(!poder->estado && !protegiendose) {
 					//activo el estado avanzar
 					if (direc) {
 						sentido = direccion;
@@ -628,5 +691,6 @@ void Personaje::saltarOblicuamente(bool direc) {
 		}
 	}
 
-
 }
+
+

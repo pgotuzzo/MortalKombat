@@ -17,9 +17,9 @@ class ControladorJoystick {
         FLECHA_IZQUIERDA
     };
 private:
-    Tinput esAnterior(SDL_Joystick*);
+    Tinput esAnterior(SDL_Joystick*,SDL_Event);
     void guardarAnteriorX(SDL_Joystick* ,Tinput );
-    void setInputAnteriorX(SDL_Joystick*,Tinput&  );
+    void setInputAnteriorX(SDL_Joystick*,Tinput& ,SDL_Event );
     Tinput inputAnteriorX(SDL_Joystick* );
     void vibrar();
     SDL_Joystick* player1 = NULL;
