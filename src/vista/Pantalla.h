@@ -29,6 +29,8 @@ private:
     void InicializarPersonajes(vector<Tpersonaje> personajes);
     void InicializarCapas(vector<Tcapa> capas);
 
+    bool vibroADerecha;
+    int contador;
 
 public:
     /*
