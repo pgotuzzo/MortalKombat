@@ -5,9 +5,9 @@
 #include "CapaInfo.h"
 const float porcBarraRelleno = 162.0/168.0;
 const float porcTamBarraPantallaX = 0.35;
-const float porcTamBarraPantallaY = 0.07;
+const float porcTamBarraPantallaY = 0.05;
 const float porcDistBarraPantallaX = 0.05;
-const float porcDistBarraPantallaY = 0.07;
+const float porcDistBarraPantallaY = 0.04;
 const std::string dirPathVidaRoja = "resources/accesorios/barraVidaRoja.gif";
 const std::string dirPathVidaVerde = "resources/accesorios/barraVidaVerde.gif";
 

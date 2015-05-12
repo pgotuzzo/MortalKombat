@@ -29,8 +29,6 @@ private:
     void InicializarPersonajes(vector<Tpersonaje> personajes);
     void InicializarCapas(vector<Tcapa> capas);
 
-    float porcv2,porcv1;
-    int elcuentacuentaameo;
 
 public:
     /*

@@ -98,7 +98,6 @@ Pantalla::Pantalla(vector<Tcapa> capas, Tventana ventana, Tescenario escenario, 
 
     // Capas
     InicializarCapas(capas);
-    elcuentacuentaameo=0;
 };
 
 /*
@@ -150,12 +149,8 @@ void Pantalla::update(vector<Tcambio> changes) {
     for (int i = 0; i < mCapas.size(); i++) {
         mCapas[i].ajustar(posEscenario);
     }
-    if (elcuentacuentaameo=20000) {
-        porcv1 = rand()/ float(RAND_MAX);
-        porcv2 = rand()/ float(RAND_MAX);
-        elcuentacuentaameo = 0;
-    }
-    capaInfo.update(porcv1,porcv2);
+
+    capaInfo.update(changes[0].vida/100,changes[1].vida/100);
 }
 
 
