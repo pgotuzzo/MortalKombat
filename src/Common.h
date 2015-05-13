@@ -370,8 +370,14 @@ static string TestadoPersonajeToString(TestadoPersonaje e){
         case TestadoPersonaje::ACC_PATADA_ALTA_ATRAS: return "acc_patada_alta_atras";
         case TestadoPersonaje::ACC_PROTECCION: return "acc_proteccion";
         case TestadoPersonaje::ACC_PROTECCION_AGACHADO: return "acc_proteccion_agachado";
-        case TestadoPersonaje::ACC_PODER: return "acc_lanzando_poder";
+        case TestadoPersonaje::ACC_PODER: return "acc_poder";
 
+        case TestadoPersonaje::REA_AGACHADO: return "rea_agachado";
+        case TestadoPersonaje::REA_GOLPE_ALTO: return "rea_golpe_alto";
+        case TestadoPersonaje::REA_GOLPE_BAJO: return "rea_golpe_bajo";
+        case TestadoPersonaje::REA_GOLPE_FUERTE: return "rea_golpe_fuerte";
+        case TestadoPersonaje::REA_PATADA_BARRIDA: return "rea_patada_barrida";
+        case TestadoPersonaje::REA_PINIA_ALTA: return "rea_pinia_alta";
 
     }
     return NULL;
@@ -390,15 +396,25 @@ enum Tsentido{
 struct Tpersonaje {
     Tdimension d;
     int zIndex;
-    Tdireccion orientacion=DERECHA;
-    std::string nombre;
-    std::string sprites;
+    Tdireccion orientacion = DERECHA;
+    string nombre;
+    string sprites;
 
     // para el personaje alternativo
     TcolorSettings colorSettings;
 };
 
+enum TestadoPoder{
+    ACTIVADO,
+    DESACTIVADO,
+    COLISION,
+};
 
+struct TcambioPoder{
+    TestadoPoder e;
+    Tdimension d;
+    Posicion p;
+};
 
 /**
  * Estructura que media entre el modelo y
@@ -416,8 +432,7 @@ struct Tcambio{
     float vida;
 
     // Para el poder
-    Tdimension dPoder;
-    Posicion posicionPoder;
+    TcambioPoder poder;
 };
 
 /**

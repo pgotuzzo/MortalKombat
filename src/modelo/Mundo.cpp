@@ -195,9 +195,9 @@ Tcambio Mundo::actualizarPJ(Personaje *PJ) {
 
 	cambio.vida = PJ->vida;
 
-	cambio.dPoder.h = PJ->poder->altura;
-	cambio.dPoder.w = PJ->poder->ancho;
-	cambio.posicionPoder = PJ->poder->pos;
+	cambio.poder.d.h = PJ->poder->altura;
+	cambio.poder.d.w = PJ->poder->ancho;
+	cambio.poder.p = PJ->poder->pos;
 
 	return cambio;
 
