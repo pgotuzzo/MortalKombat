@@ -27,7 +27,10 @@ void PersonajeVista::crearSprites(string path) {
             case ACC_PATADA_SALTO:
             case ACC_PROTECCION:
             case ACC_PROTECCION_AGACHADO:
-            case ACC_PODER:{
+            case ACC_PODER:
+            case REA_GOLPE_FUERTE:
+            case REA_PATADA_BARRIDA:
+            case REA_GOLPE_ALTO:{
                 mSprites[s] = Sprite(mUtils, spritesPath, false);
                 break;
             };
