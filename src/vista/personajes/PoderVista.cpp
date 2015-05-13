@@ -10,20 +10,23 @@ void PoderVista::initialize(VistaUtils* vu, std::string path, float scales[2]) {
     mScales[0] = scales[0];
     mScales[1] = scales[1];
 
+    mState = DESACTIVADO;
+
     mSprites = std::array<Sprite, 2>();
-    mSprites[0].initialize(mUtils, PODER_ACTIVADO_PATH, false);
-    mSprites[1].initialize(mUtils, PODER_COLISION_PATH, false);
+    mSprites[0].initialize(mUtils, path + "/" + PODER_ACTIVADO_PATH + "/", false);
+    mSprites[1].initialize(mUtils, path + "/" + PODER_COLISION_PATH + "/", false);
 }
 
 void PoderVista::update(TcambioPoder cambio, Tdireccion direccion) {
     if ( (cambio.e == TestadoPoder::ACTIVADO) &&
          (mState == TestadoPoder::DESACTIVADO) ){
         mDirection = direccion;
+        mSprites[0].restart();
+        mSprites[1].restart();
     }
     mState = cambio.e;
     mRect.p = cambio.p;
     mRect.d = cambio.d;
-
 }
 
 void PoderVista::getTexture(SDL_Texture *ventana, float x) {
@@ -54,7 +57,7 @@ void PoderVista::getTexture(SDL_Texture *ventana, float x) {
         Trect r;
         r.d = mUtils->getDimension(texture, mScales);
         r.p.y = mRect.p.y + mRect.d.h / 2.0F - r.d.h / 2.0F;
-        r.p.x = (mDirection = DERECHA) ?
+        r.p.x = (mDirection == DERECHA) ?
                 mRect.p.x - x + mRect.d.w - r.d.w :
                 mRect.p.x - x;
 

@@ -12,6 +12,11 @@ public:
     bool direccion;
     bool estado;
 
+    float posInicialX;
+    float posFinalX;
+
+    TestadoPoder estadoPoder;
+
     float altoPJ;
     float anchoPJ;
 

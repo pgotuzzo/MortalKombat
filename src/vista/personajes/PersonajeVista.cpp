@@ -57,6 +57,8 @@ void PersonajeVista::update(Tcambio tcambio) {
     }
     mDirection = tcambio.direccion;
     mTarget = tcambio.sentido;
+
+    mPoder.update(tcambio.poder, mDirection);
 };
 
 void PersonajeVista::getTexture(SDL_Texture* ventana, float x) {
@@ -112,7 +114,7 @@ void PersonajeVista::getTexture(SDL_Texture* ventana, float x) {
     mUtils->copyTexture(texture, ventana, NULL, &r, &r.d, NULL, flip);
 
     // Imprimo el poder
-//    mPoder.getTexture(ventana, x);
+    mPoder.getTexture(ventana, x);
 }
 
 void PersonajeVista::freeTextures() {

@@ -175,7 +175,7 @@ void Mundo::verificarColision(bool generaViolencia,TestadoPersonaje estadoViolen
 					colisionador.solucionarColision(PJ, (Poder *) objeto);
 				}
 			}
-			else{
+			else
 				if (colisionador.distanciaColisionadaenX(objeto,PJ)>0){
 					objeto->pos.setX(objeto->pos.getX() - colisionador.distanciaColisionadaenX(objeto,PJ));
 					colisionador.solucionarColision(PJ, (Poder *) objeto);
@@ -184,7 +184,7 @@ void Mundo::verificarColision(bool generaViolencia,TestadoPersonaje estadoViolen
 			}
 		}
 	}
-}
+
 
 Tcambio Mundo::actualizarPJ(Personaje *PJ) {
 	Tcambio cambio;
@@ -199,6 +199,7 @@ Tcambio Mundo::actualizarPJ(Personaje *PJ) {
 
 	cambio.vida = PJ->vida;
 
+	cambio.poder.e = PJ->poder->estadoPoder;
 	cambio.poder.d.h = PJ->poder->altura;
 	cambio.poder.d.w = PJ->poder->ancho;
 	cambio.poder.p = PJ->poder->pos;

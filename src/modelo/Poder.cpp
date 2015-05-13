@@ -12,8 +12,11 @@ const float divisorYPoder = 4;
 
 Poder::Poder(float anchoPJ, float altoPJ) {
 
+
     this->anchoPJ = anchoPJ;
     this->altoPJ = altoPJ;
+
+    estadoPoder = DESACTIVADO;
 
     ancho = anchoPJ / divisorAnchoPoder;
 
@@ -28,13 +31,22 @@ void Poder::activar(Posicion posPJ,float direccion, float danio, bool nuevoEstad
 
     float pos_x,pos_y;
 
+
+    estadoPoder = ACTIVADO;
+
     //pos_y = posPJ.getY();
     pos_y = posPJ.getY();
-    if (direccion) pos_x = posPJ.getX() + anchoPJ;
-    else pos_x = posPJ.getX() -ancho;
+    if (direccion) {
+        pos_x = posPJ.getX() + anchoPJ;
+        posFinalX = pos_x + 200;
+    }
+    else {
+        pos_x = posPJ.getX() -ancho;
+        posFinalX = pos_x - 200;
+    }
     pos = Posicion(pos_x,pos_y);
     this->danio = danio;
-
+    posInicialX =pos_x;
     this->direccion = direccion;
 
     this->estado = nuevoEstado;
@@ -42,17 +54,24 @@ void Poder::activar(Posicion posPJ,float direccion, float danio, bool nuevoEstad
 
 void Poder::avanzar(float avance) {
     pos.mostrarPar();
-    if(estado) {
+    if(estado && estadoPoder == ACTIVADO) {
         if (direccion){
             cout<<"Costado derecho poder: "<<pos.getX()+ancho/2<<endl;
             pos = pos + Posicion(avance, 0);
+            if (pos.getX() >= posFinalX){
+                estado = false;
+                estadoPoder = DESACTIVADO;
+            }
         }
         else{
             cout<<"Costado izquierdo poder: "<<pos.getX()-ancho/2<<endl;
             pos = pos - Posicion(avance, 0);
+            if (pos.getX() <= posFinalX){
+                estado = false;
+                estadoPoder = DESACTIVADO;
+            }
         }
     }
-
 }
 
 
