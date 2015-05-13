@@ -27,6 +27,10 @@ public:
 
 	virtual Posicion realizarAccion(Posicion pos,bool dir);
 
+	virtual void setConfiguracion(float alturaSalto, float longitudSalto, float intervaloSalto);
+
+	virtual void setConfiguracionDefault();
+
 	virtual void setAnchoDePaso(float nuevoAnchoDePaso);
 
 	virtual void setAnchoDePasoDefault();

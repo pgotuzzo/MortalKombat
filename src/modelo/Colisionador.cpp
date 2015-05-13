@@ -6,6 +6,7 @@ const float factorDeRetrocesoConProteccion = 1;
 
 //Constructor
 Colisionador::Colisionador() {
+    loopsReaccion = 0;
 }
 
 void Colisionador::setEscenario(float ancho) {
@@ -23,7 +24,7 @@ bool Colisionador::sonProximos(ObjetoColisionable* primerObjeto, ObjetoColisiona
     if(primerObjeto->pos.getX() <= segundoObjeto->pos.getX())distanciaEntrePjs = segundoObjeto->pos.getX() - primerObjeto->pos.getX() - primerObjeto->ancho;
     else distanciaEntrePjs = primerObjeto->pos.getX() - segundoObjeto->pos.getX() - segundoObjeto->ancho;
 
-   // cout<<"Distancia entre pjs: "<<distanciaEntrePjs<<endl;
+    // cout<<"Distancia entre pjs: "<<distanciaEntrePjs<<endl;
 
     /*float bordeIzqObjeto1 = primerObjeto->pos.getX() - primerObjeto->ancho/2;
     float bordeDerObjeto1 = primerObjeto->pos.getX() + primerObjeto->ancho/2;
@@ -38,7 +39,7 @@ bool Colisionador::sonProximos(ObjetoColisionable* primerObjeto, ObjetoColisiona
     //Ajusta el choque entre pj
     if ((distanciaEntrePjs <= delta)) {
         if(techoUno > pisoDos || techoDos > pisoUno )    return false;
-            return true;
+        return true;
     }
     return  false;
 }
@@ -117,7 +118,7 @@ bool Colisionador::seProdujoColision(ObjetoColisionable* rectangulo1, ObjetoColi
     piso1 = rectangulo1->pos.getY() + rectangulo1->getAltura();
     piso2 = rectangulo2->pos.getY() + rectangulo2->getAltura();
 
-    if ((bordeDerecho1 < bordeIzquierdo2) || (bordeIzquierdo1 > bordeDerecho2) || (techo1 > piso2) || (piso1 > techo2)) return true;
+    if ((bordeDerecho1 <= bordeIzquierdo2) || (bordeIzquierdo1 >= bordeDerecho2) || (techo1 >= piso2) || (piso1 >= techo2)) return true;
     return false;
 
 }
@@ -207,14 +208,16 @@ void Colisionador::solucionarColision(Personaje* PJ1, Personaje* PJ2){
                 }
                 else if (PJ1->estado == ACC_PROTECCION) {
                     PJ1->accionesEnCurso[2]->setAnchoDePaso(factorDeRetrocesoConProteccion);
-                    PJ1->realizarAccion(inputIzquierda, anchoEsc);
+                    //PJ1->realizarAccion(inputIzquierda, anchoEsc);
+                    PJ1->caminar(false);
                     PJ1->estado = ACC_PROTECCION;
                     PJ2->accionesEnCurso[2]->setAnchoDePaso(factorDeRetrocesoConProteccion);
                     PJ1->accionesEnCurso[2]->setAnchoDePasoDefault();
                 }
                 else if (PJ1->estado == ACC_PROTECCION_AGACHADO) {
                     PJ1->accionesEnCurso[2]->setAnchoDePaso(factorDeRetrocesoConProteccion);
-                    PJ1->realizarAccion(inputIzquierda, anchoEsc);
+                    //PJ1->realizarAccion(inputIzquierda, anchoEsc);
+                    PJ1->caminar(false);
                     PJ1->estado = ACC_PROTECCION_AGACHADO;
                     PJ2->accionesEnCurso[2]->setAnchoDePaso(factorDeRetrocesoConProteccion);
                     PJ1->accionesEnCurso[2]->setAnchoDePasoDefault();
@@ -262,78 +265,112 @@ void Colisionador::solucionarColision(Personaje* PJ1, Personaje* PJ2){
 
     if(seProdujoColision(PJ1,PJ2)) {
         if ((PJ1->pos.getX() - PJ2->pos.getX()) <= 0) {
-            PJ2->pos.setX(PJ2->pos.getX() + distanciaColisionadaenX(PJ1, PJ2));
+            if(PJ2->pos.getX() >= anchoEsc - PJ2->ancho && PJ1->pos.getX() >= anchoEsc - PJ2->ancho - PJ1->ancho){
+                PJ2->pos.setX(anchoEsc - PJ2->ancho);
+                PJ1->pos.setX(anchoEsc - PJ2->ancho - PJ1->ancho);
+            }
+            else PJ2->pos.setX(PJ2->pos.getX() + distanciaColisionadaenX(PJ1, PJ2));
         }
     }
 }
 
 void Colisionador::solucionarColision(Personaje *PJ, TestadoPersonaje estadoViolento,Golpe *golpeOponente) {
     PJ->mePegaron(golpeOponente->danio);
+    if(loopsReaccion > 0){
+        estadoViolento = ACC_PINIA_ALTA_AGACHADO;
+    }
     switch (estadoViolento){
         case (ACC_PINIA_ALTA):
-            //estado
-            // Ver logica de si se tiene que mover o algo hacia atras
+            PJ->estado = REA_PINIA_ALTA;
             break;
         case (ACC_PINIA_BAJA):
-            //estado
-            // Ver logica de si se tiene que mover o algo hacia atras
+            PJ->estado = REA_GOLPE_BAJO;
             break;
         case (ACC_PINIA_BAJA_AGACHADO):
-            //estado
+            PJ->estado = REA_GOLPE_BAJO;
+            if(PJ->direccion){
+                PJ->accionesEnCurso[2]->setEstado(true,false);
+            }
+            else PJ->accionesEnCurso[2]->setEstado(true,true);
             // Ver logica de si se tiene que mover o algo hacia atras
             break;
         case (ACC_PINIA_ALTA_AGACHADO): // Gancho
-            //estado
+            if(loopsReaccion == 0) loopsReaccion = 13;
+            if(loopsReaccion > 7) {
+                PJ->accionesEnCurso[3]->setConfiguracion(30, 60, 10);
+                if (PJ->direccion) {
+                    cout << "gola" << endl;
+                    if (!PJ->accionesEnCurso[3]->getEstado()) {
+                        PJ->accionesEnCurso[3]->setEstado(true, PJ->pos, false);
+                    }
+                }
+                else {
+                    if (!PJ->accionesEnCurso[3]->getEstado()) {
+                        PJ->accionesEnCurso[3]->setEstado(true, PJ->pos, true);
+                    }
+                }
+            }
+            PJ->estado = REA_GOLPE_FUERTE;
+
             // Salto oblicuo hacia atras con cosas seteadas
             // Aca podria vibrar la pantalla (cuando cae)
             break;
         case (ACC_PINIA_SALTO):
-            //estado
+            PJ->estado = REA_GOLPE_ALTO;
             // Se mueve un poco para atras
             break;
         case (ACC_PATADA_ALTA):
-            //estado
+            PJ->estado = REA_GOLPE_ALTO;
             // Se mueve un poco para atras
             break;
         case (ACC_PATADA_BAJA):
-            //estado
+            PJ->estado = REA_GOLPE_BAJO;
             // Se mueve un poco para atras
             break;
         case (ACC_PATADA_ALTA_ATRAS):
-            //estado
+            PJ->estado = REA_GOLPE_FUERTE;
             // Lo tira para atras y se levanta solo. Luego estado parado
             // Aca podria vibrar la pantalla
             break;
         case (ACC_PATADA_BAJA_ATRAS):
-            //estado
+            PJ->estado = REA_PATADA_BARRIDA;
             // Se cae pero en el lugar, se ve al chabon de frente
             // Aca podria vibrar la pantalla
             break;
         case (ACC_PATADA_AGACHADO):
-            //estado
+            PJ->estado = REA_GOLPE_BAJO;
             // Se mueve un poco para atras
             break;
         case (ACC_PATADA_SALTO_VERTICAL):
-            //estado
+            PJ->estado = REA_GOLPE_ALTO;
             // No estoy seguro de cual sea la reaccion
             break;
         case (ACC_PATADA_SALTO):
-            //estado
+            PJ->estado = REA_GOLPE_FUERTE;
             // Se mueve un poco para atras
             break;
 
         default:
             break;
     }
+    if(loopsReaccion > 0) loopsReaccion--;
+    if(loopsReaccion == 0){
+        PJ->estado = MOV_PARADO;
+    }
+
     cout<<"SE ESTAN PEGANDO"<<endl;
 }
 
 void Colisionador::solucionarColision(Personaje *PJ, Poder *poderOponente) {
-    PJ->mePegaron(poderOponente->danio);
-    cout<<"Personaje que recibio el poder"<<endl;
-    PJ->pos.mostrarPar();
-    cout<<"Costado Derecho del PODER: "<<poderOponente->pos.getX() + poderOponente->ancho<<endl;
+    if(sonProximos(PJ,poderOponente,0)){
+        PJ->mePegaron(poderOponente->danio);
+        cout<<"Personaje que recibio el poder"<<endl;
+        PJ->pos.mostrarPar();
+        cout<<"Costado Derecho del PODER: "<<poderOponente->pos.getX() + poderOponente->ancho<<endl;
+    }
     poderOponente->estado = false;
+
+
 
     /*if (PJ->direccion){
         if (distanciaColisionadaenX(PJ,poderOponente) > 0){

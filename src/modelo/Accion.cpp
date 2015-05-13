@@ -35,8 +35,11 @@ Posicion Accion::realizarAccion(Posicion pos, bool dir) {
 	return pos;
 }
 
+void Accion::setConfiguracion(float alturaSalto, float longitudSalto, float intervaloSalto){}
+
+void Accion::setConfiguracionDefault(){}
+
 void Accion::setAnchoDePaso(float nuevoAnchoDePaso){}
 
 void Accion::setAnchoDePasoDefault(){}
-
 

@@ -44,6 +44,7 @@ Personaje::Personaje(bool direccion,Posicion posInicial,float alto,float ancho){
 	loopsGolpe = 0;
 	loopsPiniaAlta = 0;
 	loopsPiniaBaja = 0;
+	loopsReaccionGolpeFuerte = 0;
 
 	string pj = "Se crea personaje con ancho "+to_string(ancho)+" y alto "+to_string(alto);
 	loguer->loguear(pj.c_str(), Log::LOG_DEB);
@@ -251,6 +252,9 @@ TestadoPersonaje Personaje::generarEstado(Tinput input) {
 	}
 }
 
+void Personaje::setLoopsReaccionGolpeFuerte(int loops) {
+	loopsReaccionGolpeFuerte = loops;
+}
 
 bool Personaje::seguirPegando(TestadoPersonaje estadoInput) {
 	if(estado == ACC_PINIA_ALTA && (estadoInput == MOV_PARADO || estadoInput == MOV_CAMINANDO) && loopsPiniaAlta > 0){
@@ -283,6 +287,10 @@ bool Personaje::seguirPegando(TestadoPersonaje estadoInput) {
 	if(estado == ACC_PODER && (estadoInput == MOV_PARADO || estadoInput == MOV_SALTANDO_VERTICAL) && loopsGolpe >0){
 		return true;
 	}
+	//cout<<loopsReaccionGolpeFuerte<<endl;
+	if(estado == REA_GOLPE_FUERTE || loopsReaccionGolpeFuerte > 0){
+		return true;
+	}
 	return false;
 }
 
@@ -297,6 +305,7 @@ void Personaje::realizarAccion(Tinput orden,float anchoEscenario) {
 	posAnt = pos;
 	golpe->setAlturaPJ(altura);
 	TestadoPersonaje estadoInput = generarEstado(orden);
+	cout<<estadoInput<<endl;
 	if(!seguirPegando(estadoInput)) {
 		switch (estadoInput) {
 			case MOV_AGACHADO:
@@ -388,7 +397,7 @@ void Personaje::realizarAccion(Tinput orden,float anchoEscenario) {
 					if (orden.movimiento != TinputMovimiento::KEY_ABAJO) {
 						estado = ACC_PROTECCION;
 					}
-					if (estado == MOV_PARADO || accionesEnCurso[2]->getEstado()) {
+					if (estado == MOV_PARADO || estado == MOV_CAMINANDO) {
 						estado = ACC_PROTECCION;
 					}
 					if (estado == MOV_AGACHADO) {
@@ -403,15 +412,15 @@ void Personaje::realizarAccion(Tinput orden,float anchoEscenario) {
 			case ACC_PODER:
 				if(estado != ACC_PROTECCION || estado != ACC_PROTECCION_AGACHADO){
 					if (estado == MOV_PARADO || estado == MOV_SALTANDO_VERTICAL) {
-							if (!poder->estado) {
-								loopsGolpe = 3;
-								poder->activar(this->pos, this->direccion, danioPoder, true);
-								estado = ACC_PODER;
-							}
-							parado = false;
-							lanzandoGolpe = false;
-							lanzandoPoder = true;
-							protegiendose = false;
+						if (!poder->estado) {
+							loopsGolpe = 3;
+							poder->activar(this->pos, this->direccion, danioPoder, true);
+							estado = ACC_PODER;
+						}
+						parado = false;
+						lanzandoGolpe = false;
+						lanzandoPoder = true;
+						protegiendose = false;
 					}
 				}
 				break;
@@ -719,5 +728,4 @@ void Personaje::saltarOblicuamente(bool direc) {
 	}
 
 }
-
 

@@ -19,6 +19,10 @@ private:
 	float anchoPantalla;
 	float altoPantalla;
 
+	float alturaSalto;
+	float longitudSalto;
+	float intervaloSalto;
+
 	Posicion posImg;
 
 public:
@@ -28,6 +32,9 @@ public:
 	bool getEstado();
 	void setEstado(bool nuevoEstado, Posicion nuevaPosicion,bool sentidoSalto);
 
+	void setConfiguracion(float alturaSalto, float longitudSalto, float intervaloSalto);
+
+	void setConfiguracionDefault();
 	Posicion realizarAccion(Posicion pos,bool enCaida);
 
 	virtual ~SaltoOblicuo();
