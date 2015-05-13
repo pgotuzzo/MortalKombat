@@ -1,8 +1,8 @@
 #include "SaltoVertical.h"
 
 // Constantes para que se regule el salto vertical
-const float altura_salto = 60;
-const float intervalo_salto =6; // altura_salto / intervalo_salto = numero de loops
+const float altura_salto = 70;
+const float intervalo_salto =7; // altura_salto / intervalo_salto = numero de loops
 
 
 SaltoVertical::SaltoVertical() {

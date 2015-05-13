@@ -23,6 +23,7 @@ bool Colisionador::sonProximos(ObjetoColisionable* primerObjeto, ObjetoColisiona
     if(primerObjeto->pos.getX() <= segundoObjeto->pos.getX())distanciaEntrePjs = segundoObjeto->pos.getX() - primerObjeto->pos.getX() - primerObjeto->ancho;
     else distanciaEntrePjs = primerObjeto->pos.getX() - segundoObjeto->pos.getX() - segundoObjeto->ancho;
 
+   // cout<<"Distancia entre pjs: "<<distanciaEntrePjs<<endl;
 
     /*float bordeIzqObjeto1 = primerObjeto->pos.getX() - primerObjeto->ancho/2;
     float bordeDerObjeto1 = primerObjeto->pos.getX() + primerObjeto->ancho/2;
@@ -104,11 +105,11 @@ bool Colisionador::seProdujoColision(ObjetoColisionable* rectangulo1, ObjetoColi
     float bordeDerecho1,bordeIzquierdo1,techo1,piso1;
     float bordeDerecho2,bordeIzquierdo2,techo2,piso2;
 
-    bordeDerecho1 = rectangulo1->pos.getX() + rectangulo1->ancho / 2;
-    bordeDerecho2 = rectangulo2->pos.getX() + rectangulo2->ancho / 2;
+    bordeDerecho1 = rectangulo1->pos.getX() + rectangulo1->ancho;
+    bordeDerecho2 = rectangulo2->pos.getX() + rectangulo2->ancho;
 
-    bordeIzquierdo1 = rectangulo1->pos.getX() - rectangulo1->ancho / 2;
-    bordeIzquierdo2 = rectangulo2->pos.getX() - rectangulo2->ancho / 2;
+    bordeIzquierdo1 = rectangulo1->pos.getX();
+    bordeIzquierdo2 = rectangulo2->pos.getX();
 
     techo1 = rectangulo1->pos.getY();
     techo2 = rectangulo2->pos.getY();
@@ -123,8 +124,8 @@ bool Colisionador::seProdujoColision(ObjetoColisionable* rectangulo1, ObjetoColi
 
 //Solo cuando colisionan
 float Colisionador::distanciaColisionadaenX(ObjetoColisionable *objeto1, ObjetoColisionable *objeto2){
-    float bordeDerecho1 = objeto1->pos.getX() + objeto1->ancho/2;
-    float bordeIzquierdo2 = objeto2->pos.getX() - objeto2->ancho/2;
+    float bordeDerecho1 = objeto1->pos.getX() + objeto1->ancho;
+    float bordeIzquierdo2 = objeto2->pos.getX();
 
     return bordeDerecho1 - bordeIzquierdo2;
 }
@@ -265,15 +266,79 @@ void Colisionador::solucionarColision(Personaje* PJ1, Personaje* PJ2){
     }
 }
 
-void Colisionador::solucionarColision(Personaje *PJ, Golpe *golpeOponente) {
+void Colisionador::solucionarColision(Personaje *PJ, TestadoPersonaje estadoViolento,Golpe *golpeOponente) {
     PJ->mePegaron(golpeOponente->danio);
+    switch (estadoViolento){
+        case (PINIA_ALTA):
+            //estado
+            // Ver logica de si se tiene que mover o algo hacia atras
+            break;
+        case (PINIA_BAJA):
+            //estado
+            // Ver logica de si se tiene que mover o algo hacia atras
+            break;
+        case (PINIA_BAJA_AGACHADO):
+            //estado
+            // Ver logica de si se tiene que mover o algo hacia atras
+            break;
+        case (PINIA_ALTA_AGACHADO): // Gancho
+            //estado
+            // Salto oblicuo hacia atras con cosas seteadas
+            // Aca podria vibrar la pantalla (cuando cae)
+            break;
+        case (PINIA_SALTO):
+            //estado
+            // Se mueve un poco para atras
+            break;
+        case (PATADA_ALTA):
+            //estado
+            // Se mueve un poco para atras
+            break;
+        case (PATADA_BAJA):
+            //estado
+            // Se mueve un poco para atras
+            break;
+        case (PATADA_ALTA_ATRAS):
+            //estado
+            // Lo tira para atras y se levanta solo. Luego estado parado
+            // Aca podria vibrar la pantalla
+            break;
+        case (PATADA_BAJA_ATRAS):
+            //estado
+            // Se cae pero en el lugar, se ve al chabon de frente
+            // Aca podria vibrar la pantalla
+            break;
+        case (PATADA_AGACHADO):
+            //estado
+            // Se mueve un poco para atras
+            break;
+        case (PATADA_SALTO_VERTICAL):
+            //estado
+            // No estoy seguro de cual sea la reaccion
+            break;
+        case (PATADA_SALTO):
+            //estado
+            // Se mueve un poco para atras
+            break;
+
+        default:
+            break;
+    }
     cout<<"SE ESTAN PEGANDO"<<endl;
 }
 
 void Colisionador::solucionarColision(Personaje *PJ, Poder *poderOponente) {
-
-    poderOponente->estado = false;
     PJ->mePegaron(poderOponente->danio);
+    cout<<"Personaje que recibio el poder"<<endl;
+    PJ->pos.mostrarPar();
+    cout<<"Costado Derecho del PODER: "<<poderOponente->pos.getX() + poderOponente->ancho<<endl;
+    poderOponente->estado = false;
+
+    /*if (PJ->direccion){
+        if (distanciaColisionadaenX(PJ,poderOponente) > 0){
+
+        }
+    }
     cout<<"PODERRRR"<<endl;
     float posX;
     cout<<"COSTADOO: "<<poderOponente->pos.getX() + poderOponente->ancho/2<<endl;
@@ -287,7 +352,7 @@ void Colisionador::solucionarColision(Personaje *PJ, Poder *poderOponente) {
     }
 
 
-    poderOponente->pos = Posicion(posX,poderOponente->pos.getY());
+    poderOponente->pos = Posicion(posX,poderOponente->pos.getY());*/
 
 
 

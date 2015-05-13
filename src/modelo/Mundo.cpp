@@ -106,7 +106,7 @@ vector<Tcambio> Mundo::actualizarMundo(vector<Tinput> inputs) {
 	}
 
 	//Colision entre personajes (empujar)
-	if (colisionador.sonProximos(personaje1,personaje2,0)){
+	if (colisionador.sonProximos(personaje1,personaje2,deltaCero)){
 		colisionador.solucionarColision(personaje1,personaje2);
 		colisionador.solucionarColision(personaje2,personaje1);
 	}
@@ -148,25 +148,36 @@ vector<Tcambio> Mundo::actualizarMundo(vector<Tinput> inputs) {
 
 void Mundo::verificarColision(bool generaViolencia,TestadoPersonaje estadoViolento,Personaje* PJ,ObjetoColisionable *objeto, bool esPoder) {
 	if (generaViolencia) {
-		switch (estadoViolento){
+		switch (estadoViolento) {
 			case (PATADA_ALTA_ATRAS):
-				if (colisionador.sonProximos(personaje1,personaje2,8) && !esPoder) {
-				//cout<<"Personaje que recibe el poder"<<endl;
-				//PJ->pos.mostrarPar();
-				colisionador.solucionarColision(PJ, (Golpe *) objeto);
-			}
-				break;
-			default:
-				if (colisionador.sonProximos(personaje1,personaje2,2) && !esPoder) {
+				if (colisionador.sonProximos(personaje1, personaje2, 8) && !esPoder) {
 					//cout<<"Personaje que recibe el poder"<<endl;
 					//PJ->pos.mostrarPar();
-					colisionador.solucionarColision(PJ, (Golpe *) objeto);
+					colisionador.solucionarColision(PJ, estadoViolento, (Golpe *) objeto);
+				}
+				break;
+			default:
+				if (colisionador.sonProximos(personaje1, personaje2, 2) && !esPoder) {
+					//cout<<"Personaje que recibe el poder"<<endl;
+					//PJ->pos.mostrarPar();
+					colisionador.solucionarColision(PJ, estadoViolento, (Golpe *) objeto);
 				}
 				break;
 		}
-		if(colisionador.sonProximos(PJ,objeto,0) && esPoder) {
-			//cout<<"Personaje que recibe el poder"<<endl;
-			colisionador.solucionarColision(PJ, (Poder *) objeto);
+		if (esPoder) {
+			if (PJ->direccion) {
+				if (colisionador.distanciaColisionadaenX(PJ,objeto)>0){
+					objeto->pos.setX(objeto->pos.getX() + colisionador.distanciaColisionadaenX(PJ,objeto));
+					colisionador.solucionarColision(PJ, (Poder *) objeto);
+				}
+			}
+			else{
+				if (colisionador.distanciaColisionadaenX(objeto,PJ)>0){
+					objeto->pos.setX(objeto->pos.getX() - colisionador.distanciaColisionadaenX(objeto,PJ));
+					colisionador.solucionarColision(PJ, (Poder *) objeto);
+				}
+
+			}
 		}
 	}
 }
@@ -225,18 +236,18 @@ void Mundo::VerificarSiPjsColisionanaEnElAire(){
 	}
 	if (colisionador.sonCercanos(personaje1, personaje2, deltaCero)) {
 		if (personaje1->estado == SALTANDO_OBLICUO && personaje1->sentido == true && personaje2->estado == SALTANDO_OBLICUO && personaje2->sentido == true) {
-				personaje1->enCaida = true;
-				personaje2->enCaida = true;
-				if (colisionador.seProdujoColision(personaje1, personaje2)) {
-					if ((personaje1->pos.getX() - personaje2->pos.getX()) <= 0) {
-						personaje2->pos.setX(
-								personaje2->pos.getX() + colisionador.distanciaColisionadaenX(personaje1, personaje2));
-					} else {
-						personaje2->pos.setX(
-								personaje2->pos.getX() - colisionador.distanciaColisionadaenX(personaje2, personaje1));
-					};
+			personaje1->enCaida = true;
+			personaje2->enCaida = true;
+			if ((personaje1->pos.getX() - personaje2->pos.getX()) <= 0) {
+				if(colisionador.distanciaColisionadaenX(personaje1,personaje2) < 0) {
+					personaje2->pos.setX(personaje2->pos.getX() + colisionador.distanciaColisionadaenX(personaje1, personaje2));
 				}
-			}
+			} else {
+				if(colisionador.distanciaColisionadaenX(personaje2,personaje1) > 0) {
+					personaje2->pos.setX(personaje2->pos.getX() -colisionador.distanciaColisionadaenX(personaje2, personaje1));
+				}
+			};
+		}
 	}
 
 

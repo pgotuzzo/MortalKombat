@@ -21,9 +21,10 @@ public:
     bool sonProximos(ObjetoColisionable* primerObjeto,ObjetoColisionable* segundoObjeto,float delta);
     bool seVan(Personaje* PJ1, Personaje* PJ2, float delta );
     void solucionarColision(Personaje* PJ1, Personaje* PJ2);
-    void solucionarColision(Personaje* PJ,Golpe* golpeOponente);
+    void solucionarColision(Personaje* PJ, TestadoPersonaje estadoViolento,Golpe* golpeOponente);
     void solucionarColision(Personaje* PJ, Poder* poderOponente);
 
+    bool sePasoDelObjeto(ObjetoColisionable* objeto1, ObjetoColisionable* objeto2);
     float distanciaColisionadaenX(ObjetoColisionable *objeto1, ObjetoColisionable *objeto2);
 
     bool seProdujoColision(ObjetoColisionable* rectangulo1, ObjetoColisionable* rectangulo2);

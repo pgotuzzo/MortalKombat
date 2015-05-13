@@ -112,7 +112,7 @@ void Personaje::ejecutarAcionesActivadas(Accion **accionesEnCurso,float anchoEsc
 		pos = verificarPuntoEnX(accionesEnCurso[3]->realizarAccion(pos,enCaida),anchoEscenario);
 	}
 	if (poder->estado){
-		poder->avanzar(this->ancho/2);
+		poder->avanzar(10);
 	}
 }
 
@@ -332,14 +332,28 @@ void Personaje::realizarAccion(Tinput orden,float anchoEscenario) {
 				}
 				break;
 			case CAMINANDO:
-				if (orden.movimiento == TinputMovimiento::KEY_DERECHA)caminar(true);
-				else if (orden.movimiento == TinputMovimiento::KEY_IZQUIERDA)caminar(false);
+				if (orden.movimiento == TinputMovimiento::KEY_DERECHA){
+					if( !protegiendose || (inputAnterior.movimiento == TinputMovimiento::KEY_DERECHA
+										   && estado == PROTECCION
+										   && orden.accion == TinputAccion::KEY_NADA)) {
+						caminar(true);
+					}
+				}
+				else if (orden.movimiento == TinputMovimiento::KEY_IZQUIERDA){
+					if( !protegiendose || (inputAnterior.movimiento == TinputMovimiento::KEY_IZQUIERDA
+										   && estado == PROTECCION
+										   && orden.accion == TinputAccion::KEY_NADA)) {
+						caminar(false);
+					}
+				}
 				break;
 			case SALTANDO_VERTICAL:
 				if (!accionesEnCurso[0]->getEstado()) {
 					if (!accionesEnCurso[3]->getEstado()) {
 						if (!accionesEnCurso[1]->getEstado()) {
-							if (!protegiendose) {
+							if (!protegiendose || (inputAnterior.movimiento == TinputMovimiento::KEY_ARRIBA
+												   && estado == PROTECCION
+												   && orden.accion == TinputAccion::KEY_NADA)) {
 								//Activo el estado de saltar verticalmente. Puede realizar el poder durante el salto vertical
 								loguer->loguear("El personaje salta verticalmente", Log::LOG_DEB);
 								accionesEnCurso[0]->setEstado(activado, pos);
@@ -354,16 +368,27 @@ void Personaje::realizarAccion(Tinput orden,float anchoEscenario) {
 				}
 				break;
 			case SALTANDO_OBLICUO:
-				if (orden.movimiento == TinputMovimiento::KEY_ARRIBA_DERECHA)saltarOblicuamente(true);
-				else if (orden.movimiento == TinputMovimiento::KEY_ARRIBA_IZQUIERDA)saltarOblicuamente(false);
+				if (orden.movimiento == TinputMovimiento::KEY_ARRIBA_DERECHA){
+					if( !protegiendose || (inputAnterior.movimiento == TinputMovimiento::KEY_ARRIBA_DERECHA
+										   && estado == PROTECCION
+										   && orden.accion == TinputAccion::KEY_NADA)) {
+						saltarOblicuamente(true);
+					}
+				}
+				else if (orden.movimiento == TinputMovimiento::KEY_ARRIBA_IZQUIERDA){
+					if( !protegiendose || (inputAnterior.movimiento == TinputMovimiento::KEY_ARRIBA_IZQUIERDA
+										   && estado == PROTECCION
+										   && orden.accion == TinputAccion::KEY_NADA)) {
+						saltarOblicuamente(false);
+					}
+				}
 				break;
 			case PROTECCION:
-				// TODO: Hacer que se mantenga agachado sin mantengo abajo y solte proteccion
-				if (estado != SALTANDO_OBLICUO && estado != SALTANDO_VERTICAL) {
+				if (!accionesEnCurso[3]->getEstado() && !accionesEnCurso[0]->getEstado() && !poder->estado) {
 					if (orden.movimiento != TinputMovimiento::KEY_ABAJO) {
 						estado = PROTECCION;
 					}
-					if (estado == PARADO || estado == CAMINANDO) {
+					if (estado == PARADO || accionesEnCurso[2]->getEstado()) {
 						estado = PROTECCION;
 					}
 					if (estado == AGACHADO) {
@@ -376,16 +401,18 @@ void Personaje::realizarAccion(Tinput orden,float anchoEscenario) {
 				}
 				break;
 			case PODER:
-				if (estado == PARADO || estado == SALTANDO_VERTICAL) {
-					if (!poder->estado) {
-						loopsGolpe = 3;
-						poder->activar(this->pos, this->direccion, danioPoder, true);
-						estado = PODER;
+				if(estado != PROTECCION || estado != PROTECCION_AGACHADO){
+					if (estado == PARADO || estado == SALTANDO_VERTICAL) {
+							if (!poder->estado) {
+								loopsGolpe = 3;
+								poder->activar(this->pos, this->direccion, danioPoder, true);
+								estado = PODER;
+							}
+							parado = false;
+							lanzandoGolpe = false;
+							lanzandoPoder = true;
+							protegiendose = false;
 					}
-					parado = false;
-					lanzandoGolpe = false;
-					lanzandoPoder = true;
-					protegiendose = false;
 				}
 				break;
 			case PINIA_ALTA:
@@ -643,7 +670,7 @@ void Personaje::caminar(bool direc) {
 	if (!accionesEnCurso[0]->getEstado()) {
 		if (!accionesEnCurso[3]->getEstado()) {
 			if (!accionesEnCurso[1]->getEstado()) {
-				if(!poder->estado && !protegiendose) {
+				if(!poder->estado) {
 					//activo el estado avanzar
 					if (direc) {
 						sentido = direccion;
@@ -670,7 +697,7 @@ void Personaje::saltarOblicuamente(bool direc) {
 	if (!accionesEnCurso[0]->getEstado()) {
 		if (!accionesEnCurso[3]->getEstado()) {
 			if (!accionesEnCurso[1]->getEstado()) {
-				if(!poder->estado && !protegiendose) {
+				if(!poder->estado) {
 					//Activo el estado de saltar oblicuamente
 					if (direc) {
 						sentido = direccion;

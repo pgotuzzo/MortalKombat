@@ -30,8 +30,8 @@ void Poder::activar(Posicion posPJ,float direccion, float danio, bool nuevoEstad
 
     //pos_y = posPJ.getY();
     pos_y = posPJ.getY() + altoPJ / divisorYPoder;
-    if (direccion) pos_x = posPJ.getX() + anchoPJ / 2 + ancho/2;
-    else pos_x = posPJ.getX() - anchoPJ / 2 - ancho / 2;
+    if (direccion) pos_x = posPJ.getX() + anchoPJ;
+    else pos_x = posPJ.getX() -ancho;
     pos = Posicion(pos_x,pos_y);
     this->danio = danio;
 
