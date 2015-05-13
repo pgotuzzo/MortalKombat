@@ -32,18 +32,18 @@
         "alto": 60,
         "z-index": 2,
         "nombre":"subzero",
-        "sprites": "./resources/sprites"
+        "sprites": "./resources/sprites/zubzero"
     },
     "personaje2": {
         "ancho": 25,
         "alto": 60,
         "z-index": 2,
         "nombre":"subzero",
-        "sprites": "./resources/sprites"
+        "sprites": "./resources/sprites/ermac"
     },
     "pelea": {
         "player1":"subzero",
-        "player2":"subzero"
+        "player2":"ermac"
     },
     "color-alternativo": {
         "h-inicial": 0,

@@ -1,15 +1,18 @@
 #include "PersonajeVista.h"
 
-const string DEFAULT_SPRITE = "personaje" + SPRITES_FORMAT;
+const std::string DEFAULT_SPRITE = "personaje" + SPRITES_FORMAT;
 
-PersonajeVista::PersonajeVista() {}
-
-PersonajeVista::PersonajeVista(VistaUtils* utils, string spritesPath, Tdimension dimension, Tdireccion direction) {
+PersonajeVista::PersonajeVista(VistaUtils* utils, std::string spritesPath, Tdimension dimension, Tdireccion direction) {
     mUtils = utils;
     crearSprites(spritesPath);
     mDirection = direction;
+
     mDefaultTextureDimension = dimension;
     mDefaultTexture = mUtils->loadTexture(spritesPath + "/" + DEFAULT_SPRITE);
+
+    mUtils->getScales(mDefaultTexture, &dimension, mScales);
+
+    mPoder.initialize(mUtils, spritesPath, mScales);
 }
 
 void PersonajeVista::crearSprites(string path) {
@@ -76,7 +79,7 @@ void PersonajeVista::getTexture(SDL_Texture* ventana, float x) {
     }
 
     // Calculo la dimension de la textura comparandola con la textura por defecto
-    Tdimension d = mUtils->getDimension(mDefaultTexture, &mDefaultTextureDimension, texture);
+//    Tdimension d = mUtils->getDimension(mDefaultTexture, &mDefaultTextureDimension, texture);
 
     /**
      * mCurrentRect = Trect que maneja el modelo
@@ -96,12 +99,20 @@ void PersonajeVista::getTexture(SDL_Texture* ventana, float x) {
      *
      */
 
+//    Trect r;
+//    r.d = d;
+//    r.p.y = mCurrentRect.p.y + mCurrentRect.d.h - r.d.h;
+//    r.p.x = mCurrentRect.p.x - x + mCurrentRect.d.w / 2.0F - r.d.w / 2.0F;
+
     Trect r;
-    r.d = d;
+    r.d = mUtils->getDimension(texture, mScales);
     r.p.y = mCurrentRect.p.y + mCurrentRect.d.h - r.d.h;
     r.p.x = mCurrentRect.p.x - x + mCurrentRect.d.w / 2.0F - r.d.w / 2.0F;
 
-    mUtils->copyTexture(texture, ventana, NULL, &r, &d, NULL, flip);
+    mUtils->copyTexture(texture, ventana, NULL, &r, &r.d, NULL, flip);
+
+    // Imprimo el poder
+//    mPoder.getTexture(ventana, x);
 }
 
 void PersonajeVista::freeTextures() {

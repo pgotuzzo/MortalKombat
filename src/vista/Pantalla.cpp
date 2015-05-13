@@ -43,6 +43,7 @@ void Pantalla::InicializarPersonajes(vector<Tpersonaje> personajes) {
     // TODO - Mejorar la lógica, sobre todo si se van a tener mas de 2 personajes
     for (unsigned i = 0; i < personajes.size(); i++) {
         PersonajeVista p;
+        string* path = new string(personajes[i].sprites);
         if ((i != 0) && (personajes[i].sprites == personajes[0].sprites)){
             mUtils->setColorSetting(personajes[i].colorSettings);
             p = PersonajeVista(mUtils, personajes[i].sprites, personajes[i].d, personajes[i].orientacion);

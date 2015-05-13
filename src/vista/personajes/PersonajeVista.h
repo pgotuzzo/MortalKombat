@@ -6,6 +6,9 @@
 #include "Sprite.h"
 #include "../../Common.h"
 #include "../VistaUtils.h"
+#include "PoderVista.h"
+
+using namespace std;
 
 class PersonajeVista {
 
@@ -18,6 +21,7 @@ private:
     Tsentido mTarget;
     Tdireccion mDirection;
     Trect mCurrentRect; // Posicion y dimension que tiene el personaje en el modelo.
+    PoderVista mPoder = PoderVista();
 
     VistaUtils* mUtils;
     array <Sprite, TestadoPersonajeCount> mSprites;
@@ -31,10 +35,12 @@ private:
     SDL_Texture* mDefaultTexture;
     Tdimension mDefaultTextureDimension;
 
+    float mScales[2];
+
     void crearSprites(std::string path);
 
 public:
-    PersonajeVista();
+    PersonajeVista(){};
     PersonajeVista(VistaUtils* utils, std::string spritesPath, Tdimension dimension, Tdireccion direction);
 
     void update(Tcambio);

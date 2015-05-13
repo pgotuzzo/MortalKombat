@@ -305,7 +305,7 @@ struct Tcapa {
  * Estructuras y enums propios de los
  *  Personajes
  */
-static const int TestadoPersonajeCount = 20;
+static const int TestadoPersonajeCount = 26;
 
 enum TestadoPersonaje {
     // Movimient
@@ -404,16 +404,21 @@ struct Tpersonaje {
     TcolorSettings colorSettings;
 };
 
+static const int TestadoPoderCount = 3;
+
 enum TestadoPoder{
     ACTIVADO,
     DESACTIVADO,
-    COLISION,
+    COLISION
 };
+
+static const string PODER_ACTIVADO_PATH = "pod_poder";
+static const string PODER_COLISION_PATH = "pod_colision";
 
 struct TcambioPoder{
     TestadoPoder e;
-    Tdimension d;
     Posicion p;
+    Tdimension d;
 };
 
 /**

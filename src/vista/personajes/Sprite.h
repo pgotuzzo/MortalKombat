@@ -21,6 +21,7 @@ private:
 public:
     Sprite(){};
     Sprite(VistaUtils* utils, string dirPath, bool repeat);
+    void initialize(VistaUtils* utils, string dirPath, bool repeat);
     long getCount();
     void restart();
     SDL_Texture* getNext();

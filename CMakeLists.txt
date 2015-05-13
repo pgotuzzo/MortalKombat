@@ -79,9 +79,11 @@ set(SOURCE_FILES
     src/controlador/ControladorTeclado.h
     src/controlador/ControladorJoystick.cpp
     src/controlador/ControladorJoystick.h
+    src/vista/personajes/PoderVista.cpp
+    src/vista/personajes/PoderVista.h
     )
 
-add_executable(MortalKombat ${SOURCE_FILES}  )
+add_executable(MortalKombat ${SOURCE_FILES})
 
 # Bibliotecas
 target_link_libraries(MortalKombat
