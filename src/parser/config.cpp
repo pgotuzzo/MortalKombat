@@ -566,50 +566,50 @@ void config::validacionAnchoVentanaEscenario(){
 int config::cantSprites(TestadoPersonaje e){
 	int cant=0;
 	switch ( e ) {
-		case PARADO:
+		case MOV_PARADO:
 			cant=9;
 			break;
-		case AGACHADO:
+		case MOV_AGACHADO:
 			cant=3;
 			break;
-		case CAMINANDO:
+		case MOV_CAMINANDO:
 			cant=8;
 			break;
-		case SALTANDO_OBLICUO:
+		case MOV_SALTANDO_OBLICUO:
 			cant=9;
 			break;
-		case SALTANDO_VERTICAL:
+		case MOV_SALTANDO_VERTICAL:
 			cant=3;
 			break;
-		case PINIA_BAJA:
+		case ACC_PINIA_BAJA:
 			cant=4;break;
-		case PINIA_BAJA_AGACHADO:
+		case ACC_PINIA_BAJA_AGACHADO:
 			cant=3;break;
-		case PINIA_ALTA:
+		case ACC_PINIA_ALTA:
 			cant=9;break;
-		case PINIA_ALTA_AGACHADO:
+		case ACC_PINIA_ALTA_AGACHADO:
 			cant=5;break;
-		case PINIA_SALTO:
+		case ACC_PINIA_SALTO:
 			cant=3;break;
-		case PATADA_BAJA:
+		case ACC_PATADA_BAJA:
 			cant=9;break;
-		case PATADA_BAJA_ATRAS:
+		case ACC_PATADA_BAJA_ATRAS:
 			cant=8;break;
-		case PATADA_AGACHADO:
+		case ACC_PATADA_AGACHADO:
 			cant=7;break;
-		case PATADA_SALTO_VERTICAL:
+		case ACC_PATADA_SALTO_VERTICAL:
 			cant=3;break;
-		case PATADA_SALTO:
+		case ACC_PATADA_SALTO:
 			cant=3;break;
-		case PATADA_ALTA:
+		case ACC_PATADA_ALTA:
 			cant=3;break;
-		case PATADA_ALTA_ATRAS:
+		case ACC_PATADA_ALTA_ATRAS:
 			cant=8;break;
-		case PROTECCION:
+		case ACC_PROTECCION:
 			cant=3;break;
-		case PROTECCION_AGACHADO:
+		case ACC_PROTECCION_AGACHADO:
 			cant=3;break;
-		case PODER:
+		case ACC_PODER:
 			cant=7;break;
 
 	}

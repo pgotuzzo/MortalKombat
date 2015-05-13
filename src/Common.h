@@ -308,58 +308,71 @@ struct Tcapa {
 static const int TestadoPersonajeCount = 20;
 
 enum TestadoPersonaje {
-    PARADO,
-    CAMINANDO,
-    SALTANDO_VERTICAL,
-    SALTANDO_OBLICUO,
-    AGACHADO,
+    // Movimient
+    MOV_PARADO,
+    MOV_CAMINANDO,
+    MOV_SALTANDO_VERTICAL,
+    MOV_SALTANDO_OBLICUO,
+    MOV_AGACHADO,
 
-    PINIA_BAJA,
-    PINIA_BAJA_AGACHADO,
+    // Accion
+    ACC_PINIA_BAJA,
+    ACC_PINIA_BAJA_AGACHADO,
 
-    PINIA_ALTA,
-    PINIA_ALTA_AGACHADO, //gancho
+    ACC_PINIA_ALTA,
+    ACC_PINIA_ALTA_AGACHADO, //gancho
 
-    PINIA_SALTO,
+    ACC_PINIA_SALTO,
 
-    PATADA_BAJA,
-    PATADA_BAJA_ATRAS,
+    ACC_PATADA_BAJA,
+    ACC_PATADA_BAJA_ATRAS,
 
-    PATADA_AGACHADO,
-    PATADA_SALTO_VERTICAL,
-    PATADA_SALTO, //oblicuo
+    ACC_PATADA_AGACHADO,
+    ACC_PATADA_SALTO_VERTICAL,
+    ACC_PATADA_SALTO, //oblicuo
 
-    PATADA_ALTA,
-    PATADA_ALTA_ATRAS,
+    ACC_PATADA_ALTA,
+    ACC_PATADA_ALTA_ATRAS,
 
-    PROTECCION,
-    PROTECCION_AGACHADO,
+    ACC_PROTECCION,
+    ACC_PROTECCION_AGACHADO,
 
-    PODER
+    ACC_PODER,
+
+    // Reaccion
+    REA_AGACHADO,
+    REA_GOLPE_ALTO, // patada alta y pinia en salto
+    REA_GOLPE_BAJO,
+    REA_GOLPE_FUERTE, // gancho y patada alta (+ atras)
+    REA_PATADA_BARRIDA, // patada baja (+ atras)
+    REA_PINIA_ALTA
 };
 
 static string TestadoPersonajeToString(TestadoPersonaje e){
     switch (e) {
-        case TestadoPersonaje::PARADO: return "parado";
-        case TestadoPersonaje::CAMINANDO: return "caminando";
-        case TestadoPersonaje::SALTANDO_VERTICAL: return "salto_vertical";
-        case TestadoPersonaje::SALTANDO_OBLICUO: return "salto_oblicuo";
-        case TestadoPersonaje::AGACHADO: return "agachado";
-        case TestadoPersonaje::PINIA_BAJA: return "pinia_baja";
-        case TestadoPersonaje::PINIA_BAJA_AGACHADO: return "pinia_baja_agachado";
-        case TestadoPersonaje::PINIA_ALTA: return "pinia_alta";
-        case TestadoPersonaje::PINIA_ALTA_AGACHADO: return "pinia_alta_agachado";
-        case TestadoPersonaje::PINIA_SALTO: return "pinia_salto";
-        case TestadoPersonaje::PATADA_BAJA: return "patada_baja";
-        case TestadoPersonaje::PATADA_BAJA_ATRAS: return "patada_baja_atras";
-        case TestadoPersonaje::PATADA_AGACHADO: return "patada_agachado";
-        case TestadoPersonaje::PATADA_SALTO_VERTICAL: return "patada_salto_vertical";
-        case TestadoPersonaje::PATADA_SALTO: return "patada_salto";
-        case TestadoPersonaje::PATADA_ALTA: return "patada_alta";
-        case TestadoPersonaje::PATADA_ALTA_ATRAS: return "patada_alta_atras";
-        case TestadoPersonaje::PROTECCION: return "proteccion";
-        case TestadoPersonaje::PROTECCION_AGACHADO: return "proteccion_agachado";
-        case TestadoPersonaje::PODER: return "lanzando_poder";
+        case TestadoPersonaje::MOV_PARADO: return "mov_parado";
+        case TestadoPersonaje::MOV_CAMINANDO: return "mov_caminando";
+        case TestadoPersonaje::MOV_SALTANDO_VERTICAL: return "mov_salto_vertical";
+        case TestadoPersonaje::MOV_SALTANDO_OBLICUO: return "mov_salto_oblicuo";
+        case TestadoPersonaje::MOV_AGACHADO: return "mov_agachado";
+
+        case TestadoPersonaje::ACC_PINIA_BAJA: return "acc_pinia_baja";
+        case TestadoPersonaje::ACC_PINIA_BAJA_AGACHADO: return "acc_pinia_baja_agachado";
+        case TestadoPersonaje::ACC_PINIA_ALTA: return "acc_pinia_alta";
+        case TestadoPersonaje::ACC_PINIA_ALTA_AGACHADO: return "acc_pinia_alta_agachado";
+        case TestadoPersonaje::ACC_PINIA_SALTO: return "acc_pinia_salto";
+        case TestadoPersonaje::ACC_PATADA_BAJA: return "acc_patada_baja";
+        case TestadoPersonaje::ACC_PATADA_BAJA_ATRAS: return "acc_patada_baja_atras";
+        case TestadoPersonaje::ACC_PATADA_AGACHADO: return "acc_patada_agachado";
+        case TestadoPersonaje::ACC_PATADA_SALTO_VERTICAL: return "acc_patada_salto_vertical";
+        case TestadoPersonaje::ACC_PATADA_SALTO: return "acc_patada_salto";
+        case TestadoPersonaje::ACC_PATADA_ALTA: return "acc_patada_alta";
+        case TestadoPersonaje::ACC_PATADA_ALTA_ATRAS: return "acc_patada_alta_atras";
+        case TestadoPersonaje::ACC_PROTECCION: return "acc_proteccion";
+        case TestadoPersonaje::ACC_PROTECCION_AGACHADO: return "acc_proteccion_agachado";
+        case TestadoPersonaje::ACC_PODER: return "acc_lanzando_poder";
+
+
     }
     return NULL;
 }

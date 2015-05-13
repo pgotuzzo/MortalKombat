@@ -19,19 +19,19 @@ void PersonajeVista::crearSprites(string path) {
         string spritesPath = path + "/" + TestadoPersonajeToString(state) + "/";
 
         switch (state){
-            case AGACHADO:
-            case SALTANDO_VERTICAL:
-            case PINIA_ALTA_AGACHADO:
-            case PINIA_SALTO:
-            case PATADA_SALTO_VERTICAL:
-            case PATADA_SALTO:
-            case PROTECCION:
-            case PROTECCION_AGACHADO:
-            case PODER:{
+            case MOV_AGACHADO:
+            case MOV_SALTANDO_VERTICAL:
+            case ACC_PINIA_ALTA_AGACHADO:
+            case ACC_PINIA_SALTO:
+            case ACC_PATADA_SALTO_VERTICAL:
+            case ACC_PATADA_SALTO:
+            case ACC_PROTECCION:
+            case ACC_PROTECCION_AGACHADO:
+            case ACC_PODER:{
                 mSprites[s] = Sprite(mUtils, spritesPath, false);
                 break;
             };
-            case SALTANDO_OBLICUO:{
+            case MOV_SALTANDO_OBLICUO:{
                 mSprites[s] = Sprite(mUtils, spritesPath, true);
                 mSprites[s].disable(0);
                 break;
@@ -59,8 +59,8 @@ void PersonajeVista::getTexture(SDL_Texture* ventana, float x) {
 
     // El "sentido" del personaje es importante SOLO para las acciones de salto oblicuo o caminar
     switch (mCurrentState){
-        case SALTANDO_OBLICUO:
-        case CAMINANDO:{
+        case MOV_SALTANDO_OBLICUO:
+        case MOV_CAMINANDO:{
             if(mTarget == Tsentido::ADELANTE){
                 texture = mSprites[mCurrentState].getNext();
             }else{

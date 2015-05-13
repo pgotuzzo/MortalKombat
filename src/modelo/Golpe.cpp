@@ -32,26 +32,26 @@ void Golpe::activar(TestadoPersonaje tipoDeGolpe, Posicion posPJ,bool direccion)
 
     switch (tipoDeGolpe){
 
-        case (PINIA_ALTA):
+        case (ACC_PINIA_ALTA):
             ancho = anchoPJ / divisorAnchoPiniaAlta;
             altura = altoPJ / divisorAltoPiniaAlta;
             pos.setY(posPJ.getY() * multiplicadorYPiniaAlta);
             danio = 1;
             //danio
             break;
-        case (PINIA_BAJA):
+        case (ACC_PINIA_BAJA):
             ancho = anchoPJ / divisorAnchoPiniaBaja;
             altura = altoPJ / divisorAltoPiniaBaja;
             pos.setY(posPJ.getY() * multiplicadorYPiniaBaja);
             danio = 1;
             break;
-        case (PATADA_ALTA):
+        case (ACC_PATADA_ALTA):
             ancho = anchoPJ / divisorAnchoPatadaAlta;
             altura = altoPJ / divisorAltoPatadaAlta;
             pos.setY(posPJ.getY() * multiplicadorYPatadaAlta);
             danio = 2;
             break;
-        case (PATADA_BAJA):
+        case (ACC_PATADA_BAJA):
             ancho = anchoPJ / divisorAnchoPatadaBaja;
             altura = altoPJ / divisorAltoPatadaBaja;
             pos.setY(posPJ.getY() * multiplicadorYPatadaBaja);

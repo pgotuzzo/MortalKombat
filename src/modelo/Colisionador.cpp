@@ -137,7 +137,7 @@ void Colisionador::solucionarColision(Personaje* PJ1, Personaje* PJ2){
     // Choques entre los cuerpos de los pjs
 
     //Los dos caminando en sentido contrario
-    if(PJ1->sentido == true && PJ1->estado == CAMINANDO && PJ2->sentido == true && PJ2->estado == CAMINANDO){
+    if(PJ1->sentido == true && PJ1->estado == MOV_CAMINANDO && PJ2->sentido == true && PJ2->estado == MOV_CAMINANDO){
         if ((PJ1->pos.getX() - PJ2->pos.getX()) <= 0) {
             PJ1->pos.setX(PJ1->pos.getX() - 1);
             PJ2->pos.setX(PJ2->pos.getX() + 1);
@@ -160,62 +160,62 @@ void Colisionador::solucionarColision(Personaje* PJ1, Personaje* PJ2){
         inputAgachado.accion = TinputAccion::KEY_NADA;
 
         if ((PJ1->pos.getX() - PJ2->pos.getX()) <= 0 ) {
-            if(PJ1->estado == CAMINANDO && PJ1->sentido == true){
-                if(PJ2->estado == PARADO) {
+            if(PJ1->estado == MOV_CAMINANDO && PJ1->sentido == true){
+                if(PJ2->estado == MOV_PARADO) {
                     PJ2->accionesEnCurso[2]->setAnchoDePaso(factorDeRestrocesoSinProteccion);
                     PJ2->realizarAccion(inputDerecha,anchoEsc);
-                    PJ2->estado = PARADO;
+                    PJ2->estado = MOV_PARADO;
                     PJ1->accionesEnCurso[2]->setAnchoDePaso(factorDeRestrocesoSinProteccion);
                     PJ2->accionesEnCurso[2]->setAnchoDePasoDefault();
                 }
-                else if(PJ2->estado == AGACHADO) {
+                else if(PJ2->estado == MOV_AGACHADO) {
                     PJ2->accionesEnCurso[2]->setAnchoDePaso(factorDeRestrocesoSinProteccion);
                     PJ2->realizarAccion(inputDerecha, anchoEsc);
                     PJ2->realizarAccion(inputAgachado,anchoEsc);
                     PJ1->accionesEnCurso[2]->setAnchoDePaso(factorDeRestrocesoSinProteccion);
                     PJ2->accionesEnCurso[2]->setAnchoDePasoDefault();
                 }
-                else if (PJ2->estado == PROTECCION) {
+                else if (PJ2->estado == ACC_PROTECCION) {
                     PJ2->accionesEnCurso[2]->setAnchoDePaso(factorDeRetrocesoConProteccion);
                     PJ2->realizarAccion(inputDerecha, anchoEsc);
-                    PJ2->estado = PROTECCION;
+                    PJ2->estado = ACC_PROTECCION;
                     PJ1->accionesEnCurso[2]->setAnchoDePaso(factorDeRetrocesoConProteccion);
                     PJ2->accionesEnCurso[2]->setAnchoDePasoDefault();
                 }
-                else if (PJ2->estado ==PROTECCION_AGACHADO) {
+                else if (PJ2->estado == ACC_PROTECCION_AGACHADO) {
                     PJ2->accionesEnCurso[2]->setAnchoDePaso(factorDeRetrocesoConProteccion);
                     PJ2->realizarAccion(inputDerecha, anchoEsc);
-                    PJ2->estado = PROTECCION_AGACHADO;
+                    PJ2->estado = ACC_PROTECCION_AGACHADO;
                     PJ1->accionesEnCurso[2]->setAnchoDePaso(factorDeRetrocesoConProteccion);
                     PJ2->accionesEnCurso[2]->setAnchoDePasoDefault();
                 }
             }
-            else if(PJ2->estado == CAMINANDO && PJ2->sentido == true){
-                if (PJ1->estado == PARADO){
+            else if(PJ2->estado == MOV_CAMINANDO && PJ2->sentido == true){
+                if (PJ1->estado == MOV_PARADO){
                     PJ1->accionesEnCurso[2]->setAnchoDePaso(factorDeRestrocesoSinProteccion);
                     PJ1->realizarAccion(inputIzquierda, anchoEsc);
-                    PJ1->estado = PARADO;
+                    PJ1->estado = MOV_PARADO;
                     PJ2->accionesEnCurso[2]->setAnchoDePaso(factorDeRestrocesoSinProteccion);
                     PJ1->accionesEnCurso[2]->setAnchoDePasoDefault();
                 }
-                else if (PJ1->estado == AGACHADO){
+                else if (PJ1->estado == MOV_AGACHADO){
                     PJ1->accionesEnCurso[2]->setAnchoDePaso(factorDeRestrocesoSinProteccion);
                     PJ1->realizarAccion(inputIzquierda, anchoEsc);
                     PJ1->realizarAccion(inputAgachado,anchoEsc);
                     PJ2->accionesEnCurso[2]->setAnchoDePaso(factorDeRestrocesoSinProteccion);
                     PJ1->accionesEnCurso[2]->setAnchoDePasoDefault();
                 }
-                else if (PJ1->estado == PROTECCION) {
+                else if (PJ1->estado == ACC_PROTECCION) {
                     PJ1->accionesEnCurso[2]->setAnchoDePaso(factorDeRetrocesoConProteccion);
                     PJ1->realizarAccion(inputIzquierda, anchoEsc);
-                    PJ1->estado = PROTECCION;
+                    PJ1->estado = ACC_PROTECCION;
                     PJ2->accionesEnCurso[2]->setAnchoDePaso(factorDeRetrocesoConProteccion);
                     PJ1->accionesEnCurso[2]->setAnchoDePasoDefault();
                 }
-                else if (PJ1->estado == PROTECCION_AGACHADO) {
+                else if (PJ1->estado == ACC_PROTECCION_AGACHADO) {
                     PJ1->accionesEnCurso[2]->setAnchoDePaso(factorDeRetrocesoConProteccion);
                     PJ1->realizarAccion(inputIzquierda, anchoEsc);
-                    PJ1->estado = PROTECCION_AGACHADO;
+                    PJ1->estado = ACC_PROTECCION_AGACHADO;
                     PJ2->accionesEnCurso[2]->setAnchoDePaso(factorDeRetrocesoConProteccion);
                     PJ1->accionesEnCurso[2]->setAnchoDePasoDefault();
                 }
@@ -226,21 +226,22 @@ void Colisionador::solucionarColision(Personaje* PJ1, Personaje* PJ2){
 
 
     //Colision entre un pj saltando oblicuamente y otro que esta parado (que no se superpongan luego dle salto)
-    if(PJ1->estado == SALTANDO_OBLICUO && PJ1->sentido == true && (PJ2->estado == PARADO || PJ2->estado == AGACHADO) && seProdujoColision(PJ1,PJ2)){
+    if(PJ1->estado == MOV_SALTANDO_OBLICUO && PJ1->sentido == true && (PJ2->estado == MOV_PARADO || PJ2->estado ==
+                                                                                                    MOV_AGACHADO) && seProdujoColision(PJ1,PJ2)){
         if ((PJ1->pos.getX() - PJ2->pos.getX()) <= 0) {
             PJ2->pos.setX(PJ2->pos.getX() + distanciaColisionadaenX(PJ1,PJ2));
         }
     }
 
     //Colision entre un pj saltando oblicuamente y otro caminando
-    if(PJ1->estado == SALTANDO_OBLICUO && PJ1->sentido == true && PJ2->estado == CAMINANDO && seProdujoColision(PJ1,PJ2)){
+    if(PJ1->estado == MOV_SALTANDO_OBLICUO && PJ1->sentido == true && PJ2->estado == MOV_CAMINANDO && seProdujoColision(PJ1,PJ2)){
         if ((PJ1->pos.getX() - PJ2->pos.getX()) <= 0) {
             PJ2->pos.setX(PJ2->pos.getX() + distanciaColisionadaenX(PJ1,PJ2));
         }
     }
 
     //Colision entre un pj Saltando vertical y otro caminando
-    if(PJ1->estado == SALTANDO_VERTICAL && PJ2->estado == CAMINANDO && PJ2->sentido == true && seProdujoColision(PJ1,PJ2)){
+    if(PJ1->estado == MOV_SALTANDO_VERTICAL && PJ2->estado == MOV_CAMINANDO && PJ2->sentido == true && seProdujoColision(PJ1,PJ2)){
         if ((PJ1->pos.getX() - PJ2->pos.getX()) <= 0) {
             PJ2->pos.setX(PJ2->pos.getX() + distanciaColisionadaenX(PJ1,PJ2));
         } else {
@@ -249,7 +250,7 @@ void Colisionador::solucionarColision(Personaje* PJ1, Personaje* PJ2){
     }
 
     // Colision entre un pj saltando vertical y otro saltando oblicuamente
-    if(PJ1->estado == SALTANDO_VERTICAL && PJ2->estado == SALTANDO_OBLICUO && PJ2->sentido == true && seProdujoColision(PJ1,PJ2)){
+    if(PJ1->estado == MOV_SALTANDO_VERTICAL && PJ2->estado == MOV_SALTANDO_OBLICUO && PJ2->sentido == true && seProdujoColision(PJ1,PJ2)){
         if ((PJ1->pos.getX() - PJ2->pos.getX()) <= 0) {
             PJ2->enCaida = true;
             PJ2->pos.setX(PJ2->pos.getX() + distanciaColisionadaenX(PJ1,PJ2));
@@ -269,54 +270,54 @@ void Colisionador::solucionarColision(Personaje* PJ1, Personaje* PJ2){
 void Colisionador::solucionarColision(Personaje *PJ, TestadoPersonaje estadoViolento,Golpe *golpeOponente) {
     PJ->mePegaron(golpeOponente->danio);
     switch (estadoViolento){
-        case (PINIA_ALTA):
+        case (ACC_PINIA_ALTA):
             //estado
             // Ver logica de si se tiene que mover o algo hacia atras
             break;
-        case (PINIA_BAJA):
+        case (ACC_PINIA_BAJA):
             //estado
             // Ver logica de si se tiene que mover o algo hacia atras
             break;
-        case (PINIA_BAJA_AGACHADO):
+        case (ACC_PINIA_BAJA_AGACHADO):
             //estado
             // Ver logica de si se tiene que mover o algo hacia atras
             break;
-        case (PINIA_ALTA_AGACHADO): // Gancho
+        case (ACC_PINIA_ALTA_AGACHADO): // Gancho
             //estado
             // Salto oblicuo hacia atras con cosas seteadas
             // Aca podria vibrar la pantalla (cuando cae)
             break;
-        case (PINIA_SALTO):
+        case (ACC_PINIA_SALTO):
             //estado
             // Se mueve un poco para atras
             break;
-        case (PATADA_ALTA):
+        case (ACC_PATADA_ALTA):
             //estado
             // Se mueve un poco para atras
             break;
-        case (PATADA_BAJA):
+        case (ACC_PATADA_BAJA):
             //estado
             // Se mueve un poco para atras
             break;
-        case (PATADA_ALTA_ATRAS):
+        case (ACC_PATADA_ALTA_ATRAS):
             //estado
             // Lo tira para atras y se levanta solo. Luego estado parado
             // Aca podria vibrar la pantalla
             break;
-        case (PATADA_BAJA_ATRAS):
+        case (ACC_PATADA_BAJA_ATRAS):
             //estado
             // Se cae pero en el lugar, se ve al chabon de frente
             // Aca podria vibrar la pantalla
             break;
-        case (PATADA_AGACHADO):
+        case (ACC_PATADA_AGACHADO):
             //estado
             // Se mueve un poco para atras
             break;
-        case (PATADA_SALTO_VERTICAL):
+        case (ACC_PATADA_SALTO_VERTICAL):
             //estado
             // No estoy seguro de cual sea la reaccion
             break;
-        case (PATADA_SALTO):
+        case (ACC_PATADA_SALTO):
             //estado
             // Se mueve un poco para atras
             break;
