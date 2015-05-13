@@ -27,11 +27,33 @@
             "ancho": 1000
         }
     ],
-    "personaje": {
+    "personaje1": {
         "ancho": 25,
         "alto": 60,
-        "z-index":2,
-        "orientacion": "derecha",
+        "z-index": 2,
+        "nombre":"subzero",
         "sprites": "./resources/sprites"
+    },
+    "personaje2": {
+        "ancho": 25,
+        "alto": 60,
+        "z-index": 2,
+        "nombre":"subzero",
+        "sprites": "./resources/sprites"
+    },
+    "pelea": {
+        "player1":"subzero",
+        "player2":"subzero"
+    },
+    "color-alternativo": {
+        "h-inicial": 0,
+        "h-final":359,
+        "delta": 120
+    },
+    "botones":{
+        "piña-baja": 3,
+        "piña-alta": 2,
+        "patada-alta": 0,
+        "patada-baja": 1
     }
 } 
