@@ -95,6 +95,8 @@ vector<Tcambio> Mundo::actualizarMundo(vector<Tinput> inputs) {
 
 	personaje1->accionesEnCurso[2]->setAnchoDePasoDefault();
 	personaje2->accionesEnCurso[2]->setAnchoDePasoDefault();
+	personaje1->accionesEnCurso[3]->setConfiguracionDefault();
+	personaje2->accionesEnCurso[3]->setConfiguracionDefault();
 
 
 	//Choque de saltos oblicuos en el aire
@@ -136,6 +138,7 @@ vector<Tcambio> Mundo::actualizarMundo(vector<Tinput> inputs) {
 	cambio1 = actualizarPJ(personaje1);
 	cambio2 = actualizarPJ(personaje2);
 
+	if(personaje1->estado == REA_PINIA_ALTA || personaje2->estado == REA_PINIA_ALTA) cout<<"REACION"<<endl;
 	/*cout<<"PERSONAJE1"<<endl;
 	personaje1->pos.mostrarPar();*/
 
@@ -151,13 +154,14 @@ void Mundo::verificarColision(bool generaViolencia,TestadoPersonaje estadoViolen
 		switch (estadoViolento) {
 			case (ACC_PATADA_ALTA_ATRAS):
 				if (colisionador.sonProximos(personaje1, personaje2, 8) && !esPoder) {
+					if(PJ->estado == MOV_PARADO) cout<<"Esta parado"<<endl;
 					//cout<<"Personaje que recibe el poder"<<endl;
 					//PJ->pos.mostrarPar();
 					colisionador.solucionarColision(PJ, estadoViolento, (Golpe *) objeto);
 				}
 				break;
 			default:
-				if (colisionador.sonProximos(personaje1, personaje2, 2) && !esPoder) {
+				if (colisionador.sonProximos(personaje1, personaje2, 10) && !esPoder) {
 					//cout<<"Personaje que recibe el poder"<<endl;
 					//PJ->pos.mostrarPar();
 					colisionador.solucionarColision(PJ, estadoViolento, (Golpe *) objeto);
@@ -189,7 +193,7 @@ Tcambio Mundo::actualizarPJ(Personaje *PJ) {
 	else cambio.direccion = IZQUIERDA;
 	if(PJ->getSentido()) cambio.sentido = ADELANTE;
 	else cambio.sentido = ATRAS;
-	cambio.estado = PJ->getEstado();
+	cambio.estado = PJ->estado;
 	cambio.dPJ.h = PJ->getAlturaPersonaje();
 	cambio.dPJ.w = PJ->getAnchoPersonaje();
 
@@ -260,11 +264,11 @@ void Mundo::verificarQueNoSeVallaDeLaPantalla() {
 
 	// No se vayan caminando
 	if(personaje1->estado == MOV_CAMINANDO && !personaje1->sentido){
-			personaje1->pos.setX(personaje1->posAnt.getX());
-		}
+		personaje1->pos.setX(personaje1->posAnt.getX());
+	}
 	if(personaje2->estado == MOV_CAMINANDO && !personaje2->sentido){
 		personaje2->pos.setX(personaje2->posAnt.getX());
-		}
+	}
 	if ((personaje1->estado == MOV_SALTANDO_OBLICUO || personaje1->estado == ACC_PINIA_SALTO || personaje1->estado ==
 																								ACC_PATADA_SALTO) && !personaje1->sentido){
 		personaje1->enCaida = true;

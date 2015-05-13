@@ -14,6 +14,7 @@ class Colisionador {
 
 public:
     float anchoEsc;
+    int loopsReaccion;
 
     Colisionador();
     void setEscenario(float ancho);

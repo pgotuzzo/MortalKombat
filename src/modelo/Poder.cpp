@@ -2,11 +2,11 @@
 
 //Constantes Poder
 
-    //Divisores del ancho y alto del Pj para calcular el ancho y alto del poder
+//Divisores del ancho y alto del Pj para calcular el ancho y alto del poder
 const float divisorAnchoPoder = 2;
-const float divisorAltoPoder = 3;
+const float divisorAltoPoder = 4;
 
-    //Divisor de la altura del pj para calcular la posicion y del poder
+//Divisor de la altura del pj para calcular la posicion y del poder
 const float divisorYPoder = 4;
 
 
@@ -17,7 +17,7 @@ Poder::Poder(float anchoPJ, float altoPJ) {
 
     ancho = anchoPJ / divisorAnchoPoder;
 
-    altura = altoPJ / divisorAltoPoder ;
+    altura = altoPJ / divisorAltoPoder;
 
     this->estado = false;
 
@@ -29,7 +29,7 @@ void Poder::activar(Posicion posPJ,float direccion, float danio, bool nuevoEstad
     float pos_x,pos_y;
 
     //pos_y = posPJ.getY();
-    pos_y = posPJ.getY() + altoPJ / divisorYPoder;
+    pos_y = posPJ.getY();
     if (direccion) pos_x = posPJ.getX() + anchoPJ;
     else pos_x = posPJ.getX() -ancho;
     pos = Posicion(pos_x,pos_y);

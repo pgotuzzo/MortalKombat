@@ -4,14 +4,31 @@
 using namespace std;
 
 // Constantes para regular el salto oblicuo
-const float alturaSalto = 70;
-const float longitudSalto = 70;
-const float intervaloSalto = 3; // longitudSalto / intervaloSalto = numero de loops = numero de puntos
+const float alturaSaltoDefault = 70;
+const float longitudSaltoDefault = 70;
+const float intervaloSaltoDefault = 3; // longitudSalto / intervaloSalto = numero de loops = numero de puntos
 
 
 SaltoOblicuo::SaltoOblicuo(float altura) {
 	estado = false;
 	alturaPJ = altura;
+
+	alturaSalto = alturaSaltoDefault;
+	longitudSalto = longitudSaltoDefault;
+	intervaloSalto = intervaloSaltoDefault;
+}
+
+void SaltoOblicuo::setConfiguracion(float alturaSalto, float longitudSalto, float intervaloSalto) {
+	this->alturaSalto = alturaSalto;
+	this->longitudSalto = longitudSalto;
+	this->intervaloSalto = intervaloSalto;
+
+}
+
+void SaltoOblicuo::setConfiguracionDefault() {
+	alturaSalto = alturaSaltoDefault;
+	longitudSalto = longitudSaltoDefault;
+	intervaloSalto = intervaloSaltoDefault;
 }
 
 /*
@@ -21,25 +38,25 @@ SaltoOblicuo::SaltoOblicuo(float altura) {
  * forma y = a*(x-x1)*(x-x2) donde x1 y x2 son el x inicial y final del personaje.
  */
 void SaltoOblicuo::setEstado(bool nuevoEstado,Posicion nuevaPosicion,bool sentidoSalto) {
-    estado = nuevoEstado;
-    posInicial = nuevaPosicion;
+	estado = nuevoEstado;
+	posInicial = nuevaPosicion;
 	posImg = nuevaPosicion; // Para que no se pase del margen.
-    if (sentidoSalto) {
-    	posFinal = posInicial + Posicion(longitudSalto,0);
-    	coeficiente = 1.0; // este coeficiente sirve para saber si le tengo que restar o sumar a la posicion en x.
-    }
-    else{
-    	posFinal = posInicial - Posicion(longitudSalto,0);
-    	coeficiente = -1.0;
-    }
-    float b = pow(posInicial.getX()+posFinal.getX(),2) / 4;
-    float c = posInicial.getX() * posFinal.getX();
-    a = alturaSalto/ (b - c); // a de la funcion parabolica para que se respete el maximo y ancho que se quiere.
+	if (sentidoSalto) {
+		posFinal = posInicial + Posicion(longitudSalto,0);
+		coeficiente = 1.0; // este coeficiente sirve para saber si le tengo que restar o sumar a la posicion en x.
+	}
+	else{
+		posFinal = posInicial - Posicion(longitudSalto,0);
+		coeficiente = -1.0;
+	}
+	float b = pow(posInicial.getX()+posFinal.getX(),2) / 4;
+	float c = posInicial.getX() * posFinal.getX();
+	a = alturaSalto/ (b - c); // a de la funcion parabolica para que se respete el maximo y ancho que se quiere.
 	primeraVez = true;
 }
 
 bool SaltoOblicuo::getEstado() {
-    return estado;
+	return estado;
 }
 
 /*

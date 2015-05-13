@@ -20,7 +20,7 @@ class Personaje: public ObjetoColisionable {
 
 public:
 
- 	bool enCaida;
+	bool enCaida;
 	bool parado;
 	bool direccion;
 	bool sentido;
@@ -35,6 +35,7 @@ public:
 	int loopsGolpe;
 	int loopsPiniaAlta;
 	int loopsPiniaBaja;
+	int loopsReaccionGolpeFuerte;
 
 	bool lanzandoGolpe;
 	bool lanzandoPoder;
@@ -60,6 +61,8 @@ public:
 	TestadoPersonaje getEstado();
 
 	float getAltura();
+
+	void setLoopsReaccionGolpeFuerte(int loops);
 
 	void setEstado(TestadoPersonaje estado);
 	void setDireccion(bool direccion);

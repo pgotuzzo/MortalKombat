@@ -305,7 +305,7 @@ struct Tcapa {
  * Estructuras y enums propios de los
  *  Personajes
  */
-static const int TestadoPersonajeCount = 20;
+static const int TestadoPersonajeCount = 26;
 
 enum TestadoPersonaje {
     // Movimient
