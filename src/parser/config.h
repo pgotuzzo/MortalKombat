@@ -16,7 +16,8 @@ public:
 	enum Tdato{
 		DOUBLE,
 		INT,
-		STRING
+		STRING,
+		ARRAY,
 	};
 
 	enum Tparte{
@@ -26,16 +27,6 @@ public:
 		VENTANA_H,
 		VENTANA_W,
 		VENTANA_A,
-		PERSONAJE1_W,
-		PERSONAJE1_H,
-		PERSONAJE1_N,
-		PERSONAJE2_W,
-		PERSONAJE2_H,
-		PERSONAJE2_N,
-		PERSONAJE1_Z,
-		PERSONAJE2_Z,
-		PERSONAJE1_S,
-		PERSONAJE2_S,
 		COLOR_I,
 		COLOR_F,
 		COLOR_D,
@@ -64,6 +55,7 @@ private:
 	Tescenario escenario;
 	Tpersonaje personaje1;
 	Tpersonaje personaje2;
+	vector<Tpersonaje> personajes;
 	Tpelea pelea;
 	Tbotones botones;
 	Tcapa capa;
@@ -76,14 +68,14 @@ private:
 	void obtiene(Json::Value,string,string,Tparte,int,Tdato);
 	void defecto(Tparte,int);
 	void original(Tparte,Json::Value);
-	void setPersonajeX(Json::Value,string,Tpersonaje&,Tparte,Tparte,Tparte,Tparte,Tparte);
-
+	void setPersonajeX(Json::Value);
+	TcolorSettings ObColor(Json::Value,int);
 	int cantSprites(TestadoPersonaje);
 	bool directorioExiste(const char*);
 	void cargaExitosa(string);
 
 	//Validacion de direcciones de archivos, numeros positivos, y tamaños deseados.
-	void validacionPath(string,string);
+	void validacionPath(string);
 	void validacionPositivoI(int,string,string);
 	void validacionPositivoF(float,string,string);
 	void validacionTamanioZindex();
@@ -91,11 +83,11 @@ private:
 	void validacionAnchoVentanaEscenario();
 	void validacionPelea();
 
-	void copiarImagenDefault(int&,const char*,string);
+	void copiarImagenDefault(int&,const char*);
 
 	void ventanaDefecto();
 	void escenarioDefecto();
-	void personajeXDefecto(Tpersonaje&,string);
+	void personajeXDefecto();
 	void colorDefecto();
 	void capasDefecto();
 	void botonesDefecto();

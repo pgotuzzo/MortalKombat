@@ -22,7 +22,7 @@ public:
     bool sonProximos(ObjetoColisionable* primerObjeto,ObjetoColisionable* segundoObjeto,float delta);
     bool seVan(Personaje* PJ1, Personaje* PJ2, float delta );
     void solucionarColision(Personaje* PJ1, Personaje* PJ2);
-    void solucionarColision(Personaje* PJ, TestadoPersonaje estadoViolento,Golpe* golpeOponente);
+    void solucionarColision(Personaje* PJ, Personaje* agresor,Golpe* golpeOponente);
     void solucionarColision(Personaje* PJ, Poder* poderOponente);
 
     bool sePasoDelObjeto(ObjetoColisionable* objeto1, ObjetoColisionable* objeto2);

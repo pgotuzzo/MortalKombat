@@ -15,6 +15,7 @@ public:
 
 	bool getEstado();
 	void setEstado(bool nuevoEstado, bool nuevaDireccion);
+	void setEstado(bool nuevoEstado);
 
 	void setAnchoDePaso(float nuevoAnchoDePaso);
 	void setAnchoDePasoDefault();

@@ -274,49 +274,62 @@ void Colisionador::solucionarColision(Personaje* PJ1, Personaje* PJ2){
     }
 }
 
-void Colisionador::solucionarColision(Personaje *PJ, TestadoPersonaje estadoViolento,Golpe *golpeOponente) {
-    PJ->mePegaron(golpeOponente->danio);
-    if(loopsReaccion > 0){
-        estadoViolento = ACC_PINIA_ALTA_AGACHADO;
-    }
-    switch (estadoViolento){
+void Colisionador::solucionarColision(Personaje *PJ, Personaje* agresor,Golpe *golpeOponente) {
+    switch (agresor->estado){
         case (ACC_PINIA_ALTA):
-            PJ->estado = REA_PINIA_ALTA;
+            if(sonProximos(PJ,agresor,5)) {
+                PJ->mePegaron(golpeOponente->danio);
+                PJ->estado = REA_PINIA_ALTA;
+            }
+            if (loopsReaccion == 0) loopsReaccion = 3;
             break;
         case (ACC_PINIA_BAJA):
-            PJ->estado = REA_GOLPE_BAJO;
+            if(sonProximos(PJ,agresor,7)) {
+                PJ->mePegaron(golpeOponente->danio);
+                PJ->estado = REA_GOLPE_BAJO;
+            }
+            if (loopsReaccion == 0) loopsReaccion = 3;
             break;
         case (ACC_PINIA_BAJA_AGACHADO):
-            PJ->estado = REA_GOLPE_BAJO;
-            if(PJ->direccion){
-                PJ->accionesEnCurso[2]->setEstado(true,false);
+            if(sonProximos(PJ,agresor,7)) {
+                PJ->mePegaron(golpeOponente->danio);
+                PJ->estado = REA_GOLPE_BAJO;
             }
-            else PJ->accionesEnCurso[2]->setEstado(true,true);
+            if (loopsReaccion == 0) loopsReaccion = 3;
             // Ver logica de si se tiene que mover o algo hacia atras
             break;
         case (ACC_PINIA_ALTA_AGACHADO): // Gancho
-            if(loopsReaccion == 0) loopsReaccion = 13;
-            if(loopsReaccion > 7) {
-                PJ->accionesEnCurso[3]->setConfiguracion(30, 60, 10);
-                if (PJ->direccion) {
-                    cout << "gola" << endl;
-                    if (!PJ->accionesEnCurso[3]->getEstado()) {
-                        PJ->accionesEnCurso[3]->setEstado(true, PJ->pos, false);
-                    }
-                }
-                else {
-                    if (!PJ->accionesEnCurso[3]->getEstado()) {
-                        PJ->accionesEnCurso[3]->setEstado(true, PJ->pos, true);
-                    }
+            if(sonProximos(PJ,agresor,7)) {
+                PJ->mePegaron(golpeOponente->danio);
+                PJ->estado = REA_GOLPE_FUERTE;
+            }
+            PJ->accionesEnCurso[3]->setConfiguracion(30, 60, 10);
+            if (PJ->direccion) {
+                if (!PJ->accionesEnCurso[3]->getEstado()) {
+                    PJ->accionesEnCurso[3]->setEstado(true, PJ->pos, false);
                 }
             }
+            else {
+                if (!PJ->accionesEnCurso[3]->getEstado()) {
+                    PJ->accionesEnCurso[3]->setEstado(true, PJ->pos, true);
+                }
+            }
+            if (loopsReaccion == 0) loopsReaccion = 6;
             PJ->estado = REA_GOLPE_FUERTE;
 
             // Salto oblicuo hacia atras con cosas seteadas
             // Aca podria vibrar la pantalla (cuando cae)
             break;
         case (ACC_PINIA_SALTO):
-            PJ->estado = REA_GOLPE_ALTO;
+            cout<<"jeje"<<endl;
+            if(sonProximos(PJ,agresor,7)) {
+                PJ->mePegaron(golpeOponente->danio);
+                PJ->estado = REA_GOLPE_ALTO;
+            }
+            PJ->accionesEnCurso[2]->setAnchoDePaso(3);
+            if (PJ->direccion)PJ->accionesEnCurso[2]->setEstado(true,false);
+            else PJ->accionesEnCurso[2]->setEstado(true,true);
+            if (loopsReaccion == 0) loopsReaccion = 8;
             // Se mueve un poco para atras
             break;
         case (ACC_PATADA_ALTA):
@@ -354,10 +367,13 @@ void Colisionador::solucionarColision(Personaje *PJ, TestadoPersonaje estadoViol
             break;
     }
     if(loopsReaccion > 0) loopsReaccion--;
-    if(loopsReaccion == 0){
+    else {
+        PJ->accionesEnCurso[3]->setEstado(false);
+        PJ->accionesEnCurso[2]->setEstado(false);
         PJ->estado = MOV_PARADO;
-    }
+        agresor->estado = MOV_PARADO;
 
+    }
     cout<<"SE ESTAN PEGANDO"<<endl;
 }
 

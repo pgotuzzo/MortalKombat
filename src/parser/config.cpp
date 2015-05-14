@@ -78,28 +78,17 @@ void config::setValores(Value partes){
 
 	this->setCapa(partes);
 
-	if(!partes["color-alternativo"].isNull()){
-		obtiene(partes,"color-alternativo","h-inicial",Tparte::COLOR_I,40,Tdato::DOUBLE);
-		obtiene(partes,"color-alternativo","h-final",Tparte::COLOR_F,45,Tdato::DOUBLE);
-		obtiene(partes,"color-alternativo","delta",Tparte::COLOR_D,30,Tdato::DOUBLE);
-	}else
-		this->colorDefecto();
-	cargaExitosa("color-alternativo");
+	setPersonajeX(partes);
 
-	setPersonajeX(partes,"personaje1",this->personaje1,PERSONAJE1_W,PERSONAJE1_H,PERSONAJE1_S,PERSONAJE1_Z,PERSONAJE1_N);
-	setPersonajeX(partes,"personaje2",this->personaje2,PERSONAJE2_W,PERSONAJE2_H,PERSONAJE2_S,PERSONAJE2_Z,PERSONAJE2_N);
-	this->personaje1.colorSettings=this->color;
-	this->personaje2.colorSettings=this->color;
 	this->validacionTamanioZindex();
-	this->personaje1.zIndex=this->personaje2.zIndex;
 
 	if( !partes["pelea"].isNull()){
 		obtiene(partes,"pelea","player1",Tparte::PLAYER1,99,Tdato::STRING);
 		obtiene(partes,"pelea","player2",Tparte::PLAYER2,99,Tdato::STRING);
-		pelea.valida();
+		pelea.valida(personajes);
 	}else{
-		pelea.player1="subzero";
-		pelea.player2="scorpion";
+		pelea.player1=personajes.at(0).nombre;
+		pelea.player2=personajes.at(0).nombre;
 		loguer->loguear("Se carga por defecto pelea.",Log::Tlog::LOG_WAR);
 	}
 
@@ -128,21 +117,94 @@ void config::setValores(Value partes){
 		this->botonesDefecto();
 	cargaExitosa("botones");
 }
-//tipo1==PERSONAJEX_W tipo2==PERSONAJEX_H tipo3=+PERSONAJEX_S tipo4==PERSONAJEX_Z tipo5==PERSONAJEX_N
-void config::setPersonajeX(Value partes,string personajeXJson,Tpersonaje& personaX,Tparte tipo1,Tparte tipo2,Tparte tipo3,Tparte tipo4,Tparte tipo5){
-	if(! partes[personajeXJson].isNull()){
-		obtiene(partes,personajeXJson,"ancho",tipo1,25,Tdato::DOUBLE);
-		validacionPositivoF(personaX.d.w,personajeXJson,"ancho");
-		obtiene(partes,personajeXJson,"alto",tipo2,60,Tdato::DOUBLE);
-		obtiene(partes,personajeXJson,"nombre",tipo5,99,Tdato::STRING);
-		validacionPositivoF(personaX.d.h,personajeXJson,"alto");
-		obtiene(partes,personajeXJson,"z-index",tipo4,1,Tdato::INT);
-		validacionPositivoI(personaX.zIndex,personajeXJson,"z-index");
-		obtiene(partes,personajeXJson,"sprites",tipo3,99,Tdato::STRING);
-		this->validacionPath(personaX.sprites,personajeXJson);
-	}else
-		this->personajeXDefecto(personaX,personajeXJson);
-	cargaExitosa(personajeXJson);
+
+void config::setPersonajeX(Value partes){
+	if(! partes["personajes"].isNull()){
+		Value parte=partes["personajes"];
+		for(unsigned int i=0;i<parte.size();i++){
+
+			if(parte[i].get("ancho","defecto").isDouble()){
+				personaje1.d.w=parte[i].get("ancho",25).asFloat();
+			}else{
+				loguer->loguear("Error al cargar ancho personaje, se carga por defecto",Log::Tlog::LOG_WAR);
+				personaje1.d.w=25;
+			}
+			validacionPositivoF(personaje1.d.w,"personaje","ancho");
+
+			if(parte[i].get("alto","defecto").isDouble()){
+				personaje1.d.h=parte[i].get("alto",60).asFloat();
+			}else{
+				loguer->loguear("Error al cargar alto personaje, se carga por defecto",Log::Tlog::LOG_WAR);
+				personaje1.d.h=60;
+			}
+			validacionPositivoF(personaje1.d.h,"personaje","alto");
+
+			if(parte[i].get("z-index","defecto").isInt()){
+				personaje1.zIndex=parte[i].get("z-index",2).asInt();
+			}else{
+				loguer->loguear("Error al cargar z-index personaje, se carga por defecto",Log::Tlog::LOG_WAR);
+				personaje1.zIndex=2;
+			}
+			this->validacionPositivoI(personaje1.zIndex,"personaje","z-index");
+
+			if(parte[i].get("nombre",99).isString()){
+				personaje1.nombre=parte[i].get("nombre","default").asString();
+			}else{
+				loguer->loguear("Error al cargar nombre personaje, se carga por defecto",Log::Tlog::LOG_WAR);
+				personaje1.nombre="Default_"+i;
+			}
+
+			if(parte[i].get("sprites",99).isString()){
+				personaje1.sprites=parte[i].get("sprites","default").asString();
+			}else{
+				loguer->loguear("Error al cargar sprites personaje, se carga por defecto",Log::Tlog::LOG_WAR);
+				personaje1.sprites="./resources/sprites/subzero";
+			}
+			this->validacionPath(personaje1.sprites);
+
+			personaje1.colorSettings=ObColor(parte,i);
+
+			personajes.push_back(personaje1);
+		}
+
+	}else{
+		this->personajeXDefecto();
+	}
+
+	cargaExitosa("personaje");
+}
+
+TcolorSettings config::ObColor(Value partes,int i){
+	TcolorSettings aux;
+	if(!partes[i]["color-alternativo"].isNull()){
+		Value colores=partes[i]["color-alternativo"];
+
+		if(colores[0].get("h-inicial","defecto").isDouble()){
+			aux.hmin=colores[0].get("h-inicial",30).asFloat();
+		}else{
+			loguer->loguear("Error en color-alternativo. Se carga por defecto",Log::Tlog::LOG_WAR);
+			aux.hmin=30;
+		}
+
+		if(colores[1].get("h-final","defecto").isDouble()){
+			aux.hmax=colores[1].get("h-final",45).asFloat();
+		}else{
+			loguer->loguear("Error en color-alternativo. Se carga por defecto",Log::Tlog::LOG_WAR);
+			aux.hmax=45;
+		}
+
+		if(colores[2].get("delta","defecto").isDouble()){
+			aux.delta=colores[2].get("delta",45).asFloat();
+		}else{
+			loguer->loguear("Error en color-alternativo. Se carga por defecto",Log::Tlog::LOG_WAR);
+			aux.delta=45;
+		}
+		return aux;
+
+	}else{
+		this->colorDefecto();
+		return color;
+	}
 }
 
 void config::obtiene(Value partes,string parte,string subParte, Tparte tparte,int defecto,Tdato tipo){
@@ -153,6 +215,7 @@ void config::obtiene(Value partes,string parte,string subParte, Tparte tparte,in
 			break;
 		case INT: tipoDato=partes[parte].get(subParte, defecto).isInt();break;
 		case STRING: tipoDato=partes[parte].get(subParte, "defecto").isString();break;
+		case ARRAY: tipoDato=partes[parte].get(subParte, "defecto").isArray();break;
 	}
 
 	if(!tipoDato){
@@ -179,16 +242,6 @@ void config::original(Tparte tipoParte,Value partes){
 		case VENTANA_H: this->ventana.dimPx.h=partes["ventana"].get("alto-px",150).asInt();break;
 		case VENTANA_W: this->ventana.dimPx.w=partes["ventana"].get("ancho-px",150).asInt();break;
 		case VENTANA_A: this->ventana.ancho=partes["ventana"].get("ancho",150).asFloat();break;
-		case PERSONAJE1_W: this->personaje1.d.w=partes["personaje1"].get("ancho",150).asFloat();break;
-		case PERSONAJE1_H: this->personaje1.d.h=partes["personaje1"].get("alto",150).asFloat();break;
-		case PERSONAJE1_N: this->personaje1.nombre=partes["personaje1"].get("nombre",150).asString();break;
-		case PERSONAJE2_N: this->personaje2.nombre=partes["personaje2"].get("nombre",150).asString();break;
-		case PERSONAJE2_W: this->personaje2.d.w=partes["personaje2"].get("ancho",150).asFloat();break;
-		case PERSONAJE2_H: this->personaje2.d.h=partes["personaje2"].get("alto",150).asFloat();break;
-		case PERSONAJE1_Z: this->personaje1.zIndex=partes["personaje1"].get("z-index",0).asInt();break;
-		case PERSONAJE2_Z: this->personaje2.zIndex=partes["personaje2"].get("z-index",0).asInt();break;
-		case PERSONAJE1_S: this->personaje1.sprites=partes["personaje1"].get("sprites","./resources/sprites").asString();break;
-		case PERSONAJE2_S: this->personaje2.sprites=partes["personaje2"].get("sprites","./resources/sprites").asString();break;
 		case COLOR_D: this->color.delta=partes["color-alternativo"].get("delta",30).asInt();break;
 		case COLOR_I: this->color.hmin=partes["color-alternativo"].get("h-inicial",40).asInt();break;
 		case COLOR_F: this->color.hmax=partes["color-alternativo"].get("h-final",45).asInt();break;
@@ -199,7 +252,7 @@ void config::original(Tparte tipoParte,Value partes){
 		case BOTONES_POD: this->botones.poder=partes["botones"].get("poder",11).asInt();break;
 		case BOTONES_PROTEC: this->botones.proteccion=partes["botones"].get("proteccion",10).asInt();break;
 		case PLAYER1: pelea.player1=partes["pelea"].get("player1","subzero").asString();break;
-		case PLAYER2: pelea.player2=partes["pelea"].get("player2","scorpion").asString();break;
+		case PLAYER2: pelea.player2=partes["pelea"].get("player2","ermac").asString();break;
 	}
 }
 
@@ -211,16 +264,6 @@ void config::defecto(Tparte tipoParte,int defecto){
 		case VENTANA_H: this->ventana.dimPx.h=defecto;break;
 		case VENTANA_W: this->ventana.dimPx.w=defecto;break;
 		case VENTANA_A: this->ventana.ancho=defecto;break;
-		case PERSONAJE1_W: this->personaje1.d.w=defecto;break;
-		case PERSONAJE1_H: this->personaje1.d.h=defecto;break;
-		case PERSONAJE1_N: this->personaje1.nombre="Default_1";break;
-		case PERSONAJE2_N: this->personaje2.nombre="Default_2";break;
-		case PERSONAJE2_W: this->personaje2.d.w=defecto;break;
-		case PERSONAJE2_H: this->personaje2.d.h=defecto;break;
-		case PERSONAJE1_Z: this->personaje1.zIndex=this->zIndexDefecto;break;
-		case PERSONAJE2_Z: this->personaje2.zIndex=this->zIndexDefecto;break;
-		case PERSONAJE1_S: this->personaje1.sprites="./resources/sprites";break;
-		case PERSONAJE2_S: this->personaje2.sprites="./resources/sprites";break;
 		case COLOR_D: this->color.delta=defecto;break;
 		case COLOR_I: this->color.hmin=defecto;break;
 		case COLOR_F:this->color.hmax=defecto;break;
@@ -230,8 +273,8 @@ void config::defecto(Tparte tipoParte,int defecto){
 		case BOTONES_LP: this->botones.highKick=defecto;break;
 		case BOTONES_POD: this->botones.poder=defecto;break;
 		case BOTONES_PROTEC: this->botones.proteccion=defecto;break;
-		case PLAYER1: pelea.player1="subzero";break;
-		case PLAYER2: pelea.player2="scorpion";break;
+		case PLAYER1: pelea.player1=personajes.at(0).nombre;break;
+		case PLAYER2: pelea.player2=personajes.at(0).nombre;break;
 	}
 }
 
@@ -313,16 +356,22 @@ void config::escenarioDefecto(){
 	this->escenario.yPiso=10;
 }
 
-void config::personajeXDefecto(Tpersonaje& personajeX,string personajeXJson){
+void config::personajeXDefecto(){
 	string mensajeError="No se encuentra: personaje en el archivo Json. Se carga por defecto todas sus partes.";
 	loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_WAR);
-	personajeX.d.h = 50;
-	personajeX.d.w = 20;
-	if(!strcmp(personajeXJson.c_str(),"personaje1"))
-		personajeX.zIndex=this->personaje2.zIndex;
-	else
-		personajeX.zIndex=this->personaje1.zIndex;
-	personajeX.sprites = "./resources/sprites";
+	personaje1.d.h = 50;
+	personaje1.d.w = 20;
+	personaje1.zIndex=2;
+	personaje1.nombre="subzero";
+	personaje1.sprites = "./resources/sprites/subzero";
+
+	personaje2.d.h = 50;
+	personaje2.d.w = 20;
+	personaje2.zIndex=2;
+	personaje2.nombre="ermac";
+	personaje2.sprites = "./resources/sprites/ermac";
+	personajes.push_back(personaje1);
+	personajes.push_back(personaje2);
 }
 
 void config::ventanaDefecto(){
@@ -377,7 +426,7 @@ void config::botonesDefecto(){
 	botones.proteccion=10;
 }
 
-void config::validacionPath(string path,string personajeXJson){
+void config::validacionPath(string path){
 	ostringstream os;
 
 	int cantErroneos=0;
@@ -395,10 +444,8 @@ void config::validacionPath(string path,string personajeXJson){
 	}
 
 	if(!directorioExiste){
-		if(!strcmp(personajeXJson.c_str(),"personaje1"))
-			this->personaje1.sprites="./resources/sprites";
-		else
-			this->personaje2.sprites="./resources/sprites";
+
+		this->personaje1.sprites="./resources/sprites/subzero";
 
 		ostringstream mensajeError;
 		mensajeError<<"Directorios erroneos. Se cargan sprites por default.";
@@ -418,19 +465,18 @@ void config::validacionPath(string path,string personajeXJson){
 					os<<path<<"/"<<TestadoPersonajeToString(estado)<<"/"<<i<<".png";
 
 				if(!this->directorioExiste(os.str().c_str()))
-					this->copiarImagenDefault(cantErroneos,os.str().c_str(),personajeXJson);
+					this->copiarImagenDefault(cantErroneos,os.str().c_str());
 			}
 		}
 }
 
-void config::copiarImagenDefault(int &ContadorErroneos,const char* os,string personajeXJson){
+void config::copiarImagenDefault(int &ContadorErroneos,const char* os){
 
 	ContadorErroneos++;
 	if(ContadorErroneos==cantidadTotalSprites){
-		if(!strcmp(personajeXJson.c_str(),"personaje1"))
-			this->personaje1.sprites="./resources/sprites";
-		else
-			this->personaje2.sprites="./resources/sprites";
+
+		this->personaje1.sprites="./resources/sprites/subzero";
+
 		ostringstream mensajeError;
 		mensajeError<<"Falló la carga de todos los sprites. Se cargan sprites por default.";
 		loguer->loguear(mensajeError.str().c_str(), Log::Tlog::LOG_WAR);
@@ -472,19 +518,19 @@ void config::validacionTamanioYpiso(){
 }
 
 void config::validacionTamanioZindex(){
-	if((unsigned)personaje1.zIndex>= this->vectorCapas.size()&& (unsigned)personaje2.zIndex>= this->vectorCapas.size()){
-		personaje2.zIndex=1;
-		personaje1.zIndex=1;
+
+	for(unsigned int i=0;i<(personajes.size()-1);i++){
+
+		if(personajes.at(i).zIndex!=personajes.at(i+1).zIndex){
+			personajes.at(i+1).zIndex=personajes.at(i).zIndex;
+		}
+	}
+
+	if((unsigned)personajes.at(0).zIndex>= this->vectorCapas.size()){
+		for(unsigned int i=0;i<personajes.size();i++){
+			personajes.at(i).zIndex=1;
+		}
 		string mensajeError="En personaje: z-index, mas grande que las capas cargadas. Se carga por defecto z-index.";
-		loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_WAR);
-	}else
-	if((unsigned)personaje1.zIndex>= this->vectorCapas.size()){
-		personaje1.zIndex=personaje2.zIndex;
-		string mensajeError="Personaje1: z-index, es mas grande que las capas cargadas. Se carga por defecto z-index.";
-		loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_WAR);
-	}else if((unsigned)personaje2.zIndex>= this->vectorCapas.size()){
-		personaje2.zIndex=personaje1.zIndex;
-		string mensajeError="Personaje2: z-index, es mas grande que las capas cargadas. Se carga por defecto z-index.";
 		loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_WAR);
 	}
 
@@ -539,13 +585,7 @@ void config::validacionPositivoF(float num,string parte,string conf){
 			else
 				this->escenario.yPiso=1;
 		} else
-		if(strcmp(parte.c_str(),"personaje1")==0){
-			if(strcmp(conf.c_str(),"ancho")==0)
-				this->personaje1.d.w = 20;
-			else
-				this->personaje1.d.h = 35;
-		} else
-		if(strcmp(parte.c_str(),"personaje2")==0){
+		if(strcmp(parte.c_str(),"personaje")==0){
 			if(strcmp(conf.c_str(),"ancho")==0)
 				this->personaje1.d.w = 20;
 			else
@@ -576,10 +616,10 @@ int config::cantSprites(TestadoPersonaje e){
 			cant=8;
 			break;
 		case MOV_SALTANDO_OBLICUO:
-			cant=9;
+			cant=10;
 			break;
 		case MOV_SALTANDO_VERTICAL:
-			cant=3;
+			cant=5;
 			break;
 		case ACC_PINIA_BAJA:
 			cant=4;break;
@@ -646,18 +686,23 @@ Tescenario config::getEscenario(){
 
 vector <Tpersonaje> config::getPersonajes(){
 	vector <Tpersonaje> vectorPersonajes;
-	if(strcmp(pelea.player1.c_str(),pelea.player2.c_str())){
-		vectorPersonajes.push_back(personaje1);
-		vectorPersonajes.push_back(personaje2);
-	}else{
-		if(!strcmp(pelea.player1.c_str(),personaje1.nombre.c_str())){
-			vectorPersonajes.push_back(personaje1);
-			vectorPersonajes.push_back(personaje1);
-		}else{
-			vectorPersonajes.push_back(personaje2);
-			vectorPersonajes.push_back(personaje2);
+
+	unsigned int i=0;
+	if(personajes.size()==1){
+		loguer->loguear("Un solo personaje en personajes, se selecciona el mismo personaje dos veces",Log::Tlog::LOG_WAR);
+		vectorPersonajes.push_back(personajes.at(0));
+		vectorPersonajes.push_back(personajes.at(0));
+	}else
+		while(i<personajes.size()||vectorPersonajes.size()!=2){
+
+			if(!strcmp(pelea.player1.c_str(),personajes.at(i).nombre.c_str()) && !strcmp(pelea.player2.c_str(),personajes.at(i).nombre.c_str())){
+				vectorPersonajes.push_back(personajes.at(i));
+				vectorPersonajes.push_back(personajes.at(i));
+			}else if(!strcmp(pelea.player1.c_str(),personajes.at(i).nombre.c_str())||!strcmp(pelea.player2.c_str(),personajes.at(i).nombre.c_str()))
+				vectorPersonajes.push_back(personajes.at(i));
+			i++;
 		}
-	}
+
 	return vectorPersonajes;
 }
 

@@ -7,7 +7,8 @@
 
 class SaltoOblicuo : public Accion{
 
-private:
+
+public:
 	bool estado;
 	bool orientacion;
 	float a;
@@ -25,12 +26,12 @@ private:
 
 	Posicion posImg;
 
-public:
-
 	SaltoOblicuo(float altura);
 
 	bool getEstado();
 	void setEstado(bool nuevoEstado, Posicion nuevaPosicion,bool sentidoSalto);
+
+	void setEstado(bool nuevoEstado);
 
 	void setConfiguracion(float alturaSalto, float longitudSalto, float intervaloSalto);
 

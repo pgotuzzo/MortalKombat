@@ -24,6 +24,7 @@ public:
 	float getAlto();
 	float getAltoPiso();
 
+	int loopsReaccionGolpeFuerte;
 	vector<Tcambio> actualizarMundo(vector<Tinput> inputs);
 
 	virtual ~Mundo();
@@ -34,7 +35,7 @@ public:
 
 	void verificarQueNoSeVallaDeLaPantalla();
 
-	void verificarColision(bool generaViolencia,TestadoPersonaje estadoViolento,Personaje* PJ,ObjetoColisionable* objeto,bool esPoder);
+	void verificarColision(bool generaViolencia,Personaje* agresor,Personaje* PJ,ObjetoColisionable* objeto,bool esPoder);
 
 	Tcambio actualizarPJ(Personaje* PJ);
 

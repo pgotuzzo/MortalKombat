@@ -9,6 +9,7 @@ class Accion {
 public:
 	bool accion_activada;
 	Posicion pos_inicial;
+	Posicion posFinal;
 	bool estado;
 
 	Accion();

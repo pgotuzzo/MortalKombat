@@ -71,6 +71,7 @@ public:
 	bool getDireccion();
 	bool getSentido();
 
+	void realizarReaccion(TestadoPersonaje estadoReaccion);
 	virtual ~Personaje();
 
 	void caminar(bool direc);

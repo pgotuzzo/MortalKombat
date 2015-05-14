@@ -34,6 +34,10 @@ void Caminar::setEstado(bool nuevoEstado,bool nuevaDireccion){
 	estado = nuevoEstado;
 }
 
+void Caminar::setEstado(bool nuevoEstado) {
+	estado = nuevoEstado;
+}
+
 bool Caminar::getEstado(){
 	return estado;
 }

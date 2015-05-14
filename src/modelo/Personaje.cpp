@@ -287,10 +287,6 @@ bool Personaje::seguirPegando(TestadoPersonaje estadoInput) {
 	if(estado == ACC_PODER && (estadoInput == MOV_PARADO || estadoInput == MOV_SALTANDO_VERTICAL) && loopsGolpe >0){
 		return true;
 	}
-	//cout<<loopsReaccionGolpeFuerte<<endl;
-	if(estado == REA_GOLPE_FUERTE || loopsReaccionGolpeFuerte > 0){
-		return true;
-	}
 	return false;
 }
 
@@ -305,7 +301,7 @@ void Personaje::realizarAccion(Tinput orden,float anchoEscenario) {
 	posAnt = pos;
 	golpe->setAlturaPJ(altura);
 	TestadoPersonaje estadoInput = generarEstado(orden);
-	cout<<estadoInput<<endl;
+	//cout<<estadoInput<<endl;
 	if(!seguirPegando(estadoInput)) {
 		switch (estadoInput) {
 			case MOV_AGACHADO:
@@ -729,3 +725,25 @@ void Personaje::saltarOblicuamente(bool direc) {
 
 }
 
+void Personaje::realizarReaccion(TestadoPersonaje estadoReaccion) {
+
+	switch(estadoReaccion){
+		case (REA_GOLPE_FUERTE):
+			accionesEnCurso[3]->setConfiguracion(30, 60, 10);
+			if (direccion) {
+				if (!accionesEnCurso[3]->getEstado()) {
+					accionesEnCurso[3]->setEstado(true, pos, false);
+				}
+			}
+			else {
+				if (!accionesEnCurso[3]->getEstado()) {
+					accionesEnCurso[3]->setEstado(true, pos, true);
+				}
+			}
+			break;
+		default:
+			break;
+	}
+
+
+}
