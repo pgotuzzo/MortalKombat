@@ -286,6 +286,16 @@ Tdimension VistaUtils::getDimension(SDL_Texture* tIndex, Tdimension* dIndex, SDL
     return dimension;
 }
 
+
+Tdimension VistaUtils::getDimension(SDL_Texture *texture, float scales[2]) {
+    int w, h;
+    SDL_QueryTexture(texture, NULL, NULL, &w, &h);
+
+    Tdimension dimension = {w / scales[0], h / scales[1]};
+
+    return dimension;
+}
+
 VistaUtils::~VistaUtils() {
     for (unsigned i = 0; i < mAuxTextures.size(); i++){
         SDL_DestroyTexture(mAuxTextures.at(i));

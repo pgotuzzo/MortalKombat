@@ -3,6 +3,10 @@
 #include "Sprite.h"
 
 Sprite::Sprite(VistaUtils* utils, string dirPath, bool repeat) {
+    initialize(utils, dirPath, repeat);
+}
+
+void Sprite::initialize(VistaUtils *utils, string dirPath, bool repeat) {
     mCurrent = 0;
     mRepeat = repeat;
     mFirstPass = true;
@@ -30,6 +34,7 @@ Sprite::Sprite(VistaUtils* utils, string dirPath, bool repeat) {
 
     }while(!end);
 }
+
 
 long Sprite::getCount() {
     return mTextures.size();

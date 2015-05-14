@@ -417,16 +417,21 @@ enum Tsentido{
 };
 
 
+static const int TestadoPoderCount = 3;
+
 enum TestadoPoder{
     ACTIVADO,
     DESACTIVADO,
-    COLISION,
+    COLISION
 };
+
+static const string PODER_ACTIVADO_PATH = "pod_poder";
+static const string PODER_COLISION_PATH = "pod_colision";
 
 struct TcambioPoder{
     TestadoPoder e;
-    Tdimension d;
     Posicion p;
+    Tdimension d;
 };
 
 /**

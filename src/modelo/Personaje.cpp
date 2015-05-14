@@ -409,8 +409,8 @@ void Personaje::realizarAccion(Tinput orden,float anchoEscenario) {
 				if(estado != ACC_PROTECCION || estado != ACC_PROTECCION_AGACHADO){
 					if (estado == MOV_PARADO || estado == MOV_SALTANDO_VERTICAL) {
 						if (!poder->estado) {
-							loopsGolpe = 3;
 							poder->activar(this->pos, this->direccion, danioPoder, true);
+							loopsGolpe = 3;
 							estado = ACC_PODER;
 						}
 						parado = false;

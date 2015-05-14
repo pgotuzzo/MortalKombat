@@ -14,7 +14,7 @@ private:
     SDL_Renderer* mRenderer;
     vector<SDL_Texture*> mAuxTextures;
 
-    void getScales(SDL_Texture* texture, Tdimension* dimension, float scales[2]);
+
     void changeColor(SDL_Surface* surface);
     Uint32 getPixel(SDL_Surface* surface, int i);
     void putPixel(SDL_Surface* surface, int i, Uint32 pixel);
@@ -30,6 +30,8 @@ public:
     void copyTexture(SDL_Texture* src, SDL_Texture* dst, Trect* srcRect, Trect* dstRect, Tdimension* srcDim, Tdimension* dstDim);
     void copyTexture(SDL_Texture* src, SDL_Texture* dst, Trect* srcRect, Trect* dstRect, Tdimension* srcDim, Tdimension* dstDim, bool flip);
     Tdimension getDimension(SDL_Texture* tIndex, Tdimension* dIndex, SDL_Texture *texture);
+    void getScales(SDL_Texture* texture, Tdimension* dimension, float scales[2]);
+    Tdimension getDimension(SDL_Texture* texture, float scales[2]);
     void cleanTexture(SDL_Texture* t);
 
     virtual ~VistaUtils();

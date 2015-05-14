@@ -383,8 +383,13 @@ void Colisionador::solucionarColision(Personaje *PJ, Poder *poderOponente) {
         cout<<"Personaje que recibio el poder"<<endl;
         PJ->pos.mostrarPar();
         cout<<"Costado Derecho del PODER: "<<poderOponente->pos.getX() + poderOponente->ancho<<endl;
+        poderOponente->estadoPoder = COLISION;
+        poderOponente->estado = false;
     }
-    poderOponente->estado = false;
+//    else {
+//        poderOponente->estado = true;
+//        poderOponente->estadoPoder = ACTIVADO;
+//    }
 
 
 
