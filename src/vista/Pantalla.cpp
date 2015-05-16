@@ -157,7 +157,7 @@ void Pantalla::update(vector<Tcambio> changes) {
     bool vibrar =false;
     // La idea es q el tiempo q la cant de ciclos que tiene q vibrar  y cuando venga desde afuera
     // si les molesta la vibracion comenten esto ajjaja
-    if (contador>40) vibrar =true;
+    //if (contador>40) vibrar =true;
     contador = contador+1;
     if (contador>50) contador =0;
 

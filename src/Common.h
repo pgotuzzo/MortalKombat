@@ -13,6 +13,7 @@
 #include <string>
 #include <cstring>
 #include <iostream>
+#include <vector>
 #include "parser/log/WarningLog.h"
 #include "parser/log/DebugLog.h"
 #include "parser/log/ErrorLog.h"
@@ -241,20 +242,47 @@ struct Tescenario {
     float yPiso;
 };
 
+enum Tdireccion{
+    DERECHA,
+    IZQUIERDA
+};
+
+struct Tpersonaje {
+    Tdimension d;
+    int zIndex;
+    Tdireccion orientacion = DERECHA;
+    string nombre;
+    string sprites;
+
+    // para el personaje alternativo
+    TcolorSettings colorSettings;
+};
+
 struct Tpelea {
     string player1;
     string player2;
 
-    void valida(){
+    void valida(vector<Tpersonaje> personajes){
+        string igual;
+        int cont=0;
+        for(unsigned int i=0;i<personajes.size();i++)
+            if(!strcmp(player1.c_str(),personajes.at(i).nombre.c_str())||!strcmp(player2.c_str(),personajes.at(i).nombre.c_str())){
+                igual=personajes.at(i).nombre;
+                cont++;
+            }
+        if(cont==1){
+            if(player1==igual)
+                this->player2=igual;
+            else
+                player1=igual;
+        }
+        if(cont==0){
+            player1=personajes.at(0).nombre;
+            player2=personajes.at(0).nombre;
+        }
 
-        if(strcmp(player1.c_str(),"scorpion")&&strcmp(player1.c_str(),"subzero")){
-            loguer->loguear("Nombre no valido, se carga por defecto",Log::Tlog::LOG_WAR);
-            player1="scorpion";
-        }
-        if(strcmp(player2.c_str(),"scorpion")&&strcmp(player2.c_str(),"subzero")){
-            loguer->loguear("Nombre no valido, se carga por defecto",Log::Tlog::LOG_WAR);
-            player2="scorpion";
-        }
+
+
     }
 };
 
@@ -383,26 +411,11 @@ static string TestadoPersonajeToString(TestadoPersonaje e){
     return NULL;
 }
 
-enum Tdireccion{
-    DERECHA,
-    IZQUIERDA
-};
-
 enum Tsentido{
     ADELANTE,
     ATRAS
 };
 
-struct Tpersonaje {
-    Tdimension d;
-    int zIndex;
-    Tdireccion orientacion = DERECHA;
-    string nombre;
-    string sprites;
-
-    // para el personaje alternativo
-    TcolorSettings colorSettings;
-};
 
 static const int TestadoPoderCount = 3;
 

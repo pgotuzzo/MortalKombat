@@ -59,6 +59,10 @@ bool SaltoOblicuo::getEstado() {
 	return estado;
 }
 
+void SaltoOblicuo::setEstado(bool nuevoEstado) {
+	estado = nuevoEstado;
+}
+
 /*
  * Se devuelve la posicion del personaje luego de un intervalo de salto hecho.
  */

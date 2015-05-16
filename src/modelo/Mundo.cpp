@@ -24,6 +24,7 @@ Mundo::Mundo(config configuracion) {
 	Tpersonaje PJ1 = personajes[0];
 	Tpersonaje PJ2 = personajes[1];
 
+	loopsReaccionGolpeFuerte = 0;
 
 	anchoEscenario = escenario.d.w;
 	altoEscenario = escenario.d.h;
@@ -115,10 +116,10 @@ vector<Tcambio> Mundo::actualizarMundo(vector<Tinput> inputs) {
 
 	//Colision entre el personaje y el golpe
 	bool esPoder = true;
-	verificarColision(personaje2->lanzandoGolpe,personaje2->estado,personaje1,personaje2->golpe,!esPoder);
+	verificarColision(personaje2->lanzandoGolpe,personaje2,personaje1,personaje2->golpe,!esPoder);
 	string mensajePJ1 = "Vida del personaje 1: " + to_string(personaje1->vida);
 	if(personaje1->vida < 100 && personaje1->vida > 0)loguer->loguear(mensajePJ1.c_str(),Log::LOG_DEB);
-	verificarColision(personaje1->lanzandoGolpe,personaje1->estado,personaje2,personaje1->golpe,!esPoder);
+	verificarColision(personaje1->lanzandoGolpe,personaje1,personaje2,personaje1->golpe,!esPoder);
 	string mensajePJ2 = "Vida del personaje 2: " + to_string(personaje2->vida);
 	if(personaje2->vida < 100 && personaje2->vida > 0)loguer->loguear(mensajePJ2.c_str(),Log::LOG_DEB);
 
@@ -131,8 +132,8 @@ vector<Tcambio> Mundo::actualizarMundo(vector<Tinput> inputs) {
 		cout<<"personaje que lanza el poder"<<endl;
 		personaje2->pos.mostrarPar();
 	}
-	verificarColision(personaje2->lanzandoPoder,personaje2->estado,personaje1,personaje2->poder,esPoder);
-	verificarColision(personaje1->lanzandoPoder,personaje1->estado,personaje2,personaje1->poder,esPoder);
+	verificarColision(personaje2->lanzandoPoder,personaje2,personaje1,personaje2->poder,esPoder);
+	verificarColision(personaje1->lanzandoPoder,personaje1,personaje2,personaje1->poder,esPoder);
 
 	//Se actualizan a los personajes
 	cambio1 = actualizarPJ(personaje1);
@@ -149,33 +150,19 @@ vector<Tcambio> Mundo::actualizarMundo(vector<Tinput> inputs) {
 }
 
 
-void Mundo::verificarColision(bool generaViolencia,TestadoPersonaje estadoViolento,Personaje* PJ,ObjetoColisionable *objeto, bool esPoder) {
+void Mundo::verificarColision(bool generaViolencia,Personaje* agresor,Personaje* PJ,ObjetoColisionable *objeto, bool esPoder) {
 	if (generaViolencia) {
-		switch (estadoViolento) {
-			case (ACC_PATADA_ALTA_ATRAS):
-				if (colisionador.sonProximos(personaje1, personaje2, 8) && !esPoder) {
-					if(PJ->estado == MOV_PARADO) cout<<"Esta parado"<<endl;
-					//cout<<"Personaje que recibe el poder"<<endl;
-					//PJ->pos.mostrarPar();
-					colisionador.solucionarColision(PJ, estadoViolento, (Golpe *) objeto);
-				}
-				break;
-			default:
-				if (colisionador.sonProximos(personaje1, personaje2, 10) && !esPoder) {
-					//cout<<"Personaje que recibe el poder"<<endl;
-					//PJ->pos.mostrarPar();
-					colisionador.solucionarColision(PJ, estadoViolento, (Golpe *) objeto);
-				}
-				break;
+		if(!esPoder){
+			colisionador.solucionarColision(PJ, agresor, (Golpe *) objeto);
 		}
-		if (esPoder) {
+		else {
 			if (PJ->direccion) {
 				if (colisionador.distanciaColisionadaenX(PJ,objeto)>0){
 					objeto->pos.setX(objeto->pos.getX() + colisionador.distanciaColisionadaenX(PJ,objeto));
 					colisionador.solucionarColision(PJ, (Poder *) objeto);
 				}
 			}
-			else
+			else{
 				if (colisionador.distanciaColisionadaenX(objeto,PJ)>0){
 					objeto->pos.setX(objeto->pos.getX() - colisionador.distanciaColisionadaenX(objeto,PJ));
 					colisionador.solucionarColision(PJ, (Poder *) objeto);
@@ -184,7 +171,27 @@ void Mundo::verificarColision(bool generaViolencia,TestadoPersonaje estadoViolen
 			}
 		}
 	}
-
+	if (PJ->estado == REA_GOLPE_FUERTE){
+		loopsReaccionGolpeFuerte++;
+		PJ->accionesEnCurso[3]->setConfiguracion(30, 60, 10);
+		if (PJ->direccion) {
+			if (!PJ->accionesEnCurso[3]->getEstado()) {
+				PJ->accionesEnCurso[3]->setEstado(true, PJ->pos, false);
+			}
+		}
+		else {
+			if (!PJ->accionesEnCurso[3]->getEstado()) {
+				PJ->accionesEnCurso[3]->setEstado(true, PJ->pos, true);
+			}
+		}
+		cout<<loopsReaccionGolpeFuerte<<endl;
+		if(loopsReaccionGolpeFuerte >= 13){
+			PJ->accionesEnCurso[3]->setEstado(false);
+			PJ->estado = MOV_PARADO;
+			loopsReaccionGolpeFuerte = 0;
+		}
+	}
+}
 
 Tcambio Mundo::actualizarPJ(Personaje *PJ) {
 	Tcambio cambio;
@@ -199,7 +206,6 @@ Tcambio Mundo::actualizarPJ(Personaje *PJ) {
 
 	cambio.vida = PJ->vida;
 
-	cambio.poder.e = PJ->poder->estadoPoder;
 	cambio.poder.d.h = PJ->poder->altura;
 	cambio.poder.d.w = PJ->poder->ancho;
 	cambio.poder.p = PJ->poder->pos;
