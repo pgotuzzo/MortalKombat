@@ -89,5 +89,6 @@ add_executable(MortalKombat ${SOURCE_FILES})
 target_link_libraries(MortalKombat
                         SDL2main
                         SDL2
-                        SDL2_image)
+                        SDL2_image
+                        SDL2_ttf)
 
