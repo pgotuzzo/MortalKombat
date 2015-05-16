@@ -80,9 +80,6 @@ void PersonajeVista::getTexture(SDL_Texture* ventana, float x) {
             texture = mSprites[mCurrentState].getNext();
     }
 
-    // Calculo la dimension de la textura comparandola con la textura por defecto
-//    Tdimension d = mUtils->getDimension(mDefaultTexture, &mDefaultTextureDimension, texture);
-
     /**
      * mCurrentRect = Trect que maneja el modelo
      * r = Trect que tiene maneja la vista
@@ -100,11 +97,6 @@ void PersonajeVista::getTexture(SDL_Texture* ventana, float x) {
      *       -------------------------
      *
      */
-
-//    Trect r;
-//    r.d = d;
-//    r.p.y = mCurrentRect.p.y + mCurrentRect.d.h - r.d.h;
-//    r.p.x = mCurrentRect.p.x - x + mCurrentRect.d.w / 2.0F - r.d.w / 2.0F;
 
     Trect r;
     r.d = mUtils->getDimension(texture, mScales);

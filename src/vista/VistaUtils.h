@@ -4,6 +4,7 @@
 #include <SDL2/SDL_render.h>
 #include <string>
 #include <vector>
+#include <SDL2/SDL_ttf.h>
 #include "../Common.h"
 
 class VistaUtils {
@@ -29,10 +30,12 @@ public:
     void copyTexture(SDL_Texture* src, SDL_Texture* dst, bool flip);
     void copyTexture(SDL_Texture* src, SDL_Texture* dst, Trect* srcRect, Trect* dstRect, Tdimension* srcDim, Tdimension* dstDim);
     void copyTexture(SDL_Texture* src, SDL_Texture* dst, Trect* srcRect, Trect* dstRect, Tdimension* srcDim, Tdimension* dstDim, bool flip);
+    Tdimension getDimension(SDL_Texture *texture);
     Tdimension getDimension(SDL_Texture* tIndex, Tdimension* dIndex, SDL_Texture *texture);
     void getScales(SDL_Texture* texture, Tdimension* dimension, float scales[2]);
     Tdimension getDimension(SDL_Texture* texture, float scales[2]);
     void cleanTexture(SDL_Texture* t);
+    SDL_Texture* createTexture(string fontPath, string string, int size);
 
     virtual ~VistaUtils();
 };

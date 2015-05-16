@@ -27,7 +27,7 @@ private:
 
     void InicializarSdl(Tdimension d);
     void InicializarPersonajes(vector<Tpersonaje> personajes);
-    void InicializarCapas(vector<Tcapa> capas);
+    void InicializarCapas(vector<Tcapa> capas, string personajes[2]);
 
     bool vibroADerecha;
     int contador;

@@ -156,6 +156,22 @@ SDL_Texture *VistaUtils::createTexture(Tdimension dimension) {
     return nullptr;
 }
 
+SDL_Texture *VistaUtils::createTexture(string fontPath, string text, int size) {
+    TTF_Font* font = TTF_OpenFont(fontPath.c_str(), size);
+    if (font == NULL) {
+        loguer->loguear("No se pudo cargar la fuente.", Log::LOG_ERR);
+        loguer->loguear(TTF_GetError(), Log::LOG_ERR);
+        throw new exception();
+    }
+
+    SDL_Color black = {255, 255, 255, 0};
+
+    SDL_Surface* surface = TTF_RenderText_Blended(font, text.c_str(), black);
+    SDL_Texture* textTexture = SDL_CreateTextureFromSurface(mRenderer, surface);
+
+    return textTexture;
+}
+
 /**
  * Se crea una textura a partir de un path, respetando la relacion de aspecto.
  */
@@ -271,6 +287,19 @@ void VistaUtils::cleanTexture(SDL_Texture* t){
 }
 
 /**
+ * Obtiene la dimension en unidades logicas de una textura.
+ *  Utilizando la relacion pixel / unidad logica de la ventana.
+ */
+Tdimension VistaUtils::getDimension(SDL_Texture *texture){
+    int w, h;
+    SDL_QueryTexture(texture, NULL, NULL, &w, &h);
+
+    Tdimension dimension = {w / mScales[0], h / mScales[1]};
+
+    return dimension;
+}
+
+/**
  * Obtiene la dimension en unidades lógicas de una textura, comparandola con otra
  *  de la cual conocemos sus dimensiones.
  */
@@ -301,4 +330,5 @@ VistaUtils::~VistaUtils() {
         SDL_DestroyTexture(mAuxTextures.at(i));
     }
 }
+
 

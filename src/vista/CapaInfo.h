@@ -1,7 +1,3 @@
-//
-// Created by fran on 09/05/15.
-//
-
 #ifndef MORTALKOMBAT_CAPAINFO_H
 #define MORTALKOMBAT_CAPAINFO_H
 
@@ -13,11 +9,14 @@
 class CapaInfo {
 private:
     VistaUtils* mUtils;
-    SDL_Texture * barraVidaCompletaText;
-    SDL_Texture * barraVidaParcialText;
+    SDL_Texture* barraVidaCompletaText;
+    SDL_Texture* barraVidaParcialText;
+    SDL_Texture* mNombre1;
+    SDL_Texture* mNombre2;
     float anchoBorde, anchoRelleno,anchoPantalla, distBorde;
     Trect barraVidaCompleta1, barraVidaCompleta2, barraVidaParcialPedazo1,
-            barraVidaParcialPedazo2,barraVidaParcialPantalla1,barraVidaParcialPantalla2;
+            barraVidaParcialPedazo2, barraVidaParcialPantalla1, barraVidaParcialPantalla2,
+            mNombre1Rect, mNombre2Rect;
 
 
 public:
@@ -29,7 +28,7 @@ public:
     *  rectPantalla : contiene el tamaño de la pantalla y la posicion inicial de la
     *  capa en relacion a su tamaño total de la imagen
     */
-    CapaInfo(VistaUtils* utils, Tdimension dimPantalla);
+    CapaInfo(VistaUtils* utils, Tdimension dimPantalla, string nombres[2]);
 
 
     /*

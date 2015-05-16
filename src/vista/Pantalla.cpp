@@ -1,6 +1,7 @@
 #include "Pantalla.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
 
 const float distVibracion = 5;
 
@@ -12,13 +13,33 @@ const float distVibracion = 5;
  *
  * d    Dimensiones en pixeles
  */
-void Pantalla::InicializarSdl(Tdimension d) {
+void Pantalla::InicializarSdl(Tdimension d){
     loguer->loguear("Inicia SDL", Log::LOG_DEB);
-    if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
+    if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
         loguer->loguear("Fallo la inicializacion de SDL.", Log::LOG_ERR);
+        loguer->loguear(SDL_GetError(), Log::LOG_ERR);
+        throw new exception();
+    }
 
-    mWindow = SDL_CreateWindow("MortalKombat", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, d.w, d.h, SDL_WINDOW_SHOWN);
+    if (TTF_Init() < 0) {
+        loguer->loguear("Fallo la inicializacion de TTF.", Log::LOG_ERR);
+        loguer->loguear(TTF_GetError(), Log::LOG_ERR);
+        throw new exception();
+    }
+
+    mWindow = SDL_CreateWindow("MortalKombat", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, (int) d.w, (int) d.h, SDL_WINDOW_SHOWN);
+    if (mWindow == NULL){
+        loguer->loguear("Error al crear la ventana.", Log::LOG_ERR);
+        loguer->loguear(SDL_GetError(), Log::LOG_ERR);
+        throw new exception();
+    }
+
     mRenderer = SDL_CreateRenderer(mWindow, -1, SDL_RENDERER_ACCELERATED);
+    if (mRenderer == NULL){
+        loguer->loguear("Error al crear el renderer.", Log::LOG_ERR);
+        loguer->loguear(SDL_GetError(), Log::LOG_ERR);
+        throw new exception();
+    }
 
     float scales[2] = {d.w / mDimension.w, d.h / mDimension.h};
     mUtils = new VistaUtils(mRenderer, mDimension.w / mDimension.h, scales);
@@ -37,13 +58,13 @@ void Pantalla::InicializarPersonajes(vector<Tpersonaje> personajes) {
     }
 
     // zIndex y ancho del personaje igual para ambos personajes
+    // TODO - El ancho del personaje no tiene por que ser igual para ambos
     zIndex = personajes[0].zIndex;
     mAnchoPersonaje = personajes[0].d.w;
 
     // TODO - Mejorar la lógica, sobre todo si se van a tener mas de 2 personajes
     for (unsigned i = 0; i < personajes.size(); i++) {
         PersonajeVista p;
-        string* path = new string(personajes[i].sprites);
         if ((i != 0) && (personajes[i].sprites == personajes[0].sprites)){
             mUtils->setColorSetting(personajes[i].colorSettings);
             p = PersonajeVista(mUtils, personajes[i].sprites, personajes[i].d, personajes[i].orientacion);
@@ -62,7 +83,7 @@ void Pantalla::InicializarPersonajes(vector<Tpersonaje> personajes) {
  * \observacion Para que se puedan inicializar las capas, previamente se tuvo que inicializar los
  *              componentes de SDL (mUtils)
  */
-void Pantalla::InicializarCapas(vector<Tcapa> capas) {
+void Pantalla::InicializarCapas(vector<Tcapa> capas, string personajes[2]) {
     if (mUtils == nullptr){
         loguer->loguear("No se pueden crear las vistas de las capas sin antes inicializar SDL", Log::LOG_ERR);
         throw new exception;
@@ -77,7 +98,7 @@ void Pantalla::InicializarCapas(vector<Tcapa> capas) {
         mCapas.push_back(capa);
     }
 
-    capaInfo = CapaInfo( mUtils, mDimension);
+    capaInfo = CapaInfo(mUtils, mDimension, personajes);
 }
 
 /*
@@ -100,7 +121,8 @@ Pantalla::Pantalla(vector<Tcapa> capas, Tventana ventana, Tescenario escenario, 
     InicializarPersonajes(personajes);
 
     // Capas
-    InicializarCapas(capas);
+    string nombres[2] = {personajes[0].nombre, personajes[1].nombre};
+    InicializarCapas(capas, nombres);
     vibroADerecha = false;
     contador = 0;
 };
