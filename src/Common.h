@@ -23,6 +23,7 @@
  */
 static const string SPRITES_FORMAT = ".png";
 static const float MIN_DISTANCE_FROM_BOUND = 20;
+const float velocidadDelPoder = 30;
 
 /**
  * Estas estructuras, pseudo-clases cruzan toda
@@ -368,7 +369,7 @@ enum TestadoPersonaje {
     ACC_PODER,
 
     // Reaccion
-    REA_AGACHADO,
+            REA_AGACHADO,
     REA_GOLPE_ALTO, // patada alta y pinia en salto
     REA_GOLPE_BAJO,
     REA_GOLPE_FUERTE, // gancho y patada alta (+ atras)
@@ -380,6 +381,7 @@ static string TestadoPersonajeToString(TestadoPersonaje e){
     switch (e) {
         case TestadoPersonaje::MOV_PARADO: return "mov_parado";
         case TestadoPersonaje::MOV_CAMINANDO: return "mov_caminando";
+
         case TestadoPersonaje::MOV_SALTANDO_VERTICAL: return "mov_salto_vertical";
         case TestadoPersonaje::MOV_SALTANDO_OBLICUO: return "mov_salto_oblicuo";
         case TestadoPersonaje::MOV_AGACHADO: return "mov_agachado";
@@ -496,5 +498,73 @@ struct Tinput{
     TinputAccion accion=TinputAccion::KEY_NADA;
     TinputGame game= TinputGame::KEY_NADA;
 };
+
+
+//PERSONAJE ------------------------------
+
+//funcion que devuelve la cantidad de loops que se hacen para cada accion
+
+static int loopsPara(TestadoPersonaje accion){
+
+    switch (accion){
+
+        case MOV_PARADO:
+            // infinito (?
+            return 1;
+        case MOV_CAMINANDO:
+            return 1;
+        case MOV_SALTANDO_VERTICAL:
+            return 10;
+        case MOV_SALTANDO_OBLICUO:
+            return 20;
+        case MOV_AGACHADO:
+            return 1;
+        case ACC_PINIA_BAJA:
+            // OJO VER COMO SOLUCIONAR VARIOS ESTADOS
+            return 4;
+        case ACC_PINIA_BAJA_AGACHADO:
+            return 4;
+        case ACC_PINIA_ALTA:
+            //pensar lo mismo que pinia baja
+            return 4;
+        case ACC_PINIA_ALTA_AGACHADO:
+            return 5;
+        case ACC_PINIA_SALTO:
+            return 20;
+        case ACC_PATADA_BAJA:
+            return 12;
+        case ACC_PATADA_BAJA_ATRAS:
+            return 8;
+        case ACC_PATADA_AGACHADO:
+            return 4;
+        case ACC_PATADA_SALTO_VERTICAL:
+            return 10;
+        case ACC_PATADA_SALTO:
+            return 20;
+        case ACC_PATADA_ALTA:
+            return 12;
+        case ACC_PATADA_ALTA_ATRAS:
+            return 8;
+        case ACC_PROTECCION:
+            return 1;
+        case ACC_PROTECCION_AGACHADO:
+            return 1;
+        case ACC_PODER:
+            return 3;
+        case REA_AGACHADO:
+            return 1;
+//        case REA_GOLPE_ALTO:
+//            break;
+//        case REA_GOLPE_BAJO:
+//            break;
+//        case REA_GOLPE_FUERTE:
+//            break;
+//        case REA_PATADA_BARRIDA:
+//            break;
+//        case REA_PINIA_ALTA:
+//            break;
+    }
+}
+
 
 #endif //_MORTALKOMBAT_COMMON_H_

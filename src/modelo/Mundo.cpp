@@ -24,48 +24,41 @@ Mundo::Mundo(config configuracion) {
 	Tpersonaje PJ1 = personajes[0];
 	Tpersonaje PJ2 = personajes[1];
 
-	loopsReaccionGolpeFuerte = 0;
-
 	anchoEscenario = escenario.d.w;
 	altoEscenario = escenario.d.h;
 	altoPiso = escenario.yPiso;
 
-	float altoPJ1 = PJ1.d.h;
-	float anchoPJ1 = PJ1.d.w;
-	float altoPJ2 = PJ2.d.h;
-	float anchoPJ2 = PJ2.d.w;
-
-	float pos_x = anchoEscenario/2;
-	float pos_y1 = altoEscenario - altoPiso - altoPJ1;
-	float pos_y2 = altoEscenario - altoPiso - altoPJ2;
+	float pos_x1 = anchoEscenario/2 - anchoVentana/2 + MIN_DISTANCE_FROM_BOUND;
+	float pos_x2 = anchoEscenario/2 + anchoVentana/2 - PJ2.d.w - MIN_DISTANCE_FROM_BOUND;
+	float pos_y1 = altoEscenario - altoPiso - PJ1.d.h;
+	float pos_y2 = altoEscenario - altoPiso - PJ2.d.h;
 
 	Tdireccion direccion1 = PJ1.orientacion;
 	Tdireccion direccion2 = PJ2.orientacion;
 
-	bool dir1, dir2;
-
-	if (direccion1 == DERECHA) dir1 = true;
-	else dir1 = false;
-
-	if(direccion2 == DERECHA) dir2 = true;
-	else dir2 = false;
-
+	Trect rectanguloPj1,rectanguloPj2;
+	rectanguloPj1.d = PJ1.d;
+	rectanguloPj2.d = PJ2.d;
+	rectanguloPj1.p = {pos_x1, pos_y1};
+	rectanguloPj2.p = {pos_x2,pos_y2};
 
 	//TODO: EL PJ1 Y PJ2 EMPIEZAN EN LADOS OPUESTOS - lo dejamos asi por los controles del teclado
 
-	personaje1 = new Personaje(dir1,Posicion(pos_x+anchoVentana/2-anchoPJ1-MIN_DISTANCE_FROM_BOUND,pos_y1),altoPJ1,anchoPJ1);
-	cout<<"Costado izquierdo personaje 1: "<<personaje1->pos.getX() - personaje1->ancho/2<<endl;
-	personaje2 = new Personaje(dir2,Posicion(pos_x-anchoVentana/2+MIN_DISTANCE_FROM_BOUND,pos_y2),altoPJ2,anchoPJ2);
-	cout<<"Costado derecho personaje 2: "<<personaje2->pos.getX() + personaje2->ancho/2<<endl;
-	colisionador = Colisionador();
-	colisionador.setEscenario(anchoEscenario);
+	personaje1 = new Personaje(direccion1,rectanguloPj1,anchoVentana);
+	//cout<<"Costado izquierdo personaje 1: "<<personaje1->rectanguloPj.p.getX() - personaje1->rectanguloPj.d.w<<endl;
+	personaje2 = new Personaje(direccion2,rectanguloPj2,anchoVentana);
+	//cout<<"Costado derecho personaje 2: "<<personaje2->rectanguloPj.p.getX() + personaje2->rectanguloPj.d.w<<endl;
+
+
+	colisionador = DetectorDeColisiones();
+
 	anchoPantalla = configuracion.getVentana().ancho;
 }
 
 
-Personaje* Mundo::getPersonaje(){
-	return personaje1;
-}
+vector<Personaje*> Mundo::getPersonajes(){
+	return vector<Personaje*> {personaje1,personaje2};
+};
 
 float Mundo::getAlto(){
 	return altoEscenario;
@@ -77,6 +70,23 @@ float Mundo::getAncho(){
 
 float Mundo::getAltoPiso(){
 	return altoPiso;
+}
+
+Tcambio Mundo::actualizarPJ(Personaje *PJ) {
+	Tcambio cambio;
+	cambio.dPJ = PJ->rectanguloPj.d;
+	cambio.posicion = PJ->rectanguloPj.p;
+	cambio.direccion = PJ->direccionPj;
+	cambio.sentido = PJ->sentidoPj;
+	cambio.estado = PJ->estadoActual;
+
+	cambio.vida = PJ->vida;
+
+	cambio.poder.d = PJ->poder->rectanguloPoder.d;
+	cambio.poder.p = PJ->poder->rectanguloPoder.p;
+	cambio.poder.e = PJ->poder->estado;
+
+	return cambio;
 }
 
 /* Devuelve la actualizacion del struct Tcambio recibido junto con el numero de accion que debe realizar
@@ -91,57 +101,15 @@ vector<Tcambio> Mundo::actualizarMundo(vector<Tinput> inputs) {
 	verificarDireccionDeLosPersonajes();
 
 	// Los personajes realizan sus acciones
-	personaje1->realizarAccion(inputs[0],anchoEscenario);
-	personaje2->realizarAccion(inputs[1],anchoEscenario);
+	personaje1->realizarAccion(inputs[0]);
+	personaje2->realizarAccion(inputs[1]);
 
-	personaje1->accionesEnCurso[2]->setAnchoDePasoDefault();
-	personaje2->accionesEnCurso[2]->setAnchoDePasoDefault();
-	personaje1->accionesEnCurso[3]->setConfiguracionDefault();
-	personaje2->accionesEnCurso[3]->setConfiguracionDefault();
-
-
-	//Choque de saltos oblicuos en el aire
-	if(!colisionador.sonCercanos(personaje1, personaje2, anchoPantalla - (MIN_DISTANCE_FROM_BOUND * 2)-personaje1->ancho - personaje2->ancho)){
-		verificarQueNoSeVallaDeLaPantalla();
-	}
-	else {
-		VerificarSiPjsColisionanaEnElAire();
-	}
-
-	//Colision entre personajes (empujar)
-	if (colisionador.sonProximos(personaje1,personaje2,deltaCero)){
-		colisionador.solucionarColision(personaje1,personaje2);
-		colisionador.solucionarColision(personaje2,personaje1);
-	}
-
-	//Colision entre el personaje y el golpe
-	bool esPoder = true;
-	verificarColision(personaje2->lanzandoGolpe,personaje2,personaje1,personaje2->golpe,!esPoder);
-	string mensajePJ1 = "Vida del personaje 1: " + to_string(personaje1->vida);
-	if(personaje1->vida < 100 && personaje1->vida > 0)loguer->loguear(mensajePJ1.c_str(),Log::LOG_DEB);
-	verificarColision(personaje1->lanzandoGolpe,personaje1,personaje2,personaje1->golpe,!esPoder);
-	string mensajePJ2 = "Vida del personaje 2: " + to_string(personaje2->vida);
-	if(personaje2->vida < 100 && personaje2->vida > 0)loguer->loguear(mensajePJ2.c_str(),Log::LOG_DEB);
-
-	//Colision entre el personaje y el poder
-	if(personaje1->lanzandoPoder) {
-		cout<<"personaje que lanza el poder"<<endl;
-		personaje1->pos.mostrarPar();
-	}
-	if(personaje2->lanzandoPoder) {
-		cout<<"personaje que lanza el poder"<<endl;
-		personaje2->pos.mostrarPar();
-	}
-	verificarColision(personaje2->lanzandoPoder,personaje2,personaje1,personaje2->poder,esPoder);
-	verificarColision(personaje1->lanzandoPoder,personaje1,personaje2,personaje1->poder,esPoder);
+	// COLISIONES
+	colisionador.resolverColisiones(personaje1,personaje2);
 
 	//Se actualizan a los personajes
 	cambio1 = actualizarPJ(personaje1);
 	cambio2 = actualizarPJ(personaje2);
-
-	if(personaje1->estado == REA_PINIA_ALTA || personaje2->estado == REA_PINIA_ALTA) cout<<"REACION"<<endl;
-	/*cout<<"PERSONAJE1"<<endl;
-	personaje1->pos.mostrarPar();*/
 
 	c.push_back(cambio1);
 	c.push_back(cambio2);
@@ -150,7 +118,7 @@ vector<Tcambio> Mundo::actualizarMundo(vector<Tinput> inputs) {
 }
 
 
-void Mundo::verificarColision(bool generaViolencia,Personaje* agresor,Personaje* PJ,ObjetoColisionable *objeto, bool esPoder) {
+/*void Mundo::verificarColision(bool generaViolencia,Personaje* agresor,Personaje* PJ,ObjetoColisionable *objeto, bool esPoder) {
 	if (generaViolencia) {
 		if(!esPoder){
 			colisionador.solucionarColision(PJ, agresor, (Golpe *) objeto);
@@ -191,28 +159,7 @@ void Mundo::verificarColision(bool generaViolencia,Personaje* agresor,Personaje*
 			loopsReaccionGolpeFuerte = 0;
 		}
 	}
-}
-
-Tcambio Mundo::actualizarPJ(Personaje *PJ) {
-	Tcambio cambio;
-	cambio.posicion = PJ->getPosicion();
-	if(PJ->getDireccion()) cambio.direccion = DERECHA;
-	else cambio.direccion = IZQUIERDA;
-	if(PJ->getSentido()) cambio.sentido = ADELANTE;
-	else cambio.sentido = ATRAS;
-	cambio.estado = PJ->estado;
-	cambio.dPJ.h = PJ->getAlturaPersonaje();
-	cambio.dPJ.w = PJ->getAnchoPersonaje();
-
-	cambio.vida = PJ->vida;
-
-	cambio.poder.d.h = PJ->poder->altura;
-	cambio.poder.d.w = PJ->poder->ancho;
-	cambio.poder.p = PJ->poder->pos;
-
-	return cambio;
-
-}
+}*/
 
 Mundo::~Mundo() {
 	if(personaje1->vida == 0) loguer->loguear("El personaje 1 esta muerto",Log::LOG_DEB);
@@ -226,17 +173,19 @@ Mundo::~Mundo() {
 
 void Mundo::verificarDireccionDeLosPersonajes() {
 	//direccion derecha igual true
-	if(personaje1->pos.getX() - personaje2->pos.getX() <= 0){
-		personaje1->setDireccion(true);
-		personaje2->setDireccion(false);
+	if(personaje1->rectanguloPj.p.getX() - personaje2->rectanguloPj.p.getX() <= 0){
+		personaje1->direccionPj = DERECHA;
+		personaje2->direccionPj = IZQUIERDA;
 
 	}	else{
-		personaje1->setDireccion(false);
-		personaje2->setDireccion(true);
+		personaje1->direccionPj = IZQUIERDA;
+		personaje2->direccionPj = DERECHA;
 	}
 }
 
-void Mundo::VerificarSiPjsColisionanaEnElAire(){
+
+// No borrar me sirve para el detector de colisiones despues.
+/*void Mundo::VerificarSiPjsColisionanaEnElAire(){
 	if ((personaje1->getEstado() != MOV_SALTANDO_OBLICUO) || (personaje1->sentido == false)) {
 		personaje1->enCaida = false;
 		personaje2->enCaida = false;
@@ -315,4 +264,4 @@ void Mundo::verificarQueNoSeVallaDeLaPantalla() {
 
 
 
-}
+}*/

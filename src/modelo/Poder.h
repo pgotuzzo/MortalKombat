@@ -8,29 +8,18 @@
 class Poder: public ObjetoColisionable {
 
 public:
+    Trect rectanguloPoder;
     float danio;
-    bool direccion;
-    bool estado;
-
-    float posInicialX;
+    Tdireccion direccion;
+    TestadoPoder estado;
     float posFinalX;
 
-    TestadoPoder estadoPoder;
 
-    float altoPJ;
-    float anchoPJ;
-
-    Poder(float anchoPJ, float altoPJ);
-
-    void activar(Posicion posPJ,float direccion,float danio,bool nuevoEstado);
-
+    Poder();
+    void activar(Trect rectPJ,Tdireccion direccion,float anchoPantalla);
     void avanzar(float avance);
-
-    float getAltura();
-
-    void solucionColision(vector<ObjetoColisionable*>  objetosProximos);
-    void determinarAccionPorColision(ObjetoColisionable* primerObjeto, ObjetoColisionable* segundoObjeto);
-    void solucionarColision(ObjetoColisionable* enemigo);
+    void setEstado(TestadoPoder nuevoEstado);
+    Trect getRectangulo();
 
     ~Poder();
 

@@ -4,7 +4,7 @@
 #include "../parser/config.h"
 #include "Personaje.h"
 #include "../Common.h"
-#include "Colisionador.h"
+#include "DetectorDeColisiones.h"
 
 class Mundo {
 private:
@@ -16,10 +16,10 @@ private:
 	float anchoPantalla;
 
 public:
-	Colisionador colisionador;
+	DetectorDeColisiones colisionador;
 	Mundo(config configuracion);
 
-	Personaje* getPersonaje();
+	vector<Personaje*> getPersonajes();
 	float getAncho();
 	float getAlto();
 	float getAltoPiso();

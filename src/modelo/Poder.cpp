@@ -2,83 +2,63 @@
 
 //Constantes Poder
 
-//Divisores del ancho y alto del Pj para calcular el ancho y alto del poder
-const float divisorAnchoPoder = 2;
-const float divisorAltoPoder = 4;
+const float anchoPoder = 20;
+const float altoPoder = 20;
+const float proporcionPosYPoder = 0.75;
+const float danioPoder = 5;
 
-//Divisor de la altura del pj para calcular la posicion y del poder
-const float divisorYPoder = 4;
-
-
-Poder::Poder(float anchoPJ, float altoPJ) {
-
-
-    this->anchoPJ = anchoPJ;
-    this->altoPJ = altoPJ;
-
-    estadoPoder = DESACTIVADO;
-
-    ancho = anchoPJ / divisorAnchoPoder;
-
-    altura = altoPJ / divisorAltoPoder;
-
-    this->estado = false;
-
-
+Poder::Poder() {
+    estado = DESACTIVADO;
+    rectanguloPoder.d.w = anchoPoder;
+    rectanguloPoder.d.h = altoPoder;
+    danio = danioPoder;
 }
 
-void Poder::activar(Posicion posPJ,float direccion, float danio, bool nuevoEstado) {
+void Poder::activar(Trect rectPJ,Tdireccion direccion,float anchoPantalla) {
 
-    float pos_x,pos_y;
+    rectanguloPoder.p = rectPJ.p;
+    estado = ACTIVADO;
 
-
-    estadoPoder = ACTIVADO;
-
-    //pos_y = posPJ.getY();
-    pos_y = posPJ.getY();
-    if (direccion) {
-        pos_x = posPJ.getX() + anchoPJ;
-        posFinalX = pos_x + 200;
+    rectanguloPoder.p.y = rectPJ.p.getY() * proporcionPosYPoder;
+    if (direccion == DERECHA) {
+        rectanguloPoder.p.x = rectPJ.p.getX() + rectPJ.d.w;
+        posFinalX = rectPJ.p.x + anchoPantalla;
     }
     else {
-        pos_x = posPJ.getX() -ancho;
-        posFinalX = pos_x - 200;
+        rectanguloPoder.p.x = rectPJ.p.getX() - rectPJ.d.w;
+        posFinalX = rectPJ.p.x - anchoPantalla;
     }
-    pos = Posicion(pos_x,pos_y);
     this->danio = danio;
-    posInicialX =pos_x;
     this->direccion = direccion;
-
-    this->estado = nuevoEstado;
 }
 
 void Poder::avanzar(float avance) {
-    pos.mostrarPar();
-    if(estado && estadoPoder == ACTIVADO) {
-        if (direccion){
-            cout<<"Costado derecho poder: "<<pos.getX()+ancho/2<<endl;
-            pos = pos + Posicion(avance, 0);
-            if (pos.getX() >= posFinalX){
-                estado = false;
+    TestadoPoder estadoPoder = this->estado;
+    if(estadoPoder == ACTIVADO) {
+        if (direccion == DERECHA){
+            //cout<<"Costado derecho poder: "<<pos.getX()+ancho/2<<endl;
+            rectanguloPoder.p.x = rectanguloPoder.p.x + avance;
+            if (rectanguloPoder.p.getX() >= posFinalX){
                 estadoPoder = DESACTIVADO;
             }
         }
         else{
-            cout<<"Costado izquierdo poder: "<<pos.getX()-ancho/2<<endl;
-            pos = pos - Posicion(avance, 0);
-            if (pos.getX() <= posFinalX){
-                estado = false;
+            //cout<<"Costado izquierdo poder: "<<pos.getX()-ancho/2<<endl;
+            rectanguloPoder.p.x = rectanguloPoder.p.x - avance;
+            if (rectanguloPoder.p.getX() <= posFinalX){
                 estadoPoder = DESACTIVADO;
             }
         }
     }
 }
 
-
-float Poder::getAltura() {
-    return altura;
+void Poder::setEstado(TestadoPoder nuevoEstado) {
+    estado = nuevoEstado;
 }
 
+Trect Poder::getRectangulo() {
+    return rectanguloPoder;
+}
 
 
 Poder::~Poder() {

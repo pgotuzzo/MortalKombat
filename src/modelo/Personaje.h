@@ -7,77 +7,47 @@
 #include <list>
 #include "math.h"
 #include <tr1/unordered_map>
-#include "Accion.h"
 #include "../Common.h"
 #include "ObjetoColisionable.h"
 #include "Poder.h"
 #include "Golpe.h"
+#include "Accionador.h"
 
 
 using namespace std;
 
-class Personaje: public ObjetoColisionable {
-
+class Personaje: public ObjetoColisionable{
 public:
+	TestadoPersonaje estadoActual;
+	TestadoPersonaje estadoAnterior;
 
-	bool enCaida;
-	bool parado;
-	bool direccion;
-	bool sentido;
-	float yPiso;
-	float alturaParado;
-	Posicion posInicial;
-	TestadoPersonaje estado;
-	Tinput inputAnterior;
-	Accion* accionesEnCurso[4];
+	Posicion posicionAnterior;
+	Trect rectanguloPj;
+
+	Tdireccion direccionPj;
+	Tsentido sentidoPj;
+
+
 	float vida;
 
-	int loopsGolpe;
-	int loopsPiniaAlta;
-	int loopsPiniaBaja;
-	int loopsReaccionGolpeFuerte;
+	float yPiso;
+	float anchoPantalla;
+	int countLoops;
 
-	bool lanzandoGolpe;
-	bool lanzandoPoder;
-	bool protegiendose;
+	Accionador llevarACabo;
 
 	Poder* poder;
-	Golpe* golpe;
 
+	//-----------------------------------------------------------------------------
+	bool puedoRealizarAccion(TestadoPersonaje accion);
+	TestadoPersonaje generarEstado(Tinput orden);
+	Personaje(Tdireccion direccionInicial,Trect cuerpo,float anchoPantalla);
 
-	void mePegaron(float danioGolpe);
+	Trect getRectangulo();
 
-	Posicion verificarPuntoEnX(Posicion posicionActual,float anchoEscenario);
-	Posicion verificarPuntoEnY(Posicion posicionActual);
+	void realizarAccion(Tinput orden);
+	~Personaje();
 
-	void ejecutarAcionesActivadas(Accion **accionesEnCurso,float anchoEscenario);
-
-	Personaje(bool direccion,Posicion posInicial,float alto,float ancho);
-	void realizarAccion(Tinput orden,float anchoEscenario);
-	TestadoPersonaje generarEstado(Tinput input);
-	bool seguirPegando(TestadoPersonaje estadoInput);
-
-	Posicion getPosicion();
-	TestadoPersonaje getEstado();
-
-	float getAltura();
-
-	void setLoopsReaccionGolpeFuerte(int loops);
-
-	void setEstado(TestadoPersonaje estado);
-	void setDireccion(bool direccion);
-	float getAlturaPersonaje();
-	float getAnchoPersonaje();
-	bool getDireccion();
-	bool getSentido();
-
-	void realizarReaccion(TestadoPersonaje estadoReaccion);
-	virtual ~Personaje();
-
-	void caminar(bool direc);
-
-	void saltarOblicuamente(bool direc);
-
-	bool puedoRealizarAccion(TestadoPersonaje est);
 };
+
 #endif /* PERSONAJE_H_ */

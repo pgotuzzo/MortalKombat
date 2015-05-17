@@ -18,19 +18,9 @@ file(COPY ${RESOURCES} DESTINATION ${PROJECT_SOURCE_DIR}/bin)
 # Sources
 set(SOURCE_FILES
     src/modelo/Personaje.h
-    src/modelo/acciones/Caminar.h
-    src/modelo/acciones/Caminar.cpp
-    src/modelo/acciones/Agachar.h
-    src/modelo/acciones/SaltoVertical.h
+    src/modelo/Personaje.cpp
     src/modelo/Mundo.h
     src/modelo/Mundo.cpp
-    src/modelo/Accion.cpp
-    src/modelo/acciones/Agachar.cpp
-    src/modelo/acciones/SaltoOblicuo.h
-    src/modelo/Personaje.cpp
-    src/modelo/Accion.h
-    src/modelo/acciones/SaltoVertical.cpp
-    src/modelo/acciones/SaltoOblicuo.cpp
     src/parser/include/json/assertions.h
     src/parser/include/json/autolink.h
     src/parser/include/json/config.h
@@ -68,8 +58,6 @@ set(SOURCE_FILES
     src/vista/VistaUtils.h
     src/Common.h
     src/main.cpp
-    src/modelo/Colisionador.cpp
-    src/modelo/Colisionador.h
     src/modelo/ObjetoColisionable.h
     src/modelo/Poder.h
     src/modelo/Poder.cpp
@@ -81,9 +69,13 @@ set(SOURCE_FILES
     src/controlador/ControladorJoystick.h
     src/vista/personajes/PoderVista.cpp
     src/vista/personajes/PoderVista.h
+    src/modelo/DetectorDeColisiones.cpp
+    src/modelo/DetectorDeColisiones.h
+    src/modelo/Accionador.cpp
+    src/modelo/Accionador.h
     )
 
-add_executable(MortalKombat ${SOURCE_FILES})
+add_executable(MortalKombat ${SOURCE_FILES} )
 
 # Bibliotecas
 target_link_libraries(MortalKombat

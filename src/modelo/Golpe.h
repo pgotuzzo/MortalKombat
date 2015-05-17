@@ -3,29 +3,20 @@
 #ifndef MORTALKOMBAT_GOLPE_H
 #define MORTALKOMBAT_GOLPE_H
 
-#include "../Common.h"
+//#include "../Common.h"
 #include "ObjetoColisionable.h"
 
 class Golpe: public ObjetoColisionable{
 
 public:
+    Trect rectangulo;
     float danio;
     bool estado;
-
-    float anchoPJ;
-    float altoPJ;
-
-
-    Golpe(float anchoPJ, float altoPJ);
-
-    void activar(TestadoPersonaje tipoDeGolpe, Posicion posPJ,bool direccion);
-
-    float getAltura();
-
-    void setAlturaPJ(float altura);
-
-    virtual ~Golpe();
-
+    TestadoPersonaje efectoSobreOponente;
+    Golpe();
+    ~Golpe();
+    void setGolpe(float danio,bool estado, Trect rectangulo, TestadoPersonaje nuevoEstado);
+    Trect getRectangulo();
 
 };
 

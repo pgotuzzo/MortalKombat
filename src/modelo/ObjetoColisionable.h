@@ -6,14 +6,10 @@
 #include "../Common.h"
 
 class ObjetoColisionable {
+
 public:
 
-    Posicion pos;
-    Posicion posAnt;
-    float altura;
-    float ancho;
-
-    virtual float getAltura() = 0;
+    virtual Trect getRectangulo() = 0;
 
     virtual ~ObjetoColisionable() {}
 
