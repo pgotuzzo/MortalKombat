@@ -18,13 +18,17 @@ Personaje::Personaje(Tdireccion direccionInicial,Trect cuerpo, float anchoPantal
 	vida = 100;
 
 	llevarACabo.initialize(rectanguloPj,anchoPantalla,yPiso);
+	countLoops = 0;
 }
 
 
 void Personaje::realizarAccion(Tinput orden) {
 
-	if(estadoActual == MOV_AGACHADO) rectanguloPj.d.w = rectanguloPj.d.w *2;
 
+	if(estadoActual == MOV_AGACHADO) {
+		rectanguloPj.p = rectanguloPj.p - Posicion(0,rectanguloPj.d.h);
+		rectanguloPj.d.h = rectanguloPj.d.h *2;
+	}
 
 
 	TestadoPersonaje estadoCompuesto = generarEstado(orden);
@@ -32,7 +36,10 @@ void Personaje::realizarAccion(Tinput orden) {
 	if(puedoRealizarAccion(estadoCompuesto)){
 		estadoAnterior = estadoActual;
 		estadoActual = estadoCompuesto;
-	}else{
+		verificarDireccion(orden);
+
+	}
+	else{
 		estadoAnterior = estadoActual;
 	}
 
@@ -43,6 +50,8 @@ void Personaje::realizarAccion(Tinput orden) {
 	// if(poder.estado == ACTIVADO) poder.avanzar();
 	// poersonaje.getPoder.posicion
 
+
+	//&& estadoActual != MOV_CAMINANDO
 	if(loopsPara(estadoActual)==countLoops) estadoActual = MOV_PARADO;
 
 	//Si el estado anterior es salto oblicuo y el nuevo estado es una patada o una pinia durante ese salto
@@ -50,8 +59,12 @@ void Personaje::realizarAccion(Tinput orden) {
 
 	bool accionDuranteOblicuo = (estadoAnterior == MOV_SALTANDO_OBLICUO &&(estadoActual==ACC_PINIA_SALTO||estadoActual==ACC_PATADA_SALTO));
 	bool accionDuranteVertical = (estadoAnterior == MOV_SALTANDO_VERTICAL &&(estadoActual==ACC_PATADA_SALTO_VERTICAL));
-	if((estadoAnterior != estadoActual) && (!accionDuranteOblicuo)&&(!accionDuranteVertical)) countLoops = 0;
+
+//	if((estadoAnterior != estadoActual) || (!accionDuranteOblicuo)&&(!accionDuranteVertical)) countLoops = 1;
+	if(estadoActual == MOV_PARADO) countLoops = 1;
 	else countLoops++;
+//	if(countLoops != 0) cout <<countLoops<<endl;
+
 }
 
 bool Personaje::puedoRealizarAccion(TestadoPersonaje accion) {
@@ -62,11 +75,11 @@ bool Personaje::puedoRealizarAccion(TestadoPersonaje accion) {
 
 	//Mientras salta solo puede pegar patada salto y pinia salto
 	if(estadoActual == MOV_SALTANDO_OBLICUO){
-		return accion == ACC_PINIA_ALTA ||accion == ACC_PINIA_BAJA || accion == ACC_PATADA_ALTA|| accion == ACC_PATADA_BAJA;
+		return accion == ACC_PINIA_SALTO ||accion == ACC_PATADA_SALTO;
 	}
 	//Mientras salta verticalmente solo puede hacer una patada salto vertical
 	if(estadoActual == MOV_SALTANDO_VERTICAL){
-		return accion == ACC_PATADA_ALTA ||accion == ACC_PATADA_BAJA || accion == ACC_PODER;
+		return accion == ACC_PATADA_SALTO_VERTICAL ||accion == ACC_PINIA_SALTO || accion == ACC_PODER;
 	}
 	//mientras esta agachado solo puede pegar pinias altas y bajas patada agachado y proteccion agachado
 	if(estadoActual == MOV_AGACHADO){
@@ -88,7 +101,28 @@ Trect Personaje::getRectangulo() {
 	return rectanguloPj;
 }
 
+void Personaje::verificarDireccion(Tinput orden) {
 
+	switch(orden.movimiento){
+		case TinputMovimiento::KEY_DERECHA:
+			if(direccionPj == DERECHA) sentidoPj = ADELANTE;
+			else sentidoPj = ATRAS;
+			break;
+		case TinputMovimiento::KEY_IZQUIERDA:
+			if(direccionPj == DERECHA) sentidoPj = ATRAS;
+			else sentidoPj = ADELANTE;
+			break;
+		case TinputMovimiento::KEY_ARRIBA_DERECHA:
+			if(direccionPj == DERECHA) sentidoPj = ADELANTE;
+			else sentidoPj = ATRAS;
+			break;
+		case TinputMovimiento::KEY_ARRIBA_IZQUIERDA:
+			if(direccionPj == DERECHA) sentidoPj = ATRAS;
+			else sentidoPj = ADELANTE;
+			break;
+	}
+
+}
 
 TestadoPersonaje Personaje::generarEstado(Tinput orden) {
 
@@ -230,3 +264,5 @@ TestadoPersonaje Personaje::generarEstado(Tinput orden) {
 Personaje::~Personaje() {
 
 }
+
+

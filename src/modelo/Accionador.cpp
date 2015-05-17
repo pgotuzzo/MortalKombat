@@ -22,10 +22,10 @@ const float piniasBajas = 2;
 
 //CONSTANTES DE MOVIMIENTO
 const float intervaloPaso =2;
-const float intervaloSaltoVertical = 5;
+const float intervaloSaltoVertical = 10;
 const float intervaloSaltoOblicuo = 5;
-const float alturaSaltoOblicuo = 60;
-const float anchoSaltoOblicuo = 60;
+const float alturaSaltoOblicuo = 50;
+const float anchoSaltoOblicuo = 100;
 
 Accionador::Accionador() {
 
@@ -130,7 +130,7 @@ Accionador::~Accionador() {
 void Accionador::caminar(Tsentido sentido, Tdireccion direccion) {
     if(direccion == DERECHA){
         if(sentido == ADELANTE) rectaDelPj.p = rectaDelPj.p + Posicion(intervaloPaso,0);
-        else rectaDelPj.p + Posicion(-intervaloPaso,0);
+        else rectaDelPj.p = rectaDelPj.p + Posicion(-intervaloPaso,0);
     }else{
         if(sentido == ADELANTE) rectaDelPj.p =rectaDelPj.p + Posicion(-intervaloPaso,0);
         else rectaDelPj.p =rectaDelPj.p + Posicion(intervaloPaso,0);
@@ -140,9 +140,13 @@ void Accionador::caminar(Tsentido sentido, Tdireccion direccion) {
 //                  SALTO VERTICAL
 void Accionador::saltarVerticualmente(int loops) {
 
-    if(loopsPara(MOV_SALTANDO_VERTICAL) < loops){
-        if (loops<=(loopsPara(MOV_SALTANDO_VERTICAL)/2))rectaDelPj.p =rectaDelPj.p+Posicion(0,-intervaloSaltoVertical);
-        else rectaDelPj.p =rectaDelPj.p+Posicion(0,intervaloSaltoVertical);
+    if(loopsPara(MOV_SALTANDO_VERTICAL) >= loops){
+        if (loops<=(loopsPara(MOV_SALTANDO_VERTICAL)/2)) {
+            rectaDelPj.p =rectaDelPj.p+Posicion(0,-intervaloSaltoVertical);
+        }
+        else {
+            rectaDelPj.p =rectaDelPj.p+Posicion(0,intervaloSaltoVertical);
+        }
     }
 }
 //--------------------------------------------------------------------------------------
@@ -150,30 +154,33 @@ void Accionador::saltarVerticualmente(int loops) {
 void Accionador::saltarOblicuamente(int loops, Tsentido sentido, Tdireccion direccion) {
 
     if(loopsPara(MOV_SALTANDO_OBLICUO) >=loops){
-        if(loops < (loopsPara(MOV_SALTANDO_OBLICUO)/2)){
+        if(loops <= (loopsPara(MOV_SALTANDO_OBLICUO)/2)){
+            //Sube
             if(direccion == DERECHA){
                 if (sentido == ADELANTE) rectaDelPj.p =rectaDelPj.p+Posicion(intervaloSaltoOblicuo,-intervaloSaltoOblicuo);
-                else Posicion(-intervaloSaltoOblicuo,-intervaloSaltoOblicuo);
+                else rectaDelPj.p =rectaDelPj.p+Posicion(-intervaloSaltoOblicuo,-intervaloSaltoOblicuo);
             }else{
                 if (sentido == ADELANTE) rectaDelPj.p =rectaDelPj.p+Posicion(-intervaloSaltoOblicuo,-intervaloSaltoOblicuo);
-                else Posicion(intervaloSaltoOblicuo,-intervaloSaltoOblicuo);
+                else rectaDelPj.p =rectaDelPj.p+Posicion(intervaloSaltoOblicuo,-intervaloSaltoOblicuo);
             }
         }else{
+            //Baja
             if(direccion == DERECHA){
                 if (sentido == ADELANTE) rectaDelPj.p =rectaDelPj.p+Posicion(intervaloSaltoOblicuo,intervaloSaltoOblicuo);
-                else Posicion(-intervaloSaltoOblicuo,intervaloSaltoOblicuo);
+                else rectaDelPj.p =rectaDelPj.p+Posicion(-intervaloSaltoOblicuo,intervaloSaltoOblicuo);
             }else{
                 if (sentido == ADELANTE) rectaDelPj.p =rectaDelPj.p+Posicion(-intervaloSaltoOblicuo,intervaloSaltoOblicuo);
-                else Posicion(intervaloSaltoOblicuo,intervaloSaltoOblicuo);
+                else rectaDelPj.p =rectaDelPj.p+Posicion(intervaloSaltoOblicuo,intervaloSaltoOblicuo);
             }
         }
     }
-
 }
 //--------------------------------------------------------------------------------------
 //                  AGACHAR
 void Accionador::agachar() {
-    rectaDelPj.d.h = rectaDelPj.d.h;
+    cout<<"hola"<<endl;
+    rectaDelPj.d.h = rectaDelPj.d.h/2;
+    rectaDelPj.p = rectaDelPj.p + Posicion(0,rectaDelPj.d.h);
 }
 //--------------------------------------------------------------------------------------
 //                  GOLPES

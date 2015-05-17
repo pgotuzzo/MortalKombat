@@ -48,6 +48,7 @@ public:
 	void realizarAccion(Tinput orden);
 	~Personaje();
 
+	void verificarDireccion(Tinput tinput);
 };
 
 #endif /* PERSONAJE_H_ */
