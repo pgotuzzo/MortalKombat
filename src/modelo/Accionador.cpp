@@ -121,12 +121,15 @@ Trect Accionador::laAccion(TestadoPersonaje estadoPj, int loops, Posicion pos, T
         case REA_AGACHADO:
             break;
         case REA_GOLPE_ALTO:
+            reaccionTrasPiniaAlta(loops,direccion);
             break;
         case REA_GOLPE_BAJO:
             break;
         case REA_GOLPE_FUERTE:
+            reaccionTrasGolpeFuerte(loops,direccion);
             break;
         case REA_PATADA_BARRIDA:
+            reaccionBarrida(loops,direccion);
             break;
         case REA_PINIA_ALTA:
             break;
@@ -243,7 +246,8 @@ void Accionador::piniaAlta(int loops,Tdireccion direccion) {
     }
     rectan.d.w = rectaDelPj.d.w * proporcionPiniaAlta;
     if(loopsPara(ACC_PINIA_ALTA)>loops){
-        golpe->setGolpe(piniasAltas, loops == 2,rectan,REA_PINIA_ALTA);
+        // TODO: Cambiar por REA_PINIA_ALTA cuando ande bien
+        golpe->setGolpe(piniasAltas, loops == 2,rectan,REA_GOLPE_ALTO);
     }
 }
 //--------------------------------------------------------------------------------------
@@ -369,4 +373,32 @@ Posicion Accionador::desplazado(float deltaDesplazo,Tdireccion direccion){
 
 Golpe *Accionador::getGolpe() {
     return golpe;
+}
+
+void Accionador::reaccionTrasPiniaAlta(int loops, Tdireccion direccion) {
+
+    if (direccion == DERECHA){
+        rectaDelPj.p = rectaDelPj.p + Posicion(-2,0);
+    }else{
+        rectaDelPj.p = rectaDelPj.p + Posicion(2,0);
+    }
+
+}
+
+void Accionador::reaccionTrasGolpeFuerte(int loops, Tdireccion direccion) {
+    cout<<loops<<endl;
+    if(loops<=loopsPara(REA_GOLPE_FUERTE)/2){
+        cout<<"ohas"<<endl;
+        if(direccion == DERECHA) subirEnSaltoOblicuo(intervaloSaltoOblicuo,3*intervaloSaltoOblicuo,ATRAS,direccion);
+        else subirEnSaltoOblicuo(intervaloSaltoOblicuo,3*intervaloSaltoOblicuo,ATRAS,direccion);
+    }else{
+        cout<<"aaaaa"<<endl;
+        if(direccion == DERECHA) bajarEnSaltoOblicuo(intervaloSaltoOblicuo,3*intervaloSaltoOblicuo,ATRAS,direccion);
+        else bajarEnSaltoOblicuo(intervaloSaltoOblicuo,3*intervaloSaltoOblicuo,ATRAS,direccion);
+    }
+
+}
+
+void Accionador::reaccionBarrida(int loops, Tdireccion direccion) {
+
 }

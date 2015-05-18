@@ -24,7 +24,7 @@ Personaje::Personaje(Tdireccion direccionInicial,Trect cuerpo, float anchoPantal
 
 void Personaje::realizarAccion(Tinput orden) {
 
-
+	//mostrarEstado(estadoActual);
 	if(estadoActual == MOV_AGACHADO) {
 		rectanguloPj.p = rectanguloPj.p - Posicion(0,rectanguloPj.d.h);
 		rectanguloPj.d.h = rectanguloPj.d.h *2;
@@ -41,7 +41,8 @@ void Personaje::realizarAccion(Tinput orden) {
 		else countLoops =1;
 
 	}
-	else{
+	else {
+		if(estadoActual == REA_GOLPE_FUERTE && estadoAnterior != REA_GOLPE_FUERTE) countLoops = 0;
 		estadoAnterior = estadoActual;
 		countLoops++;
 	}

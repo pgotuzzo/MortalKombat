@@ -236,8 +236,8 @@ bool DetectorDeColisiones::hayEfectoTunel(ObjetoColisionable *objeto1, ObjetoCol
 // resuelve la colision entre golpe y personaje
 void DetectorDeColisiones::resolverColision(Personaje *PJ,Golpe *golpe) {
     PJ->reducirVida(golpe->danio);
-    //PJ->estadoAnterior = PJ->estadoActual;
-    //PJ->estadoActual = golpe->efectoSobreOponente;
+    PJ->estadoAnterior = PJ->estadoActual;
+    PJ->estadoActual = golpe->efectoSobreOponente;
     // Ajustar la superrectanguloPj.picion del golpe con el personaje si es necesario
 }
 

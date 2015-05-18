@@ -536,7 +536,7 @@ static int loopsPara(TestadoPersonaje accion){
         case ACC_PINIA_SALTO:
             return 20;
         case ACC_PATADA_BAJA:
-            return 12;
+            return 9;
         case ACC_PATADA_BAJA_ATRAS:
             return 8;
         case ACC_PATADA_AGACHADO:
@@ -546,7 +546,7 @@ static int loopsPara(TestadoPersonaje accion){
         case ACC_PATADA_SALTO:
             return 20;
         case ACC_PATADA_ALTA:
-            return 12;
+            return 6;
         case ACC_PATADA_ALTA_ATRAS:
             return 8;
         case ACC_PROTECCION:
@@ -559,16 +559,16 @@ static int loopsPara(TestadoPersonaje accion){
             return 10;
         case REA_AGACHADO:
             return 1;
-//        case REA_GOLPE_ALTO:
-//            break;
-//        case REA_GOLPE_BAJO:
-//            break;
-//        case REA_GOLPE_FUERTE:
-//            break;
-//        case REA_PATADA_BARRIDA:
-//            break;
-//        case REA_PINIA_ALTA:
-//            break;
+        case REA_GOLPE_ALTO:
+            return 8;
+        case REA_GOLPE_BAJO:
+            return 3;
+        case REA_GOLPE_FUERTE:
+            return 8;
+        case REA_PATADA_BARRIDA:
+            return 12;
+        case REA_PINIA_ALTA:
+            return 3;
     }
 }
 

@@ -59,6 +59,12 @@ public:
     void bajarEnSaltoOblicuo(float deltaMovX, float deltaMovY, Tsentido sentido, Tdireccion direccion);
 
     void activarPoder(Tdireccion direccion);
+
+    void reaccionTrasPiniaAlta(int loops, Tdireccion direccion);
+
+    void reaccionTrasGolpeFuerte(int loops, Tdireccion direccion);
+
+    void reaccionBarrida(int loops, Tdireccion direccion);
 };
 
 
