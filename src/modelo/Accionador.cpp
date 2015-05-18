@@ -153,7 +153,7 @@ void Accionador::saltarVerticualmente(int loops) {
 //--------------------------------------------------------------------------------------
 //                  SALTO OBLICUO
 void Accionador::subirEnSaltoOblicuo(float deltaMovX,float deltaMovY,Tsentido sentido, Tdireccion direccion){
-    if(direccion == DERECHA){
+    if(direcBloqueada == DERECHA){
         if (sentido == ADELANTE) rectaDelPj.p =rectaDelPj.p+Posicion(deltaMovX,-deltaMovY);
         else rectaDelPj.p =rectaDelPj.p+Posicion(-deltaMovX,-deltaMovY);
     }else{
@@ -162,7 +162,7 @@ void Accionador::subirEnSaltoOblicuo(float deltaMovX,float deltaMovY,Tsentido se
     }
 }
 void Accionador::bajarEnSaltoOblicuo(float deltaMovX,float deltaMovY,Tsentido sentido, Tdireccion direccion) {
-    if (direccion == DERECHA) {
+    if (direcBloqueada == DERECHA) {
         if (sentido == ADELANTE) rectaDelPj.p = rectaDelPj.p + Posicion(deltaMovX, deltaMovY);
         else rectaDelPj.p = rectaDelPj.p + Posicion(-deltaMovX, deltaMovY);
     } else {
@@ -171,6 +171,8 @@ void Accionador::bajarEnSaltoOblicuo(float deltaMovX,float deltaMovY,Tsentido se
     }
 }
 void Accionador::saltarOblicuamente(int loops, Tsentido sentido, Tdireccion direccion) {
+
+    if(loops == 1) direcBloqueada = direccion;
 
     if(loopsPara(MOV_SALTANDO_OBLICUO) >=loops){
         // en la priemra mitad de loops sube

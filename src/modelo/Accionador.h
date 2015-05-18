@@ -15,6 +15,7 @@ public:
     float ydelPiso;
 
     TestadoPersonaje nuevoEstado;
+    Tdireccion direcBloqueada;
 
     Golpe golpe;
 
@@ -50,6 +51,7 @@ public:
     void subirEnSaltoOblicuo(float deltaMovX, float deltaMovY, Tsentido sentido, Tdireccion direccion);
 
     void bajarEnSaltoOblicuo(float deltaMovX, float deltaMovY, Tsentido sentido, Tdireccion direccion);
+
 };
 
 

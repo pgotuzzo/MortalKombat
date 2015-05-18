@@ -566,5 +566,88 @@ static int loopsPara(TestadoPersonaje accion){
     }
 }
 
+static int mostrarEstado(TestadoPersonaje accion){
 
+    switch (accion){
+
+        case MOV_PARADO:
+            cout<<"MOV_PARADO"<<endl;
+            break;
+        case MOV_CAMINANDO:
+            cout<<"MOV_CAMINANDO"<<endl;
+            break;
+        case MOV_SALTANDO_VERTICAL:
+            cout<<"MOV_SALTANDO_VERTICAL"<<endl;
+            break;
+        case MOV_SALTANDO_OBLICUO:
+            cout<<"MOV_SALTANDO_OBLICUO"<<endl;
+            break;
+        case MOV_AGACHADO:
+            cout<<"MOV_AGACHADO"<<endl;
+            break;
+        case ACC_PINIA_BAJA:
+            cout<<"ACC_PINIA_BAJA"<<endl;
+            break;
+        case ACC_PINIA_BAJA_AGACHADO:
+            cout<<"ACC_PINIA_BAJA_AGACHADO"<<endl;
+            break;
+        case ACC_PINIA_ALTA:
+            cout<<"ACC_PINIA_ALTA"<<endl;
+            break;
+        case ACC_PINIA_ALTA_AGACHADO:
+            cout<<"ACC_PINIA_ALTA_AGACHADO"<<endl;
+            break;
+        case ACC_PINIA_SALTO:
+            cout<<"ACC_PINIA_SALTO"<<endl;
+            break;
+        case ACC_PATADA_BAJA:
+            cout<<"ACC_PATADA_BAJA"<<endl;
+            break;
+        case ACC_PATADA_BAJA_ATRAS:
+            cout<<"ACC_PATADA_BAJA_ATRAS"<<endl;
+            break;
+        case ACC_PATADA_AGACHADO:
+            cout<<"ACC_PATADA_AGACHADO"<<endl;
+            break;
+        case ACC_PATADA_SALTO_VERTICAL:
+            cout<<"ACC_PATADA_SALTO_VERTICAL"<<endl;
+            break;
+        case ACC_PATADA_SALTO:
+            cout<<"ACC_PATADA_SALTO"<<endl;
+            break;
+        case ACC_PATADA_ALTA:
+            cout<<"ACC_PATADA_ALTA"<<endl;
+            break;
+        case ACC_PATADA_ALTA_ATRAS:
+            cout<<"ACC_PATADA_ALTA_ATRAS"<<endl;
+            break;
+        case ACC_PROTECCION:
+            cout<<"ACC_PROTECCION"<<endl;
+            break;
+        case ACC_PROTECCION_AGACHADO:
+            cout<<"ACC_PROTECCION_AGACHADO"<<endl;
+            break;
+        case ACC_PODER:
+            cout<<"ACC_PODER"<<endl;
+            break;
+        case REA_AGACHADO:
+            cout<<"REA_AGACHADO"<<endl;
+            break;
+        case REA_GOLPE_ALTO:
+            cout<<"REA_GOLPE_ALTO"<<endl;
+            break;
+        case REA_GOLPE_BAJO:
+            cout<<"REA_GOLPE_BAJO"<<endl;
+            break;
+        case REA_GOLPE_FUERTE:
+            cout<<"REA_GOLPE_FUERTE"<<endl;
+            break;
+        case REA_PATADA_BARRIDA:
+            cout<<"REA_PATADA_BARRIDA"<<endl;
+            break;
+        case REA_PINIA_ALTA:
+            cout<<"REA_PINIA_ALTA"<<endl;
+            break;
+    }
+}
 #endif //_MORTALKOMBAT_COMMON_H_
