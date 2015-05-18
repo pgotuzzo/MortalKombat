@@ -17,7 +17,7 @@ Personaje::Personaje(Tdireccion direccionInicial,Trect cuerpo, float anchoPantal
 	poder = new Poder();
 	vida = 100;
 
-	llevarACabo.initialize(rectanguloPj,anchoPantalla,yPiso);
+	llevarACabo.initialize(rectanguloPj,anchoPantalla,yPiso,poder);
 	countLoops = 0;
 }
 
@@ -50,9 +50,8 @@ void Personaje::realizarAccion(Tinput orden) {
 	rectanguloPj = llevarACabo.laAccion(estadoActual,countLoops, rectanguloPj.p,sentidoPj,direccionPj);
 
 
-	// if(poder.estado == ACTIVADO) poder.avanzar();
-	// poersonaje.getPoder.posicion
-
+	if(poder->estado == ACTIVADO) poder->avanzar(10);
+	if(poder->estado == COLISION) poder->setEstado(DESACTIVADO);
 
 
 }
@@ -69,7 +68,7 @@ bool Personaje::puedoRealizarAccion(TestadoPersonaje accion) {
 	}
 	//Mientras salta verticalmente solo puede hacer una patada salto vertical
 	if(estadoActual == MOV_SALTANDO_VERTICAL){
-		return accion == ACC_PATADA_SALTO_VERTICAL ||accion == ACC_PINIA_SALTO || accion == ACC_PODER;
+		return accion == ACC_PATADA_SALTO_VERTICAL ||accion == ACC_PINIA_SALTO || accion == ACC_PODER_SALTO;
 	}
 	//mientras esta agachado solo puede pegar pinias altas y bajas patada agachado y proteccion agachado
 	if(estadoActual == MOV_AGACHADO){

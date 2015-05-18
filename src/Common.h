@@ -368,9 +368,10 @@ enum TestadoPersonaje {
     ACC_PROTECCION_AGACHADO,
 
     ACC_PODER,
+    ACC_PODER_SALTO,
 
     // Reaccion
-            REA_AGACHADO,
+    REA_AGACHADO,
     REA_GOLPE_ALTO, // patada alta y pinia en salto
     REA_GOLPE_BAJO,
     REA_GOLPE_FUERTE, // gancho y patada alta (+ atras)
@@ -403,6 +404,7 @@ static string TestadoPersonajeToString(TestadoPersonaje e){
         case TestadoPersonaje::ACC_PROTECCION: return "acc_proteccion";
         case TestadoPersonaje::ACC_PROTECCION_AGACHADO: return "acc_proteccion_agachado";
         case TestadoPersonaje::ACC_PODER: return "acc_poder";
+        case TestadoPersonaje::ACC_PODER_SALTO: return "acc_poder";
 
         case TestadoPersonaje::REA_AGACHADO: return "rea_agachado";
         case TestadoPersonaje::REA_GOLPE_ALTO: return "rea_golpe_alto";
@@ -553,6 +555,8 @@ static int loopsPara(TestadoPersonaje accion){
             return 1;
         case ACC_PODER:
             return 3;
+        case ACC_PODER_SALTO:
+            return 10;
         case REA_AGACHADO:
             return 1;
 //        case REA_GOLPE_ALTO:
@@ -652,6 +656,9 @@ static int mostrarEstado(TestadoPersonaje accion){
             break;
         case ACC_PINIA_SALTO_VERTICAL:
             cout<<"ACC_PATADA_SALTO_VERTICAL"<<endl;
+            break;
+        case ACC_PODER_SALTO:
+            cout<<"ACC_PODER_SALTO";
             break;
     }
 }

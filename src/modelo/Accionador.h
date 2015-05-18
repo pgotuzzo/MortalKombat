@@ -4,6 +4,7 @@
 
 #include "../Common.h"
 #include "Golpe.h"
+#include "Poder.h"
 
 class Accionador {
 
@@ -11,19 +12,20 @@ public:
 
     Trect rectaDelPj;
 
-    float anchoEsc;
+    float anchoPantalla;
     float ydelPiso;
 
     TestadoPersonaje nuevoEstado;
     Tdireccion direcBloqueada;
 
-    Golpe golpe;
+    Golpe* golpe;
+    Poder* poder;
 
     Accionador();
 
     ~Accionador();
 
-    void initialize(Trect rectan, float anchoEscenario, float yPiso);
+    void initialize(Trect rectan, float anchoEscenario, float yPiso,Poder* nuevoPoder);
 
     Trect laAccion(TestadoPersonaje estadoPj,int loops, Posicion pos, Tsentido sentido, Tdireccion direccion);
 
@@ -52,6 +54,7 @@ public:
 
     void bajarEnSaltoOblicuo(float deltaMovX, float deltaMovY, Tsentido sentido, Tdireccion direccion);
 
+    void activarPoder(Tdireccion direccion);
 };
 
 

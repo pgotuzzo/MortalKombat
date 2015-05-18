@@ -1,5 +1,5 @@
 #include "Accionador.h"
-//CONSTANTES PARA LA CREACION DE GOLPES
+//CONSTANTES PARA LA CREACION DE golpe->
 const float proporcionPiniaAlta = 0.25;
 const float proporcionPiniaBaja = 0.35;
 const float proporcionPatadaAlta = 0.31;
@@ -32,13 +32,14 @@ Accionador::Accionador() {
 
 
 }
-void Accionador::initialize(Trect rectan, float anchoEscenario, float yPiso) {
+void Accionador::initialize(Trect rectan, float anchoPanta, float yPiso,Poder* nuevoPoder) {
 
     rectaDelPj = rectan;
-    anchoEsc = anchoEscenario;
+    anchoPantalla = anchoPanta;
     ydelPiso = yPiso;
     nuevoEstado = MOV_PARADO;
-    golpe = Golpe();
+    golpe = new Golpe();
+    this->poder = nuevoPoder;
 }
 
 Trect Accionador::laAccion(TestadoPersonaje estadoPj, int loops, Posicion pos, Tsentido sentido, Tdireccion direccion) {
@@ -110,6 +111,10 @@ Trect Accionador::laAccion(TestadoPersonaje estadoPj, int loops, Posicion pos, T
         case ACC_PROTECCION_AGACHADO:
             break;
         case ACC_PODER:
+            activarPoder(direccion);
+            break;
+        case ACC_PODER_SALTO:
+            saltarVerticualmente(loops);
             break;
 
             //case Reacciones ---------------------------------
@@ -213,7 +218,7 @@ void Accionador::piniaBaja(int loops) {
 
     rectan.d.w = rectaDelPj.d.w * proporcionPiniaBaja;
     if(loopsPara(ACC_PINIA_BAJA)<loops){
-        golpe.setGolpe(piniasBajas, loops == 2,rectan,REA_GOLPE_BAJO);
+        golpe->setGolpe(piniasBajas, loops == 2,rectan,REA_GOLPE_BAJO);
     }
 }
 //--------------------------------------------------------------------------------------
@@ -224,7 +229,7 @@ void Accionador::piniaBajaAgachado(int loops) {
 
     rectan.d.w = rectaDelPj.d.w * proporcionPiniaBaja;
     if(loopsPara(ACC_PINIA_BAJA_AGACHADO)<loops){
-        golpe.setGolpe(piniasBajas, loops == 2,rectan,REA_GOLPE_BAJO);
+        golpe->setGolpe(piniasBajas, loops == 2,rectan,REA_GOLPE_BAJO);
     }
 }
 //--------------------------------------------------------------------------------------
@@ -235,7 +240,7 @@ void Accionador::piniaAlta(int loops) {
 
     rectan.d.w = rectaDelPj.d.w * proporcionPiniaAlta;
     if(loopsPara(ACC_PINIA_ALTA)<loops){
-        golpe.setGolpe(piniasAltas, loops == 2,rectan,REA_GOLPE_BAJO);
+        golpe->setGolpe(piniasAltas, loops == 2,rectan,REA_GOLPE_BAJO);
     }
 }
 //--------------------------------------------------------------------------------------
@@ -246,7 +251,7 @@ void Accionador::piniaAltaAgachado(int loops) {
 
     rectan.d.w = rectaDelPj.d.w * proporcionPiniaAltaAgachado;
     if(loopsPara(ACC_PINIA_ALTA_AGACHADO)<loops){
-        golpe.setGolpe(poderFuerte, loops == 2,rectan,REA_GOLPE_BAJO);
+        golpe->setGolpe(poderFuerte, loops == 2,rectan,REA_GOLPE_BAJO);
     }
 }
 //--------------------------------------------------------------------------------------
@@ -257,7 +262,7 @@ void Accionador::piniaSalto(int loops) {
 
     rectan.d.w = rectaDelPj.d.w * proporcionPiniaSalto;
     if(loopsPara(ACC_PINIA_SALTO)<loops){
-        golpe.setGolpe(piniasAltas, loops == 2,rectan,REA_GOLPE_BAJO);
+        golpe->setGolpe(piniasAltas, loops == 2,rectan,REA_GOLPE_BAJO);
     }
 }
 //--------------------------------------------------------------------------------------
@@ -268,7 +273,7 @@ void Accionador::patadaBaja(int loops) {
 
     rectan.d.w = rectaDelPj.d.w * proporcionPatadaBaja;
     if(loopsPara(ACC_PATADA_BAJA)<loops){
-        golpe.setGolpe(patadasBajas, loops == 2,rectan,REA_GOLPE_BAJO);
+        golpe->setGolpe(patadasBajas, loops == 2,rectan,REA_GOLPE_BAJO);
     }
 
 }
@@ -280,7 +285,7 @@ void Accionador::patadaBajaAtras(int loops) {
 
     rectan.d.w = rectaDelPj.d.w * proporcionPatadaAlta;
     if(loopsPara(ACC_PATADA_BAJA_ATRAS)<loops){
-        golpe.setGolpe(patadasBajas, loops == 2,rectan,REA_GOLPE_BAJO);
+        golpe->setGolpe(patadasBajas, loops == 2,rectan,REA_GOLPE_BAJO);
     }
 
 }
@@ -292,7 +297,7 @@ void Accionador::patadaAltaAtras(int loops) {
 
     rectan.d.w = rectaDelPj.d.w * porporcionPatadaAltaAtras;
     if(loopsPara(ACC_PATADA_ALTA_ATRAS)<loops){
-        golpe.setGolpe(poderFuerte, loops == 2,rectan,REA_GOLPE_BAJO);
+        golpe->setGolpe(poderFuerte, loops == 2,rectan,REA_GOLPE_BAJO);
     }
 
 }
@@ -304,7 +309,7 @@ void Accionador::patadaAlta(int loops) {
 
     rectan.d.w = rectaDelPj.d.w * proporcionPatadaAlta;
     if(loopsPara(ACC_PATADA_ALTA)<loops){
-        golpe.setGolpe(patadasAltas, loops == 2,rectan,REA_GOLPE_BAJO);
+        golpe->setGolpe(patadasAltas, loops == 2,rectan,REA_GOLPE_BAJO);
     }
 
 }
@@ -316,7 +321,7 @@ void Accionador::patadaSalto(int loops) {
 
     rectan.d.w = rectaDelPj.d.w * proporcionPatadaSO;
     if(loopsPara(ACC_PATADA_SALTO)<loops){
-        golpe.setGolpe(patadasAltas, loops == 2,rectan,REA_GOLPE_BAJO);
+        golpe->setGolpe(patadasAltas, loops == 2,rectan,REA_GOLPE_BAJO);
     }
 
 }
@@ -328,7 +333,7 @@ void Accionador::patadaSaltoVertical(int loops) {
 
     rectan.d.w = rectaDelPj.d.w * proporcionPatadaSV;
     if(loopsPara(ACC_PATADA_SALTO_VERTICAL)<loops){
-        golpe.setGolpe(patadasAltas, loops == 2,rectan,REA_GOLPE_BAJO);
+        golpe->setGolpe(patadasAltas, loops == 2,rectan,REA_GOLPE_BAJO);
     }
 }
 //--------------------------------------------------------------------------------------
@@ -339,7 +344,12 @@ void Accionador::patadaAgachado(int loops) {
 
     rectan.d.w = rectaDelPj.d.w * proporcionPatadaAgachado;
     if(loopsPara(ACC_PATADA_AGACHADO)<loops){
-        golpe.setGolpe(patadasBajas, loops == 2,rectan,REA_GOLPE_BAJO);
+        golpe->setGolpe(patadasBajas, loops == 2,rectan,REA_GOLPE_BAJO);
     }
 
+}
+//--------------------------------------------------------------------------------------
+//                  PODER
+void Accionador::activarPoder(Tdireccion direccion) {
+    poder->activar(rectaDelPj,direccion, anchoPantalla);
 }
