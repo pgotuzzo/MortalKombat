@@ -37,33 +37,22 @@ void Personaje::realizarAccion(Tinput orden) {
 		estadoAnterior = estadoActual;
 		estadoActual = estadoCompuesto;
 		verificarDireccion(orden);
+		countLoops =1;
 
 	}
 	else{
 		estadoAnterior = estadoActual;
+		countLoops++;
 	}
-
-	posicionAnterior = rectanguloPj.p;
+	if(loopsPara(estadoActual) < countLoops) estadoActual = MOV_PARADO;
 
 	rectanguloPj = llevarACabo.laAccion(estadoActual,countLoops, rectanguloPj.p,sentidoPj,direccionPj);
+
 
 	// if(poder.estado == ACTIVADO) poder.avanzar();
 	// poersonaje.getPoder.posicion
 
 
-	//&& estadoActual != MOV_CAMINANDO
-	if(loopsPara(estadoActual)==countLoops) estadoActual = MOV_PARADO;
-
-	//Si el estado anterior es salto oblicuo y el nuevo estado es una patada o una pinia durante ese salto
-	// el contador de loops no se reinicia. Lo mismo para el salto vertical
-
-	bool accionDuranteOblicuo = (estadoAnterior == MOV_SALTANDO_OBLICUO &&(estadoActual==ACC_PINIA_SALTO||estadoActual==ACC_PATADA_SALTO));
-	bool accionDuranteVertical = (estadoAnterior == MOV_SALTANDO_VERTICAL &&(estadoActual==ACC_PATADA_SALTO_VERTICAL));
-
-//	if((estadoAnterior != estadoActual) || (!accionDuranteOblicuo)&&(!accionDuranteVertical)) countLoops = 1;
-	if(estadoActual == MOV_PARADO) countLoops = 1;
-	else countLoops++;
-//	if(countLoops != 0) cout <<countLoops<<endl;
 
 }
 

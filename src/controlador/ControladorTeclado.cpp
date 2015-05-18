@@ -164,12 +164,10 @@ Tinput ControladorTeclado::esAnterior1(const Uint8 *state) {
 			}else if(state[SDL_SCANCODE_DOWN] && state[SDL_SCANCODE_O]){
 				inputAnterior1.movimiento=TinputMovimiento::KEY_ABAJO;
 				inputAnterior1.accion=TinputAccion::KEY_PROTECCION;
-				cout<<"111111"<<endl;
 				return inputAnterior1;
 			}else if(state[SDL_SCANCODE_DOWN]){
 				inputAnterior1.movimiento=TinputMovimiento::KEY_ABAJO;
 				inputAnterior1.accion=TinputAccion::KEY_NADA;
-				cout<<"222222222"<<endl;
 				return inputAnterior1;break;
 			}
 		};

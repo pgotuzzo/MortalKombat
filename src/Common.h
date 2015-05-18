@@ -518,7 +518,7 @@ static int loopsPara(TestadoPersonaje accion){
         case MOV_SALTANDO_OBLICUO:
             return 20;
         case MOV_AGACHADO:
-            return 1;
+            return 3;
         case ACC_PINIA_BAJA:
             // OJO VER COMO SOLUCIONAR VARIOS ESTADOS
             return 4;

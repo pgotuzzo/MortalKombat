@@ -191,7 +191,6 @@ void Accionador::saltarOblicuamente(int loops, Tsentido sentido, Tdireccion dire
 //--------------------------------------------------------------------------------------
 //                  AGACHAR
 void Accionador::agachar() {
-    cout<<"hola"<<endl;
     rectaDelPj.d.h = rectaDelPj.d.h/2;
     rectaDelPj.p = rectaDelPj.p + Posicion(0,rectaDelPj.d.h);
 }
