@@ -72,6 +72,19 @@ float Mundo::getAltoPiso(){
 	return altoPiso;
 }
 
+void Mundo::verificarDireccionDeLosPersonajes() {
+	//direccion derecha igual true
+	if(personaje1->rectanguloPj.p.getX() - personaje2->rectanguloPj.p.getX() <= 0){
+		personaje1->direccionPj = DERECHA;
+		personaje2->direccionPj = IZQUIERDA;
+
+	}
+	else{
+		personaje1->direccionPj = IZQUIERDA;
+		personaje2->direccionPj = DERECHA;
+	}
+}
+
 Tcambio Mundo::actualizarPJ(Personaje *PJ) {
 	Tcambio cambio;
 	cambio.dPJ = PJ->rectanguloPj.d;
@@ -111,6 +124,7 @@ vector<Tcambio> Mundo::actualizarMundo(vector<Tinput> inputs) {
 	cambio1 = actualizarPJ(personaje1);
 	cambio2 = actualizarPJ(personaje2);
 
+	//personaje1->rectanguloPj.p.mostrarPar();
 	c.push_back(cambio1);
 	c.push_back(cambio2);
 
@@ -171,17 +185,6 @@ Mundo::~Mundo() {
 	loguer->loguear("Se libero a los personajes", Log::LOG_DEB);
 }
 
-void Mundo::verificarDireccionDeLosPersonajes() {
-	//direccion derecha igual true
-	if(personaje1->rectanguloPj.p.getX() - personaje2->rectanguloPj.p.getX() <= 0){
-		personaje1->direccionPj = DERECHA;
-		personaje2->direccionPj = IZQUIERDA;
-
-	}	else{
-		personaje1->direccionPj = IZQUIERDA;
-		personaje2->direccionPj = DERECHA;
-	}
-}
 
 
 // No borrar me sirve para el detector de colisiones despues.

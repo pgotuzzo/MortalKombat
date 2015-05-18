@@ -8,10 +8,12 @@
 void DetectorDeColisiones::resolverColisiones(Personaje *personaje1, Personaje *personaje2) {
 
     colisionar(personaje1,personaje2);
-    // si personaje1 esta tirando el golpe
-    // colisionar(personaje2,personaje1->llevarAcabo.golpe.estado)
-    // si personaje2 esta tirando el golpe
-    // colisionar(personaje1,personaje2->llevarAcabo.golpe.estado)
+    if(personaje1->llevarACabo.getGolpe()->estado){
+        colisionar(personaje2,personaje1->llevarACabo.getGolpe());
+    }
+    if(personaje2->llevarACabo.getGolpe()->estado){
+        colisionar(personaje1,personaje2->llevarACabo.getGolpe());
+    }
     if(personaje1->poder->estado == ACTIVADO && personaje2->poder->estado == ACTIVADO){
         colisionar(personaje1->poder,personaje2->poder);
         colisionar(personaje1,personaje2->poder);
@@ -35,8 +37,6 @@ void DetectorDeColisiones::resolverColisiones(Personaje *personaje1, Personaje *
 // Si objeto1 u objeto2 son NULL devuelvo false
 bool DetectorDeColisiones::detectarColision(ObjetoColisionable *objeto1, ObjetoColisionable *objeto2) {
 
-    if(!objeto1 || !objeto2) return false;
-
     float bordeDerecho1,bordeIzquierdo1,techo1,piso1;
     float bordeDerecho2,bordeIzquierdo2,techo2,piso2;
 
@@ -55,10 +55,12 @@ bool DetectorDeColisiones::detectarColision(ObjetoColisionable *objeto1, ObjetoC
     piso1 = rectangulo1.p.getY() + rectangulo1.d.h;
     piso2 = rectangulo2.p.getY() + rectangulo2.d.h;
 
-    if (!((bordeDerecho1 < bordeIzquierdo2) || (bordeIzquierdo1 > bordeDerecho2) || (techo1 < piso2) || (piso1 > techo2))) {
-        return true;
+    if ( (bordeDerecho2 < bordeIzquierdo1) || (bordeIzquierdo2 > bordeDerecho1) ){
+
+        return false;
     }
-    return false;
+    else if ( (techo2 > piso1) || (piso2 < techo1) ) return false;
+    else return true;
 }
 
 // Calcula la distancia del borde derecho del primer objeto con el borde izquierdo del segundo.
@@ -134,146 +136,60 @@ void DetectorDeColisiones::colisionar(Poder *poder1, Poder *poder2) {
 }
 
 
+bool DetectorDeColisiones::verificarEstadosAnterioresAlChoque(Personaje *PJ){
+
+    return ((PJ->estadoActual == MOV_SALTANDO_OBLICUO  && PJ->sentidoPj == ADELANTE)
+            || PJ->estadoActual == MOV_CAMINANDO
+            || PJ->estadoActual == MOV_PARADO
+            || PJ->estadoActual == MOV_AGACHADO
+            || PJ->estadoActual == MOV_SALTANDO_VERTICAL);
+}
+
+void DetectorDeColisiones::separarPersonajes(Personaje *PJ1, Personaje *PJ2) {
+
+    float distancia;
+    if ((PJ1->rectanguloPj.p.getX() - PJ2->rectanguloPj.p.getX()) <= 0)
+        distancia = distanciaColisionadaenX(PJ1,PJ2);
+    else distancia = distanciaColisionadaenX(PJ2,PJ1);
+    PJ1->empujado(distancia/2,PJ1->direccionPj);
+    PJ2->empujado(distancia/2,PJ2->direccionPj);
+
+}
 // Resuelve las colisiones entre los dos personajes.
 // Dicha resolucion se tiene que hacer ida y vuelta para los personajes, debido a que todas las comprobaciones
 // se hacen una sola vez
 void DetectorDeColisiones::resolverColision(Personaje *PJ1, Personaje *PJ2) {
-
     //Los dos caminando en sentido contrario
-   /* if(PJ1->sentido == true && PJ1->estado == MOV_CAMINANDO && PJ2->sentido == true && PJ2->estado == MOV_CAMINANDO){
-        if ((PJ1->pos.getX() - PJ2->pos.getX()) <= 0) {
-            PJ1->pos.setX(PJ1->pos.getX() - 1);
-            PJ2->pos.setX(PJ2->pos.getX() + 1);
-        } else {
-            PJ1->pos.setX(PJ1->pos.getX() + 1);
-            PJ2->pos.setX(PJ2->pos.getX() - 1);
-        };
+   if(PJ1->sentidoPj == ADELANTE && PJ1->estadoActual == MOV_CAMINANDO && PJ2->sentidoPj == ADELANTE && PJ2->estadoActual == MOV_CAMINANDO){
+       separarPersonajes(PJ1,PJ2);
     }
     else{
-        Tinput inputDerecha;
-        inputDerecha.movimiento = TinputMovimiento::KEY_DERECHA;
-        inputDerecha.accion = TinputAccion::KEY_NADA;
-
-        Tinput inputIzquierda;
-        inputIzquierda.movimiento = TinputMovimiento::KEY_IZQUIERDA;
-        inputDerecha.accion = TinputAccion::KEY_NADA;
-
-        Tinput inputAgachado;
-        inputAgachado.movimiento = TinputMovimiento::KEY_ABAJO;
-        inputAgachado.accion = TinputAccion::KEY_NADA;
-
-        if ((PJ1->pos.getX() - PJ2->pos.getX()) <= 0 ) {
-            if(PJ1->estado == MOV_CAMINANDO && PJ1->sentido == true){
-                if(PJ2->estado == MOV_PARADO) {
-                    PJ2->accionesEnCurso[2]->setAnchoDePaso(factorDeRestrocesoSinProteccion);
-                    PJ2->realizarAccion(inputDerecha,anchoEsc);
-                    PJ2->estado = MOV_PARADO;
-                    PJ1->accionesEnCurso[2]->setAnchoDePaso(factorDeRestrocesoSinProteccion);
-                    PJ2->accionesEnCurso[2]->setAnchoDePasoDefault();
+       // Empuja uno al otro
+        if ((PJ1->rectanguloPj.p.getX() - PJ2->rectanguloPj.p.getX()) <= 0 ) {
+            if(PJ1->estadoActual == MOV_CAMINANDO && PJ1->sentidoPj == ADELANTE) {
+                if (PJ2->estadoActual == MOV_PARADO || PJ2->estadoActual == MOV_AGACHADO || PJ2->estadoActual == MOV_SALTANDO_VERTICAL) {
+                    PJ2->empujado(2, PJ2->direccionPj);
                 }
-                else if(PJ2->estado == MOV_AGACHADO) {
-                    PJ2->accionesEnCurso[2]->setAnchoDePaso(factorDeRestrocesoSinProteccion);
-                    PJ2->realizarAccion(inputDerecha, anchoEsc);
-                    PJ2->realizarAccion(inputAgachado,anchoEsc);
-                    PJ1->accionesEnCurso[2]->setAnchoDePaso(factorDeRestrocesoSinProteccion);
-                    PJ2->accionesEnCurso[2]->setAnchoDePasoDefault();
-                }
-                else if (PJ2->estado == ACC_PROTECCION) {
-                    PJ2->accionesEnCurso[2]->setAnchoDePaso(factorDeRetrocesoConProteccion);
-                    PJ2->realizarAccion(inputDerecha, anchoEsc);
-                    PJ2->estado = ACC_PROTECCION;
-                    PJ1->accionesEnCurso[2]->setAnchoDePaso(factorDeRetrocesoConProteccion);
-                    PJ2->accionesEnCurso[2]->setAnchoDePasoDefault();
-                }
-                else if (PJ2->estado == ACC_PROTECCION_AGACHADO) {
-                    PJ2->accionesEnCurso[2]->setAnchoDePaso(factorDeRetrocesoConProteccion);
-                    PJ2->realizarAccion(inputDerecha, anchoEsc);
-                    PJ2->estado = ACC_PROTECCION_AGACHADO;
-                    PJ1->accionesEnCurso[2]->setAnchoDePaso(factorDeRetrocesoConProteccion);
-                    PJ2->accionesEnCurso[2]->setAnchoDePasoDefault();
+                if (PJ2->estadoActual == ACC_PROTECCION || PJ2->estadoActual == ACC_PROTECCION_AGACHADO) {
+                    PJ2->empujado(1, PJ2->direccionPj);
+                    PJ1->empujado(1, PJ1->direccionPj);
                 }
             }
-            else if(PJ2->estado == MOV_CAMINANDO && PJ2->sentido == true){
-                if (PJ1->estado == MOV_PARADO){
-                    PJ1->accionesEnCurso[2]->setAnchoDePaso(factorDeRestrocesoSinProteccion);
-                    PJ1->realizarAccion(inputIzquierda, anchoEsc);
-                    PJ1->estado = MOV_PARADO;
-                    PJ2->accionesEnCurso[2]->setAnchoDePaso(factorDeRestrocesoSinProteccion);
-                    PJ1->accionesEnCurso[2]->setAnchoDePasoDefault();
+            else if(PJ2->estadoActual == MOV_CAMINANDO && PJ2->sentidoPj == ADELANTE){
+                if (PJ1->estadoActual == MOV_PARADO || PJ1->estadoActual == MOV_AGACHADO || PJ1->estadoActual == MOV_SALTANDO_VERTICAL) {
+                    PJ1->empujado(2, PJ1->direccionPj);
                 }
-                else if (PJ1->estado == MOV_AGACHADO){
-                    PJ1->accionesEnCurso[2]->setAnchoDePaso(factorDeRestrocesoSinProteccion);
-                    PJ1->realizarAccion(inputIzquierda, anchoEsc);
-                    PJ1->realizarAccion(inputAgachado,anchoEsc);
-                    PJ2->accionesEnCurso[2]->setAnchoDePaso(factorDeRestrocesoSinProteccion);
-                    PJ1->accionesEnCurso[2]->setAnchoDePasoDefault();
-                }
-                else if (PJ1->estado == ACC_PROTECCION) {
-                    PJ1->accionesEnCurso[2]->setAnchoDePaso(factorDeRetrocesoConProteccion);
-                    //PJ1->realizarAccion(inputIzquierda, anchoEsc);
-                    PJ1->caminar(false);
-                    PJ1->estado = ACC_PROTECCION;
-                    PJ2->accionesEnCurso[2]->setAnchoDePaso(factorDeRetrocesoConProteccion);
-                    PJ1->accionesEnCurso[2]->setAnchoDePasoDefault();
-                }
-                else if (PJ1->estado == ACC_PROTECCION_AGACHADO) {
-                    PJ1->accionesEnCurso[2]->setAnchoDePaso(factorDeRetrocesoConProteccion);
-                    //PJ1->realizarAccion(inputIzquierda, anchoEsc);
-                    PJ1->caminar(false);
-                    PJ1->estado = ACC_PROTECCION_AGACHADO;
-                    PJ2->accionesEnCurso[2]->setAnchoDePaso(factorDeRetrocesoConProteccion);
-                    PJ1->accionesEnCurso[2]->setAnchoDePasoDefault();
+                if (PJ1->estadoActual == ACC_PROTECCION || PJ1->estadoActual == ACC_PROTECCION_AGACHADO) {
+                    PJ2->empujado(1, PJ2->direccionPj);
+                    PJ1->empujado(1, PJ1->direccionPj);
                 }
             }
         }
-
     }
-
-
-    //Colision entre un pj saltando oblicuamente y otro que esta parado (que no se superpongan luego dle salto)
-    if(PJ1->estado == MOV_SALTANDO_OBLICUO && PJ1->sentido == true && (PJ2->estado == MOV_PARADO || PJ2->estado ==
-                                                                                                    MOV_AGACHADO) && seProdujoColision(PJ1,PJ2)){
-        if ((PJ1->pos.getX() - PJ2->pos.getX()) <= 0) {
-            PJ2->pos.setX(PJ2->pos.getX() + distanciaColisionadaenX(PJ1,PJ2));
-        }
+    if (PJ1->estadoActual == MOV_SALTANDO_OBLICUO && PJ1->sentidoPj == ADELANTE){
+        if(verificarEstadosAnterioresAlChoque(PJ2)) separarPersonajes(PJ1,PJ2);
     }
-
-    //Colision entre un pj saltando oblicuamente y otro caminando
-    if(PJ1->estado == MOV_SALTANDO_OBLICUO && PJ1->sentido == true && PJ2->estado == MOV_CAMINANDO && seProdujoColision(PJ1,PJ2)){
-        if ((PJ1->pos.getX() - PJ2->pos.getX()) <= 0) {
-            PJ2->pos.setX(PJ2->pos.getX() + distanciaColisionadaenX(PJ1,PJ2));
-        }
-    }
-
-    //Colision entre un pj Saltando vertical y otro caminando
-    if(PJ1->estado == MOV_SALTANDO_VERTICAL && PJ2->estado == MOV_CAMINANDO && PJ2->sentido == true && seProdujoColision(PJ1,PJ2)){
-        if ((PJ1->pos.getX() - PJ2->pos.getX()) <= 0) {
-            PJ2->pos.setX(PJ2->pos.getX() + distanciaColisionadaenX(PJ1,PJ2));
-        } else {
-            PJ2->pos.setX(PJ2->pos.getX() - distanciaColisionadaenX(PJ2,PJ1));
-        };
-    }
-
-    // Colision entre un pj saltando vertical y otro saltando oblicuamente
-    if(PJ1->estado == MOV_SALTANDO_VERTICAL && PJ2->estado == MOV_SALTANDO_OBLICUO && PJ2->sentido == true && seProdujoColision(PJ1,PJ2)){
-        if ((PJ1->pos.getX() - PJ2->pos.getX()) <= 0) {
-            PJ2->enCaida = true;
-            PJ2->pos.setX(PJ2->pos.getX() + distanciaColisionadaenX(PJ1,PJ2));
-        } else {
-            PJ2->enCaida = true;
-            PJ2->pos.setX(PJ2->pos.getX() - distanciaColisionadaenX(PJ2,PJ1));
-        };
-    }
-
-    if(seProdujoColision(PJ1,PJ2)) {
-        if ((PJ1->pos.getX() - PJ2->pos.getX()) <= 0) {
-            if(PJ2->pos.getX() >= anchoEsc - PJ2->ancho && PJ1->pos.getX() >= anchoEsc - PJ2->ancho - PJ1->ancho){
-                PJ2->pos.setX(anchoEsc - PJ2->ancho);
-                PJ1->pos.setX(anchoEsc - PJ2->ancho - PJ1->ancho);
-            }
-            else PJ2->pos.setX(PJ2->pos.getX() + distanciaColisionadaenX(PJ1, PJ2));
-        }
-    }*/
+    separarPersonajes(PJ1,PJ2);
 }
 
 // Se resuelve la colision entre el personaje y el poder.
@@ -319,8 +235,9 @@ bool DetectorDeColisiones::hayEfectoTunel(ObjetoColisionable *objeto1, ObjetoCol
 
 // resuelve la colision entre golpe y personaje
 void DetectorDeColisiones::resolverColision(Personaje *PJ,Golpe *golpe) {
-    // PJ->reducirVida(golpe->danio);
-    // PJ->estado = golpe->efectoSobreOponente;
-    // Ajustar la superposicion del golpe con el personaje si es necesario
+    PJ->reducirVida(golpe->danio);
+    //PJ->estadoAnterior = PJ->estadoActual;
+    //PJ->estadoActual = golpe->efectoSobreOponente;
+    // Ajustar la superrectanguloPj.picion del golpe con el personaje si es necesario
 }
 

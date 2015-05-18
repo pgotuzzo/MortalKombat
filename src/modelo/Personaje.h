@@ -44,8 +44,11 @@ public:
 	Personaje(Tdireccion direccionInicial,Trect cuerpo,float anchoPantalla);
 
 	Trect getRectangulo();
+	void modificarPosicion(Posicion nuevaPosicion);
 
 	void realizarAccion(Tinput orden);
+	void reducirVida(float danio);
+	void empujado(float desplazamiento, Tdireccion direccion);
 	~Personaje();
 
 	void verificarDireccion(Tinput tinput);

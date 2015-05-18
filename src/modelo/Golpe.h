@@ -17,6 +17,7 @@ public:
     ~Golpe();
     void setGolpe(float danio,bool estado, Trect rectangulo, TestadoPersonaje nuevoEstado);
     Trect getRectangulo();
+    void modificarPosicion(Posicion nuevaPosicion);
 
 };
 

@@ -11,6 +11,8 @@ public:
 
     virtual Trect getRectangulo() = 0;
 
+    virtual void modificarPosicion(Posicion nuevaPosicion) = 0;
+
     virtual ~ObjetoColisionable() {}
 
 };

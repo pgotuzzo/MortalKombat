@@ -16,7 +16,6 @@ private:
     float distanciaColisionadaenX(ObjetoColisionable *objeto1, ObjetoColisionable *objeto2);
     bool detectarColisionenY(ObjetoColisionable* objeto1, ObjetoColisionable* objeto2);
 
-public:
     void colisionar(Personaje* personaje1, Personaje* personaje2);
     void colisionar(Personaje* personaje1, Golpe* golpe);
     void colisionar(Personaje* personaje1, Poder* poder);
@@ -30,6 +29,11 @@ public:
 
     bool hayEfectoTunel(ObjetoColisionable* objeto1, ObjetoColisionable* objeto2);
 
+    bool verificarEstadosAnterioresAlChoque(Personaje* PJ);
+
+    void separarPersonajes(Personaje* PJ1, Personaje* PJ2);
+
+public:
     void resolverColisiones(Personaje* personaje1, Personaje* personaje2);
 };
 

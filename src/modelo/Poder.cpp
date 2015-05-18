@@ -60,6 +60,10 @@ Trect Poder::getRectangulo() {
     return rectanguloPoder;
 }
 
+void Poder::modificarPosicion(Posicion nuevaPosicion) {
+    rectanguloPoder.p = nuevaPosicion;
+}
+
 
 Poder::~Poder() {
 

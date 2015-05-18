@@ -15,12 +15,16 @@ Trect Golpe::getRectangulo() {
     return rectangulo;
 }
 
+void Golpe::modificarPosicion(Posicion nuevaPosicion) {
+    rectangulo.p = nuevaPosicion;
+}
+
 
 void Golpe::setGolpe(float danio, bool estado, Trect rectan, TestadoPersonaje nuevoEstado) {
 
     efectoSobreOponente = nuevoEstado;
     rectangulo = rectan;
-    estado = true;
+    this->estado = estado;
     this->danio = danio;
 }
 

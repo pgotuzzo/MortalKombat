@@ -39,7 +39,7 @@ public:
     //GOLPES
     void piniaBaja(int loops);
     void piniaBajaAgachado(int loops);
-    void piniaAlta(int loops);
+    void piniaAlta(int loops,Tdireccion direccion);
     void piniaAltaAgachado(int loops);
     void piniaSalto(int loops);
     void patadaBaja(int loops);
@@ -49,6 +49,10 @@ public:
     void patadaSalto(int loops);
     void patadaSaltoVertical(int loops);
     void patadaAgachado(int loops);
+
+    Posicion desplazado(float deltaDesplazo, Tdireccion direccion);
+
+    Golpe* getGolpe();
 
     void subirEnSaltoOblicuo(float deltaMovX, float deltaMovY, Tsentido sentido, Tdireccion direccion);
 

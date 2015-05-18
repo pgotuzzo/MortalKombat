@@ -92,6 +92,10 @@ Trect Personaje::getRectangulo() {
 	return rectanguloPj;
 }
 
+void Personaje::modificarPosicion(Posicion nuevaPosicion) {
+	rectanguloPj.p = nuevaPosicion;
+}
+
 void Personaje::verificarDireccion(Tinput orden) {
 
 	switch(orden.movimiento){
@@ -251,6 +255,10 @@ TestadoPersonaje Personaje::generarEstado(Tinput orden) {
 	}
 }
 
+void Personaje::reducirVida(float danio) {
+	if(vida <= danio) vida = 0;
+	else vida = vida - danio;
+}
 
 Personaje::~Personaje() {
 
@@ -272,4 +280,8 @@ bool Personaje::estadoActualContinuaElAnterior() {
 	(estadoAnterior == MOV_SALTANDO_VERTICAL && estadoActual == ACC_PATADA_SALTO_VERTICAL);
 	//Si el estado anterior era salto vertical y el actual patada salto vertical o pinia salto tiene que seguir
 	// con los loops del estado anterior
+}
+
+void Personaje::empujado(float desplazamiento, Tdireccion direccion) {
+	rectanguloPj.p = llevarACabo.desplazado(desplazamiento,direccion);
 }

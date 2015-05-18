@@ -20,6 +20,7 @@ public:
     void avanzar(float avance);
     void setEstado(TestadoPoder nuevoEstado);
     Trect getRectangulo();
+    void modificarPosicion(Posicion nuevaPosicion);
 
     ~Poder();
 

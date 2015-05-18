@@ -57,7 +57,7 @@ int main(int argc, char **argv) {
 
         //TODO: Modificar los dos controladores para que devuelvan los nuevos inputs del struct Tinput
         ControladorTeclado controlador = ControladorTeclado();
-        //ControladorJoystick controlador = ControladorJoystick();
+        //ControladorJoystick controlador = ControladorJoystick(configuracion.getBotones());
 
         loguer->loguear("Finaliza la creacion del controlador", Log::LOG_DEB);
         loguer->loguear("-------------- GameLoop ----------------------------", Log::LOG_DEB);
