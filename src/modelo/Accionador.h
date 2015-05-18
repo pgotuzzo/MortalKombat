@@ -46,6 +46,10 @@ public:
     void patadaSalto(int loops);
     void patadaSaltoVertical(int loops);
     void patadaAgachado(int loops);
+
+    void subirEnSaltoOblicuo(float deltaMovX, float deltaMovY, Tsentido sentido, Tdireccion direccion);
+
+    void bajarEnSaltoOblicuo(float deltaMovX, float deltaMovY, Tsentido sentido, Tdireccion direccion);
 };
 
 
