@@ -72,14 +72,16 @@ bool Personaje::puedoRealizarAccion(TestadoPersonaje accion) {
 	}
 	//mientras esta agachado solo puede pegar pinias altas y bajas patada agachado y proteccion agachado
 	if(estadoActual == MOV_AGACHADO){
-		return accion == ACC_PINIA_ALTA || accion == ACC_PINIA_BAJA ||accion == ACC_PATADA_ALTA||accion == ACC_PATADA_BAJA || accion == ACC_PROTECCION;
+		return accion == MOV_AGACHADO || accion == ACC_PROTECCION_AGACHADO ||accion == ACC_PATADA_AGACHADO
+			   ||accion == ACC_PINIA_ALTA_AGACHADO || accion == ACC_PINIA_BAJA_AGACHADO;
 	}
 	//si se esta protegiendo solo puede agacharse
 	if(estadoActual == ACC_PROTECCION){
-		return accion == MOV_AGACHADO;
+		return accion == ACC_PROTECCION || accion == MOV_AGACHADO;
 	}
+	//Si esta protegiendose agachado solo puede seguir haciendolo o dejar de protegerse
 	if(estadoActual == ACC_PROTECCION_AGACHADO){
-		return accion == MOV_AGACHADO;
+		return accion ==ACC_PROTECCION_AGACHADO || accion == MOV_AGACHADO;
 	}
 	//si no esta haciendo ninguna de las enteriores
 	//quiere decir que esta haciendo alguna patada pinia o poder, las cuales no se puede interrumpir o combinar con nada
