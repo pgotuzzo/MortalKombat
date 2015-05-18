@@ -26,6 +26,7 @@ const float intervaloSaltoVertical = 10;
 const float intervaloSaltoOblicuo = 5;
 const float alturaSaltoOblicuo = 50;
 const float anchoSaltoOblicuo = 100;
+const float proporcionSalto = 3;
 
 Accionador::Accionador() {
 
@@ -180,8 +181,8 @@ void Accionador::saltarOblicuamente(int loops, Tsentido sentido, Tdireccion dire
         }else{
             //en la segunda mitad de los loops baja
             //en el primer cuarto de estos baja mas lentamente que en el segundo cuarto
-            if(loops <= (3*loopsPara(MOV_SALTANDO_OBLICUO)/4)) bajarEnSaltoOblicuo(intervaloSaltoOblicuo,intervaloSaltoOblicuo,sentido,direccion);
-            else bajarEnSaltoOblicuo(intervaloSaltoOblicuo,intervaloSaltoOblicuo*3,sentido,direccion);
+            if(loops <= (proporcionSalto*loopsPara(MOV_SALTANDO_OBLICUO)/4)) bajarEnSaltoOblicuo(intervaloSaltoOblicuo,intervaloSaltoOblicuo,sentido,direccion);
+            else bajarEnSaltoOblicuo(intervaloSaltoOblicuo,intervaloSaltoOblicuo*proporcionSalto,sentido,direccion);
         }
     }
 }
