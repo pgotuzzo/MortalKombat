@@ -49,6 +49,10 @@ public:
 	~Personaje();
 
 	void verificarDireccion(Tinput tinput);
+
+	void caminar();
+
+	bool estadoActualContinuaElAnterior();
 };
 
 #endif /* PERSONAJE_H_ */

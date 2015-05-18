@@ -37,7 +37,8 @@ void Personaje::realizarAccion(Tinput orden) {
 		estadoAnterior = estadoActual;
 		estadoActual = estadoCompuesto;
 		verificarDireccion(orden);
-		countLoops =1;
+		if(estadoActualContinuaElAnterior())countLoops ++;
+		else countLoops =1;
 
 	}
 	else{
@@ -77,7 +78,7 @@ bool Personaje::puedoRealizarAccion(TestadoPersonaje accion) {
 	}
 	//si se esta protegiendo solo puede agacharse
 	if(estadoActual == ACC_PROTECCION){
-		return accion == ACC_PROTECCION || accion == MOV_AGACHADO;
+		return accion == ACC_PROTECCION || accion == MOV_AGACHADO ||accion == ACC_PROTECCION_AGACHADO;
 	}
 	//Si esta protegiendose agachado solo puede seguir haciendolo o dejar de protegerse
 	if(estadoActual == ACC_PROTECCION_AGACHADO){
@@ -257,3 +258,19 @@ Personaje::~Personaje() {
 }
 
 
+void Personaje::caminar(){
+	estadoActual = MOV_CAMINANDO;
+	llevarACabo.laAccion(estadoActual,0,rectanguloPj.p,ATRAS,direccionPj);
+	estadoActual =MOV_PARADO;
+}
+
+bool Personaje::estadoActualContinuaElAnterior() {
+	return (estadoAnterior == MOV_SALTANDO_OBLICUO && estadoActual == ACC_PINIA_SALTO) ||
+	(estadoAnterior == MOV_SALTANDO_OBLICUO && estadoActual == ACC_PATADA_SALTO)||
+	//Si el estado anterior era salto oblicuo y el actual patada salto o pinia salto tiene que seguir
+	// con los loops del estado anterior
+	(estadoAnterior == MOV_SALTANDO_VERTICAL && estadoActual == ACC_PINIA_SALTO)||
+	(estadoAnterior == MOV_SALTANDO_VERTICAL && estadoActual == ACC_PATADA_SALTO_VERTICAL);
+	//Si el estado anterior era salto vertical y el actual patada salto vertical o pinia salto tiene que seguir
+	// con los loops del estado anterior
+}

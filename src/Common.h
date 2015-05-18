@@ -355,6 +355,7 @@ enum TestadoPersonaje {
 
     ACC_PATADA_BAJA,
     ACC_PATADA_BAJA_ATRAS,
+    ACC_PINIA_SALTO_VERTICAL,
 
     ACC_PATADA_AGACHADO,
     ACC_PATADA_SALTO_VERTICAL,
@@ -391,6 +392,7 @@ static string TestadoPersonajeToString(TestadoPersonaje e){
         case TestadoPersonaje::ACC_PINIA_ALTA: return "acc_pinia_alta";
         case TestadoPersonaje::ACC_PINIA_ALTA_AGACHADO: return "acc_pinia_alta_agachado";
         case TestadoPersonaje::ACC_PINIA_SALTO: return "acc_pinia_salto";
+        case TestadoPersonaje::ACC_PINIA_SALTO_VERTICAL: return "acc_pinia_salto";
         case TestadoPersonaje::ACC_PATADA_BAJA: return "acc_patada_baja";
         case TestadoPersonaje::ACC_PATADA_BAJA_ATRAS: return "acc_patada_baja_atras";
         case TestadoPersonaje::ACC_PATADA_AGACHADO: return "acc_patada_agachado";
@@ -647,6 +649,9 @@ static int mostrarEstado(TestadoPersonaje accion){
             break;
         case REA_PINIA_ALTA:
             cout<<"REA_PINIA_ALTA"<<endl;
+            break;
+        case ACC_PINIA_SALTO_VERTICAL:
+            cout<<"ACC_PATADA_SALTO_VERTICAL"<<endl;
             break;
     }
 }

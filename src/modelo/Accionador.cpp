@@ -75,6 +75,7 @@ Trect Accionador::laAccion(TestadoPersonaje estadoPj, int loops, Posicion pos, T
             piniaAltaAgachado(loops);
             break;
         case ACC_PINIA_SALTO:
+            saltarOblicuamente(loops,sentido,direccion);
             piniaSalto(loops);
             break;
         case ACC_PATADA_BAJA:
@@ -87,9 +88,15 @@ Trect Accionador::laAccion(TestadoPersonaje estadoPj, int loops, Posicion pos, T
             patadaAgachado(loops);
             break;
         case ACC_PATADA_SALTO_VERTICAL:
+            saltarVerticualmente(loops);
+            patadaSaltoVertical(loops);
+            break;
+        case ACC_PINIA_SALTO_VERTICAL:
+            saltarVerticualmente(loops);
             patadaSaltoVertical(loops);
             break;
         case ACC_PATADA_SALTO:
+            saltarOblicuamente(loops,sentido,direccion);
             patadaSalto(loops);
             break;
         case ACC_PATADA_ALTA:
