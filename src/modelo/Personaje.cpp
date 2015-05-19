@@ -25,43 +25,33 @@ Personaje::Personaje(Tdireccion direccionInicial,Trect cuerpo, float anchoPantal
 
 void Personaje::realizarAccion(Tinput orden) {
 
-	//mostrarEstado(estadoActual);
-
-	if(estadoActual == MOV_AGACHADO) {
-		rectanguloPj = llevarACabo.ponerseDePie();
-	}
-
-
-
 	TestadoPersonaje estadoCompuesto = generarEstado(orden);
 
-	if(puedoRealizarAccion(estadoCompuesto)){
+	if (puedoRealizarAccion(estadoCompuesto)) {
 		estadoAnterior = estadoActual;
 		estadoActual = estadoCompuesto;
 		verificarDireccion(orden);
-		if(estadoActualContinuaElAnterior())countLoops ++;
+		if (estadoActualContinuaElAnterior())countLoops++;
 		else {
-			if(estadoAnterior == REA_GOLPE_FUERTE) {
-				cout<<"hola"<<endl;
+			if (estadoAnterior == REA_GOLPE_FUERTE) {
+				cout << "hola" << endl;
 				estadoActual = REA_LEVANTARSE;
 			}
-			countLoops =1;
+			countLoops = 1;
 		}
 	}
 	else {
-		if(estadoActual == REA_GOLPE_FUERTE && estadoAnterior != REA_GOLPE_FUERTE) countLoops = 0;
+		if (estadoActual == REA_GOLPE_FUERTE && estadoAnterior != REA_GOLPE_FUERTE) countLoops = 0;
 		estadoAnterior = estadoActual;
 		countLoops++;
 	}
-	if(loopsPara(estadoActual) < countLoops) estadoActual = MOV_PARADO;
+	if (loopsPara(estadoActual) < countLoops) estadoActual = MOV_PARADO;
 
-	rectanguloPj = llevarACabo.laAccion(estadoActual,countLoops, rectanguloPj.p,sentidoPj,direccionPj);
-
-
-	if(poder->estado == ACTIVADO) poder->avanzar(10);
-	if(poder->estado == COLISION) poder->setEstado(DESACTIVADO);
+	rectanguloPj = llevarACabo.laAccion(estadoActual, countLoops, rectanguloPj.p, sentidoPj, direccionPj);
 
 
+	if (poder->estado == ACTIVADO) poder->avanzar(10);
+	if (poder->estado == COLISION) poder->setEstado(DESACTIVADO);
 }
 
 bool Personaje::puedoRealizarAccion(TestadoPersonaje accion) {

@@ -37,7 +37,8 @@ void Accionador::initialize(Trect rectan, float anchoPanta, float yPiso,Poder* n
     rectaDelPj = rectan;
     anchoPantalla = anchoPanta;
     ydelPiso = yPiso;
-    nuevoEstado = MOV_PARADO;
+    estAct = MOV_PARADO;
+    estAnt = MOV_PARADO;
     golpe = new Golpe();
     this->poder = nuevoPoder;
     alturaPj = rectan.d.h;
@@ -46,6 +47,12 @@ void Accionador::initialize(Trect rectan, float anchoPanta, float yPiso,Poder* n
 
 Trect Accionador::laAccion(TestadoPersonaje estadoPj, int loops, Posicion pos, Tsentido sentido, Tdireccion direccion) {
 
+    estAnt = estAct;
+    estAct = estadoPj;
+    if(estAnt == MOV_AGACHADO && estAct != MOV_AGACHADO) {
+        ponerseDePie();
+        return rectaDelPj;
+    }
 
     switch (estadoPj){
         //case movimiento ---------------------------------
@@ -211,9 +218,16 @@ void Accionador::saltarOblicuamente(int loops, Tsentido sentido, Tdireccion dire
 //--------------------------------------------------------------------------------------
 //                  AGACHAR
 void Accionador::agachar() {
-    rectaDelPj.d.h = alturaPj/2;
-    rectaDelPj.p = rectaDelPj.p + Posicion(0,rectaDelPj.d.h);
+    if(estAnt != MOV_AGACHADO){
+        rectaDelPj.d.h = rectaDelPj.d.h/2;
+        rectaDelPj.p = rectaDelPj.p + Posicion(0,rectaDelPj.d.h);
+    }
 }
+void Accionador::ponerseDePie() {
+    rectaDelPj.p = rectaDelPj.p + Posicion(0,-(rectaDelPj.d.h));
+    rectaDelPj.d.h = rectaDelPj.d.h*2;
+}
+
 //--------------------------------------------------------------------------------------
 //                  GOLPES
 //--------------------------------------------------------------------------------------
@@ -430,8 +444,3 @@ Golpe *Accionador::getGolpe() {
     return golpe;
 }
 
-Trect Accionador::ponerseDePie() {
-    rectaDelPj.p = rectaDelPj.p + Posicion(0,-(alturaPj/2));
-    rectaDelPj.d.h = alturaPj;
-    return rectaDelPj;
-}

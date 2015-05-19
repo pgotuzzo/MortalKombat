@@ -16,7 +16,9 @@ public:
     float anchoPantalla;
     float ydelPiso;
 
-    TestadoPersonaje nuevoEstado;
+    TestadoPersonaje estAct;
+    TestadoPersonaje estAnt;
+
     Tdireccion direcBloqueada;
 
     Golpe* golpe;
@@ -37,7 +39,7 @@ public:
     void subirEnSaltoOblicuo(float deltaMovX, float deltaMovY, Tsentido sentido, Tdireccion direccion);
     void bajarEnSaltoOblicuo(float deltaMovX, float deltaMovY, Tsentido sentido, Tdireccion direccion);
     void agachar();
-    Trect ponerseDePie();
+    void ponerseDePie();
 
     //GOLPES
     void piniaBaja(int loops,Tdireccion direccion);
