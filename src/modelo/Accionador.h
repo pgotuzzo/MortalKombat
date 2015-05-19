@@ -37,18 +37,18 @@ public:
 
 
     //GOLPES
-    void piniaBaja(int loops);
-    void piniaBajaAgachado(int loops);
+    void piniaBaja(int loops,Tdireccion direccion);
+    void piniaBajaAgachado(int loops,Tdireccion direccion);
     void piniaAlta(int loops,Tdireccion direccion);
-    void piniaAltaAgachado(int loops);
-    void piniaSalto(int loops);
-    void patadaBaja(int loops);
-    void patadaBajaAtras(int loops);
-    void patadaAltaAtras(int loops);
-    void patadaAlta(int loops);
-    void patadaSalto(int loops);
-    void patadaSaltoVertical(int loops);
-    void patadaAgachado(int loops);
+    void piniaAltaAgachado(int loops,Tdireccion direccion);
+    void piniaSalto(int loops,Tdireccion direccion);
+    void patadaBaja(int loops,Tdireccion direccion);
+    void patadaBajaAtras(int loops,Tdireccion direccion);
+    void patadaAltaAtras(int loops,Tdireccion direccion);
+    void patadaAlta(int loops,Tdireccion direccion);
+    void patadaSalto(int loops,Tdireccion direccion);
+    void patadaSaltoVertical(int loops,Tdireccion direccion);
+    void patadaAgachado(int loops,Tdireccion direccion);
 
     Posicion desplazado(float deltaDesplazo, Tdireccion direccion);
 

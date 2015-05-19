@@ -64,47 +64,47 @@ Trect Accionador::laAccion(TestadoPersonaje estadoPj, int loops, Posicion pos, T
 
             //case acciones ---------------------------------
         case ACC_PINIA_BAJA:
-            piniaBaja(loops);
+            piniaBaja(loops,direccion);
             break;
         case ACC_PINIA_BAJA_AGACHADO:
-            piniaBajaAgachado(loops);
+            piniaBajaAgachado(loops,direccion);
             break;
         case ACC_PINIA_ALTA:
             piniaAlta(loops,direccion);
             break;
         case ACC_PINIA_ALTA_AGACHADO:
-            piniaAltaAgachado(loops);
+            piniaAltaAgachado(loops,direccion);
             break;
         case ACC_PINIA_SALTO:
             saltarOblicuamente(loops,sentido,direccion);
-            piniaSalto(loops);
+            piniaSalto(loops,direccion);
             break;
         case ACC_PATADA_BAJA:
-            patadaBaja(loops);
+            patadaBaja(loops,direccion);
             break;
         case ACC_PATADA_BAJA_ATRAS:
-            patadaBajaAtras(loops);
+            patadaBajaAtras(loops,direccion);
             break;
         case ACC_PATADA_AGACHADO:
-            patadaAgachado(loops);
+            patadaAgachado(loops,direccion);
             break;
         case ACC_PATADA_SALTO_VERTICAL:
             saltarVerticualmente(loops);
-            patadaSaltoVertical(loops);
+            patadaSaltoVertical(loops,direccion);
             break;
         case ACC_PINIA_SALTO_VERTICAL:
             saltarVerticualmente(loops);
-            patadaSaltoVertical(loops);
+            patadaSaltoVertical(loops,direccion);
             break;
         case ACC_PATADA_SALTO:
             saltarOblicuamente(loops,sentido,direccion);
-            patadaSalto(loops);
+            patadaSalto(loops,direccion);
             break;
         case ACC_PATADA_ALTA:
-            patadaAlta(loops);
+            patadaAlta(loops,direccion);
             break;
         case ACC_PATADA_ALTA_ATRAS:
-            patadaAltaAtras(loops);
+            patadaAltaAtras(loops,direccion);
             break;
         case ACC_PROTECCION:
             break;
@@ -217,11 +217,13 @@ void Accionador::agachar() {
 //--------------------------------------------------------------------------------------
 //                  PINIA BAJA
 //TODO:: FALTA AJUSTAR, EL ALTO DEL CUADRADO Y LA POSICION Y LAS REACCIONES
-void Accionador::piniaBaja(int loops) {
+void Accionador::piniaBaja(int loops,Tdireccion direccion) {
 
     Trect rectan = Trect();
     rectan.p = rectaDelPj.p;
-
+    if(direccion == DERECHA){
+        rectan.p = rectan.p + Posicion(rectaDelPj.d.w,0);
+    }
     rectan.d.w = rectaDelPj.d.w * proporcionPiniaBaja;
     if(loopsPara(ACC_PINIA_BAJA)<loops){
         golpe->setGolpe(piniasBajas, loops == 2,rectan,REA_GOLPE_BAJO);
@@ -229,10 +231,12 @@ void Accionador::piniaBaja(int loops) {
 }
 //--------------------------------------------------------------------------------------
 //                  PINIA BAJA AGACHADO
-void Accionador::piniaBajaAgachado(int loops) {
+void Accionador::piniaBajaAgachado(int loops,Tdireccion direccion) {
     Trect rectan = Trect();
     rectan.p = rectaDelPj.p;
-
+    if(direccion == DERECHA){
+        rectan.p = rectan.p + Posicion(rectaDelPj.d.w,0);
+    }
     rectan.d.w = rectaDelPj.d.w * proporcionPiniaBaja;
     if(loopsPara(ACC_PINIA_BAJA_AGACHADO)<loops){
         golpe->setGolpe(piniasBajas, loops == 2,rectan,REA_GOLPE_BAJO);
@@ -255,10 +259,12 @@ void Accionador::piniaAlta(int loops,Tdireccion direccion) {
 }
 //--------------------------------------------------------------------------------------
 //                  PINIA ALTA AGACHADO
-void Accionador::piniaAltaAgachado(int loops) {
+void Accionador::piniaAltaAgachado(int loops,Tdireccion direccion) {
     Trect rectan = Trect();
     rectan.p = rectaDelPj.p;
-
+    if(direccion == DERECHA){
+        rectan.p = rectan.p + Posicion(rectaDelPj.d.w,0);
+    }
     rectan.d.w = rectaDelPj.d.w * proporcionPiniaAltaAgachado;
     if(loopsPara(ACC_PINIA_ALTA_AGACHADO)>loops){
         golpe->setGolpe(poderFuerte, loops == 2,rectan,REA_GOLPE_FUERTE);
@@ -266,10 +272,12 @@ void Accionador::piniaAltaAgachado(int loops) {
 }
 //--------------------------------------------------------------------------------------
 //                  PINIA SALTO
-void Accionador::piniaSalto(int loops) {
+void Accionador::piniaSalto(int loops,Tdireccion direccion) {
     Trect rectan = Trect();
     rectan.p = rectaDelPj.p;
-
+    if(direccion == DERECHA){
+        rectan.p = rectan.p + Posicion(rectaDelPj.d.w,0);
+    }
     rectan.d.w = rectaDelPj.d.w * proporcionPiniaSalto;
     if(loopsPara(ACC_PINIA_SALTO)>loops){
         //TODO: PENSAR, DEBERIA CONOCER EL ESTADO DEL OTRO PJ?
@@ -278,10 +286,12 @@ void Accionador::piniaSalto(int loops) {
 }
 //--------------------------------------------------------------------------------------
 //                  PATADA BAJA
-void Accionador::patadaBaja(int loops) {
+void Accionador::patadaBaja(int loops,Tdireccion direccion) {
     Trect rectan = Trect();
     rectan.p = rectaDelPj.p;
-
+    if(direccion == DERECHA){
+        rectan.p = rectan.p + Posicion(rectaDelPj.d.w,0);
+    }
     rectan.d.w = rectaDelPj.d.w * proporcionPatadaBaja;
     if(loopsPara(ACC_PATADA_BAJA)>loops){
         golpe->setGolpe(patadasBajas, loops == 2,rectan,REA_GOLPE_ALTO);
@@ -290,10 +300,12 @@ void Accionador::patadaBaja(int loops) {
 }
 //--------------------------------------------------------------------------------------
 //                  PATADA BAJA ATRAS
-void Accionador::patadaBajaAtras(int loops) {
+void Accionador::patadaBajaAtras(int loops,Tdireccion direccion) {
     Trect rectan = Trect();
     rectan.p = rectaDelPj.p;
-
+    if(direccion == DERECHA){
+        rectan.p = rectan.p + Posicion(rectaDelPj.d.w,0);
+    }
     rectan.d.w = rectaDelPj.d.w * proporcionPatadaAlta;
     if(loopsPara(ACC_PATADA_BAJA_ATRAS)>loops){
         golpe->setGolpe(patadasBajas, loops == 2,rectan,REA_PATADA_BARRIDA);
@@ -302,10 +314,12 @@ void Accionador::patadaBajaAtras(int loops) {
 }
 //--------------------------------------------------------------------------------------
 //                  PATADA ALTA ATRAS
-void Accionador::patadaAltaAtras(int loops) {
+void Accionador::patadaAltaAtras(int loops,Tdireccion direccion) {
     Trect rectan = Trect();
     rectan.p = rectaDelPj.p;
-
+    if(direccion == DERECHA){
+        rectan.p = rectan.p + Posicion(rectaDelPj.d.w,0);
+    }
     rectan.d.w = rectaDelPj.d.w * porporcionPatadaAltaAtras;
     if(loopsPara(ACC_PATADA_ALTA_ATRAS)>loops){
         golpe->setGolpe(poderFuerte, loops == 2,rectan,REA_GOLPE_FUERTE);
@@ -314,10 +328,12 @@ void Accionador::patadaAltaAtras(int loops) {
 }
 //--------------------------------------------------------------------------------------
 //                  PATADA ALTA
-void Accionador::patadaAlta(int loops) {
+void Accionador::patadaAlta(int loops,Tdireccion direccion) {
     Trect rectan = Trect();
     rectan.p = rectaDelPj.p;
-
+    if(direccion == DERECHA){
+        rectan.p = rectan.p + Posicion(rectaDelPj.d.w,0);
+    }
     rectan.d.w = rectaDelPj.d.w * proporcionPatadaAlta;
     if(loopsPara(ACC_PATADA_ALTA)>loops){
         golpe->setGolpe(patadasAltas, loops == 2,rectan,REA_GOLPE_ALTO);
@@ -326,10 +342,12 @@ void Accionador::patadaAlta(int loops) {
 }
 //--------------------------------------------------------------------------------------
 //                  PATADA SALTO
-void Accionador::patadaSalto(int loops) {
+void Accionador::patadaSalto(int loops,Tdireccion direccion) {
     Trect rectan = Trect();
     rectan.p = rectaDelPj.p;
-
+    if(direccion == DERECHA){
+        rectan.p = rectan.p + Posicion(rectaDelPj.d.w,0);
+    }
     rectan.d.w = rectaDelPj.d.w * proporcionPatadaSO;
     if(loopsPara(ACC_PATADA_SALTO)>loops){
         //TODO: PENSAR, DEBERIA CONOCER EL ESTADO DEL OTRO PJ?
@@ -339,10 +357,12 @@ void Accionador::patadaSalto(int loops) {
 }
 //--------------------------------------------------------------------------------------
 //                  PATADA SALTO VERTICAL
-void Accionador::patadaSaltoVertical(int loops) {
+void Accionador::patadaSaltoVertical(int loops,Tdireccion direccion) {
     Trect rectan = Trect();
     rectan.p = rectaDelPj.p;
-
+    if(direccion == DERECHA){
+        rectan.p = rectan.p + Posicion(rectaDelPj.d.w,0);
+    }
     rectan.d.w = rectaDelPj.d.w * proporcionPatadaSV;
     if(loopsPara(ACC_PATADA_SALTO_VERTICAL)>loops){
         //TODO: PENSAR, DEBERIA CONOCER EL ESTADO DEL OTRO PJ?
@@ -351,10 +371,12 @@ void Accionador::patadaSaltoVertical(int loops) {
 }
 //--------------------------------------------------------------------------------------
 //                  PATADA AGACHADO
-void Accionador::patadaAgachado(int loops) {
+void Accionador::patadaAgachado(int loops,Tdireccion direccion) {
     Trect rectan = Trect();
     rectan.p = rectaDelPj.p;
-
+    if(direccion == DERECHA){
+        rectan.p = rectan.p + Posicion(rectaDelPj.d.w,0);
+    }
     rectan.d.w = rectaDelPj.d.w * proporcionPatadaAgachado;
     if(loopsPara(ACC_PATADA_AGACHADO)>loops){
         golpe->setGolpe(patadasBajas, loops == 2,rectan,REA_GOLPE_BAJO);

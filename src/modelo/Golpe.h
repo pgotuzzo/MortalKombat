@@ -1,5 +1,3 @@
-
-
 #ifndef MORTALKOMBAT_GOLPE_H
 #define MORTALKOMBAT_GOLPE_H
 
@@ -23,3 +21,50 @@ public:
 
 
 #endif //MORTALKOMBAT_GOLPE_H
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
