@@ -194,7 +194,7 @@ void DetectorDeColisiones::resolverColision(Personaje *PJ1, Personaje *PJ2) {
 void DetectorDeColisiones::resolverColision(Personaje* PJ, Poder* poder) {
     Trect rectanguloPJ = PJ->rectanguloPj;
     Trect rectanguloPoder = poder->rectanguloPoder;
-    // Sacar danio
+    PJ->reducirVida(poder->danio);
     if(rectanguloPJ.p.getX() < poder->rectanguloPoder.p.getX()) poder->rectanguloPoder.p.setX(rectanguloPJ.p.getX() + rectanguloPJ.d.w);
     else rectanguloPoder.p.setX(rectanguloPJ.p.getX() - rectanguloPoder.d.w);
 
@@ -233,11 +233,10 @@ bool DetectorDeColisiones::hayEfectoTunel(ObjetoColisionable *objeto1, ObjetoCol
 //TODO: Y SI SE ESTA PROTEGIENDO
 // resuelve la colision entre golpe y personaje
 void DetectorDeColisiones::resolverColision(Personaje *PJ,Golpe *golpe) {
-    if((PJ->estadoActual != ACC_PROTECCION)){
-        PJ->estadoAnterior = PJ->estadoActual;
-        PJ->estadoActual = golpe->efectoSobreOponente;
-        PJ->reducirVida(golpe->danio);
-    }else PJ->reducirVida(golpe->danio/2);
+    if (PJ->estadoActual == ACC_PROTECCION || PJ->estadoActual ==ACC_PROTECCION_AGACHADO) PJ->reducirVida(golpe->danio/2);
+    else PJ->reducirVida(golpe->danio);
+    PJ->estadoAnterior = PJ->estadoActual;
+    PJ->estadoActual = golpe->efectoSobreOponente;
 
     // Ajustar la superrectanguloPj.picion del golpe con el personaje si es necesario
 }

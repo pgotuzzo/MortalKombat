@@ -410,7 +410,9 @@ void Accionador::patadaAgachado(int loops,Tdireccion direccion) {
 //--------------------------------------------------------------------------------------
 //                  PODER
 void Accionador::activarPoder(Tdireccion direccion) {
-    poder->activar(rectaDelPj,direccion, anchoPantalla);
+    if(poder->estado == DESACTIVADO) {
+        poder->activar(rectaDelPj, direccion, anchoPantalla);
+    }
 }
 //--------------------------------------------------------------------------------------
 //                  REACCIONES

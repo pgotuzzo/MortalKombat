@@ -4,7 +4,8 @@
 
 const float anchoPoder = 20;
 const float altoPoder = 20;
-const float proporcionPosYPoder = 0.75;
+const float proporcionPosYPoder = 0.2;
+const float proporcionPosXPoder = 0.52;
 const float danioPoder = 5;
 
 Poder::Poder() {
@@ -16,16 +17,15 @@ Poder::Poder() {
 
 void Poder::activar(Trect rectPJ,Tdireccion direccion,float anchoPantalla) {
 
-    rectanguloPoder.p = rectPJ.p;
     estado = ACTIVADO;
 
-    rectanguloPoder.p.y = rectPJ.p.getY() * proporcionPosYPoder;
+    rectanguloPoder.p.y = rectPJ.p.getY() + rectPJ.d.h * proporcionPosYPoder;
     if (direccion == DERECHA) {
         rectanguloPoder.p.x = rectPJ.p.getX() + rectPJ.d.w;
         posFinalX = rectPJ.p.x + anchoPantalla;
     }
     else {
-        rectanguloPoder.p.x = rectPJ.p.getX() - rectPJ.d.w;
+        rectanguloPoder.p.x = rectPJ.p.getX();
         posFinalX = rectPJ.p.x - anchoPantalla;
     }
     this->danio = danio;
@@ -39,14 +39,14 @@ void Poder::avanzar(float avance) {
             //cout<<"Costado derecho poder: "<<pos.getX()+ancho/2<<endl;
             rectanguloPoder.p.x = rectanguloPoder.p.x + avance;
             if (rectanguloPoder.p.getX() >= posFinalX){
-                estadoPoder = DESACTIVADO;
+                this->estado = DESACTIVADO;
             }
         }
         else{
             //cout<<"Costado izquierdo poder: "<<pos.getX()-ancho/2<<endl;
             rectanguloPoder.p.x = rectanguloPoder.p.x - avance;
             if (rectanguloPoder.p.getX() <= posFinalX){
-                estadoPoder = DESACTIVADO;
+                this->estado = DESACTIVADO;
             }
         }
     }

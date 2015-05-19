@@ -45,7 +45,12 @@ void Personaje::realizarAccion(Tinput orden) {
 		estadoAnterior = estadoActual;
 		countLoops++;
 	}
+	// TODO: cambie en generarEstado que devuelvan ACC_PROTECCION cuando este saltando y demas.
+	// TODO: con esta linea cada vez que apreto una tecla de mov cuando estoy protegido pasa por el estado parado
 	if (loopsPara(estadoActual) < countLoops) estadoActual = MOV_PARADO;
+
+	//TODO: con esto anda (linea de abajo) de no pasar por el estado parado mientras esta protegido pero si despresiono el boton sigue protegido (probado con joystick)
+	//if (loopsPara(estadoActual) < countLoops && estadoActual != ACC_PROTECCION) estadoActual = MOV_PARADO;
 
 	rectanguloPj = llevarACabo.laAccion(estadoActual, countLoops, rectanguloPj.p, sentidoPj, direccionPj);
 
@@ -208,7 +213,7 @@ TestadoPersonaje Personaje::generarEstado(Tinput orden) {
 				case TinputAccion::KEY_PINIA_BAJA:
 					return ACC_PINIA_SALTO;
 				case TinputAccion::KEY_PROTECCION:
-					return MOV_SALTANDO_VERTICAL;
+					return ACC_PROTECCION;
 				case TinputAccion::KEY_PODER:
 					return ACC_PODER; // TODO: Ver cuando salta y tira el poder (nuevo estado?)
 			}
@@ -226,7 +231,7 @@ TestadoPersonaje Personaje::generarEstado(Tinput orden) {
 				case TinputAccion::KEY_PINIA_BAJA:
 					return ACC_PINIA_SALTO;
 				case TinputAccion::KEY_PROTECCION:
-					return MOV_SALTANDO_OBLICUO;
+					return ACC_PROTECCION;
 				case TinputAccion::KEY_PODER:
 					return MOV_SALTANDO_OBLICUO;
 			}
@@ -244,7 +249,7 @@ TestadoPersonaje Personaje::generarEstado(Tinput orden) {
 				case TinputAccion::KEY_PINIA_BAJA:
 					return ACC_PINIA_SALTO;
 				case TinputAccion::KEY_PROTECCION:
-					return MOV_SALTANDO_OBLICUO;
+					return ACC_PROTECCION;
 				case TinputAccion::KEY_PODER:
 					return MOV_SALTANDO_OBLICUO;
 			}
