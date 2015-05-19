@@ -376,7 +376,8 @@ enum TestadoPersonaje {
     REA_GOLPE_BAJO,
     REA_GOLPE_FUERTE, // gancho y patada alta (+ atras)
     REA_PATADA_BARRIDA, // patada baja (+ atras)
-    REA_PINIA_ALTA
+    REA_PINIA_ALTA,
+    REA_LEVANTARSE
 };
 
 static string TestadoPersonajeToString(TestadoPersonaje e){
@@ -412,6 +413,8 @@ static string TestadoPersonajeToString(TestadoPersonaje e){
         case TestadoPersonaje::REA_GOLPE_FUERTE: return "rea_golpe_fuerte";
         case TestadoPersonaje::REA_PATADA_BARRIDA: return "rea_patada_barrida";
         case TestadoPersonaje::REA_PINIA_ALTA: return "rea_pinia_alta";
+        case TestadoPersonaje::REA_LEVANTARSE: return "rea_levantarse";
+
 
     }
     return NULL;
@@ -569,6 +572,8 @@ static int loopsPara(TestadoPersonaje accion){
             return 12;
         case REA_PINIA_ALTA:
             return 3;
+        case REA_LEVANTARSE:
+            return 7;
     }
 }
 
@@ -659,6 +664,9 @@ static int mostrarEstado(TestadoPersonaje accion){
             break;
         case ACC_PODER_SALTO:
             cout<<"ACC_PODER_SALTO";
+            break;
+        case REA_LEVANTARSE:
+        cout<<"REA_LEVANTARSE"<<endl;
             break;
     }
 }

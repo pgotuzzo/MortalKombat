@@ -133,6 +133,9 @@ Trect Accionador::laAccion(TestadoPersonaje estadoPj, int loops, Posicion pos, T
             break;
         case REA_PINIA_ALTA:
             break;
+        case REA_LEVANTARSE:
+            cout<<loops<<endl;
+            break;
     }
     return rectaDelPj;
 }
@@ -363,6 +366,34 @@ void Accionador::patadaAgachado(int loops) {
 void Accionador::activarPoder(Tdireccion direccion) {
     poder->activar(rectaDelPj,direccion, anchoPantalla);
 }
+//--------------------------------------------------------------------------------------
+//                  REACCIONES
+//--------------------------------------------------------------------------------------
+//                  REACCION TRAS LA PINIA
+void Accionador::reaccionTrasPiniaAlta(int loops, Tdireccion direccion) {
+
+    if (direccion == DERECHA){
+        rectaDelPj.p = rectaDelPj.p + Posicion(-2,0);
+    }else{
+        rectaDelPj.p = rectaDelPj.p + Posicion(2,0);
+    }
+}
+//--------------------------------------------------------------------------------------
+//                  REACCION TRAS EL GOLPE FUERTE
+void Accionador::reaccionTrasGolpeFuerte(int loops, Tdireccion direccion) {
+    if(loops<=loopsPara(REA_GOLPE_FUERTE)/2){
+        if(direccion == DERECHA) subirEnSaltoOblicuo(intervaloSaltoOblicuo,3*intervaloSaltoOblicuo,ATRAS,direccion);
+        else subirEnSaltoOblicuo(intervaloSaltoOblicuo,3*intervaloSaltoOblicuo,ATRAS,direccion);
+    }else{
+        if(direccion == DERECHA) bajarEnSaltoOblicuo(intervaloSaltoOblicuo,3*intervaloSaltoOblicuo,ATRAS,direccion);
+        else bajarEnSaltoOblicuo(intervaloSaltoOblicuo,3*intervaloSaltoOblicuo,ATRAS,direccion);
+    }
+}
+//--------------------------------------------------------------------------------------
+//                  REACCION BARRIDA
+void Accionador::reaccionBarrida(int loops, Tdireccion direccion) {
+
+}
 
 Posicion Accionador::desplazado(float deltaDesplazo,Tdireccion direccion){
 
@@ -373,32 +404,4 @@ Posicion Accionador::desplazado(float deltaDesplazo,Tdireccion direccion){
 
 Golpe *Accionador::getGolpe() {
     return golpe;
-}
-
-void Accionador::reaccionTrasPiniaAlta(int loops, Tdireccion direccion) {
-
-    if (direccion == DERECHA){
-        rectaDelPj.p = rectaDelPj.p + Posicion(-2,0);
-    }else{
-        rectaDelPj.p = rectaDelPj.p + Posicion(2,0);
-    }
-
-}
-
-void Accionador::reaccionTrasGolpeFuerte(int loops, Tdireccion direccion) {
-    cout<<loops<<endl;
-    if(loops<=loopsPara(REA_GOLPE_FUERTE)/2){
-        cout<<"ohas"<<endl;
-        if(direccion == DERECHA) subirEnSaltoOblicuo(intervaloSaltoOblicuo,3*intervaloSaltoOblicuo,ATRAS,direccion);
-        else subirEnSaltoOblicuo(intervaloSaltoOblicuo,3*intervaloSaltoOblicuo,ATRAS,direccion);
-    }else{
-        cout<<"aaaaa"<<endl;
-        if(direccion == DERECHA) bajarEnSaltoOblicuo(intervaloSaltoOblicuo,3*intervaloSaltoOblicuo,ATRAS,direccion);
-        else bajarEnSaltoOblicuo(intervaloSaltoOblicuo,3*intervaloSaltoOblicuo,ATRAS,direccion);
-    }
-
-}
-
-void Accionador::reaccionBarrida(int loops, Tdireccion direccion) {
-
 }

@@ -38,8 +38,13 @@ void Personaje::realizarAccion(Tinput orden) {
 		estadoActual = estadoCompuesto;
 		verificarDireccion(orden);
 		if(estadoActualContinuaElAnterior())countLoops ++;
-		else countLoops =1;
-
+		else {
+			if(estadoAnterior == REA_GOLPE_FUERTE) {
+				cout<<"hola"<<endl;
+				estadoActual = REA_LEVANTARSE;
+			}
+			countLoops =1;
+		}
 	}
 	else {
 		if(estadoActual == REA_GOLPE_FUERTE && estadoAnterior != REA_GOLPE_FUERTE) countLoops = 0;

@@ -2,33 +2,31 @@
 
 #include "DetectorDeColisiones.h"
 
+DetectorDeColisiones::DetectorDeColisiones() {}
 
-
+DetectorDeColisiones::DetectorDeColisiones(float anchoPantalla, float anchoEscenario){
+    this->anchoPantalla = anchoPantalla;
+    this->anchoEscenario = anchoEscenario;
+}
 
 void DetectorDeColisiones::resolverColisiones(Personaje *personaje1, Personaje *personaje2) {
 
     colisionar(personaje1,personaje2);
-    if(personaje1->llevarACabo.getGolpe()->estado){
-        colisionar(personaje2,personaje1->llevarACabo.getGolpe());
-    }
-    if(personaje2->llevarACabo.getGolpe()->estado){
-        colisionar(personaje1,personaje2->llevarACabo.getGolpe());
-    }
+    if(personaje1->llevarACabo.getGolpe()->estado) colisionar(personaje2,personaje1->llevarACabo.getGolpe());
+    if(personaje2->llevarACabo.getGolpe()->estado) colisionar(personaje1,personaje2->llevarACabo.getGolpe());
+
+    resolverColisionconPantalla(personaje1,personaje2);
+    resolverColisionconPantalla(personaje2,personaje1);
+
     if(personaje1->poder->estado == ACTIVADO && personaje2->poder->estado == ACTIVADO){
         colisionar(personaje1->poder,personaje2->poder);
         colisionar(personaje1,personaje2->poder);
         colisionar(personaje2,personaje1->poder);
     }
     else{
-        if(personaje1->poder->estado == ACTIVADO){
-            colisionar(personaje2,personaje1->poder);
-        }
-        if(personaje2->poder->estado == ACTIVADO){
-            colisionar(personaje1,personaje2->poder);
-        }
-
+        if(personaje1->poder->estado == ACTIVADO) colisionar(personaje2,personaje1->poder);
+        if(personaje2->poder->estado == ACTIVADO) colisionar(personaje1,personaje2->poder);
     }
-
 }
 
 
@@ -55,12 +53,8 @@ bool DetectorDeColisiones::detectarColision(ObjetoColisionable *objeto1, ObjetoC
     piso1 = rectangulo1.p.getY() + rectangulo1.d.h;
     piso2 = rectangulo2.p.getY() + rectangulo2.d.h;
 
-    if ( (bordeDerecho2 < bordeIzquierdo1) || (bordeIzquierdo2 > bordeDerecho1) ){
-
-        return false;
-    }
-    else if ( (techo2 > piso1) || (piso2 < techo1) ) return false;
-    else return true;
+    if ( (bordeDerecho2 < bordeIzquierdo1) || (bordeIzquierdo2 > bordeDerecho1) )return false;
+    else return !((techo2 > piso1) || (piso2 < techo1));
 }
 
 // Calcula la distancia del borde derecho del primer objeto con el borde izquierdo del segundo.
@@ -90,8 +84,7 @@ bool DetectorDeColisiones::detectarColisionenY(ObjetoColisionable *objeto1, Obje
     piso1 = rectangulo1.p.getY() + rectangulo1.d.h;
     piso2 = rectangulo2.p.getY() + rectangulo2.d.h;
 
-    if(!((techo1 < piso2) || (piso1 > techo2))) return true;
-    return false;
+    return !((techo1 < piso2) || (piso1 > techo2));
 }
 
 
@@ -241,3 +234,79 @@ void DetectorDeColisiones::resolverColision(Personaje *PJ,Golpe *golpe) {
     // Ajustar la superrectanguloPj.picion del golpe con el personaje si es necesario
 }
 
+void DetectorDeColisiones::resolverColisionconPantalla(Personaje *PJ1,Personaje* PJ2) {
+    float ancho1 = PJ1->getRectangulo().d.w;
+    float ancho2 = PJ2->getRectangulo().d.w;
+    float distanciaMaxima = anchoPantalla - 2 * MIN_DISTANCE_FROM_BOUND - ancho1 - ancho2;
+
+    float distanciaPasada = distancia(PJ1,PJ2) - distanciaMaxima;
+    if(distanciaPasada > 0){
+        PJ1->empujado(-distanciaPasada/2,PJ1->direccionPj);
+        PJ2->empujado(-distanciaPasada/2,PJ2->direccionPj);
+    }
+
+}
+
+
+/*void Mundo::verificarQueNoSeVallaDeLaPantalla() {
+
+    // No se vayan caminando
+    if(personaje1->estado == MOV_CAMINANDO && !personaje1->sentido){
+        personaje1->pos.setX(personaje1->posAnt.getX());
+    }
+    if(personaje2->estado == MOV_CAMINANDO && !personaje2->sentido){
+        personaje2->pos.setX(personaje2->posAnt.getX());
+    }
+    if ((personaje1->estado == MOV_SALTANDO_OBLICUO || personaje1->estado == ACC_PINIA_SALTO || personaje1->estado ==
+                                                                                                ACC_PATADA_SALTO) && !personaje1->sentido){
+        personaje1->enCaida = true;
+        personaje1->pos.setX(personaje1->posAnt.getX());
+        if((personaje2->estado == MOV_SALTANDO_OBLICUO || personaje2->estado == ACC_PINIA_SALTO || personaje2->estado ==
+                                                                                                   ACC_PATADA_SALTO) && !personaje2->sentido){
+            personaje2->enCaida = true;
+            personaje2->pos.setX(personaje2->posAnt.getX());
+        }
+        if (personaje2->estado == MOV_CAMINANDO && !personaje2->sentido){
+            //personaje2->pos = personaje2->posAnt;
+            personaje2->pos.setX(personaje2->posAnt.getX());
+        }
+
+    }
+
+    if ((personaje2->estado == MOV_SALTANDO_OBLICUO || personaje2->estado == ACC_PINIA_SALTO || personaje2->estado ==
+                                                                                                ACC_PATADA_SALTO) && !personaje2->sentido){
+        personaje2->enCaida = true;
+        personaje2->pos.setX(personaje2->posAnt.getX());
+        if (personaje1->estado == MOV_CAMINANDO && !personaje1->sentido) {
+            personaje1->pos.setX(personaje1->posAnt.getX());
+            //personaje1->pos = personaje1->posAnt;
+        }
+
+    }
+    if (((personaje1->getEstado() != MOV_SALTANDO_OBLICUO || personaje1->estado != ACC_PINIA_SALTO || personaje1->estado !=
+                                                                                                      ACC_PATADA_SALTO)) || personaje1->sentido) {
+        personaje1->enCaida = false;
+        personaje2->enCaida = false;
+    }
+    if (((personaje2->getEstado() != MOV_SALTANDO_OBLICUO) || personaje2->estado != ACC_PINIA_SALTO || personaje2->estado !=
+                                                                                                       ACC_PATADA_SALTO) || personaje2->sentido) {
+        personaje1->enCaida = false;
+        personaje2->enCaida = false;
+    }
+
+
+
+}*/
+
+float DetectorDeColisiones::distancia(ObjetoColisionable *objeto1, ObjetoColisionable *objeto2) {
+    float distancia;
+    float posicionXObjeto1 = objeto1->getRectangulo().p.getX();
+    float posicionXObjeto2 = objeto2->getRectangulo().p.getX();
+    float ancho1 = objeto1->getRectangulo().d.w;
+    float ancho2 = objeto2->getRectangulo().d.w;
+
+    if(posicionXObjeto1 < posicionXObjeto2) distancia = posicionXObjeto2 - posicionXObjeto1 - ancho1;
+    else distancia = posicionXObjeto1 - posicionXObjeto2 - ancho2;
+
+    return distancia;
+}

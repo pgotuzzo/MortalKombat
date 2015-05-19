@@ -19,8 +19,6 @@ Mundo::Mundo(config configuracion) {
 	vector<Tpersonaje> personajes = configuracion.getPersonajes();
 	float anchoVentana = configuracion.getVentana().ancho;
 
-	cout<<anchoVentana<<endl;
-
 	Tpersonaje PJ1 = personajes[0];
 	Tpersonaje PJ2 = personajes[1];
 
@@ -50,7 +48,7 @@ Mundo::Mundo(config configuracion) {
 	//cout<<"Costado derecho personaje 2: "<<personaje2->rectanguloPj.p.getX() + personaje2->rectanguloPj.d.w<<endl;
 
 
-	colisionador = DetectorDeColisiones();
+	colisionador = DetectorDeColisiones(anchoVentana,anchoEscenario);
 
 	anchoPantalla = configuracion.getVentana().ancho;
 }
@@ -213,58 +211,6 @@ Mundo::~Mundo() {
 			};
 		}
 	}
-
-
-}
-
-
-
-void Mundo::verificarQueNoSeVallaDeLaPantalla() {
-
-	// No se vayan caminando
-	if(personaje1->estado == MOV_CAMINANDO && !personaje1->sentido){
-		personaje1->pos.setX(personaje1->posAnt.getX());
-	}
-	if(personaje2->estado == MOV_CAMINANDO && !personaje2->sentido){
-		personaje2->pos.setX(personaje2->posAnt.getX());
-	}
-	if ((personaje1->estado == MOV_SALTANDO_OBLICUO || personaje1->estado == ACC_PINIA_SALTO || personaje1->estado ==
-																								ACC_PATADA_SALTO) && !personaje1->sentido){
-		personaje1->enCaida = true;
-		personaje1->pos.setX(personaje1->posAnt.getX());
-		if((personaje2->estado == MOV_SALTANDO_OBLICUO || personaje2->estado == ACC_PINIA_SALTO || personaje2->estado ==
-																								   ACC_PATADA_SALTO) && !personaje2->sentido){
-			personaje2->enCaida = true;
-			personaje2->pos.setX(personaje2->posAnt.getX());
-		}
-		if (personaje2->estado == MOV_CAMINANDO && !personaje2->sentido){
-			//personaje2->pos = personaje2->posAnt;
-			personaje2->pos.setX(personaje2->posAnt.getX());
-		}
-
-	}
-
-	if ((personaje2->estado == MOV_SALTANDO_OBLICUO || personaje2->estado == ACC_PINIA_SALTO || personaje2->estado ==
-																								ACC_PATADA_SALTO) && !personaje2->sentido){
-		personaje2->enCaida = true;
-		personaje2->pos.setX(personaje2->posAnt.getX());
-		if (personaje1->estado == MOV_CAMINANDO && !personaje1->sentido) {
-			personaje1->pos.setX(personaje1->posAnt.getX());
-			//personaje1->pos = personaje1->posAnt;
-		}
-
-	}
-	if (((personaje1->getEstado() != MOV_SALTANDO_OBLICUO || personaje1->estado != ACC_PINIA_SALTO || personaje1->estado !=
-																									  ACC_PATADA_SALTO)) || personaje1->sentido) {
-		personaje1->enCaida = false;
-		personaje2->enCaida = false;
-	}
-	if (((personaje2->getEstado() != MOV_SALTANDO_OBLICUO) || personaje2->estado != ACC_PINIA_SALTO || personaje2->estado !=
-																									   ACC_PATADA_SALTO) || personaje2->sentido) {
-		personaje1->enCaida = false;
-		personaje2->enCaida = false;
-	}
-
 
 
 }*/
