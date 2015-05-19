@@ -277,8 +277,7 @@ void Accionador::piniaAlta(int loops,Tdireccion direccion) {
     }
     rectan.d.w = rectaDelPj.d.w * proporcionPiniaAlta;
     if(loopsPara(ACC_PINIA_ALTA)>loops){
-        // TODO: Cambiar por REA_PINIA_ALTA cuando ande bien
-        golpe->setGolpe(piniasAltas, loops == 2,rectan,REA_GOLPE_ALTO);
+        golpe->setGolpe(piniasAltas, loops == 2,rectan,REA_PINIA_ALTA);
     }
 }
 //--------------------------------------------------------------------------------------
@@ -318,7 +317,7 @@ void Accionador::patadaBaja(int loops,Tdireccion direccion) {
     }
     rectan.d.w = rectaDelPj.d.w * proporcionPatadaBaja;
     if(loopsPara(ACC_PATADA_BAJA)>loops){
-        golpe->setGolpe(patadasBajas, loops == 2,rectan,REA_GOLPE_ALTO);
+        golpe->setGolpe(patadasBajas, loops == 2,rectan,REA_GOLPE_BAJO);
     }
 
 }
