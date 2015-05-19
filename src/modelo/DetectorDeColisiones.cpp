@@ -15,8 +15,7 @@ void DetectorDeColisiones::resolverColisiones(Personaje *personaje1, Personaje *
     if(personaje1->llevarACabo.getGolpe()->estado) colisionar(personaje2,personaje1->llevarACabo.getGolpe());
     if(personaje2->llevarACabo.getGolpe()->estado) colisionar(personaje1,personaje2->llevarACabo.getGolpe());
 
-    resolverColisionconPantalla(personaje1,personaje2);
-    resolverColisionconPantalla(personaje2,personaje1);
+
 
     if(personaje1->poder->estado == ACTIVADO && personaje2->poder->estado == ACTIVADO){
         colisionar(personaje1->poder,personaje2->poder);
@@ -27,6 +26,11 @@ void DetectorDeColisiones::resolverColisiones(Personaje *personaje1, Personaje *
         if(personaje1->poder->estado == ACTIVADO) colisionar(personaje2,personaje1->poder);
         if(personaje2->poder->estado == ACTIVADO) colisionar(personaje1,personaje2->poder);
     }
+
+    resolverColisionconPantalla(personaje1,personaje2);
+    resolverColisionconPantalla(personaje2,personaje1);
+    resolverColisionconEscenario(personaje1);
+    resolverColisionconEscenario(personaje2);
 }
 
 
@@ -313,4 +317,16 @@ float DetectorDeColisiones::distancia(ObjetoColisionable *objeto1, ObjetoColisio
     else distancia = posicionXObjeto1 - posicionXObjeto2 - ancho2;
 
     return distancia;
+}
+
+void DetectorDeColisiones::resolverColisionconEscenario(Personaje *PJ) {
+
+    float topeDerecha = anchoEscenario - PJ->getRectangulo().p.getX();
+    float anchoPJ = PJ->getRectangulo().d.w;
+
+    if(topeDerecha< anchoPJ) PJ->empujado(-(anchoPJ-topeDerecha),PJ->direccionPj);
+
+    float topeIzquierda = (-1)* PJ->getRectangulo().p.getX();
+
+    if(topeIzquierda > 0) PJ->empujado(-topeIzquierda,PJ->direccionPj);
 }
