@@ -19,16 +19,18 @@ Personaje::Personaje(Tdireccion direccionInicial,Trect cuerpo, float anchoPantal
 
 	llevarACabo.initialize(rectanguloPj,anchoPantalla,yPiso,poder);
 	countLoops = 0;
+
 }
 
 
 void Personaje::realizarAccion(Tinput orden) {
 
 	//mostrarEstado(estadoActual);
+
 	if(estadoActual == MOV_AGACHADO) {
-		rectanguloPj.p = rectanguloPj.p - Posicion(0,rectanguloPj.d.h);
-		rectanguloPj.d.h = rectanguloPj.d.h *2;
+		rectanguloPj = llevarACabo.ponerseDePie();
 	}
+
 
 
 	TestadoPersonaje estadoCompuesto = generarEstado(orden);

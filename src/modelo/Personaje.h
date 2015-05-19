@@ -18,6 +18,7 @@ using namespace std;
 
 class Personaje: public ObjetoColisionable{
 public:
+
 	TestadoPersonaje estadoActual;
 	TestadoPersonaje estadoAnterior;
 

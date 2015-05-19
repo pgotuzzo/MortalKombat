@@ -10,6 +10,7 @@ class Accionador {
 
 public:
 
+    float alturaPj;
     Trect rectaDelPj;
 
     float anchoPantalla;
@@ -33,8 +34,10 @@ public:
     void caminar(Tsentido sentido, Tdireccion direccion);
     void saltarVerticualmente(int loops);
     void saltarOblicuamente(int loops, Tsentido sentido, Tdireccion direccion);
+    void subirEnSaltoOblicuo(float deltaMovX, float deltaMovY, Tsentido sentido, Tdireccion direccion);
+    void bajarEnSaltoOblicuo(float deltaMovX, float deltaMovY, Tsentido sentido, Tdireccion direccion);
     void agachar();
-
+    Trect ponerseDePie();
 
     //GOLPES
     void piniaBaja(int loops,Tdireccion direccion);
@@ -49,22 +52,20 @@ public:
     void patadaSalto(int loops,Tdireccion direccion);
     void patadaSaltoVertical(int loops,Tdireccion direccion);
     void patadaAgachado(int loops,Tdireccion direccion);
-
-    Posicion desplazado(float deltaDesplazo, Tdireccion direccion);
-
+    //PODER
+    void activarPoder(Tdireccion direccion);
     Golpe* getGolpe();
 
-    void subirEnSaltoOblicuo(float deltaMovX, float deltaMovY, Tsentido sentido, Tdireccion direccion);
 
-    void bajarEnSaltoOblicuo(float deltaMovX, float deltaMovY, Tsentido sentido, Tdireccion direccion);
-
-    void activarPoder(Tdireccion direccion);
-
+    //REACCIONES
     void reaccionTrasPiniaAlta(int loops, Tdireccion direccion);
-
     void reaccionTrasGolpeFuerte(int loops, Tdireccion direccion);
-
     void reaccionBarrida(int loops, Tdireccion direccion);
+
+    //Colisiones
+    Posicion desplazado(float deltaDesplazo, Tdireccion direccion);
+
+
 };
 
 

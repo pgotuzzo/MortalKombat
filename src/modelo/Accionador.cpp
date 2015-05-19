@@ -40,6 +40,8 @@ void Accionador::initialize(Trect rectan, float anchoPanta, float yPiso,Poder* n
     nuevoEstado = MOV_PARADO;
     golpe = new Golpe();
     this->poder = nuevoPoder;
+    alturaPj = rectan.d.h;
+
 }
 
 Trect Accionador::laAccion(TestadoPersonaje estadoPj, int loops, Posicion pos, Tsentido sentido, Tdireccion direccion) {
@@ -209,7 +211,7 @@ void Accionador::saltarOblicuamente(int loops, Tsentido sentido, Tdireccion dire
 //--------------------------------------------------------------------------------------
 //                  AGACHAR
 void Accionador::agachar() {
-    rectaDelPj.d.h = rectaDelPj.d.h/2;
+    rectaDelPj.d.h = alturaPj/2;
     rectaDelPj.p = rectaDelPj.p + Posicion(0,rectaDelPj.d.h);
 }
 //--------------------------------------------------------------------------------------
@@ -426,4 +428,10 @@ Posicion Accionador::desplazado(float deltaDesplazo,Tdireccion direccion){
 
 Golpe *Accionador::getGolpe() {
     return golpe;
+}
+
+Trect Accionador::ponerseDePie() {
+    rectaDelPj.p = rectaDelPj.p + Posicion(0,-(alturaPj/2));
+    rectaDelPj.d.h = alturaPj;
+    return rectaDelPj;
 }
