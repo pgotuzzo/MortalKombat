@@ -56,7 +56,6 @@ void Personaje::realizarAccion(Tinput orden) {
 
 bool Personaje::puedoRealizarAccion(TestadoPersonaje accion) {
 
-
 	//porque si esta en esos estados puede hacer cualquier cosa
 	if(estadoActual == MOV_PARADO || estadoActual == MOV_CAMINANDO) return true;
 

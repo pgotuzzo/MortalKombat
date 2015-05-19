@@ -53,7 +53,7 @@ Trect Accionador::laAccion(TestadoPersonaje estadoPj, int loops, Posicion pos, T
         ponerseDePie();
         return rectaDelPj;
     }
-
+    if(golpe->estado) golpe->setEstado(false);
     switch (estadoPj){
         //case movimiento ---------------------------------
         case MOV_PARADO:
@@ -133,6 +133,7 @@ Trect Accionador::laAccion(TestadoPersonaje estadoPj, int loops, Posicion pos, T
             reaccionTrasPiniaAlta(loops,direccion);
             break;
         case REA_GOLPE_BAJO:
+            reaccionTrasPiniaAlta(loops,direccion);
             break;
         case REA_GOLPE_FUERTE:
             reaccionTrasGolpeFuerte(loops,direccion);
@@ -141,6 +142,7 @@ Trect Accionador::laAccion(TestadoPersonaje estadoPj, int loops, Posicion pos, T
             reaccionBarrida(loops,direccion);
             break;
         case REA_PINIA_ALTA:
+            reaccionTrasPiniaAlta(loops,direccion);
             break;
         case REA_LEVANTARSE:
             cout<<loops<<endl;
@@ -182,10 +184,16 @@ void Accionador::saltarVerticualmente(int loops) {
 void Accionador::subirEnSaltoOblicuo(float deltaMovX,float deltaMovY,Tsentido sentido, Tdireccion direccion){
     if(direcBloqueada == DERECHA){
         if (sentido == ADELANTE) rectaDelPj.p =rectaDelPj.p+Posicion(deltaMovX,-deltaMovY);
-        else rectaDelPj.p =rectaDelPj.p+Posicion(-deltaMovX,-deltaMovY);
+        else {
+            cout<<"1"<<endl;
+            rectaDelPj.p =rectaDelPj.p+Posicion(-deltaMovX,-deltaMovY);
+        }
     }else{
         if (sentido == ADELANTE) rectaDelPj.p =rectaDelPj.p+Posicion(-deltaMovX,-deltaMovY);
-        else rectaDelPj.p =rectaDelPj.p+Posicion(deltaMovX,-deltaMovY);
+        else {
+            cout<<"2"<<endl;
+            rectaDelPj.p =rectaDelPj.p+Posicion(deltaMovX,-deltaMovY);
+        }
     }
 }
 void Accionador::bajarEnSaltoOblicuo(float deltaMovX,float deltaMovY,Tsentido sentido, Tdireccion direccion) {
@@ -338,7 +346,7 @@ void Accionador::patadaAltaAtras(int loops,Tdireccion direccion) {
     }
     rectan.d.w = rectaDelPj.d.w * porporcionPatadaAltaAtras;
     if(loopsPara(ACC_PATADA_ALTA_ATRAS)>loops){
-        golpe->setGolpe(poderFuerte, loops == 2,rectan,REA_GOLPE_FUERTE);
+        golpe->setGolpe(poderFuerte, loops == 5,rectan,REA_GOLPE_FUERTE);
     }
 
 }
@@ -352,7 +360,7 @@ void Accionador::patadaAlta(int loops,Tdireccion direccion) {
     }
     rectan.d.w = rectaDelPj.d.w * proporcionPatadaAlta;
     if(loopsPara(ACC_PATADA_ALTA)>loops){
-        golpe->setGolpe(patadasAltas, loops == 2,rectan,REA_GOLPE_ALTO);
+        golpe->setGolpe(patadasAltas, loops == 4,rectan,REA_GOLPE_ALTO);
     }
 
 }
@@ -420,11 +428,11 @@ void Accionador::reaccionTrasPiniaAlta(int loops, Tdireccion direccion) {
 //                  REACCION TRAS EL GOLPE FUERTE
 void Accionador::reaccionTrasGolpeFuerte(int loops, Tdireccion direccion) {
     if(loops<=loopsPara(REA_GOLPE_FUERTE)/2){
-        if(direccion == DERECHA) subirEnSaltoOblicuo(intervaloSaltoOblicuo,3*intervaloSaltoOblicuo,ATRAS,direccion);
-        else subirEnSaltoOblicuo(intervaloSaltoOblicuo,3*intervaloSaltoOblicuo,ATRAS,direccion);
+        if(direccion == DERECHA)rectaDelPj.p =rectaDelPj.p+Posicion(-intervaloSaltoOblicuo,-3*intervaloSaltoOblicuo);
+        else rectaDelPj.p =rectaDelPj.p+Posicion(intervaloSaltoOblicuo,-3*intervaloSaltoOblicuo);
     }else{
-        if(direccion == DERECHA) bajarEnSaltoOblicuo(intervaloSaltoOblicuo,3*intervaloSaltoOblicuo,ATRAS,direccion);
-        else bajarEnSaltoOblicuo(intervaloSaltoOblicuo,3*intervaloSaltoOblicuo,ATRAS,direccion);
+        if (direccion == DERECHA) rectaDelPj.p = rectaDelPj.p + Posicion(-intervaloSaltoOblicuo, 3*intervaloSaltoOblicuo);
+        else rectaDelPj.p = rectaDelPj.p + Posicion(intervaloSaltoOblicuo, 3*intervaloSaltoOblicuo);
     }
 }
 //--------------------------------------------------------------------------------------

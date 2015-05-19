@@ -17,6 +17,7 @@ public:
     Trect getRectangulo();
     void modificarPosicion(Posicion nuevaPosicion);
 
+    void setEstado(bool nuevoEstado);
 };
 
 

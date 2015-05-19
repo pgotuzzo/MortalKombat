@@ -9,8 +9,6 @@ Golpe::Golpe(){
     danio = 0;
 }
 
-
-
 Trect Golpe::getRectangulo() {
     return rectangulo;
 }
@@ -27,8 +25,8 @@ void Golpe::setGolpe(float danio, bool estado, Trect rectan, TestadoPersonaje nu
     this->estado = estado;
     this->danio = danio;
 }
-
-
-
+void Golpe::setEstado(bool nuevoEstado){
+    estado = nuevoEstado;
+}
 Golpe::~Golpe() {
 }

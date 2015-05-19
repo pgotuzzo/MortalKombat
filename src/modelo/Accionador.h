@@ -68,6 +68,9 @@ public:
     Posicion desplazado(float deltaDesplazo, Tdireccion direccion);
 
 
+    void bajarEnReaGolpeFuerte(float deltaMovX, float deltaMovY, Tdireccion direccion);
+
+    void subirEnReaGolpeFuerte(float deltaMovX, float deltaMovY, Tdireccion direccion);
 };
 
 

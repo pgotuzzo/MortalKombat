@@ -225,12 +225,16 @@ bool DetectorDeColisiones::hayEfectoTunel(ObjetoColisionable *objeto1, ObjetoCol
     return false;
 }
 
-
+//TODO:MIKI FIJATE QUE ACA AGREGUE EL IF PARA QUE LA REACCION LA HAGA SIEMPRE Y CUANDO NO ESTE PROTEGIENDOSE
+//TODO: Y SI SE ESTA PROTEGIENDO
 // resuelve la colision entre golpe y personaje
 void DetectorDeColisiones::resolverColision(Personaje *PJ,Golpe *golpe) {
-    PJ->reducirVida(golpe->danio);
-    PJ->estadoAnterior = PJ->estadoActual;
-    PJ->estadoActual = golpe->efectoSobreOponente;
+    if((PJ->estadoActual != ACC_PROTECCION)){
+        PJ->estadoAnterior = PJ->estadoActual;
+        PJ->estadoActual = golpe->efectoSobreOponente;
+        PJ->reducirVida(golpe->danio);
+    }else PJ->reducirVida(golpe->danio/2);
+
     // Ajustar la superrectanguloPj.picion del golpe con el personaje si es necesario
 }
 
