@@ -511,6 +511,14 @@ vector<Tinput> ControladorJoystick::getInputs() {
                 return inputs;
             }
         };
+        case SDL_KEYUP: {
+            if (event.key.keysym.sym == SDLK_r) {
+                aux.game=TinputGame::KEY_RESTART;
+                inputs.clear();
+                inputs.push_back(aux);
+                return inputs;
+            }
+        };
 
         default:
             Tinput anterior1 = esAnterior(player1,event);
@@ -545,7 +553,7 @@ vector<Tinput> ControladorJoystick::getInputs() {
             }
     }
 }
-void  ControladorJoystick::vibrar(){
+/*void  ControladorJoystick::vibrar(){
 
     haptic = SDL_HapticOpen( 0 );
 
@@ -598,4 +606,10 @@ void  ControladorJoystick::vibrar(){
     // cierra
     SDL_HapticClose(haptic);
 
+}*/
+
+
+void ControladorJoystick::cerrarJoysticks() {
+    SDL_JoystickClose(player1);
+    SDL_JoystickClose(player2);
 }

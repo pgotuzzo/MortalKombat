@@ -38,6 +38,7 @@ public:
     Tinput inputAnterior1;
     Tinput inputAnterior2;
     ControladorJoystick(Tbotones);
+    void cerrarJoysticks();
     vector<Tinput> getInputs();
 
 };

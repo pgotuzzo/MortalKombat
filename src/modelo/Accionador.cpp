@@ -150,7 +150,7 @@ Trect Accionador::laAccion(TestadoPersonaje estadoPj, int loops, Posicion pos, T
     return rectaDelPj;
 }
 Accionador::~Accionador() {
-
+    delete golpe;
 }
 //--------------------------------------------------------------------------------------
 //                  ACCIONES

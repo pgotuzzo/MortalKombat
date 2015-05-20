@@ -319,5 +319,5 @@ void Personaje::setPosicion(Posicion posicion) {
 	rectanguloPj = llevarACabo.setPosicionPersonaje(posicion);
 }
 Personaje::~Personaje(){
-
+	delete poder;
 }
