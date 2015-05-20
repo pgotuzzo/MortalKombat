@@ -66,7 +66,9 @@ void Personaje::realizarAccion(Tinput orden) {
 }
 
 bool Personaje::puedoRealizarAccion(TestadoPersonaje accion) {
-
+	if(poder->estado==ACTIVADO){
+		if(accion == ACC_PODER_SALTO || accion == ACC_PODER) return false;
+	}
 	//si se esta protegiendo solo puede agacharse
 	if(estadoActual == ACC_PROTECCION||estadoActual == ACC_PROTECCION_AGACHADO){
 		return accion == ACC_PROTECCION || accion == MOV_AGACHADO ||accion == ACC_PROTECCION_AGACHADO;
@@ -105,6 +107,7 @@ bool Personaje::puedoRealizarAccion(TestadoPersonaje accion) {
 		return accion == MOV_AGACHADO || accion == ACC_PROTECCION_AGACHADO ||accion == ACC_PATADA_AGACHADO
 			   ||accion == ACC_PINIA_ALTA_AGACHADO || accion == ACC_PINIA_BAJA_AGACHADO;
 	}
+
 	//si no esta haciendo ninguna de las enteriores
 	//quiere decir que esta haciendo alguna patada pinia o poder, las cuales no se puede interrumpir o combinar con nada
 	return false;
