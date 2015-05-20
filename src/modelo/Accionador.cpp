@@ -24,8 +24,6 @@ const float piniasBajas = 2;
 const float intervaloPaso =2;
 const float intervaloSaltoVertical = 10;
 const float intervaloSaltoOblicuo = 5;
-const float alturaSaltoOblicuo = 50;
-const float anchoSaltoOblicuo = 100;
 const float proporcionSalto = 3;
 
 Accionador::Accionador() {
@@ -181,7 +179,7 @@ void Accionador::saltarVerticualmente(int loops) {
 }
 //--------------------------------------------------------------------------------------
 //                  SALTO OBLICUO
-void Accionador::subirEnSaltoOblicuo(float deltaMovX,float deltaMovY,Tsentido sentido, Tdireccion direccion){
+void Accionador::subirEnSaltoOblicuo(float deltaMovX,float deltaMovY,Tsentido sentido){
     if(direcBloqueada == DERECHA){
         if (sentido == ADELANTE) rectaDelPj.p =rectaDelPj.p+Posicion(deltaMovX,-deltaMovY);
         else {
@@ -196,7 +194,7 @@ void Accionador::subirEnSaltoOblicuo(float deltaMovX,float deltaMovY,Tsentido se
         }
     }
 }
-void Accionador::bajarEnSaltoOblicuo(float deltaMovX,float deltaMovY,Tsentido sentido, Tdireccion direccion) {
+void Accionador::bajarEnSaltoOblicuo(float deltaMovX,float deltaMovY,Tsentido sentido) {
     if (direcBloqueada == DERECHA) {
         if (sentido == ADELANTE) rectaDelPj.p = rectaDelPj.p + Posicion(deltaMovX, deltaMovY);
         else rectaDelPj.p = rectaDelPj.p + Posicion(-deltaMovX, deltaMovY);
@@ -213,13 +211,13 @@ void Accionador::saltarOblicuamente(int loops, Tsentido sentido, Tdireccion dire
         // en la priemra mitad de loops sube
         if(loops <= (loopsPara(MOV_SALTANDO_OBLICUO)/2)){
             //en el primer cuarto sube mas rapidamente que en el segundo
-            if(loops <= (loopsPara(MOV_SALTANDO_OBLICUO)/4)) subirEnSaltoOblicuo(intervaloSaltoOblicuo,intervaloSaltoOblicuo*3,sentido,direccion);
-            else subirEnSaltoOblicuo(intervaloSaltoOblicuo,intervaloSaltoOblicuo,sentido,direccion);
+            if(loops <= (loopsPara(MOV_SALTANDO_OBLICUO)/4)) subirEnSaltoOblicuo(intervaloSaltoOblicuo,intervaloSaltoOblicuo*3,sentido);
+            else subirEnSaltoOblicuo(intervaloSaltoOblicuo,intervaloSaltoOblicuo,sentido);
         }else{
             //en la segunda mitad de los loops baja
             //en el primer cuarto de estos baja mas lentamente que en el segundo cuarto
-            if(loops <= (proporcionSalto*loopsPara(MOV_SALTANDO_OBLICUO)/4)) bajarEnSaltoOblicuo(intervaloSaltoOblicuo,intervaloSaltoOblicuo,sentido,direccion);
-            else bajarEnSaltoOblicuo(intervaloSaltoOblicuo,intervaloSaltoOblicuo*proporcionSalto,sentido,direccion);
+            if(loops <= (proporcionSalto*loopsPara(MOV_SALTANDO_OBLICUO)/4)) bajarEnSaltoOblicuo(intervaloSaltoOblicuo,intervaloSaltoOblicuo,sentido);
+            else bajarEnSaltoOblicuo(intervaloSaltoOblicuo,intervaloSaltoOblicuo*proporcionSalto,sentido);
         }
     }
 }
@@ -278,7 +276,7 @@ void Accionador::piniaAlta(int loops,Tdireccion direccion) {
     rectan.d.w = rectaDelPj.d.w * proporcionPiniaAlta;
     if(loopsPara(ACC_PINIA_ALTA)>loops){
         // TODO: Cambiar por REA_PINIA_ALTA cuando ande bien
-        golpe->setGolpe(piniasAltas, loops == 2,rectan,REA_GOLPE_ALTO);
+        golpe->setGolpe(piniasAltas, loops == 2,rectan,REA_GOLPE_BAJO);
     }
 }
 //--------------------------------------------------------------------------------------

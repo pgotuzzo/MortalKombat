@@ -32,13 +32,7 @@ void Personaje::realizarAccion(Tinput orden) {
 		estadoActual = estadoCompuesto;
 		verificarDireccion(orden);
 		if (estadoActualContinuaElAnterior())countLoops++;
-		else {
-			if (estadoAnterior == REA_GOLPE_FUERTE) {
-				cout << "hola" << endl;
-				estadoActual = REA_LEVANTARSE;
-			}
-			countLoops = 1;
-		}
+		else countLoops = 1;
 	}
 	else {
 		if (estadoActual == REA_GOLPE_FUERTE && estadoAnterior != REA_GOLPE_FUERTE) countLoops = 0;
@@ -47,7 +41,10 @@ void Personaje::realizarAccion(Tinput orden) {
 	}
 	// TODO: cambie en generarEstado que devuelvan ACC_PROTECCION cuando este saltando y demas.
 	// TODO: con esta linea cada vez que apreto una tecla de mov cuando estoy protegido pasa por el estado parado
-	if (loopsPara(estadoActual) < countLoops) estadoActual = MOV_PARADO;
+	if (loopsPara(estadoActual) < countLoops) {
+		estadoAnterior =estadoActual;
+		estadoActual = MOV_PARADO;
+	}
 
 	//TODO: con esto anda (linea de abajo) de no pasar por el estado parado mientras esta protegido pero si despresiono el boton sigue protegido (probado con joystick)
 	//if (loopsPara(estadoActual) < countLoops && estadoActual != ACC_PROTECCION) estadoActual = MOV_PARADO;
@@ -57,10 +54,15 @@ void Personaje::realizarAccion(Tinput orden) {
 
 	if (poder->estado == ACTIVADO) poder->avanzar(10);
 	if (poder->estado == COLISION) poder->setEstado(DESACTIVADO);
+
 }
 
 bool Personaje::puedoRealizarAccion(TestadoPersonaje accion) {
 
+	//si se esta protegiendo solo puede agacharse
+	if(estadoActual == ACC_PROTECCION||estadoActual == ACC_PROTECCION_AGACHADO){
+		return accion == ACC_PROTECCION || accion == MOV_AGACHADO ||accion == ACC_PROTECCION_AGACHADO;
+	}
 	//porque si esta en esos estados puede hacer cualquier cosa
 	if(estadoActual == MOV_PARADO || estadoActual == MOV_CAMINANDO) return true;
 
@@ -76,14 +78,6 @@ bool Personaje::puedoRealizarAccion(TestadoPersonaje accion) {
 	if(estadoActual == MOV_AGACHADO){
 		return accion == MOV_AGACHADO || accion == ACC_PROTECCION_AGACHADO ||accion == ACC_PATADA_AGACHADO
 			   ||accion == ACC_PINIA_ALTA_AGACHADO || accion == ACC_PINIA_BAJA_AGACHADO;
-	}
-	//si se esta protegiendo solo puede agacharse
-	if(estadoActual == ACC_PROTECCION){
-		return accion == ACC_PROTECCION || accion == MOV_AGACHADO ||accion == ACC_PROTECCION_AGACHADO;
-	}
-	//Si esta protegiendose agachado solo puede seguir haciendolo o dejar de protegerse
-	if(estadoActual == ACC_PROTECCION_AGACHADO){
-		return accion ==ACC_PROTECCION_AGACHADO || accion == MOV_AGACHADO;
 	}
 	//si no esta haciendo ninguna de las enteriores
 	//quiere decir que esta haciendo alguna patada pinia o poder, las cuales no se puede interrumpir o combinar con nada

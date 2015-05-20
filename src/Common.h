@@ -553,9 +553,9 @@ static int loopsPara(TestadoPersonaje accion){
         case ACC_PATADA_ALTA_ATRAS:
             return 8;
         case ACC_PROTECCION:
-            return 1;
+            return 3;
         case ACC_PROTECCION_AGACHADO:
-            return 1;
+            return 3;
         case ACC_PODER:
             return 3;
         case ACC_PODER_SALTO:

@@ -112,9 +112,8 @@ vector<Tcambio> Mundo::actualizarMundo(vector<Tinput> inputs) {
 	verificarDireccionDeLosPersonajes();
 
 	// Los personajes realizan sus acciones
-	personaje1->realizarAccion(inputs[0]);
-	personaje2->realizarAccion(inputs[1]);
-
+	personaje1->realizarAccion(inputs[1]);
+	personaje2->realizarAccion(inputs[0]);
 	// COLISIONES
 	colisionador.resolverColisiones(personaje1,personaje2);
 
