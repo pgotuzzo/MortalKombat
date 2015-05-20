@@ -42,12 +42,17 @@ void Personaje::realizarAccion(Tinput orden) {
 	// TODO: cambie en generarEstado que devuelvan ACC_PROTECCION cuando este saltando y demas.
 	// TODO: con esta linea cada vez que apreto una tecla de mov cuando estoy protegido pasa por el estado parado
 	if (loopsPara(estadoActual) < countLoops) {
-		estadoAnterior =estadoActual;
-		estadoActual = MOV_PARADO;
+		if (estadoActual == ACC_PINIA_BAJA_AGACHADO) estadoActual = MOV_AGACHADO;
+		else if(estadoActual == ACC_PATADA_AGACHADO)estadoActual = MOV_AGACHADO;
+		else{
+			estadoAnterior =estadoActual;
+			estadoActual = MOV_PARADO;
+		}
 	}
 
 	//TODO: con esto anda (linea de abajo) de no pasar por el estado parado mientras esta protegido pero si despresiono el boton sigue protegido (probado con joystick)
 	//if (loopsPara(estadoActual) < countLoops && estadoActual != ACC_PROTECCION) estadoActual = MOV_PARADO;
+
 
 	rectanguloPj = llevarACabo.laAccion(estadoActual, countLoops, rectanguloPj.p, sentidoPj, direccionPj);
 
