@@ -57,11 +57,15 @@ void Personaje::realizarAccion(Tinput orden) {
 
 	posicionAnterior = rectanguloPj.p;
 
+	if (poder->estado == COLISION) poder->setEstado(DESACTIVADO);
+
+	if (poder->estado == ACTIVADO) poder->avanzar(velocidadDelPoder);
+
 	rectanguloPj = llevarACabo.laAccion(estadoActual, countLoops, rectanguloPj.p, sentidoPj, direccionPj);
 
 
-	if (poder->estado == ACTIVADO) poder->avanzar(10);
-	if (poder->estado == COLISION) poder->setEstado(DESACTIVADO);
+
+
 
 }
 

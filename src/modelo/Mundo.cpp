@@ -59,18 +59,6 @@ vector<Personaje*> Mundo::getPersonajes(){
 	return vector<Personaje*> {personaje1,personaje2};
 };
 
-float Mundo::getAlto(){
-	return altoEscenario;
-}
-
-float Mundo::getAncho(){
-	return anchoEscenario;
-}
-
-float Mundo::getAltoPiso(){
-	return altoPiso;
-}
-
 void Mundo::verificarDireccionDeLosPersonajes() {
 	//direccion derecha igual true
 	if(personaje1->rectanguloPj.p.getX() < personaje2->rectanguloPj.p.getX()){
