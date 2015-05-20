@@ -84,7 +84,7 @@ Trect Accionador::laAccion(TestadoPersonaje estadoPj, int loops, Posicion pos, T
             break;
         case ACC_PINIA_SALTO:
             saltarOblicuamente(loops,sentido,direccion);
-            piniaSalto(loops,direccion);
+            golpeSalto(loops,direccion);
             break;
         case ACC_PATADA_BAJA:
             patadaBaja(loops,direccion);
@@ -97,15 +97,15 @@ Trect Accionador::laAccion(TestadoPersonaje estadoPj, int loops, Posicion pos, T
             break;
         case ACC_PATADA_SALTO_VERTICAL:
             saltarVerticualmente(loops);
-            patadaSaltoVertical(loops,direccion);
+            golpeSalto(loops,direccion);
             break;
         case ACC_PINIA_SALTO_VERTICAL:
             saltarVerticualmente(loops);
-            patadaSaltoVertical(loops,direccion);
+            golpeSalto(loops,direccion);
             break;
         case ACC_PATADA_SALTO:
             saltarOblicuamente(loops,sentido,direccion);
-            patadaSalto(loops,direccion);
+            golpeSalto(loops,direccion);
             break;
         case ACC_PATADA_ALTA:
             patadaAlta(loops,direccion);
@@ -290,20 +290,6 @@ void Accionador::piniaAltaAgachado(int loops,Tdireccion direccion) {
     }
 }
 //--------------------------------------------------------------------------------------
-//                  PINIA SALTO
-void Accionador::piniaSalto(int loops,Tdireccion direccion) {
-    Trect rectan = Trect();
-    rectan.p = rectaDelPj.p;
-    if(direccion == DERECHA){
-        rectan.p = rectan.p + Posicion(rectaDelPj.d.w,0);
-    }
-    rectan.d.w = rectaDelPj.d.w * proporcionPiniaSalto;
-    if(loopsPara(ACC_PINIA_SALTO)>loops){
-        //TODO: PENSAR, DEBERIA CONOCER EL ESTADO DEL OTRO PJ?
-        golpe->setGolpe(piniasAltas, loops == 2,rectan,REA_GOLPE_BAJO);
-    }
-}
-//--------------------------------------------------------------------------------------
 //                  PATADA BAJA
 void Accionador::patadaBaja(int loops,Tdireccion direccion) {
     Trect rectan = Trect();
@@ -321,30 +307,33 @@ void Accionador::patadaBaja(int loops,Tdireccion direccion) {
 //                  PATADA BAJA ATRAS
 void Accionador::patadaBajaAtras(int loops,Tdireccion direccion) {
     Trect rectan = Trect();
+    rectan.d.w = rectaDelPj.d.w * proporcionPatadaBajaAtras;
     rectan.p = rectaDelPj.p;
-    if(direccion == DERECHA){
-        rectan.p = rectan.p + Posicion(rectaDelPj.d.w,0);
+    if (direccion == DERECHA) {
+        rectan.p = rectan.p + Posicion(rectaDelPj.d.w, 0);
+    } else {
+        rectan.p = rectan.p - Posicion(rectan.d.w, 0);
     }
-    rectan.d.w = rectaDelPj.d.w * proporcionPatadaAlta;
-    if(loopsPara(ACC_PATADA_BAJA_ATRAS)>loops){
-        golpe->setGolpe(patadasBajas, loops == 2,rectan,REA_PATADA_BARRIDA);
+    if (loopsPara(ACC_PATADA_ALTA_ATRAS) > loops) {
+        golpe->setGolpe(poderFuerte, loops == 5, rectan, REA_PATADA_BARRIDA);
     }
 
 }
 //--------------------------------------------------------------------------------------
 //                  PATADA ALTA ATRAS
 void Accionador::patadaAltaAtras(int loops,Tdireccion direccion) {
-    Trect rectan = Trect();
-    rectan.p = rectaDelPj.p;
-    if(direccion == DERECHA){
-        rectan.p = rectan.p + Posicion(rectaDelPj.d.w,0);
+        Trect rectan = Trect();
+        rectan.d.w = rectaDelPj.d.w * porporcionPatadaAltaAtras;
+        rectan.p = rectaDelPj.p;
+        if(direccion == DERECHA){
+            rectan.p = rectan.p + Posicion(rectaDelPj.d.w,0);
+        }else{
+            rectan.p = rectan.p - Posicion(rectan.d.w, 0);
+        }
+        if(loopsPara(ACC_PATADA_ALTA_ATRAS)>loops){
+            golpe->setGolpe(poderFuerte, loops == 5,rectan,REA_GOLPE_FUERTE);
+        }
     }
-    rectan.d.w = rectaDelPj.d.w * porporcionPatadaAltaAtras;
-    if(loopsPara(ACC_PATADA_ALTA_ATRAS)>loops){
-        golpe->setGolpe(poderFuerte, loops == 5,rectan,REA_GOLPE_FUERTE);
-    }
-
-}
 //--------------------------------------------------------------------------------------
 //                  PATADA ALTA
 void Accionador::patadaAlta(int loops,Tdireccion direccion) {
@@ -360,23 +349,8 @@ void Accionador::patadaAlta(int loops,Tdireccion direccion) {
 
 }
 //--------------------------------------------------------------------------------------
-//                  PATADA SALTO
-void Accionador::patadaSalto(int loops,Tdireccion direccion) {
-    Trect rectan = Trect();
-    rectan.p = rectaDelPj.p;
-    if(direccion == DERECHA){
-        rectan.p = rectan.p + Posicion(rectaDelPj.d.w,0);
-    }
-    rectan.d.w = rectaDelPj.d.w * proporcionPatadaSO;
-    if(loopsPara(ACC_PATADA_SALTO)>loops){
-        //TODO: PENSAR, DEBERIA CONOCER EL ESTADO DEL OTRO PJ?
-        golpe->setGolpe(patadasAltas, loops == 2,rectan,REA_GOLPE_BAJO);
-    }
-
-}
-//--------------------------------------------------------------------------------------
-//                  PATADA SALTO VERTICAL
-void Accionador::patadaSaltoVertical(int loops,Tdireccion direccion) {
+//                  GOLPE DURANTE EL SALTO
+void Accionador::golpeSalto(int loops,Tdireccion direccion) {
     Trect rectan = Trect();
     rectan.p = rectaDelPj.p;
     if(direccion == DERECHA){
@@ -384,8 +358,7 @@ void Accionador::patadaSaltoVertical(int loops,Tdireccion direccion) {
     }
     rectan.d.w = rectaDelPj.d.w * proporcionPatadaSV;
     if(loopsPara(ACC_PATADA_SALTO_VERTICAL)>loops){
-        //TODO: PENSAR, DEBERIA CONOCER EL ESTADO DEL OTRO PJ?
-        golpe->setGolpe(patadasAltas, loops == 2,rectan,REA_GOLPE_FUERTE);
+        golpe->setGolpe(patadasAltas,true,rectan,REA_GOLPE_FUERTE);
     }
 }
 //--------------------------------------------------------------------------------------

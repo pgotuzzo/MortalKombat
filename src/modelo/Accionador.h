@@ -46,13 +46,11 @@ public:
     void piniaBajaAgachado(int loops,Tdireccion direccion);
     void piniaAlta(int loops,Tdireccion direccion);
     void piniaAltaAgachado(int loops,Tdireccion direccion);
-    void piniaSalto(int loops,Tdireccion direccion);
     void patadaBaja(int loops,Tdireccion direccion);
     void patadaBajaAtras(int loops,Tdireccion direccion);
     void patadaAltaAtras(int loops,Tdireccion direccion);
     void patadaAlta(int loops,Tdireccion direccion);
-    void patadaSalto(int loops,Tdireccion direccion);
-    void patadaSaltoVertical(int loops,Tdireccion direccion);
+    void golpeSalto(int loops,Tdireccion direccion);
     void patadaAgachado(int loops,Tdireccion direccion);
     //PODER
     void activarPoder(Tdireccion direccion);

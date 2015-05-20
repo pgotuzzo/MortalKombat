@@ -286,17 +286,6 @@ void Personaje::reducirVida(float danio) {
 	else vida = vida - danio;
 }
 
-Personaje::~Personaje() {
-
-}
-
-
-void Personaje::caminar(){
-	estadoActual = MOV_CAMINANDO;
-	llevarACabo.laAccion(estadoActual,0,rectanguloPj.p,ATRAS,direccionPj);
-	estadoActual =MOV_PARADO;
-}
-
 bool Personaje::estadoActualContinuaElAnterior() {
 	return (estadoAnterior == MOV_SALTANDO_OBLICUO && estadoActual == ACC_PINIA_SALTO) ||
 	(estadoAnterior == MOV_SALTANDO_OBLICUO && estadoActual == ACC_PATADA_SALTO)||
@@ -314,4 +303,7 @@ void Personaje::empujado(float desplazamiento, Tdireccion direccion) {
 
 void Personaje::setPosicion(Posicion posicion) {
 	rectanguloPj = llevarACabo.setPosicionPersonaje(posicion);
+}
+Personaje::~Personaje(){
+
 }
