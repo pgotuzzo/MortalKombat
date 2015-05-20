@@ -49,7 +49,6 @@ void Personaje::realizarAccion(Tinput orden) {
 			estadoActual = MOV_PARADO;
 		}
 	}
-
 	//TODO: con esto anda (linea de abajo) de no pasar por el estado parado mientras esta protegido pero si despresiono el boton sigue protegido (probado con joystick)
 	//if (loopsPara(estadoActual) < countLoops && estadoActual != ACC_PROTECCION) estadoActual = MOV_PARADO;
 
@@ -186,8 +185,10 @@ TestadoPersonaje Personaje::generarEstado(Tinput orden) {
 				case TinputAccion::KEY_NADA:
 					return MOV_CAMINANDO;
 				case TinputAccion::KEY_PATADA_ALTA:
+					if(direccionPj == IZQUIERDA) return ACC_PATADA_ALTA_ATRAS;
 					return ACC_PATADA_ALTA;
 				case TinputAccion::KEY_PATADA_BAJA:
+					if(direccionPj == IZQUIERDA) return ACC_PATADA_BAJA_ATRAS;
 					return ACC_PATADA_BAJA;
 				case TinputAccion::KEY_PINIA_ALTA:
 					return ACC_PINIA_ALTA;
@@ -204,9 +205,11 @@ TestadoPersonaje Personaje::generarEstado(Tinput orden) {
 				case TinputAccion::KEY_NADA:
 					return MOV_CAMINANDO;
 				case TinputAccion::KEY_PATADA_ALTA:
+					if(direccionPj == DERECHA) return ACC_PATADA_ALTA_ATRAS;
 					return ACC_PATADA_ALTA;
 				case TinputAccion::KEY_PATADA_BAJA:
-					return ACC_PATADA_BAJA; // TODO: Ver mas tarde (patada baja atras), lo mismo con la alta
+					if(direccionPj == DERECHA) return ACC_PATADA_BAJA_ATRAS;
+					return ACC_PATADA_BAJA;
 				case TinputAccion::KEY_PINIA_ALTA:
 					return ACC_PINIA_ALTA;
 				case TinputAccion::KEY_PINIA_BAJA:

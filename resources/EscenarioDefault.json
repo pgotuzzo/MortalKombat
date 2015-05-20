@@ -21,10 +21,6 @@
         {
             "imagen_fondo": "./resources/capas/capa3.png",
             "ancho": 800
-        },
-        {
-            "imagen_fondo": "./resources/capas/capa4.png",
-            "ancho": 1000
         }
     ],
 
