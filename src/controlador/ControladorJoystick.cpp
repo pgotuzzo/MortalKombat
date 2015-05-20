@@ -4,14 +4,12 @@
 
 ControladorJoystick::ControladorJoystick(Tbotones botones) {
 
-
     highKick=botones.highKick;
     highPunch=botones.highPunch;
     lowKick=botones.lowKick;
     lowPunch=botones.lowPunch;
     poder=botones.poder;
     proteccion=botones.proteccion;
-
     if( SDL_NumJoysticks() < 1 ){
         string mensajeError="No hay joystick conectado.";
         loguer->loguear(mensajeError.c_str(),Log::LOG_ERR);
