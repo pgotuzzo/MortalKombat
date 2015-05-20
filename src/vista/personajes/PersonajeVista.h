@@ -38,12 +38,13 @@ private:
     float mScales[2];
 
     void crearSprites(std::string path);
+    bool greatHit();
 
 public:
     PersonajeVista(){};
     PersonajeVista(VistaUtils* utils, std::string spritesPath, Tdimension dimension, Tdireccion direction);
 
-    void update(Tcambio);
+    bool update(Tcambio);
     void getTexture(SDL_Texture* ventana, float x);
 
     void freeTextures();

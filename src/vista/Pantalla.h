@@ -53,6 +53,8 @@ public:
      */
     void update(vector<Tcambio> changes);
 
+    void vibrar();
+
     virtual ~Pantalla();
 };
 

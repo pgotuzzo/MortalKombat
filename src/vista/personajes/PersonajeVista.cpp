@@ -48,7 +48,17 @@ void PersonajeVista::crearSprites(string path) {
     }
 }
 
-void PersonajeVista::update(Tcambio tcambio) {
+bool PersonajeVista::greatHit() {
+    return mCurrentState == REA_GOLPE_FUERTE;
+}
+
+/**
+ * Actualiza el estado del personaje y devuelve un booleano en caso de
+ *  necesitar que la pantalla vibre.
+ *
+ * @return  true --> vibrar
+ */
+bool PersonajeVista::update(Tcambio tcambio) {
     mCurrentRect.p = tcambio.posicion;
     mCurrentRect.d = tcambio.dPJ;
     if (mCurrentState != tcambio.estado){
@@ -59,6 +69,7 @@ void PersonajeVista::update(Tcambio tcambio) {
     mTarget = tcambio.sentido;
 
     mPoder.update(tcambio.poder, mDirection);
+    return greatHit();
 };
 
 void PersonajeVista::getTexture(SDL_Texture* ventana, float x) {
@@ -118,3 +129,5 @@ void PersonajeVista::freeTextures() {
     loguer->loguear("Finaliza la eliminacion de los sprites del personaje", Log::LOG_DEB);
     SDL_DestroyTexture(mDefaultTexture);
 }
+
+

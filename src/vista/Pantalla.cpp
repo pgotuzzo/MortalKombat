@@ -151,45 +151,30 @@ void Pantalla::dibujar() {
  * change : contiene los cambios a realizar.
  */
 void Pantalla::update(vector<Tcambio> changes) {
-    for (unsigned i = 0; i < mPersonajes.size(); i++)
-        mPersonajes[i].update(changes[i]);
-
-    bool vibrar =false;
-    // La idea es q el tiempo q la cant de ciclos que tiene q vibrar  y cuando venga desde afuera
-    // si les molesta la vibracion comenten esto ajjaja
-    //if (contador>40) vibrar =true;
-    contador = contador+1;
-    if (contador>50) contador =0;
+    for (unsigned i = 0; i < mPersonajes.size(); i++){
+        if (mPersonajes[i].update(changes[i]))
+            this->vibrar();
+    }
 
     // Se tienen en cuenta solo los primeros 2 personajes para modificar la posicion del escenario
-    if (vibrar) {
-        if (vibroADerecha) {
-            posEscenario = posEscenario - distVibracion;
-            vibroADerecha = false;
-        } else {
-            posEscenario = posEscenario + distVibracion;
-            vibroADerecha = true;
-        }
-    } else {
-        float posPersonaje1X = changes[0].posicion.x;
-        float posPersonaje2X = changes[1].posicion.x;
-        float topeDerecha = posEscenario + mDimension.w - distTope;
-        float topeIzquierda = posEscenario + distTope;
-        bool moverIzq1 = topeIzquierda > posPersonaje1X && posPersonaje1X - distTope > 0;
-        bool moverIzq2 = topeIzquierda > posPersonaje2X && posPersonaje2X - distTope > 0;
-        bool moverDer1 = posPersonaje1X + mAnchoPersonaje > topeDerecha &&
-                         posPersonaje1X + mAnchoPersonaje + distTope < mAnchoEscenario;
-        bool moverDer2 = posPersonaje2X + mAnchoPersonaje > topeDerecha &&
-                         posPersonaje2X + mAnchoPersonaje + distTope < mAnchoEscenario;
-        if (moverIzq1) {
-            posEscenario = posPersonaje1X - distTope;
-        } else if (moverIzq2) {
-            posEscenario = posPersonaje2X - distTope;
-        } else if (moverDer1) {
-            posEscenario = posPersonaje1X + mAnchoPersonaje + distTope - mDimension.w;
-        } else if (moverDer2) {
-            posEscenario = posPersonaje2X + mAnchoPersonaje + distTope - mDimension.w;
-        }
+    float posPersonaje1X = changes[0].posicion.x;
+    float posPersonaje2X = changes[1].posicion.x;
+    float topeDerecha = posEscenario + mDimension.w - distTope;
+    float topeIzquierda = posEscenario + distTope;
+    bool moverIzq1 = topeIzquierda > posPersonaje1X && posPersonaje1X - distTope > 0;
+    bool moverIzq2 = topeIzquierda > posPersonaje2X && posPersonaje2X - distTope > 0;
+    bool moverDer1 = posPersonaje1X + mAnchoPersonaje > topeDerecha &&
+                     posPersonaje1X + mAnchoPersonaje + distTope < mAnchoEscenario;
+    bool moverDer2 = posPersonaje2X + mAnchoPersonaje > topeDerecha &&
+                     posPersonaje2X + mAnchoPersonaje + distTope < mAnchoEscenario;
+    if (moverIzq1) {
+        posEscenario = posPersonaje1X - distTope;
+    } else if (moverIzq2) {
+        posEscenario = posPersonaje2X - distTope;
+    } else if (moverDer1) {
+        posEscenario = posPersonaje1X + mAnchoPersonaje + distTope - mDimension.w;
+    } else if (moverDer2) {
+        posEscenario = posPersonaje2X + mAnchoPersonaje + distTope - mDimension.w;
     }
 
     for (int i = 0; i < mCapas.size(); i++) {
@@ -199,6 +184,15 @@ void Pantalla::update(vector<Tcambio> changes) {
     capaInfo.update(changes[0].vida/100,changes[1].vida/100);
 }
 
+void Pantalla::vibrar(){
+    if (vibroADerecha) {
+        posEscenario = posEscenario - distVibracion;
+        vibroADerecha = false;
+    } else {
+        posEscenario = posEscenario + distVibracion;
+        vibroADerecha = true;
+    }
+}
 
 Pantalla::~Pantalla() {
     loguer->loguear("Destruccion de la pantalla", Log::LOG_DEB);
