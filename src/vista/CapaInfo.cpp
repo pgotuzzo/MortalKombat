@@ -99,6 +99,8 @@ void CapaInfo::freeTextures() {
     loguer->loguear("Elimina capa", Log::LOG_DEB);
     SDL_DestroyTexture(barraVidaCompletaText);
     SDL_DestroyTexture(barraVidaParcialText);
+    SDL_DestroyTexture(mNombre1);
+    SDL_DestroyTexture(mNombre2);
     loguer->loguear("Elimina capa", Log::LOG_DEB);
 }
 

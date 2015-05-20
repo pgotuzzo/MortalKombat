@@ -76,7 +76,7 @@ int main(int argc, char **argv) {
                     restart = true;
                     delete(pantalla);
                     delete(mundo);
-                    /d/controlador.cerrarJoysticks();
+                    //controlador.cerrarJoysticks();
                     break;
                 };
                     //SI SE DESEA SALIR DEL JUEGO

@@ -197,6 +197,7 @@ Pantalla::~Pantalla() {
     loguer->loguear("Destruccion de la pantalla", Log::LOG_DEB);
     for (int i = 0; i < mCapas.size(); i++)
         mCapas[i].freeTextures();
+    capaInfo.freeTextures();
     for (int i = 0; i < mPersonajes.size(); i++)
         mPersonajes[i].freeTextures();
     delete (mUtils);
