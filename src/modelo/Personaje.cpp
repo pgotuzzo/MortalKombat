@@ -34,7 +34,11 @@ void Personaje::realizarAccion(Tinput orden) {
 		estadoAnterior = estadoActual;
 		estadoActual = estadoCompuesto;
 		verificarDireccion(orden);
+		//si el estado anterior es un salto y el nuevo es un golpe durante el salto, se usa el mismo contador de loops
 		if (estadoActualContinuaElAnterior())countLoops++;
+			// si el estado anterior es una pinia y el actual tmb se retrocede el contador para que tire una segunda pinia
+		else if(estadoAnterior == ACC_PINIA_ALTA && estadoActual == ACC_PINIA_ALTA) countLoops = countLoops-2;
+		else if(estadoAnterior == ACC_PINIA_BAJA && estadoActual == ACC_PINIA_BAJA) countLoops = countLoops-2;
 		else countLoops = 1;
 	}
 	else {
@@ -70,6 +74,13 @@ void Personaje::realizarAccion(Tinput orden) {
 }
 
 bool Personaje::puedoRealizarAccion(TestadoPersonaje accion) {
+
+
+	if(estadoActual == ACC_PINIA_ALTA)
+		return accion == ACC_PINIA_ALTA;
+	if(estadoActual == ACC_PINIA_BAJA)
+		return accion == ACC_PINIA_BAJA;
+
 	if(poder->estado==ACTIVADO){
 		if(accion == ACC_PODER_SALTO || accion == ACC_PODER) return false;
 	}

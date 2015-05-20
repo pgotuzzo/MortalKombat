@@ -545,10 +545,12 @@ static int loopsPara(TestadoPersonaje accion){
             return 4;
         case ACC_PATADA_SALTO_VERTICAL:
             return 10;
+        case ACC_PINIA_SALTO_VERTICAL:
+            return 10;
         case ACC_PATADA_SALTO:
             return 20;
         case ACC_PATADA_ALTA:
-            return 6;
+            return 8;
         case ACC_PATADA_ALTA_ATRAS:
             return 8;
         case ACC_PROTECCION:
@@ -572,7 +574,7 @@ static int loopsPara(TestadoPersonaje accion){
         case REA_PINIA_ALTA:
             return 3;
         case REA_LEVANTARSE:
-            return 7;
+            return 8;
         case REA_CAIDA:
             return 8;
     }

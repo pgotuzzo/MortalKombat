@@ -341,10 +341,10 @@ void Accionador::golpeSaltoVertical(int loops,Tdireccion direccion) {
     Trect rectan = Trect();
     rectan.d.w = rectaDelPj.d.w * proporcionPatadaSV;
     rectan.p = rectaDelPj.p;
-    if(direccion == DERECHA) rectan.p = rectan.p + Posicion(rectaDelPj.d.w,0);
-    else rectan.p = rectan.p - Posicion(rectan.d.w, 0);
+    if(direccion == DERECHA) rectan.p = rectan.p + Posicion(rectaDelPj.d.w,rectaDelPj.d.h-rectan.d.h);
+    else rectan.p = rectan.p + Posicion(-rectan.d.w,rectaDelPj.d.h-rectan.d.h);
     if(loopsPara(ACC_PATADA_SALTO_VERTICAL)>loops){
-        golpe->setGolpe(patadasAltas,true,rectan,REA_GOLPE_FUERTE);
+        golpe->setGolpe(patadasAltas,true,rectan,REA_GOLPE_ALTO);
     }
 }
 //--------------------------------------------------------------------------------------
@@ -353,10 +353,10 @@ void Accionador::golpeSaltoOblicuo(int loops,Tdireccion direccion) {
     Trect rectan = Trect();
     rectan.d.w = rectaDelPj.d.w * proporcionPatadaSV;
     rectan.p = rectaDelPj.p;
-    if(direccion == DERECHA) rectan.p = rectan.p + Posicion(rectaDelPj.d.w,0);
-    else rectan.p = rectan.p - Posicion(rectan.d.w, 0);
+    if(direccion == DERECHA) rectan.p = rectan.p + Posicion(rectaDelPj.d.w,rectaDelPj.d.h-rectan.d.h);
+    else rectan.p = rectan.p + Posicion(-rectan.d.w,rectaDelPj.d.h-rectan.d.h);
     if(loopsPara(ACC_PATADA_SALTO)>loops){
-        golpe->setGolpe(patadasAltas,true,rectan,REA_GOLPE_FUERTE);
+        golpe->setGolpe(patadasAltas,true,rectan,REA_LEVANTARSE);
     }
 }
 //--------------------------------------------------------------------------------------
