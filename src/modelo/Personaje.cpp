@@ -291,7 +291,7 @@ bool Personaje::estadoActualContinuaElAnterior() {
 	(estadoAnterior == MOV_SALTANDO_OBLICUO && estadoActual == ACC_PATADA_SALTO)||
 	//Si el estado anterior era salto oblicuo y el actual patada salto o pinia salto tiene que seguir
 	// con los loops del estado anterior
-	(estadoAnterior == MOV_SALTANDO_VERTICAL && estadoActual == ACC_PINIA_SALTO)||
+	(estadoAnterior == MOV_SALTANDO_VERTICAL && estadoActual == ACC_PINIA_SALTO_VERTICAL)||
 	(estadoAnterior == MOV_SALTANDO_VERTICAL && estadoActual == ACC_PATADA_SALTO_VERTICAL);
 	//Si el estado anterior era salto vertical y el actual patada salto vertical o pinia salto tiene que seguir
 	// con los loops del estado anterior

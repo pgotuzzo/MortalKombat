@@ -50,7 +50,8 @@ public:
     void patadaBajaAtras(int loops,Tdireccion direccion);
     void patadaAltaAtras(int loops,Tdireccion direccion);
     void patadaAlta(int loops,Tdireccion direccion);
-    void golpeSalto(int loops,Tdireccion direccion);
+    void golpeSaltoVertical(int loops,Tdireccion direccion);
+    void golpeSaltoOblicuo(int loops, Tdireccion direccion);
     void patadaAgachado(int loops,Tdireccion direccion);
     //PODER
     void activarPoder(Tdireccion direccion);
@@ -65,6 +66,8 @@ public:
     //Colisiones
     Posicion desplazado(float deltaDesplazo, Tdireccion direccion);
     Trect setPosicionPersonaje(Posicion posicion);
+
+    void ajustarPiso();
 };
 
 

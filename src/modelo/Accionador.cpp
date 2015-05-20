@@ -55,6 +55,7 @@ Trect Accionador::laAccion(TestadoPersonaje estadoPj, int loops, Posicion pos, T
     switch (estadoPj){
         //case movimiento ---------------------------------
         case MOV_PARADO:
+            if(rectaDelPj.p.y != ydelPiso-rectaDelPj.d.h) ajustarPiso();
             break;
         case MOV_CAMINANDO:
             caminar(sentido,direccion);
@@ -84,7 +85,7 @@ Trect Accionador::laAccion(TestadoPersonaje estadoPj, int loops, Posicion pos, T
             break;
         case ACC_PINIA_SALTO:
             saltarOblicuamente(loops,sentido,direccion);
-            golpeSalto(loops,direccion);
+            golpeSaltoOblicuo(loops,direccion);
             break;
         case ACC_PATADA_BAJA:
             patadaBaja(loops,direccion);
@@ -97,15 +98,15 @@ Trect Accionador::laAccion(TestadoPersonaje estadoPj, int loops, Posicion pos, T
             break;
         case ACC_PATADA_SALTO_VERTICAL:
             saltarVerticualmente(loops);
-            golpeSalto(loops,direccion);
+            golpeSaltoVertical(loops,direccion);
             break;
         case ACC_PINIA_SALTO_VERTICAL:
             saltarVerticualmente(loops);
-            golpeSalto(loops,direccion);
+            golpeSaltoVertical(loops,direccion);
             break;
         case ACC_PATADA_SALTO:
             saltarOblicuamente(loops,sentido,direccion);
-            golpeSalto(loops,direccion);
+            golpeSaltoOblicuo(loops,direccion);
             break;
         case ACC_PATADA_ALTA:
             patadaAlta(loops,direccion);
@@ -335,14 +336,26 @@ void Accionador::patadaAlta(int loops,Tdireccion direccion) {
 
 }
 //--------------------------------------------------------------------------------------
-//                  GOLPE DURANTE EL SALTO
-void Accionador::golpeSalto(int loops,Tdireccion direccion) {
+//                  GOLPE DURANTE EL SALTO Vertical
+void Accionador::golpeSaltoVertical(int loops,Tdireccion direccion) {
     Trect rectan = Trect();
     rectan.d.w = rectaDelPj.d.w * proporcionPatadaSV;
     rectan.p = rectaDelPj.p;
     if(direccion == DERECHA) rectan.p = rectan.p + Posicion(rectaDelPj.d.w,0);
     else rectan.p = rectan.p - Posicion(rectan.d.w, 0);
     if(loopsPara(ACC_PATADA_SALTO_VERTICAL)>loops){
+        golpe->setGolpe(patadasAltas,true,rectan,REA_GOLPE_FUERTE);
+    }
+}
+//--------------------------------------------------------------------------------------
+//                  GOLPE DURANTE EL SALTO OBLICUO
+void Accionador::golpeSaltoOblicuo(int loops,Tdireccion direccion) {
+    Trect rectan = Trect();
+    rectan.d.w = rectaDelPj.d.w * proporcionPatadaSV;
+    rectan.p = rectaDelPj.p;
+    if(direccion == DERECHA) rectan.p = rectan.p + Posicion(rectaDelPj.d.w,0);
+    else rectan.p = rectan.p - Posicion(rectan.d.w, 0);
+    if(loopsPara(ACC_PATADA_SALTO)>loops){
         golpe->setGolpe(patadasAltas,true,rectan,REA_GOLPE_FUERTE);
     }
 }
@@ -409,4 +422,9 @@ Golpe *Accionador::getGolpe() {
 Trect Accionador::setPosicionPersonaje(Posicion posicion) {
     rectaDelPj.p = posicion;
     return rectaDelPj;
+}
+
+void Accionador::ajustarPiso() {
+    rectaDelPj.p.y = ydelPiso - rectaDelPj.d.h;
+
 }
