@@ -144,7 +144,6 @@ Trect Accionador::laAccion(TestadoPersonaje estadoPj, int loops, Posicion pos, T
             reaccionTrasPiniaAlta(loops,direccion);
             break;
         case REA_LEVANTARSE:
-            cout<<loops<<endl;
             break;
     }
     return rectaDelPj;
@@ -184,13 +183,11 @@ void Accionador::subirEnSaltoOblicuo(float deltaMovX,float deltaMovY,Tsentido se
     if(direcBloqueada == DERECHA){
         if (sentido == ADELANTE) rectaDelPj.p =rectaDelPj.p+Posicion(deltaMovX,-deltaMovY);
         else {
-            cout<<"1"<<endl;
             rectaDelPj.p =rectaDelPj.p+Posicion(-deltaMovX,-deltaMovY);
         }
     }else{
         if (sentido == ADELANTE) rectaDelPj.p =rectaDelPj.p+Posicion(-deltaMovX,-deltaMovY);
         else {
-            cout<<"2"<<endl;
             rectaDelPj.p =rectaDelPj.p+Posicion(deltaMovX,-deltaMovY);
         }
     }
@@ -245,11 +242,11 @@ void Accionador::piniaBaja(int loops,Tdireccion direccion) {
     Trect rectan = Trect();
     rectan.p = rectaDelPj.p;
     if(direccion == DERECHA){
-        rectan.p = rectan.p + Posicion(rectaDelPj.d.w,0);
+        rectan.p = rectan.p + Posicion(rectaDelPj.d.w * proporcionPiniaBaja,0);
     }
-    rectan.d.w = rectaDelPj.d.w * proporcionPiniaBaja;
-    if(loopsPara(ACC_PINIA_BAJA)<loops){
-        golpe->setGolpe(piniasBajas, loops == 2,rectan,REA_GOLPE_BAJO);
+    rectan.d.w = rectaDelPj.d.w;
+    if(loopsPara(ACC_PINIA_BAJA)>loops){
+        golpe->setGolpe(piniasBajas,true,rectan,REA_GOLPE_BAJO);
     }
 }
 //--------------------------------------------------------------------------------------
@@ -261,7 +258,7 @@ void Accionador::piniaBajaAgachado(int loops,Tdireccion direccion) {
         rectan.p = rectan.p + Posicion(rectaDelPj.d.w,0);
     }
     rectan.d.w = rectaDelPj.d.w * proporcionPiniaBaja;
-    if(loopsPara(ACC_PINIA_BAJA_AGACHADO)<loops){
+    if(loopsPara(ACC_PINIA_BAJA_AGACHADO)>loops){
         golpe->setGolpe(piniasBajas, loops == 2,rectan,REA_GOLPE_BAJO);
     }
 }
