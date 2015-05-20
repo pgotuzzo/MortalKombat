@@ -23,7 +23,7 @@
  */
 static const string SPRITES_FORMAT = ".png";
 static const float MIN_DISTANCE_FROM_BOUND = 20;
-const float velocidadDelPoder = 10;
+const float velocidadDelPoder = 20;
 
 /**
  * Estas estructuras, pseudo-clases cruzan toda

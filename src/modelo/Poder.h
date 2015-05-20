@@ -13,6 +13,7 @@ public:
     Tdireccion direccion;
     TestadoPoder estado;
     float posFinalX;
+    bool primerLoop;
 
 
     Poder();

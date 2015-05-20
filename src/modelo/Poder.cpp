@@ -3,7 +3,7 @@
 //Constantes Poder
 
 const float anchoPoder = 20;
-const float altoPoder = 20;
+const float altoPoder = 10;
 const float proporcionPosYPoder = 0.2;
 const float proporcionPosXPoder = 0.52;
 const float danioPoder = 5;
@@ -13,19 +13,21 @@ Poder::Poder() {
     rectanguloPoder.d.w = anchoPoder;
     rectanguloPoder.d.h = altoPoder;
     danio = danioPoder;
+    primerLoop = false;
 }
 
 void Poder::activar(Trect rectPJ,Tdireccion direccion,float anchoPantalla) {
 
     if(estado == DESACTIVADO){
         estado = ACTIVADO;
-        rectanguloPoder.p.y = rectPJ.p.getY() + rectPJ.d.h * proporcionPosYPoder;
+        primerLoop = true;
+        rectanguloPoder.p.y = rectPJ.p.getY() + rectPJ.d.h /2 - rectanguloPoder.d.h-1;
         if (direccion == DERECHA) {
             rectanguloPoder.p.x = rectPJ.p.getX() + rectPJ.d.w;
             posFinalX = rectPJ.p.x + anchoPantalla;
         }
         else {
-            rectanguloPoder.p.x = rectPJ.p.getX();
+            rectanguloPoder.p.x = rectPJ.p.getX() - rectPJ.d.w;
             posFinalX = rectPJ.p.x - anchoPantalla;
         }
         this->danio = danio;
@@ -34,23 +36,21 @@ void Poder::activar(Trect rectPJ,Tdireccion direccion,float anchoPantalla) {
 }
 
 void Poder::avanzar(float avance) {
-    TestadoPoder estadoPoder = this->estado;
-    if(estadoPoder == ACTIVADO) {
+    if(estado == ACTIVADO && primerLoop == false) {
         if (direccion == DERECHA){
-            //cout<<"Costado derecho poder: "<<pos.getX()+ancho/2<<endl;
             rectanguloPoder.p.x = rectanguloPoder.p.x + avance;
             if (rectanguloPoder.p.getX() >= posFinalX){
                 this->estado = DESACTIVADO;
             }
         }
         else{
-            //cout<<"Costado izquierdo poder: "<<pos.getX()-ancho/2<<endl;
             rectanguloPoder.p.x = rectanguloPoder.p.x - avance;
             if (rectanguloPoder.p.getX() <= posFinalX){
                 this->estado = DESACTIVADO;
             }
         }
     }
+    primerLoop = false;
 }
 
 void Poder::setEstado(TestadoPoder nuevoEstado) {

@@ -23,8 +23,8 @@ void DetectorDeColisiones::resolverColisiones(Personaje *personaje1, Personaje *
         colisionar(personaje2,personaje1->poder);
     }
     else{
-        colisionar(personaje2,personaje1->poder);
-        colisionar(personaje1,personaje2->poder);
+        if(personaje1->poder->estado == ACTIVADO) colisionar(personaje2,personaje1->poder);
+        else if(personaje2->poder->estado == ACTIVADO) colisionar(personaje1,personaje2->poder);
     }
 
     resolverColisionconPantalla(personaje1,personaje2);
@@ -264,7 +264,7 @@ void DetectorDeColisiones::resolverColisionconEscenario(Personaje *PJ) {
 
 void DetectorDeColisiones::colisionar(Personaje *PJ, Poder *poder) {
     float distanciaPJPoder = distancia(PJ,poder);
-    if((distanciaPJPoder < velocidadDelPoder && detectarColisionenY(PJ,poder) && poder->estado == ACTIVADO) ){
+    if((distanciaPJPoder < velocidadDelPoder && detectarColisionenY(PJ,poder)) && !poder->primerLoop){
         poder->avanzar(distanciaPJPoder);
         poder->estado = COLISION;
         if(PJ->estadoActual == ACC_PROTECCION)PJ->reducirVida(poder->danio/2);
