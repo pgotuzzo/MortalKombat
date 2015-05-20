@@ -68,6 +68,8 @@ int main(int argc, char **argv) {
             // INPUT
             vector<Tinput> inputs = controlador.getInputs();
 
+            if(mundo->huboGanador())inputs[0].game = TinputGame::KEY_RESTART;
+
             switch (inputs[0].game){
                 //PARA RESTABLECER EL JUEGO
                 case TinputGame::KEY_RESTART:{

@@ -66,6 +66,7 @@ public:
 
     //Colisiones
     Posicion desplazado(float deltaDesplazo, Tdireccion direccion);
+    Trect setPosicionPersonaje(Posicion posicion);
 };
 
 

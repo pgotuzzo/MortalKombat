@@ -449,3 +449,7 @@ Golpe *Accionador::getGolpe() {
     return golpe;
 }
 
+Trect Accionador::setPosicionPersonaje(Posicion posicion) {
+    rectaDelPj.p = posicion;
+    return rectaDelPj;
+}

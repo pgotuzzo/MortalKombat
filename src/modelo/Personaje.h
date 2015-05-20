@@ -6,6 +6,7 @@
 #include <iostream>
 #include <list>
 #include "math.h"
+#include <string>
 #include <tr1/unordered_map>
 #include "../Common.h"
 #include "ObjetoColisionable.h"
@@ -19,6 +20,7 @@ using namespace std;
 class Personaje: public ObjetoColisionable{
 public:
 
+	string nombre;
 	TestadoPersonaje estadoActual;
 	TestadoPersonaje estadoAnterior;
 
@@ -42,7 +44,7 @@ public:
 	//-----------------------------------------------------------------------------
 	bool puedoRealizarAccion(TestadoPersonaje accion);
 	TestadoPersonaje generarEstado(Tinput orden);
-	Personaje(Tdireccion direccionInicial,Trect cuerpo,float anchoPantalla);
+	Personaje(string nombre,Tdireccion direccionInicial,Trect cuerpo,float anchoPantalla);
 
 	Trect getRectangulo();
 	void modificarPosicion(Posicion nuevaPosicion);
@@ -50,6 +52,7 @@ public:
 	void realizarAccion(Tinput orden);
 	void reducirVida(float danio);
 	void empujado(float desplazamiento, Tdireccion direccion);
+	void setPosicion(Posicion posicion);
 	~Personaje();
 
 	void verificarDireccion(Tinput tinput);

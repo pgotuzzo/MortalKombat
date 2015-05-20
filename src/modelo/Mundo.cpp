@@ -26,6 +26,7 @@ Mundo::Mundo(config configuracion) {
 	altoEscenario = escenario.d.h;
 	altoPiso = escenario.yPiso;
 
+
 	float pos_x1 = anchoEscenario/2 - anchoVentana/2 + MIN_DISTANCE_FROM_BOUND;
 	float pos_x2 = anchoEscenario/2 + anchoVentana/2 - PJ2.d.w - MIN_DISTANCE_FROM_BOUND;
 	float pos_y1 = altoEscenario - altoPiso - PJ1.d.h;
@@ -42,9 +43,9 @@ Mundo::Mundo(config configuracion) {
 
 	//TODO: EL PJ1 Y PJ2 EMPIEZAN EN LADOS OPUESTOS - lo dejamos asi por los controles del teclado
 
-	personaje1 = new Personaje(direccion1,rectanguloPj1,anchoVentana);
+	personaje1 = new Personaje(PJ1.nombre,direccion1,rectanguloPj1,anchoVentana);
 	//cout<<"Costado izquierdo personaje 1: "<<personaje1->rectanguloPj.p.getX() - personaje1->rectanguloPj.d.w<<endl;
-	personaje2 = new Personaje(direccion2,rectanguloPj2,anchoVentana);
+	personaje2 = new Personaje(PJ2.nombre,direccion2,rectanguloPj2,anchoVentana);
 	//cout<<"Costado derecho personaje 2: "<<personaje2->rectanguloPj.p.getX() + personaje2->rectanguloPj.d.w<<endl;
 
 
@@ -72,12 +73,12 @@ float Mundo::getAltoPiso(){
 
 void Mundo::verificarDireccionDeLosPersonajes() {
 	//direccion derecha igual true
-	if(personaje1->rectanguloPj.p.getX() - personaje2->rectanguloPj.p.getX() <= 0){
+	if(personaje1->rectanguloPj.p.getX() < personaje2->rectanguloPj.p.getX()){
 		personaje1->direccionPj = DERECHA;
 		personaje2->direccionPj = IZQUIERDA;
 
 	}
-	else{
+	else if(personaje1->rectanguloPj.p.getX() > personaje2->rectanguloPj.p.getX()){
 		personaje1->direccionPj = IZQUIERDA;
 		personaje2->direccionPj = DERECHA;
 	}
@@ -129,48 +130,22 @@ vector<Tcambio> Mundo::actualizarMundo(vector<Tinput> inputs) {
 }
 
 
-/*void Mundo::verificarColision(bool generaViolencia,Personaje* agresor,Personaje* PJ,ObjetoColisionable *objeto, bool esPoder) {
-	if (generaViolencia) {
-		if(!esPoder){
-			colisionador.solucionarColision(PJ, agresor, (Golpe *) objeto);
-		}
-		else {
-			if (PJ->direccion) {
-				if (colisionador.distanciaColisionadaenX(PJ,objeto)>0){
-					objeto->pos.setX(objeto->pos.getX() + colisionador.distanciaColisionadaenX(PJ,objeto));
-					colisionador.solucionarColision(PJ, (Poder *) objeto);
-				}
-			}
-			else{
-				if (colisionador.distanciaColisionadaenX(objeto,PJ)>0){
-					objeto->pos.setX(objeto->pos.getX() - colisionador.distanciaColisionadaenX(objeto,PJ));
-					colisionador.solucionarColision(PJ, (Poder *) objeto);
-				}
+bool Mundo::huboGanador() {
+	string mensaje;
+	if(personaje1->vida == 0){
+		mensaje = "Ganador: "+personaje2->nombre+" ---> Personaje 2";
+		loguer->loguear(mensaje.c_str(),Log::LOG_DEB);
+		return true;
+	}
+	if(personaje2->vida == 0){
+		mensaje = "Ganador: "+personaje1->nombre+" ---> Personaje 1";
+		loguer->loguear(mensaje.c_str(),Log::LOG_DEB);
+		return true;
+	}
+	return false;
+}
 
-			}
-		}
-	}
-	if (PJ->estado == REA_GOLPE_FUERTE){
-		loopsReaccionGolpeFuerte++;
-		PJ->accionesEnCurso[3]->setConfiguracion(30, 60, 10);
-		if (PJ->direccion) {
-			if (!PJ->accionesEnCurso[3]->getEstado()) {
-				PJ->accionesEnCurso[3]->setEstado(true, PJ->pos, false);
-			}
-		}
-		else {
-			if (!PJ->accionesEnCurso[3]->getEstado()) {
-				PJ->accionesEnCurso[3]->setEstado(true, PJ->pos, true);
-			}
-		}
-		cout<<loopsReaccionGolpeFuerte<<endl;
-		if(loopsReaccionGolpeFuerte >= 13){
-			PJ->accionesEnCurso[3]->setEstado(false);
-			PJ->estado = MOV_PARADO;
-			loopsReaccionGolpeFuerte = 0;
-		}
-	}
-}*/
+
 
 Mundo::~Mundo() {
 	if(personaje1->vida == 0) loguer->loguear("El personaje 1 esta muerto",Log::LOG_DEB);
@@ -182,34 +157,3 @@ Mundo::~Mundo() {
 	loguer->loguear("Se libero a los personajes", Log::LOG_DEB);
 }
 
-
-
-// No borrar me sirve para el detector de colisiones despues.
-/*void Mundo::VerificarSiPjsColisionanaEnElAire(){
-	if ((personaje1->getEstado() != MOV_SALTANDO_OBLICUO) || (personaje1->sentido == false)) {
-		personaje1->enCaida = false;
-		personaje2->enCaida = false;
-	}
-	if ((personaje2->getEstado() != MOV_SALTANDO_OBLICUO) || (personaje2->sentido == false)) {
-		personaje1->enCaida = false;
-		personaje2->enCaida = false;
-	}
-	if (colisionador.sonCercanos(personaje1, personaje2, deltaCero)) {
-		if (personaje1->estado == MOV_SALTANDO_OBLICUO && personaje1->sentido == true && personaje2->estado ==
-																						 MOV_SALTANDO_OBLICUO && personaje2->sentido == true) {
-			personaje1->enCaida = true;
-			personaje2->enCaida = true;
-			if ((personaje1->pos.getX() - personaje2->pos.getX()) <= 0) {
-				if(colisionador.distanciaColisionadaenX(personaje1,personaje2) < 0) {
-					personaje2->pos.setX(personaje2->pos.getX() + colisionador.distanciaColisionadaenX(personaje1, personaje2));
-				}
-			} else {
-				if(colisionador.distanciaColisionadaenX(personaje2,personaje1) > 0) {
-					personaje2->pos.setX(personaje2->pos.getX() -colisionador.distanciaColisionadaenX(personaje2, personaje1));
-				}
-			};
-		}
-	}
-
-
-}*/

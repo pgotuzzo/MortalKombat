@@ -39,6 +39,8 @@ public:
 
 	Tcambio actualizarPJ(Personaje* PJ);
 
+	bool huboGanador();
+
 };
 
 #endif /* SRC_MODELO_MUNDO_H_ */

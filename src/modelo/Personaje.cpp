@@ -2,9 +2,12 @@
 #include "Personaje.h"
 
 
-Personaje::Personaje(Tdireccion direccionInicial,Trect cuerpo, float anchoPantalla) {
+Personaje::Personaje(string nombre,Tdireccion direccionInicial,Trect cuerpo, float anchoPantalla) {
+
+	this->nombre = nombre;
 
 	rectanguloPj = cuerpo;
+	posicionAnterior = cuerpo.p;
 
 	this->anchoPantalla = anchoPantalla;
 	yPiso = rectanguloPj.p.getY() + rectanguloPj.d.h;
@@ -52,6 +55,7 @@ void Personaje::realizarAccion(Tinput orden) {
 	//TODO: con esto anda (linea de abajo) de no pasar por el estado parado mientras esta protegido pero si despresiono el boton sigue protegido (probado con joystick)
 	//if (loopsPara(estadoActual) < countLoops && estadoActual != ACC_PROTECCION) estadoActual = MOV_PARADO;
 
+	posicionAnterior = rectanguloPj.p;
 
 	rectanguloPj = llevarACabo.laAccion(estadoActual, countLoops, rectanguloPj.p, sentidoPj, direccionPj);
 
@@ -306,4 +310,8 @@ bool Personaje::estadoActualContinuaElAnterior() {
 
 void Personaje::empujado(float desplazamiento, Tdireccion direccion) {
 	rectanguloPj.p = llevarACabo.desplazado(desplazamiento,direccion);
+}
+
+void Personaje::setPosicion(Posicion posicion) {
+	rectanguloPj = llevarACabo.setPosicionPersonaje(posicion);
 }
