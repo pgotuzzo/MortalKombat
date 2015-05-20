@@ -52,6 +52,10 @@ bool PersonajeVista::greatHit() {
     return mCurrentState == REA_GOLPE_FUERTE;
 }
 
+Trect PersonajeVista::getRect() {
+    return mCurrentRect;
+}
+
 /**
  * Actualiza el estado del personaje y devuelve un booleano en caso de
  *  necesitar que la pantalla vibre.
@@ -129,5 +133,3 @@ void PersonajeVista::freeTextures() {
     loguer->loguear("Finaliza la eliminacion de los sprites del personaje", Log::LOG_DEB);
     SDL_DestroyTexture(mDefaultTexture);
 }
-
-

@@ -21,7 +21,6 @@ private:
     CapaInfo capaInfo;
 
     float distTope;
-    float mAnchoPersonaje;
     float mAnchoEscenario;
     float posEscenario;
 
@@ -30,7 +29,6 @@ private:
     void InicializarCapas(vector<Tcapa> capas, string personajes[2]);
 
     bool vibroADerecha;
-    int contador;
 
 public:
     /*

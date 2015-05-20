@@ -44,6 +44,7 @@ public:
     PersonajeVista(){};
     PersonajeVista(VistaUtils* utils, std::string spritesPath, Tdimension dimension, Tdireccion direction);
 
+    Trect getRect();
     bool update(Tcambio);
     void getTexture(SDL_Texture* ventana, float x);
 

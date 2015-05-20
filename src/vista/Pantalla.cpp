@@ -57,10 +57,8 @@ void Pantalla::InicializarPersonajes(vector<Tpersonaje> personajes) {
         throw new exception;
     }
 
-    // zIndex y ancho del personaje igual para ambos personajes
-    // TODO - El ancho del personaje no tiene por que ser igual para ambos
+    // zIndex y igual para ambos personajes
     zIndex = personajes[0].zIndex;
-    mAnchoPersonaje = personajes[0].d.w;
 
     // TODO - Mejorar la lógica, sobre todo si se van a tener mas de 2 personajes
     for (unsigned i = 0; i < personajes.size(); i++) {
@@ -124,7 +122,6 @@ Pantalla::Pantalla(vector<Tcapa> capas, Tventana ventana, Tescenario escenario, 
     string nombres[2] = {personajes[0].nombre, personajes[1].nombre};
     InicializarCapas(capas, nombres);
     vibroADerecha = false;
-    contador = 0;
 };
 
 /*
@@ -161,20 +158,22 @@ void Pantalla::update(vector<Tcambio> changes) {
     float posPersonaje2X = changes[1].posicion.x;
     float topeDerecha = posEscenario + mDimension.w - distTope;
     float topeIzquierda = posEscenario + distTope;
+    float anchoPersonaje1 = mPersonajes[0].getRect().d.w;
+    float anchoPersonaje2 = mPersonajes[1].getRect().d.w;
     bool moverIzq1 = topeIzquierda > posPersonaje1X && posPersonaje1X - distTope > 0;
     bool moverIzq2 = topeIzquierda > posPersonaje2X && posPersonaje2X - distTope > 0;
-    bool moverDer1 = posPersonaje1X + mAnchoPersonaje > topeDerecha &&
-                     posPersonaje1X + mAnchoPersonaje + distTope < mAnchoEscenario;
-    bool moverDer2 = posPersonaje2X + mAnchoPersonaje > topeDerecha &&
-                     posPersonaje2X + mAnchoPersonaje + distTope < mAnchoEscenario;
+    bool moverDer1 = posPersonaje1X + anchoPersonaje1 > topeDerecha &&
+                     posPersonaje1X + anchoPersonaje1 + distTope < mAnchoEscenario;
+    bool moverDer2 = posPersonaje2X + anchoPersonaje2 > topeDerecha &&
+                     posPersonaje2X + anchoPersonaje2 + distTope < mAnchoEscenario;
     if (moverIzq1) {
         posEscenario = posPersonaje1X - distTope;
     } else if (moverIzq2) {
         posEscenario = posPersonaje2X - distTope;
     } else if (moverDer1) {
-        posEscenario = posPersonaje1X + mAnchoPersonaje + distTope - mDimension.w;
+        posEscenario = posPersonaje1X + anchoPersonaje1 + distTope - mDimension.w;
     } else if (moverDer2) {
-        posEscenario = posPersonaje2X + mAnchoPersonaje + distTope - mDimension.w;
+        posEscenario = posPersonaje2X + anchoPersonaje2 + distTope - mDimension.w;
     }
 
     for (int i = 0; i < mCapas.size(); i++) {
