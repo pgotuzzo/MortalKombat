@@ -17,19 +17,20 @@ Poder::Poder() {
 
 void Poder::activar(Trect rectPJ,Tdireccion direccion,float anchoPantalla) {
 
-    estado = ACTIVADO;
-
-    rectanguloPoder.p.y = rectPJ.p.getY() + rectPJ.d.h * proporcionPosYPoder;
-    if (direccion == DERECHA) {
-        rectanguloPoder.p.x = rectPJ.p.getX() + rectPJ.d.w;
-        posFinalX = rectPJ.p.x + anchoPantalla;
-    }
-    else {
-        rectanguloPoder.p.x = rectPJ.p.getX();
-        posFinalX = rectPJ.p.x - anchoPantalla;
-    }
-    this->danio = danio;
-    this->direccion = direccion;
+    if(estado == DESACTIVADO){
+        estado = ACTIVADO;
+        rectanguloPoder.p.y = rectPJ.p.getY() + rectPJ.d.h * proporcionPosYPoder;
+        if (direccion == DERECHA) {
+            rectanguloPoder.p.x = rectPJ.p.getX() + rectPJ.d.w;
+            posFinalX = rectPJ.p.x + anchoPantalla;
+        }
+        else {
+            rectanguloPoder.p.x = rectPJ.p.getX();
+            posFinalX = rectPJ.p.x - anchoPantalla;
+        }
+        this->danio = danio;
+        this->direccion = direccion;
+        }
 }
 
 void Poder::avanzar(float avance) {

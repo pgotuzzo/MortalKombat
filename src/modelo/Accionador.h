@@ -36,8 +36,8 @@ public:
     void caminar(Tsentido sentido, Tdireccion direccion);
     void saltarVerticualmente(int loops);
     void saltarOblicuamente(int loops, Tsentido sentido, Tdireccion direccion);
-    void subirEnSaltoOblicuo(float deltaMovX, float deltaMovY, Tsentido sentido, Tdireccion direccion);
-    void bajarEnSaltoOblicuo(float deltaMovX, float deltaMovY, Tsentido sentido, Tdireccion direccion);
+    void subirEnSaltoOblicuo(float deltaMovX, float deltaMovY, Tsentido sentido);
+    void bajarEnSaltoOblicuo(float deltaMovX, float deltaMovY, Tsentido sentido);
     void agachar();
     void ponerseDePie();
 
@@ -66,11 +66,6 @@ public:
 
     //Colisiones
     Posicion desplazado(float deltaDesplazo, Tdireccion direccion);
-
-
-    void bajarEnReaGolpeFuerte(float deltaMovX, float deltaMovY, Tdireccion direccion);
-
-    void subirEnReaGolpeFuerte(float deltaMovX, float deltaMovY, Tdireccion direccion);
 };
 
 
