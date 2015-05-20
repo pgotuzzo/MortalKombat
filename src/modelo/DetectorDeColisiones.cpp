@@ -248,8 +248,8 @@ void DetectorDeColisiones::resolverColisionconPantalla(Personaje *PJ1,Personaje*
 
     float distanciaPasada = distancia(PJ1,PJ2) - distanciaMaxima;
     if(distanciaPasada > 0){
-        PJ1->empujado(-distanciaPasada/2,PJ1->direccionPj);
-        PJ2->empujado(-distanciaPasada/2,PJ2->direccionPj);
+        PJ1->setPosicion(Posicion(PJ1->posicionAnterior.getX(),PJ1->getRectangulo().p.getY()));
+        PJ2->setPosicion(Posicion(PJ2->posicionAnterior.getX(),PJ2->getRectangulo().p.getY()));
     }
 
 }
@@ -323,9 +323,13 @@ void DetectorDeColisiones::resolverColisionconEscenario(Personaje *PJ) {
     float topeDerecha = anchoEscenario - PJ->getRectangulo().p.getX();
     float anchoPJ = PJ->getRectangulo().d.w;
 
-    if(topeDerecha< anchoPJ) PJ->empujado(-(anchoPJ-topeDerecha),PJ->direccionPj);
+    if(topeDerecha< anchoPJ){
+        PJ->empujado(-(anchoPJ-topeDerecha),PJ->direccionPj);
+    }
 
     float topeIzquierda = (-1)* PJ->getRectangulo().p.getX();
 
-    if(topeIzquierda > 0) PJ->empujado(-topeIzquierda,PJ->direccionPj);
+    if(topeIzquierda > 0){
+        PJ->empujado(-topeIzquierda,PJ->direccionPj);
+    }
 }
