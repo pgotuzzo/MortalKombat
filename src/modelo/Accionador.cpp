@@ -240,11 +240,10 @@ void Accionador::ponerseDePie() {
 void Accionador::piniaBaja(int loops,Tdireccion direccion) {
 
     Trect rectan = Trect();
+    rectan.d.w = rectaDelPj.d.w * proporcionPiniaBaja;
     rectan.p = rectaDelPj.p;
-    if(direccion == DERECHA){
-        rectan.p = rectan.p + Posicion(rectaDelPj.d.w * proporcionPiniaBaja,0);
-    }
-    rectan.d.w = rectaDelPj.d.w;
+    if(direccion == DERECHA) rectan.p = rectan.p + Posicion(rectaDelPj.d.w,0);
+    else rectan.p = rectan.p - Posicion(rectan.d.w, 0);
     if(loopsPara(ACC_PINIA_BAJA)>loops){
         golpe->setGolpe(piniasBajas,true,rectan,REA_GOLPE_BAJO);
     }
@@ -253,11 +252,10 @@ void Accionador::piniaBaja(int loops,Tdireccion direccion) {
 //                  PINIA BAJA AGACHADO
 void Accionador::piniaBajaAgachado(int loops,Tdireccion direccion) {
     Trect rectan = Trect();
+    rectan.d.w = rectaDelPj.d.w * proporcionPiniaBajaAgachado;
     rectan.p = rectaDelPj.p;
-    if(direccion == DERECHA){
-        rectan.p = rectan.p + Posicion(rectaDelPj.d.w,0);
-    }
-    rectan.d.w = rectaDelPj.d.w * proporcionPiniaBaja;
+    if(direccion == DERECHA) rectan.p = rectan.p + Posicion(rectaDelPj.d.w,0);
+    else rectan.p = rectan.p - Posicion(rectan.d.w, 0);
     if(loopsPara(ACC_PINIA_BAJA_AGACHADO)>loops){
         golpe->setGolpe(piniasBajas, loops == 2,rectan,REA_GOLPE_BAJO);
     }
@@ -265,13 +263,11 @@ void Accionador::piniaBajaAgachado(int loops,Tdireccion direccion) {
 //--------------------------------------------------------------------------------------
 //                  PINIA ALTA
 void Accionador::piniaAlta(int loops,Tdireccion direccion) {
-
     Trect rectan = Trect();
-    rectan.p = rectaDelPj.p;
-    if(direccion == DERECHA){
-        rectan.p = rectan.p + Posicion(rectaDelPj.d.w,0);
-    }
     rectan.d.w = rectaDelPj.d.w * proporcionPiniaAlta;
+    rectan.p = rectaDelPj.p;
+    if(direccion == DERECHA) rectan.p = rectan.p + Posicion(rectaDelPj.d.w,0);
+    else rectan.p = rectan.p - Posicion(rectan.d.w, 0);
     if(loopsPara(ACC_PINIA_ALTA)>loops){
         golpe->setGolpe(piniasAltas, loops == 2,rectan,REA_PINIA_ALTA);
     }
@@ -280,28 +276,25 @@ void Accionador::piniaAlta(int loops,Tdireccion direccion) {
 //                  PINIA ALTA AGACHADO
 void Accionador::piniaAltaAgachado(int loops,Tdireccion direccion) {
     Trect rectan = Trect();
-    rectan.p = rectaDelPj.p;
-    if(direccion == DERECHA){
-        rectan.p = rectan.p + Posicion(rectaDelPj.d.w,0);
-    }
     rectan.d.w = rectaDelPj.d.w * proporcionPiniaAltaAgachado;
-    if(loopsPara(ACC_PINIA_ALTA_AGACHADO)>loops){
-        golpe->setGolpe(poderFuerte, loops == 2,rectan,REA_GOLPE_FUERTE);
+    rectan.p = rectaDelPj.p;
+    if(direccion == DERECHA) rectan.p = rectan.p + Posicion(rectaDelPj.d.w,0);
+    else rectan.p = rectan.p - Posicion(rectan.d.w, 0);
+    if (loopsPara(ACC_PINIA_ALTA_AGACHADO) > loops) {
+        golpe->setGolpe(poderFuerte, loops == 3, rectan, REA_GOLPE_FUERTE);
     }
 }
 //--------------------------------------------------------------------------------------
 //                  PATADA BAJA
 void Accionador::patadaBaja(int loops,Tdireccion direccion) {
     Trect rectan = Trect();
-    rectan.p = rectaDelPj.p;
-    if(direccion == DERECHA){
-        rectan.p = rectan.p + Posicion(rectaDelPj.d.w,0);
-    }
     rectan.d.w = rectaDelPj.d.w * proporcionPatadaBaja;
-    if(loopsPara(ACC_PATADA_BAJA)>loops){
-        golpe->setGolpe(patadasBajas, loops == 2,rectan,REA_GOLPE_ALTO);
+    rectan.p = rectaDelPj.p;
+    if(direccion == DERECHA) rectan.p = rectan.p + Posicion(rectaDelPj.d.w,0);
+    else rectan.p = rectan.p - Posicion(rectan.d.w, 0);
+    if (loopsPara(ACC_PATADA_BAJA) > loops) {
+        golpe->setGolpe(poderFuerte, loops == 4, rectan, REA_GOLPE_BAJO);
     }
-
 }
 //--------------------------------------------------------------------------------------
 //                  PATADA BAJA ATRAS
@@ -309,11 +302,8 @@ void Accionador::patadaBajaAtras(int loops,Tdireccion direccion) {
     Trect rectan = Trect();
     rectan.d.w = rectaDelPj.d.w * proporcionPatadaBajaAtras;
     rectan.p = rectaDelPj.p;
-    if (direccion == DERECHA) {
-        rectan.p = rectan.p + Posicion(rectaDelPj.d.w, 0);
-    } else {
-        rectan.p = rectan.p - Posicion(rectan.d.w, 0);
-    }
+    if(direccion == DERECHA) rectan.p = rectan.p + Posicion(rectaDelPj.d.w,0);
+    else rectan.p = rectan.p - Posicion(rectan.d.w, 0);
     if (loopsPara(ACC_PATADA_ALTA_ATRAS) > loops) {
         golpe->setGolpe(poderFuerte, loops == 5, rectan, REA_PATADA_BARRIDA);
     }
@@ -322,27 +312,23 @@ void Accionador::patadaBajaAtras(int loops,Tdireccion direccion) {
 //--------------------------------------------------------------------------------------
 //                  PATADA ALTA ATRAS
 void Accionador::patadaAltaAtras(int loops,Tdireccion direccion) {
-        Trect rectan = Trect();
-        rectan.d.w = rectaDelPj.d.w * porporcionPatadaAltaAtras;
-        rectan.p = rectaDelPj.p;
-        if(direccion == DERECHA){
-            rectan.p = rectan.p + Posicion(rectaDelPj.d.w,0);
-        }else{
-            rectan.p = rectan.p - Posicion(rectan.d.w, 0);
-        }
-        if(loopsPara(ACC_PATADA_ALTA_ATRAS)>loops){
-            golpe->setGolpe(poderFuerte, loops == 5,rectan,REA_GOLPE_FUERTE);
+    Trect rectan = Trect();
+    rectan.d.w = rectaDelPj.d.w * porporcionPatadaAltaAtras;
+    rectan.p = rectaDelPj.p;
+    if(direccion == DERECHA) rectan.p = rectan.p + Posicion(rectaDelPj.d.w,0);
+    else rectan.p = rectan.p - Posicion(rectan.d.w, 0);
+    if(loopsPara(ACC_PATADA_ALTA_ATRAS)>loops){
+        golpe->setGolpe(poderFuerte, loops == 5,rectan,REA_GOLPE_FUERTE);
         }
     }
 //--------------------------------------------------------------------------------------
 //                  PATADA ALTA
 void Accionador::patadaAlta(int loops,Tdireccion direccion) {
     Trect rectan = Trect();
-    rectan.p = rectaDelPj.p;
-    if(direccion == DERECHA){
-        rectan.p = rectan.p + Posicion(rectaDelPj.d.w,0);
-    }
     rectan.d.w = rectaDelPj.d.w * proporcionPatadaAlta;
+    rectan.p = rectaDelPj.p;
+    if(direccion == DERECHA) rectan.p = rectan.p + Posicion(rectaDelPj.d.w,0);
+    else rectan.p = rectan.p - Posicion(rectan.d.w, 0);
     if(loopsPara(ACC_PATADA_ALTA)>loops){
         golpe->setGolpe(patadasAltas, loops == 4,rectan,REA_GOLPE_ALTO);
     }
@@ -352,11 +338,10 @@ void Accionador::patadaAlta(int loops,Tdireccion direccion) {
 //                  GOLPE DURANTE EL SALTO
 void Accionador::golpeSalto(int loops,Tdireccion direccion) {
     Trect rectan = Trect();
-    rectan.p = rectaDelPj.p;
-    if(direccion == DERECHA){
-        rectan.p = rectan.p + Posicion(rectaDelPj.d.w,0);
-    }
     rectan.d.w = rectaDelPj.d.w * proporcionPatadaSV;
+    rectan.p = rectaDelPj.p;
+    if(direccion == DERECHA) rectan.p = rectan.p + Posicion(rectaDelPj.d.w,0);
+    else rectan.p = rectan.p - Posicion(rectan.d.w, 0);
     if(loopsPara(ACC_PATADA_SALTO_VERTICAL)>loops){
         golpe->setGolpe(patadasAltas,true,rectan,REA_GOLPE_FUERTE);
     }
@@ -365,11 +350,10 @@ void Accionador::golpeSalto(int loops,Tdireccion direccion) {
 //                  PATADA AGACHADO
 void Accionador::patadaAgachado(int loops,Tdireccion direccion) {
     Trect rectan = Trect();
-    rectan.p = rectaDelPj.p;
-    if(direccion == DERECHA){
-        rectan.p = rectan.p + Posicion(rectaDelPj.d.w,0);
-    }
     rectan.d.w = rectaDelPj.d.w * proporcionPatadaAgachado;
+    rectan.p = rectaDelPj.p;
+    if(direccion == DERECHA) rectan.p = rectan.p + Posicion(rectaDelPj.d.w,0);
+    else rectan.p = rectan.p - Posicion(rectan.d.w, 0);
     if(loopsPara(ACC_PATADA_AGACHADO)>loops){
         golpe->setGolpe(patadasBajas, loops == 2,rectan,REA_GOLPE_BAJO);
     }
