@@ -68,11 +68,29 @@ bool Personaje::puedoRealizarAccion(TestadoPersonaje accion) {
 
 	//Mientras salta solo puede pegar patada salto y pinia salto
 	if(estadoActual == MOV_SALTANDO_OBLICUO){
-		return accion == ACC_PINIA_SALTO ||accion == ACC_PATADA_SALTO;
+		if(accion == ACC_PATADA_ALTA || accion == ACC_PATADA_BAJA ){
+			estadoAnterior = estadoActual;
+			estadoActual = ACC_PATADA_SALTO;
+		}
+		if(accion == ACC_PINIA_ALTA || accion == ACC_PINIA_BAJA ){
+			estadoAnterior = estadoActual;
+			estadoActual = ACC_PINIA_SALTO;
+		}
 	}
 	//Mientras salta verticalmente solo puede hacer una patada salto vertical
 	if(estadoActual == MOV_SALTANDO_VERTICAL){
-		return accion == ACC_PATADA_SALTO_VERTICAL ||accion == ACC_PINIA_SALTO || accion == ACC_PODER_SALTO;
+		if(accion == ACC_PATADA_ALTA || accion == ACC_PATADA_BAJA ){
+			estadoAnterior = estadoActual;
+			estadoActual = ACC_PATADA_SALTO_VERTICAL;
+		}
+		if(accion == ACC_PINIA_ALTA || accion == ACC_PINIA_BAJA ){
+			estadoAnterior = estadoActual;
+			estadoActual = ACC_PINIA_SALTO_VERTICAL;
+		}
+		if(accion == ACC_PODER){
+			estadoAnterior = estadoActual;
+			estadoActual = ACC_PODER_SALTO;
+		}
 	}
 	//mientras esta agachado solo puede pegar pinias altas y bajas patada agachado y proteccion agachado
 	if(estadoActual == MOV_AGACHADO){

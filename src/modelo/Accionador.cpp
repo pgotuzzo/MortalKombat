@@ -121,6 +121,7 @@ Trect Accionador::laAccion(TestadoPersonaje estadoPj, int loops, Posicion pos, T
             activarPoder(direccion);
             break;
         case ACC_PODER_SALTO:
+            activarPoder(direccion);
             saltarVerticualmente(loops);
             break;
 
@@ -275,8 +276,7 @@ void Accionador::piniaAlta(int loops,Tdireccion direccion) {
     }
     rectan.d.w = rectaDelPj.d.w * proporcionPiniaAlta;
     if(loopsPara(ACC_PINIA_ALTA)>loops){
-        // TODO: Cambiar por REA_PINIA_ALTA cuando ande bien
-        golpe->setGolpe(piniasAltas, loops == 2,rectan,REA_GOLPE_BAJO);
+        golpe->setGolpe(piniasAltas, loops == 2,rectan,REA_PINIA_ALTA);
     }
 }
 //--------------------------------------------------------------------------------------
