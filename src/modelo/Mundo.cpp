@@ -114,6 +114,8 @@ vector<Tcambio> Mundo::actualizarMundo(vector<Tinput> inputs) {
 	c.push_back(cambio1);
 	c.push_back(cambio2);
 
+	//mostrarEstado(personaje2->estadoActual);
+
 	return c;
 }
 

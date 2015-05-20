@@ -23,7 +23,7 @@
  */
 static const string SPRITES_FORMAT = ".png";
 static const float MIN_DISTANCE_FROM_BOUND = 20;
-const float velocidadDelPoder = 20;
+const float velocidadDelPoder = 10;
 
 /**
  * Estas estructuras, pseudo-clases cruzan toda
@@ -520,7 +520,7 @@ static int loopsPara(TestadoPersonaje accion){
         case MOV_CAMINANDO:
             return 1;
         case MOV_SALTANDO_VERTICAL:
-            return 10;
+            return 14;
         case MOV_SALTANDO_OBLICUO:
             return 20;
         case MOV_AGACHADO:
@@ -544,9 +544,9 @@ static int loopsPara(TestadoPersonaje accion){
         case ACC_PATADA_AGACHADO:
             return 4;
         case ACC_PATADA_SALTO_VERTICAL:
-            return 10;
+            return 14;
         case ACC_PINIA_SALTO_VERTICAL:
-            return 10;
+            return 14;
         case ACC_PATADA_SALTO:
             return 20;
         case ACC_PATADA_ALTA:

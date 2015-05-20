@@ -114,8 +114,10 @@ void DetectorDeColisiones::colisionar(Personaje *personaje1, Golpe* golpe) {
 // Se setea a los dos poderes en COLISION (se desactiva en el siguiente loop).
 void DetectorDeColisiones::colisionar(Poder *poder1, Poder *poder2) {
 
-    if(detectarColision(poder1,poder2) || hayEfectoTunel(poder1,poder2)){
-        resolverColision(poder1,poder2);
+    float distanciaEntrePoderes = distancia(poder1,poder2);
+    if(distanciaEntrePoderes<velocidadDelPoder*2 && detectarColisionenY(poder1,poder2) && !poder1->primerLoop && !poder2->primerLoop){
+        poder1->avanzar(distanciaEntrePoderes/2);
+        poder2->avanzar(distanciaEntrePoderes/2);
         poder1->estado = COLISION;
         poder2->estado = COLISION;
     }
