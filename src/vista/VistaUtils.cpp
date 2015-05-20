@@ -168,6 +168,7 @@ SDL_Texture *VistaUtils::createTexture(string fontPath, string text, int size) {
 
     SDL_Surface* surface = TTF_RenderText_Blended(font, text.c_str(), black);
     SDL_Texture* textTexture = SDL_CreateTextureFromSurface(mRenderer, surface);
+    SDL_FreeSurface(surface);
 
     return textTexture;
 }

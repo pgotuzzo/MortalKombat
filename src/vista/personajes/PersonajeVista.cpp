@@ -131,5 +131,6 @@ void PersonajeVista::freeTextures() {
         mSprites[i].freeTextures();
     }
     loguer->loguear("Finaliza la eliminacion de los sprites del personaje", Log::LOG_DEB);
+    mPoder.freeTextures();
     SDL_DestroyTexture(mDefaultTexture);
 }

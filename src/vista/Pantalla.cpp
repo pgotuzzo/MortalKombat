@@ -204,7 +204,8 @@ Pantalla::~Pantalla() {
     SDL_DestroyRenderer(mRenderer);
     SDL_DestroyWindow(mWindow);
     loguer->loguear("Cierra SDL", Log::LOG_DEB);
-    SDL_Quit();
     IMG_Quit();
+    TTF_Quit();
+    SDL_Quit();
 }
 
