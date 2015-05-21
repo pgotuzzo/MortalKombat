@@ -59,6 +59,7 @@ public:
 
 	bool estadoActualContinuaElAnterior();
 
+	bool seguirLaPinia();
 };
 
 #endif /* PERSONAJE_H_ */
