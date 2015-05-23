@@ -6,42 +6,41 @@
 #include "../Common.h"
 #include "VistaUtils.h"
 
-/**
- * Observacion
- *  Todas las medidas que se tomen en esta clase, son unidades logicas.
- *  No son pixeles necesariamente.
- */
 class Capa {
 private:
-    SDL_Renderer* mRenderer;
-    SDL_Texture* mTexture;
-    Tdimension mDimension;
-    float mVelocidad;
+    VistaUtils* mUtils;
+    SDL_Texture * mTexture;
+    float mAncho;
+    float mVelocidadCapa;
+    Trect mRect;
 
 public:
-
     Capa();
+    /*
+    *  Crea una capa.
+    *  renderer : renderer utilizado
+    *  dirPath : direccion de la imagen de la capa
+    *  rectPantalla : contiene el tamaño de la pantalla y la posicion inicial de la
+    *  capa en relacion a su tamaño total de la imagen
+    */
+    Capa(VistaUtils* utils, std::string dirPath, Trect rectPantalla, float anchoCapa, float anchoEscenario);
 
-    /**
-     *  Crea una capa.
-     *  renderer : renderer utilizado
-     *  dirPath : direccion de la imagen de la capa
-     *  dimensiones : dimensiones de la capa
-     *  velocidad: velocidad de dezplazamiento
-     */
-    Capa(SDL_Renderer* renderer, std::string dirPath, Tdimension dimensiones, float velocidad);
 
-    /**
-     * target:  Textura a donde se debe copiar la capa.
-     * ancho:   anchura que debe tener la capa.
-     * x:   valor en el eje x, donde inicia la capa.
+    /*
+    *  Guarda el pedazo de la capa a mostrar en le pedazo de textura pasado por parametro.
+    *  texture : puntero a una textura del tamaño de la pantalla
+    */
+    void getTexture(SDL_Texture *texture);
+
+
+    /*
+     * Cambia la posicion de la capa ajustandola a la posicion del escenario
      */
-    void getTexture(SDL_Texture *target, float ancho, float x);
+    void ajustar(float posEscenario);
 
     void freeTextures();
 
     virtual ~Capa();
-
 };
 
 

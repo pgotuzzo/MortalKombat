@@ -11,28 +11,56 @@
     },
     "capas": [
         {
-            "imagen_fondo": "/home/venesio/ClionProjects/MortalKombat/resources/capas/capa1.png",
+            "imagen_fondo": "./resources/capas/capa1.png",
             "ancho": 500
         },
         {
-            "imagen_fondo": "/home/venesio/ClionProjects/MortalKombat/resources/capas/capa2.png",
+            "imagen_fondo": "./resources/capas/capa2.png",
             "ancho": 600
         },
         {
-            "imagen_fondo": "/home/venesio/ClionProjects/MortalKombat/resources/capas/capa3.png",
+            "imagen_fondo": "./resources/capas/capa3.png",
             "ancho": 800
+        }
+    ],
+
+    "personajes":[
+        {
+            "ancho": 25,
+            "alto": 60,
+            "z-index": 2,
+            "nombre":"subzero",
+            "sprites": "./resources/sprites/subzero",
+            "color-alternativo": [
+                {"h-inicial": 210},
+                {"h-final":270},
+                {"delta": 120}
+            ]
         },
         {
-            "imagen_fondo": "/home/venesio/ClionProjects/MortalKombat/resources/capas/capa4.png",
-            "ancho": 1000
+            "ancho": 25,
+            "alto": 60,
+            "z-index": 3,
+            "nombre":"ermac",
+            "sprites": "./resources/sprites/ermac",
+            "color-alternativo": [
+                {"h-inicial": -30},
+                {"h-final":30},
+                {"delta": 120}
+            ]
         }
-
     ],
-    "personaje": {
-        "ancho": 20,
-        "alto": 70,
-        "z-index":2,
-        "orientacion": "derecha",
-        "sprites": "/home/venesio/ClionProjects/MortalKombat/resources/sprites"
+
+    "pelea": {
+        "player1":"subzero",
+        "player2":"ermac"
+    },
+    "botones":{
+        "piña-baja": 13,
+        "piña-alta": 14,
+        "patada-alta": 15,
+        "patada-baja": 12,
+        "poder":11,
+        "proteccion":10
     }
-} 
+}

@@ -29,8 +29,8 @@
 
 # Clion
 .idea
-CMakeLists.txt
-/out/
+#-/out/
+/bin/
 
 #Eclipse
 .project

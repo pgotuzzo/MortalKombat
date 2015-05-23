@@ -1,64 +1,128 @@
 #include "PersonajeVista.h"
 
-PersonajeVista::PersonajeVista(SDL_Renderer* renderer, std::string spritesPath, float ancho, float alto, Tdireccion direction) {
-    mRenderer = renderer;
+const std::string DEFAULT_SPRITE = "personaje" + SPRITES_FORMAT;
+
+PersonajeVista::PersonajeVista(VistaUtils* utils, std::string spritesPath, Tdimension dimension, Tdireccion direction) {
+    mUtils = utils;
     crearSprites(spritesPath);
-    mRect.w = ancho;
-    mRect.h = alto;
     mDirection = direction;
-    mTexture = VistaUtils::createTexture(mRenderer, ancho, alto);
+
+    mDefaultTextureDimension = dimension;
+    mDefaultTexture = mUtils->loadTexture(spritesPath + "/" + DEFAULT_SPRITE);
+
+    mUtils->getScales(mDefaultTexture, &dimension, mScales);
+
+    mPoder.initialize(mUtils, spritesPath, mScales);
 }
 
-void PersonajeVista::crearSprites(std::string path) {
+void PersonajeVista::crearSprites(string path) {
     mSprites = std::array<Sprite, TestadoPersonajeCount>();
     for (int s = 0; s < TestadoPersonajeCount; s++){
-
         TestadoPersonaje state = TestadoPersonaje(s);
-        std::string spritesPath = path + "/" + TestadoPersonajeToString(state) + "/";
+        string spritesPath = path + "/" + TestadoPersonajeToString(state) + "/";
 
         switch (state){
-            case AGACHADO:
-            case SALTANDO_VERTICAL:{
-                mSprites[s] = Sprite(mRenderer, spritesPath, false);
+            case MOV_AGACHADO:
+            case MOV_SALTANDO_VERTICAL:
+            case ACC_PINIA_ALTA_AGACHADO:
+            case ACC_PINIA_SALTO:
+            case ACC_PATADA_SALTO_VERTICAL:
+            case ACC_PATADA_SALTO:
+            case ACC_PROTECCION:
+            case ACC_PROTECCION_AGACHADO:
+            case ACC_PODER:
+            case REA_GOLPE_FUERTE:
+            case REA_PATADA_BARRIDA:
+            case REA_GOLPE_ALTO:{
+                mSprites[s] = Sprite(mUtils, spritesPath, false);
                 break;
             };
+            case MOV_SALTANDO_OBLICUO:{
+                mSprites[s] = Sprite(mUtils, spritesPath, true);
+                mSprites[s].disable(0);
+                break;
+            }
             default:
-                mSprites[s] = Sprite(mRenderer, spritesPath, true);
+                mSprites[s] = Sprite(mUtils, spritesPath, true);
         }
     }
 }
 
-void PersonajeVista::update(Tcambio tcambio) {
-    mRect.p.x = tcambio.posicion.x;
-    mRect.p.y = tcambio.posicion.y;
+bool PersonajeVista::greatHit() {
+    return mCurrentState == REA_GOLPE_FUERTE;
+}
+
+Trect PersonajeVista::getRect() {
+    return mCurrentRect;
+}
+
+/**
+ * Actualiza el estado del personaje y devuelve un booleano en caso de
+ *  necesitar que la pantalla vibre.
+ *
+ * @return  true --> vibrar
+ */
+bool PersonajeVista::update(Tcambio tcambio) {
+    mCurrentRect.p = tcambio.posicion;
+    mCurrentRect.d = tcambio.dPJ;
     if (mCurrentState != tcambio.estado){
         mCurrentState = tcambio.estado;
         mSprites[mCurrentState].restart();
     }
     mDirection = tcambio.direccion;
     mTarget = tcambio.sentido;
-    mRect.h = tcambio.alturaPJ;
-}
+
+    mPoder.update(tcambio.poder, mDirection);
+    return greatHit();
+};
 
 void PersonajeVista::getTexture(SDL_Texture* ventana, float x) {
-    VistaUtils::cleanTexture(mRenderer, mTexture);
+    SDL_Texture* texture;
     bool flip = (mDirection != Tdireccion::DERECHA);
-    if(mTarget == Tsentido::ADELANTE) {
-        mSprites[mCurrentState].getNext(mTexture, flip);
-    }else{
-        mSprites[mCurrentState].getBefore(mTexture, flip);
+
+    // El "sentido" del personaje es importante SOLO para las acciones de salto oblicuo o caminar
+    switch (mCurrentState){
+        case MOV_SALTANDO_OBLICUO:
+        case MOV_CAMINANDO:{
+            if(mTarget == Tsentido::ADELANTE){
+                texture = mSprites[mCurrentState].getNext();
+            }else{
+                texture = mSprites[mCurrentState].getBefore();
+            }
+            break;
+        };
+        default:
+            texture = mSprites[mCurrentState].getNext();
     }
-    VistaUtils::Trect r = mRect;
-    r.p.x = mRect.p.x - x;
-    VistaUtils::copyTexture(mRenderer, mTexture, ventana, NULL, &r);
+
+    /**
+     * mCurrentRect = Trect que maneja el modelo
+     * r = Trect que tiene maneja la vista
+     * Observaciones:
+     *  - coincide el piso, de los dos rects, pero el x esta centrado.
+     *  - r puede tener dimension, y ser mayor o menor en dimension que mCurrentRect,
+     *      pero siempre va a estar el piso a la misma altura, y el x centrado
+     *       _________________________
+     *      |r                        |
+     *      |                         |
+     *      |     _______________     |
+     *      |    |mCurrentRect   |    |
+     *      |    |               |    |
+     *      |    |               |    |
+     *       -------------------------
+     *
+     */
+
+    Trect r;
+    r.d = mUtils->getDimension(texture, mScales);
+    r.p.y = mCurrentRect.p.y + mCurrentRect.d.h - r.d.h;
+    r.p.x = mCurrentRect.p.x - x + mCurrentRect.d.w / 2.0F - r.d.w / 2.0F;
+
+    mUtils->copyTexture(texture, ventana, NULL, &r, &r.d, NULL, flip);
+
+    // Imprimo el poder
+    mPoder.getTexture(ventana, x);
 }
-
-VistaUtils::Trect PersonajeVista::getRect() {
-    return mRect;
-}
-
-PersonajeVista::PersonajeVista() {}
-
 
 void PersonajeVista::freeTextures() {
     loguer->loguear("Elimina personaje", Log::LOG_DEB);
@@ -67,5 +131,6 @@ void PersonajeVista::freeTextures() {
         mSprites[i].freeTextures();
     }
     loguer->loguear("Finaliza la eliminacion de los sprites del personaje", Log::LOG_DEB);
-    SDL_DestroyTexture(mTexture);
+    mPoder.freeTextures();
+    SDL_DestroyTexture(mDefaultTexture);
 }

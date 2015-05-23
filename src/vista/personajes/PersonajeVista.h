@@ -6,29 +6,47 @@
 #include "Sprite.h"
 #include "../../Common.h"
 #include "../VistaUtils.h"
+#include "PoderVista.h"
+
+using namespace std;
 
 class PersonajeVista {
 
 private:
+    /**
+     * Atributos que tendrán correlación con el modelo
+     *  a través de setters
+     */
     TestadoPersonaje mCurrentState;
     Tsentido mTarget;
     Tdireccion mDirection;
+    Trect mCurrentRect; // Posicion y dimension que tiene el personaje en el modelo.
+    PoderVista mPoder = PoderVista();
 
+    VistaUtils* mUtils;
+    array <Sprite, TestadoPersonajeCount> mSprites;
 
-    SDL_Renderer* mRenderer;
-    SDL_Texture* mTexture;
-    VistaUtils::Trect mRect;
-    std::array <Sprite, TestadoPersonajeCount> mSprites;
+    /**
+     * Almaceno un imagen default del personaje (una imagen del personaje parado sin realizar ningun accion)
+     *  y tambien guardo la dimension en unidades logicas que tiene dicha imagen.
+     * Cuando quiera usar una imagen del personaje realizando una accion (saltar, pegar, etc). Voy a usar estos
+     *  datos para poder calcular la dimension de la imagen en unidades logicas.
+     */
+    SDL_Texture* mDefaultTexture;
+    Tdimension mDefaultTextureDimension;
+
+    float mScales[2];
 
     void crearSprites(std::string path);
+    bool greatHit();
 
 public:
-    PersonajeVista();
-    PersonajeVista(SDL_Renderer* renderer, std::string spritesPath, float ancho, float alto, Tdireccion direction);
+    PersonajeVista(){};
+    PersonajeVista(VistaUtils* utils, std::string spritesPath, Tdimension dimension, Tdireccion direction);
 
-    void update(Tcambio);
+    Trect getRect();
+    bool update(Tcambio);
     void getTexture(SDL_Texture* ventana, float x);
-    VistaUtils::Trect getRect();
 
     void freeTextures();
 };

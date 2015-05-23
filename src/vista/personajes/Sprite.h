@@ -4,23 +4,29 @@
 #include <string>
 #include <SDL2/SDL_render.h>
 #include <vector>
+#include "../VistaUtils.h"
+
+using namespace std;
 
 class Sprite {
 private:
-    SDL_Renderer* mRenderer;
-    std::vector<SDL_Texture *> mTextures;
+    VistaUtils* mUtils;
+    vector<SDL_Texture *> mTextures;
+    vector<int> mDisabled;
+    vector<int> mToDisable;
     int mCurrent;
     bool mRepeat;
     bool mFirstPass;
 
 public:
     Sprite(){};
-    Sprite(SDL_Renderer* renderer, std::string dirPath, bool repeat);
+    Sprite(VistaUtils* utils, string dirPath, bool repeat);
+    void initialize(VistaUtils* utils, string dirPath, bool repeat);
     long getCount();
     void restart();
-    void getFirst(SDL_Texture* texture, bool flip);
-    void getNext(SDL_Texture* texture, bool flip);
-    void getBefore(SDL_Texture* texture, bool flip);
+    SDL_Texture* getNext();
+    SDL_Texture* getBefore();
+    void disable(int index);
 
     void freeTextures();
 };

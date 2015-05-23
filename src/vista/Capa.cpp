@@ -4,36 +4,42 @@
 
 Capa::Capa() {}
 
-Capa::Capa(SDL_Renderer *renderer, std::string dirPath, Tdimension dimensiones, float velocidad){
-    mRenderer = renderer;
-    mDimension = dimensiones;
-    mVelocidad = velocidad;
-    mTexture = VistaUtils::loadTexture(mRenderer, dirPath, VistaUtils::BLANCO);
-    if (mTexture != nullptr)
-        loguer->loguear("Se carga textura de capa", Log::LOG_DEB);
-    else {
-        loguer->loguear("Error al cargar la textura de capa", Log::LOG_ERR);
-        throw new exception();
-    }
+/*
+*  Crea una capa.
+*  renderer : renderer utilizado
+*  dirPath : direccion de la imagen de la capa
+*  rectPantalla : contiene el tamaño de la pantalla y la posicion inicial de la
+*  capa en relacion a su tamaño total de la imagen
+*  anchoCapa : ancho total de la capa en unidades.
+*/
+Capa::Capa(VistaUtils* utils, std::string dirPath, Trect rectPantalla, float anchoCapa, float anchoEscenario) {
+    mUtils= utils;
+    mTexture = mUtils->loadTexture(dirPath);
+    mAncho = anchoCapa;
+    mVelocidadCapa = (mAncho - rectPantalla.d.w)/(anchoEscenario - rectPantalla.d.w);
+    mRect = rectPantalla;
 }
 
-void Capa::getTexture(SDL_Texture *target, float ancho, float x) {
-    int w;
-    int h;
-    SDL_QueryTexture(mTexture, NULL, NULL, &w, &h);
-    VistaUtils::Trect rect;
-    rect.w = ancho * ( w / mDimension.w ) ;
-    rect.h = h;
-    rect.p.x = ( mVelocidad * x ) * ( w / mDimension.w );
-    rect.p.y = 0;
-    VistaUtils::copyTexture2(mRenderer, mTexture, target, &rect, NULL);
+/*
+*  Guarda el pedazo de la capa a mostrar en le pedazo de textura pasado por parametro.
+*  texture : puntero a una textura del tamaño de la pantalla
+*/
+void Capa::getTexture(SDL_Texture *texture) {
+    Tdimension dim = {mAncho, mRect.d.h};
+    mUtils->copyTexture(mTexture, texture, &mRect, NULL, &dim, NULL);
+}
+
+/*
+ * Cambia la posicion de la capa ajustandola a la posicion del escenario
+ */
+void Capa::ajustar(float x) {
+    mRect.p.x =  x * mVelocidadCapa;
 }
 
 void Capa::freeTextures() {
     loguer->loguear("Elimina capa", Log::LOG_DEB);
     SDL_DestroyTexture(mTexture);
+    loguer->loguear("Elimina capa", Log::LOG_DEB);
 }
 
 Capa::~Capa() {}
-
-

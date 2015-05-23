@@ -3,15 +3,16 @@
 #include "vista/Pantalla.h"
 #include "parser/config.h"
 #include "modelo/Mundo.h"
-#include "controlador/Controlador.h"
-#include <time.h>
+#include "controlador/ControladorJoystick.h"
+#include "controlador/ControladorTeclado.h"
+
+
 
 const float delay = 45;
 
 int main(int argc, char **argv) {
 
-
-    //loguer->borrar();
+    loguer->borrar();
 
     string jsonPath = (argv[1] == nullptr) ? string("") : argv[1];
 
@@ -19,7 +20,9 @@ int main(int argc, char **argv) {
 
     bool endGame = false;
     clock_t t1, t2;
-    float timeloop = 00.0;
+    float timeloop;
+
+
 
     while (!endGame) {
 
@@ -33,12 +36,15 @@ int main(int argc, char **argv) {
         loguer->loguear("Inicia la creacion de la pantalla...", Log::LOG_DEB);
 
         Tventana tventana = configuracion.getVentana();
-        std::vector<Tcapa> vectorTcapa = configuracion.getCapas();
-        Tescenario tescenario = configuracion.getEscenario();
-        Tpersonaje tpersonaje = configuracion.getPersonaje();
         tventana.distTope = MIN_DISTANCE_FROM_BOUND;
 
-        Pantalla* pantalla = new Pantalla(vectorTcapa, tventana, tescenario, tpersonaje);
+        std::vector<Tcapa> vectorTcapa = configuracion.getCapas();
+
+        Tescenario tescenario = configuracion.getEscenario();
+
+        vector<Tpersonaje> tpersonajes = configuracion.getPersonajes();
+
+        Pantalla* pantalla = new Pantalla(vectorTcapa, tventana, tescenario, tpersonajes);
 
         loguer->loguear("Finaliza la creacion de la pantalla", Log::LOG_DEB);
         loguer->loguear("Inicia la creacion del mundo...", Log::LOG_DEB);
@@ -48,28 +54,33 @@ int main(int argc, char **argv) {
         loguer->loguear("Finaliza la creacion del mundo", Log::LOG_DEB);
         loguer->loguear("Inicia la creacion del controlador", Log::LOG_DEB);
 
-        Controlador controlador = Controlador();
+
+        //TODO: Modificar los dos controladores para que devuelvan los nuevos inputs del struct Tinput
+        ControladorTeclado controlador = ControladorTeclado();
+        //ControladorJoystick controlador = ControladorJoystick(configuracion.getBotones());
 
         loguer->loguear("Finaliza la creacion del controlador", Log::LOG_DEB);
         loguer->loguear("-------------- GameLoop ----------------------------", Log::LOG_DEB);
-
 
         while ( !restart && !endGame ) {
             t1 = clock();
 
             // INPUT
-            Tinput input = controlador.getInputs();
+            vector<Tinput> inputs = controlador.getInputs();
 
-            switch (input){
+            if(mundo->huboGanador())inputs[0].game = TinputGame::KEY_RESTART;
+
+            switch (inputs[0].game){
                 //PARA RESTABLECER EL JUEGO
-                case KEY_RESTART:{
+                case TinputGame::KEY_RESTART:{
                     restart = true;
                     delete(pantalla);
                     delete(mundo);
+                    //controlador.cerrarJoysticks();
                     break;
                 };
                     //SI SE DESEA SALIR DEL JUEGO
-                case KEY_EXIT:{
+                case TinputGame::KEY_EXIT:{
                     endGame = true;
                     delete(pantalla);
                     delete(mundo);
@@ -77,12 +88,13 @@ int main(int argc, char **argv) {
                 }
                     //DEMAS ACCIONES
                 default:{
-                    Tcambio c = mundo->actualizarMundo(c, input);
+                    vector<Tcambio> c;
+                    c = mundo->actualizarMundo(inputs);
                     pantalla->update(c);
                     pantalla->dibujar();
                     t2 = clock();
                     timeloop = (((float)t2 - (float)t1) / 1000000.0F ) * 1000;
-                    SDL_Delay(delay - timeloop);
+                    SDL_Delay( (Uint32) (delay - timeloop) );
                 }
             };
         }

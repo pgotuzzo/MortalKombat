@@ -1,236 +1,323 @@
-
-
-//Suponemos al par ordenado (x,y) como un punto sobre la cabeza de nuestro personaje.
-
-
+#include "../Common.h"
 #include "Personaje.h"
-#include "acciones/SaltoVertical.h"
-#include "acciones/Agachar.h"
-#include "acciones/Caminar.h"
-#include "acciones/SaltoOblicuo.h"
-
-const bool activado = true;
 
 
-/*
- *Constructor de personaje. Se crean acciones que puede realizar el mismo.
- * Direccion: True = derecha
- * Sentido: True = derecha
- */
-Personaje::Personaje(bool direccion,Posicion posInicial,float alto,float ancho,float nuevoAltoEscenario){
-	this->direccion = direccion;
-	this->sentido = true;
-	parado = true;
-	estado = PARADO;
-	pos = posInicial;
-	alturaDelPersonaje = alto;
-	anchoDelPersonaje = ancho;
-	altoEscenario = nuevoAltoEscenario;
-	yPiso = alturaDelPersonaje + pos.getY();
-	accionesEnCurso[0] = new SaltoVertical();
-	accionesEnCurso[1] = new Agachar(&alturaDelPersonaje, pos.getY() + alturaDelPersonaje);
-	accionesEnCurso[2] = new Caminar();
-	accionesEnCurso[3] = new SaltoOblicuo(alturaDelPersonaje);
+Personaje::Personaje(string nombre,Tdireccion direccionInicial,Trect cuerpo, float anchoPantalla) {
 
-	string pj = "Se crea personaje con ancho "+to_string(ancho)+" y alto "+to_string(alto);
-	loguer->loguear(pj.c_str(), Log::LOG_DEB);
-	loguer->loguear("Se crean las acciones del personaje", Log::LOG_DEB);
+	this->nombre = nombre;
+
+	rectanguloPj = cuerpo;
+	posicionAnterior = cuerpo.p;
+
+	this->anchoPantalla = anchoPantalla;
+	yPiso = rectanguloPj.p.getY() + rectanguloPj.d.h;
+
+	estadoActual = MOV_PARADO;
+	estadoAnterior = MOV_PARADO;
+	direccionPj = direccionInicial;
+	sentidoPj = ADELANTE;
+
+	poder = new Poder();
+	vida = 100;
+
+	llevarACabo.initialize(rectanguloPj,anchoPantalla,yPiso,poder);
+	countLoops = 0;
 
 }
 
 
-/*
- * Se verifica que el personaje no se pase nunca por debajo del piso.
- */
-Posicion Personaje::verificarPuntoEnY(Posicion posicionActual){
-	if(posicionActual.getY()+alturaDelPersonaje >= yPiso){
-		return Posicion(posicionActual.getX(),yPiso-alturaDelPersonaje);
+void Personaje::realizarAccion(Tinput orden) {
+
+	TestadoPersonaje estadoCompuesto = generarEstado(orden);
+
+	if (puedoRealizarAccion(estadoCompuesto)) {
+		estadoAnterior = estadoActual;
+		estadoActual = estadoCompuesto;
+		verificarDireccion(orden);
+		if (estadoActualContinuaElAnterior())countLoops++;
+		else if (seguirLaPinia()) countLoops = countLoops-2;
+		else countLoops = 1;
 	}
-	return posicionActual;
-
-}
-
-/*
- * Se verifica que el personaje nunca se pase de los margenes del escenario.
- * Si se pasa devuelve la posicion del limite del margen correspondiente.
- */
-Posicion Personaje::verificarPuntoEnX(Posicion posicionActual,float anchoEscenario){
-	if (posicionActual.getX() > anchoEscenario - anchoDelPersonaje){
-		return Posicion(anchoEscenario - anchoDelPersonaje, posicionActual.getY());
-	}
-	if (posicionActual.getX() < 1){
-		return Posicion(1,posicionActual.getY());
-	}
-	else return posicionActual;
-}
-
-/*
- * Se ejecutan las acciones que esten activadas (una por vez). Verificando que no se vaya del piso
- * y de los margenes.
- * No hay ninguna condicion para activar a agachar debido a que esta dura un gameloop.
- */
-void Personaje::ejecutarAcionesActivadas(Accion **accionesEnCurso,float anchoEscenario) {
-
-	pos = accionesEnCurso[1]->realizarAccion(pos);
-
-	if (accionesEnCurso[0]->getEstado()){
-		pos = verificarPuntoEnY(accionesEnCurso[0]->realizarAccion(pos));
+	else {
+		if (estadoActual == REA_GOLPE_FUERTE && estadoAnterior != REA_GOLPE_FUERTE) countLoops = 0;
+		estadoAnterior = estadoActual;
+		countLoops++;
 	}
 
-	if (accionesEnCurso[2]->getEstado()){
-		//cout<<"ejecuto accion de caminar"<<endl;
-		pos = verificarPuntoEnX(accionesEnCurso[2]->realizarAccion(pos),anchoEscenario);
-
-	}
-	if (accionesEnCurso[3]->getEstado()){
-		//cout<<"Ejecuto accion de salto oblicuo"<<endl;
-		pos = verificarPuntoEnX(accionesEnCurso[3]->realizarAccion(pos),anchoEscenario);
-	}
-}
-
-/*
- * Dependiendo de la orden que se reciba se activara la accion correspondiente.
- * Por default se siguen ejecutando las acciones que se venian ejecutando de antes.
- * Se verifica que no se puedan activar dos funciones al mismo tiempo. Por ejemplo no
- * se puede agachar mientras esta saltando verticalmente.
- */
-void Personaje::realizarAccion(Tinput orden,float anchoEscenario){
-	if (!accionesEnCurso[0]->getEstado()){
-		if(!accionesEnCurso[3]->getEstado()){
-			switch (orden){
-				//Parado
-				case(KEY_NADA):
-					if(!accionesEnCurso[1]->getEstado()){
-						loguer->loguear("El personaje se encuentra parado", Log::LOG_DEB);
-						parado=true;
-						estado = PARADO;
-					}
-					break;
-				//Saltar
-				case (KEY_ARRIBA):
-					if(!accionesEnCurso[1]->getEstado()){
-						//Activo el estado de saltar verticalmente
-						loguer->loguear("El personaje salta verticalmente", Log::LOG_DEB);
-						accionesEnCurso[0]->setEstado(activado,pos);
-						estado = SALTANDO_VERTICAL;
-						parado=false;
-					}
-					break;
-				//Agachar
-				case (KEY_ABAJO):
-					//activo el estado de agachar
-					loguer->loguear("El personaje se encuentra agachado", Log::LOG_DEB);
-					accionesEnCurso[1]->setEstado(activado,pos);
-					estado = AGACHADO;
-					parado=false;
-					break;
-
-				//Caminar a la derecha
-				case (KEY_DERECHA):
-					if(!accionesEnCurso[1]->getEstado()) {
-						//activo el estado avanzar
-						if (direccion == true)
-							sentido = true;
-						else
-							sentido = false;
-						loguer->loguear("El personaje camina hacia la derecha", Log::LOG_DEB);
-						accionesEnCurso[2]->setEstado(activado,true);
-						estado = CAMINANDO;
-						parado=false;
-						}
-					break;
-				//Caminar a la izquierda
-				case (KEY_IZQUIERDA):
-					if(!accionesEnCurso[1]->getEstado()) {
-						//activo el estado avanzar
-						if (direccion == true)
-							sentido = false;
-						else
-							sentido = true;
-						loguer->loguear("El personaje camina hacia la izquierda", Log::LOG_DEB);
-						accionesEnCurso[2]->setEstado(activado,false);
-						estado = CAMINANDO;
-						parado=false;
-						}
-					break;
-				//Salto oblicuo a la derecha
-				case (KEY_ARRIBA_DERECHA):
-					if(!accionesEnCurso[1]->getEstado()){
-						//Activo el estado de saltar oblicuamente
-						if (direccion == true)
-							sentido = true;
-						else
-							sentido = false;
-						loguer->loguear("El personaje salta a la derecha", Log::LOG_DEB);
-						accionesEnCurso[3]->setEstado(activado, pos,true);
-						estado = SALTANDO_OBLICUO;
-						parado=false;
-						}
-					break;
-
-				//Salto oblicuo a la izquierda
-				case (KEY_ARRIBA_IZQUIERDA):
-					if(!accionesEnCurso[1]->getEstado()){
-						//Activo el estado de saltar oblicuamente
-						if (direccion == true)
-							sentido = false;
-						else
-							sentido = true;
-						loguer->loguear("El personaje salta a la izquierda", Log::LOG_DEB);
-						accionesEnCurso[3]->setEstado(activado, pos, false);
-						estado = SALTANDO_OBLICUO;
-						parado=false;
-					}
-					break;
-				default:
-					estado = PARADO;
-					break;
-			}
+	if (loopsPara(estadoActual) < countLoops) {
+		if (estadoActual == ACC_PINIA_BAJA_AGACHADO) estadoActual = MOV_AGACHADO;
+		else if(estadoActual == ACC_PATADA_AGACHADO)estadoActual = MOV_AGACHADO;
+		else{
+			estadoAnterior =estadoActual;
+			estadoActual = MOV_PARADO;
 		}
 	}
 
-	ejecutarAcionesActivadas(accionesEnCurso,anchoEscenario);
-	//Este metodo va a ejecutar las acciones que este listas para ejecutarse
-	//Cada accion se desactiva cuando termina.
+	posicionAnterior = rectanguloPj.p;
+
+	if (poder->estado == ACTIVADO) poder->avanzar(velocidadDelPoder);
+
+	rectanguloPj = llevarACabo.laAccion(estadoActual, countLoops, rectanguloPj.p, sentidoPj, direccionPj);
+
+	if (poder->estado == COLISION) poder->setEstado(DESACTIVADO);
+
 }
 
-bool Personaje::getSentido() {
-	return sentido;
-}
-
-bool Personaje::getDireccion() {
-	return direccion;
-}
+bool Personaje::puedoRealizarAccion(TestadoPersonaje accion) {
 
 
-TestadoPersonaje Personaje::getEstado() {
-	if(parado) return PARADO;
-	return estado;
-}
+	if(estadoActual == ACC_PINIA_ALTA)
+		return accion == ACC_PINIA_ALTA;
+	if(estadoActual == ACC_PINIA_BAJA)
+		return accion == ACC_PINIA_BAJA;
 
-
-Posicion Personaje::getPosicion(){
-	return pos;
-}
-
-
-float Personaje::getAlturaPersonaje() {
-	// si esta saltando oblicuamente devuelve la mitad de la altura del personaje.
-	if (accionesEnCurso[3]->getEstado()) return alturaDelPersonaje / 2;
-	return alturaDelPersonaje;
-}
-
-float Personaje::getAnchoPersonaje() {
-	return anchoDelPersonaje;
-}
-
-// Se destruyen las acciones creadas en el constructor de personaje.
-Personaje::~Personaje() {
-	int i;
-	for (i = 0;i<4;i++){
-		delete accionesEnCurso[i];
+	if(poder->estado==ACTIVADO){
+		if(accion == ACC_PODER_SALTO || accion == ACC_PODER) return false;
 	}
-	loguer->loguear("Se liberan acciones del personaje", Log::LOG_DEB);
+	//si se esta protegiendo solo puede agacharse
+	if(estadoActual == ACC_PROTECCION||estadoActual == ACC_PROTECCION_AGACHADO){
+		return accion == ACC_PROTECCION || accion == MOV_AGACHADO ||accion == ACC_PROTECCION_AGACHADO;
+	}
+	//porque si esta en esos estados puede hacer cualquier cosa
+	if(estadoActual == MOV_PARADO || estadoActual == MOV_CAMINANDO) return true;
+
+	//Mientras salta solo puede pegar patada salto y pinia salto
+	if(estadoActual == MOV_SALTANDO_OBLICUO){
+		if(accion == ACC_PATADA_ALTA || accion == ACC_PATADA_BAJA ){
+			estadoAnterior = estadoActual;
+			estadoActual = ACC_PATADA_SALTO;
+		}
+		if(accion == ACC_PINIA_ALTA || accion == ACC_PINIA_BAJA ){
+			estadoAnterior = estadoActual;
+			estadoActual = ACC_PINIA_SALTO;
+		}
+	}
+	//Mientras salta verticalmente solo puede hacer una patada salto vertical
+	if(estadoActual == MOV_SALTANDO_VERTICAL){
+		if(accion == ACC_PATADA_ALTA || accion == ACC_PATADA_BAJA ){
+			estadoAnterior = estadoActual;
+			estadoActual = ACC_PATADA_SALTO_VERTICAL;
+		}
+		if(accion == ACC_PINIA_ALTA || accion == ACC_PINIA_BAJA ){
+			estadoAnterior = estadoActual;
+			estadoActual = ACC_PINIA_SALTO_VERTICAL;
+		}
+		if(accion == ACC_PODER){
+			estadoAnterior = estadoActual;
+			estadoActual = ACC_PODER_SALTO;
+		}
+	}
+	//mientras esta agachado solo puede pegar pinias altas y bajas patada agachado y proteccion agachado
+	if(estadoActual == MOV_AGACHADO){
+		return accion == MOV_AGACHADO || accion == ACC_PROTECCION_AGACHADO ||accion == ACC_PATADA_AGACHADO
+			   ||accion == ACC_PINIA_ALTA_AGACHADO || accion == ACC_PINIA_BAJA_AGACHADO;
+	}
+
+	//si no esta haciendo ninguna de las enteriores
+	//quiere decir que esta haciendo alguna patada pinia o poder, las cuales no se puede interrumpir o combinar con nada
+	return false;
+}
+
+Trect Personaje::getRectangulo() {
+	return rectanguloPj;
+}
+
+void Personaje::modificarPosicion(Posicion nuevaPosicion) {
+	rectanguloPj.p = nuevaPosicion;
+}
+
+void Personaje::verificarDireccion(Tinput orden) {
+
+	switch(orden.movimiento){
+		case TinputMovimiento::KEY_DERECHA:
+			if(direccionPj == DERECHA) sentidoPj = ADELANTE;
+			else sentidoPj = ATRAS;
+			break;
+		case TinputMovimiento::KEY_IZQUIERDA:
+			if(direccionPj == DERECHA) sentidoPj = ATRAS;
+			else sentidoPj = ADELANTE;
+			break;
+		case TinputMovimiento::KEY_ARRIBA_DERECHA:
+			if(direccionPj == DERECHA) sentidoPj = ADELANTE;
+			else sentidoPj = ATRAS;
+			break;
+		case TinputMovimiento::KEY_ARRIBA_IZQUIERDA:
+			if(direccionPj == DERECHA) sentidoPj = ATRAS;
+			else sentidoPj = ADELANTE;
+			break;
+	}
 
 }
 
+TestadoPersonaje Personaje::generarEstado(Tinput orden) {
+
+	TinputMovimiento movimiento = orden.movimiento;
+	TinputAccion accion = orden.accion;
+
+	switch (movimiento){
+		case TinputMovimiento::KEY_NADA:
+			switch(accion){
+				case TinputAccion::KEY_NADA:
+					return MOV_PARADO;
+				case TinputAccion::KEY_PATADA_ALTA:
+					return ACC_PATADA_ALTA;
+				case TinputAccion::KEY_PATADA_BAJA:
+					return ACC_PATADA_BAJA;
+				case TinputAccion::KEY_PINIA_ALTA:
+					return ACC_PINIA_ALTA;
+				case TinputAccion::KEY_PINIA_BAJA:
+					return ACC_PINIA_BAJA;
+				case TinputAccion::KEY_PROTECCION:
+					return ACC_PROTECCION;
+				case TinputAccion::KEY_PODER:
+					return ACC_PODER;
+			}
+			break;
+		case TinputMovimiento:: KEY_ABAJO:
+			switch(accion){
+				case TinputAccion::KEY_NADA:
+					return MOV_AGACHADO;
+				case TinputAccion::KEY_PATADA_ALTA:
+					return ACC_PATADA_AGACHADO;
+				case TinputAccion::KEY_PATADA_BAJA:
+					return ACC_PATADA_AGACHADO;
+				case TinputAccion::KEY_PINIA_ALTA:
+					return ACC_PINIA_ALTA_AGACHADO;
+				case TinputAccion::KEY_PINIA_BAJA:
+					return ACC_PINIA_BAJA_AGACHADO;
+				case TinputAccion::KEY_PROTECCION:
+					return ACC_PROTECCION_AGACHADO;
+				case TinputAccion::KEY_PODER:
+					return MOV_AGACHADO;
+			}
+			break;
+
+		case TinputMovimiento::KEY_DERECHA:
+			switch(accion){
+				case TinputAccion::KEY_NADA:
+					return MOV_CAMINANDO;
+				case TinputAccion::KEY_PATADA_ALTA:
+					if(direccionPj == IZQUIERDA) return ACC_PATADA_ALTA_ATRAS;
+					return ACC_PATADA_ALTA;
+				case TinputAccion::KEY_PATADA_BAJA:
+					if(direccionPj == IZQUIERDA) return ACC_PATADA_BAJA_ATRAS;
+					return ACC_PATADA_BAJA;
+				case TinputAccion::KEY_PINIA_ALTA:
+					return ACC_PINIA_ALTA;
+				case TinputAccion::KEY_PINIA_BAJA:
+					return ACC_PINIA_BAJA;
+				case TinputAccion::KEY_PROTECCION:
+					return ACC_PROTECCION;
+				case TinputAccion::KEY_PODER:
+					return ACC_PODER;
+			}
+			break;
+		case TinputMovimiento::KEY_IZQUIERDA:
+			switch(accion){
+				case TinputAccion::KEY_NADA:
+					return MOV_CAMINANDO;
+				case TinputAccion::KEY_PATADA_ALTA:
+					if(direccionPj == DERECHA) return ACC_PATADA_ALTA_ATRAS;
+					return ACC_PATADA_ALTA;
+				case TinputAccion::KEY_PATADA_BAJA:
+					if(direccionPj == DERECHA) return ACC_PATADA_BAJA_ATRAS;
+					return ACC_PATADA_BAJA;
+				case TinputAccion::KEY_PINIA_ALTA:
+					return ACC_PINIA_ALTA;
+				case TinputAccion::KEY_PINIA_BAJA:
+					return ACC_PINIA_BAJA;
+				case TinputAccion::KEY_PROTECCION:
+					return ACC_PROTECCION;
+				case TinputAccion::KEY_PODER:
+					return ACC_PODER;
+			}
+			break;
+		case TinputMovimiento::KEY_ARRIBA:
+			switch(accion){
+				case TinputAccion::KEY_NADA:
+					return MOV_SALTANDO_VERTICAL;
+				case TinputAccion::KEY_PATADA_ALTA:
+					return ACC_PATADA_SALTO_VERTICAL;
+				case TinputAccion::KEY_PATADA_BAJA:
+					return ACC_PATADA_SALTO_VERTICAL;
+				case TinputAccion::KEY_PINIA_ALTA:
+					return ACC_PINIA_SALTO;
+				case TinputAccion::KEY_PINIA_BAJA:
+					return ACC_PINIA_SALTO;
+				case TinputAccion::KEY_PROTECCION:
+					return ACC_PROTECCION;
+				case TinputAccion::KEY_PODER:
+					return ACC_PODER; // TODO: Ver cuando salta y tira el poder (nuevo estado?)
+			}
+			break;
+		case TinputMovimiento::KEY_ARRIBA_DERECHA:
+			switch(accion){
+				case TinputAccion::KEY_NADA:
+					return MOV_SALTANDO_OBLICUO;
+				case TinputAccion::KEY_PATADA_ALTA:
+					return ACC_PATADA_SALTO;
+				case TinputAccion::KEY_PATADA_BAJA:
+					return ACC_PATADA_SALTO;
+				case TinputAccion::KEY_PINIA_ALTA:
+					return ACC_PINIA_SALTO;
+				case TinputAccion::KEY_PINIA_BAJA:
+					return ACC_PINIA_SALTO;
+				case TinputAccion::KEY_PROTECCION:
+					return ACC_PROTECCION;
+				case TinputAccion::KEY_PODER:
+					return MOV_SALTANDO_OBLICUO;
+			}
+			break;
+		case TinputMovimiento::KEY_ARRIBA_IZQUIERDA:
+			switch(accion){
+				case TinputAccion::KEY_NADA:
+					return MOV_SALTANDO_OBLICUO;
+				case TinputAccion::KEY_PATADA_ALTA:
+					return ACC_PATADA_SALTO;
+				case TinputAccion::KEY_PATADA_BAJA:
+					return ACC_PATADA_SALTO;
+				case TinputAccion::KEY_PINIA_ALTA:
+					return ACC_PINIA_SALTO;
+				case TinputAccion::KEY_PINIA_BAJA:
+					return ACC_PINIA_SALTO;
+				case TinputAccion::KEY_PROTECCION:
+					return ACC_PROTECCION;
+				case TinputAccion::KEY_PODER:
+					return MOV_SALTANDO_OBLICUO;
+			}
+			break;
+	}
+}
+
+void Personaje::reducirVida(float danio) {
+	if(vida <= danio) vida = 0;
+	else vida = vida - danio;
+}
+
+bool Personaje::estadoActualContinuaElAnterior() {
+	return (estadoAnterior == MOV_SALTANDO_OBLICUO && estadoActual == ACC_PINIA_SALTO) ||
+	(estadoAnterior == MOV_SALTANDO_OBLICUO && estadoActual == ACC_PATADA_SALTO)||
+	//Si el estado anterior era salto oblicuo y el actual patada salto o pinia salto tiene que seguir
+	// con los loops del estado anterior
+	(estadoAnterior == MOV_SALTANDO_VERTICAL && estadoActual == ACC_PINIA_SALTO_VERTICAL)||
+	(estadoAnterior == MOV_SALTANDO_VERTICAL && estadoActual == ACC_PATADA_SALTO_VERTICAL);
+	//Si el estado anterior era salto vertical y el actual patada salto vertical o pinia salto tiene que seguir
+	// con los loops del estado anterior
+}
+
+void Personaje::empujado(float desplazamiento, Tdireccion direccion) {
+	rectanguloPj.p = llevarACabo.desplazado(desplazamiento,direccion);
+}
+
+void Personaje::setPosicion(Posicion posicion) {
+	rectanguloPj = llevarACabo.setPosicionPersonaje(posicion);
+}
+
+Personaje::~Personaje(){
+	delete poder;
+}
+
+bool Personaje::seguirLaPinia() {
+	return ((estadoAnterior == ACC_PINIA_ALTA && estadoActual == ACC_PINIA_ALTA)||
+			(estadoAnterior == ACC_PINIA_BAJA && estadoActual == ACC_PINIA_BAJA));
+}

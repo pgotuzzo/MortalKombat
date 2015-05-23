@@ -1,6 +1,12 @@
+#include <functional>
 #include "../parser/config.h"
 #include "Mundo.h"
 
+const float delta = 5.00;
+const float deltaLejania = 80;
+const float deltaCero = 0;
+const float deltaParaPelea = 25.00;
+const float deltaParaPoder = 5.00;
 
 /* Constructor de Mundo.
  * Recibe la configuracion que se devuelve del parser.
@@ -10,66 +16,134 @@
  */
 Mundo::Mundo(config configuracion) {
 	Tescenario escenario = configuracion.getEscenario();
-	Tpersonaje pj = configuracion.getPersonaje();
+	vector<Tpersonaje> personajes = configuracion.getPersonajes();
+	float anchoVentana = configuracion.getVentana().ancho;
 
-	anchoEscenario = escenario.ancho;
-	altoEscenario = escenario.alto;
+	Tpersonaje PJ1 = personajes[0];
+	Tpersonaje PJ2 = personajes[1];
+
+	anchoEscenario = escenario.d.w;
+	altoEscenario = escenario.d.h;
 	altoPiso = escenario.yPiso;
 
-	float altoPJ = pj.alto;
-	float anchoPJ = pj.ancho;
 
-	float pos_x = anchoEscenario/2;
-	float pos_y = altoEscenario - altoPiso - altoPJ;
+	float pos_x1 = anchoEscenario/2 - anchoVentana/2 + MIN_DISTANCE_FROM_BOUND;
+	float pos_x2 = anchoEscenario/2 + anchoVentana/2 - PJ2.d.w - MIN_DISTANCE_FROM_BOUND;
+	float pos_y1 = altoEscenario - altoPiso - PJ1.d.h;
+	float pos_y2 = altoEscenario - altoPiso - PJ2.d.h;
 
-	Tdireccion direccion = configuracion.getPersonaje().orientacion;
+	Tdireccion direccion1 = PJ1.orientacion;
+	Tdireccion direccion2 = PJ2.orientacion;
 
-	bool dir;
+	Trect rectanguloPj1,rectanguloPj2;
+	rectanguloPj1.d = PJ1.d;
+	rectanguloPj2.d = PJ2.d;
+	rectanguloPj1.p = {pos_x1, pos_y1};
+	rectanguloPj2.p = {pos_x2,pos_y2};
 
-	if (direccion == DERECHA) dir = true;
-	else dir = false;
+	//TODO: EL PJ1 Y PJ2 EMPIEZAN EN LADOS OPUESTOS - lo dejamos asi por los controles del teclado
 
-	personaje1 = new Personaje(dir,Posicion(pos_x,pos_y),altoPJ,anchoPJ, altoEscenario);
+	personaje1 = new Personaje(PJ1.nombre,direccion1,rectanguloPj1,anchoVentana);
+	//cout<<"Costado izquierdo personaje 1: "<<personaje1->rectanguloPj.p.getX() - personaje1->rectanguloPj.d.w<<endl;
+	personaje2 = new Personaje(PJ2.nombre,direccion2,rectanguloPj2,anchoVentana);
+	//cout<<"Costado derecho personaje 2: "<<personaje2->rectanguloPj.p.getX() + personaje2->rectanguloPj.d.w<<endl;
 
+
+	colisionador = DetectorDeColisiones(anchoVentana,anchoEscenario);
+
+	anchoPantalla = configuracion.getVentana().ancho;
 }
 
 
-Personaje* Mundo::getPersonaje(){
-	return personaje1;
+vector<Personaje*> Mundo::getPersonajes(){
+	return vector<Personaje*> {personaje1,personaje2};
+};
+
+void Mundo::verificarDireccionDeLosPersonajes() {
+	//direccion derecha igual true
+	if(personaje1->rectanguloPj.p.getX() < personaje2->rectanguloPj.p.getX()){
+		personaje1->direccionPj = DERECHA;
+		personaje2->direccionPj = IZQUIERDA;
+
+	}
+	else if(personaje1->rectanguloPj.p.getX() > personaje2->rectanguloPj.p.getX()){
+		personaje1->direccionPj = IZQUIERDA;
+		personaje2->direccionPj = DERECHA;
+	}
 }
 
-float Mundo::getAlto(){
-	return altoEscenario;
-}
+Tcambio Mundo::actualizarPJ(Personaje *PJ) {
+	Tcambio cambio;
+	cambio.dPJ = PJ->rectanguloPj.d;
+	cambio.posicion = PJ->rectanguloPj.p;
+	cambio.direccion = PJ->direccionPj;
+	cambio.sentido = PJ->sentidoPj;
+	cambio.estado = PJ->estadoActual;
 
-float Mundo::getAncho(){
-	return anchoEscenario;
-}
+	cambio.vida = PJ->vida;
 
-float Mundo::getAltoPiso(){
-	return altoPiso;
+	cambio.poder.d = PJ->poder->rectanguloPoder.d;
+	cambio.poder.p = PJ->poder->rectanguloPoder.p;
+	cambio.poder.e = PJ->poder->estado;
+
+	return cambio;
 }
 
 /* Devuelve la actualizacion del struct Tcambio recibido junto con el numero de accion que debe realizar
  * Personaje realiza su respectiva accion.
  * Se asigna todos los datos pertinentes de personaje a Tcambio.
  */
-Tcambio Mundo::actualizarMundo(Tcambio c,Tinput input){
-	personaje1->realizarAccion(input,anchoEscenario);
-	c.posicion = personaje1->getPosicion();
-	if(personaje1->getDireccion()) c.direccion = DERECHA;
-	else c.direccion = IZQUIERDA;
-	if(personaje1->getSentido()) c.sentido = ADELANTE;
-	else c.sentido = ATRAS;
-	c.estado = personaje1->getEstado();
-	c.alturaPJ = personaje1->getAlturaPersonaje();
-	c.anchoPJ = personaje1->getAnchoPersonaje();
+vector<Tcambio> Mundo::actualizarMundo(vector<Tinput> inputs) {
+	vector<Tcambio> c;
+	Tcambio cambio1, cambio2;
+
+	//Verifica y da vuelta la direccion de los personajes si se pasan
+	verificarDireccionDeLosPersonajes();
+
+	// Los personajes realizan sus acciones
+	personaje1->realizarAccion(inputs[1]);
+	personaje2->realizarAccion(inputs[0]);
+	// COLISIONES
+	colisionador.resolverColisiones(personaje1,personaje2);
+
+	//Se actualizan a los personajes
+	cambio1 = actualizarPJ(personaje1);
+	cambio2 = actualizarPJ(personaje2);
+
+	//personaje1->rectanguloPj.p.mostrarPar();
+	c.push_back(cambio1);
+	c.push_back(cambio2);
+
+	//mostrarEstado(personaje2->estadoActual);
 
 	return c;
 }
 
+
+bool Mundo::huboGanador() {
+	string mensaje;
+	if(personaje1->vida == 0){
+		mensaje = "Ganador: "+personaje2->nombre+" ---> Personaje 2";
+		loguer->loguear(mensaje.c_str(),Log::LOG_DEB);
+		return true;
+	}
+	if(personaje2->vida == 0){
+		mensaje = "Ganador: "+personaje1->nombre+" ---> Personaje 1";
+		loguer->loguear(mensaje.c_str(),Log::LOG_DEB);
+		return true;
+	}
+	return false;
+}
+
+
+
 Mundo::~Mundo() {
+	if(personaje1->vida == 0) loguer->loguear("El personaje 1 esta muerto",Log::LOG_DEB);
+	else loguer->loguear("El personaje 1 sobrevivio",Log::LOG_DEB);
+	if(personaje2->vida == 0) loguer->loguear("El personaje 2 esta muerto",Log::LOG_DEB);
+	else loguer->loguear("El personaje 2 sobrevivio",Log::LOG_DEB);
 	delete personaje1;
-	loguer->loguear("Se libera al personaje", Log::LOG_DEB);
+	delete personaje2;
+	loguer->loguear("Se libero a los personajes", Log::LOG_DEB);
 }
 

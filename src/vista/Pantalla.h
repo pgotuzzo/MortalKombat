@@ -4,39 +4,41 @@
 #include <SDL2/SDL_render.h>
 #include <vector>
 #include "Capa.h"
+#include "CapaInfo.h"
 #include "personajes/PersonajeVista.h"
 
 using namespace std;
 
 class Pantalla {
 private:
-    SDL_Window *mWindow;
-    SDL_Renderer *mRenderer;
-    vector<Capa> capas;
-    PersonajeVista personaje;
+    SDL_Window* mWindow;
+    SDL_Renderer* mRenderer;
+    VistaUtils* mUtils;
+    vector<Capa> mCapas;
+    vector<PersonajeVista> mPersonajes;
     int zIndex;
-
-    // Dimensiones en unidades logicas
     Tdimension mDimension;
+    CapaInfo capaInfo;
 
-    float anchoEscenario;
-    float xVentana;
-    float topeVentana;
+    float distTope;
+    float mAnchoEscenario;
+    float posEscenario;
 
-    /*
-     * Se inicia la ventana y el renderer.
-     */
-    void Inicializar(int anchoPx,int altoPx);
+    void InicializarSdl(Tdimension d);
+    void InicializarPersonajes(vector<Tpersonaje> personajes);
+    void InicializarCapas(vector<Tcapa> capas, string personajes[2]);
+
+    bool vibroADerecha;
 
 public:
-    /**
+    /*
      * Crea una pantalla.
      * capas : formato de cada capa.
      * ventana : formato de ventana.
      * escenario : formato del escenario.
      * personaje : formato del personaje.
      */
-    Pantalla(vector<Tcapa> capas, Tventana ventana, Tescenario escenario, Tpersonaje personaje);
+    Pantalla(vector<Tcapa> capas, Tventana ventana, Tescenario escenario, vector<Tpersonaje> personajes);
 
     /*
      * Dibuja todos los objetos en pantalla.
@@ -47,7 +49,9 @@ public:
      * Actualiza todos los objetos de pantalla.
      * change : contiene los cambios a realizar.
      */
-    void update(Tcambio change);
+    void update(vector<Tcambio> changes);
+
+    void vibrar();
 
     virtual ~Pantalla();
 };

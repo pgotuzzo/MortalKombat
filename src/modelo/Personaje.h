@@ -5,46 +5,61 @@
 #include <stdlib.h>
 #include <iostream>
 #include <list>
+#include "math.h"
+#include <string>
 #include <tr1/unordered_map>
-#include "Accion.h"
 #include "../Common.h"
+#include "ObjetoColisionable.h"
+#include "Poder.h"
+#include "Golpe.h"
+#include "Accionador.h"
 
 
 using namespace std;
 
-class Personaje {
-
-private:
-
-	bool parado;
-	Posicion pos;
-	bool direccion;
-	bool sentido;
-	float alturaDelPersonaje;
-	float anchoDelPersonaje;
-	float altoEscenario;
-	float yPiso;
-	TestadoPersonaje estado;
-	Accion* accionesEnCurso[4];
-
-	Posicion verificarPuntoEnX(Posicion posicionActual,float anchoEscenario);
-	Posicion verificarPuntoEnY(Posicion posicionActual);
-
-	void ejecutarAcionesActivadas(Accion **accionesEnCurso,float anchoEscenario);
-
+class Personaje: public ObjetoColisionable{
 public:
 
-	Personaje(bool direccion,Posicion posInicial,float alto,float ancho,float nuevoAltoEscenario);
-	void realizarAccion(Tinput orden,float anchoEscenario);
+	string nombre;
+	TestadoPersonaje estadoActual;
+	TestadoPersonaje estadoAnterior;
 
-	Posicion getPosicion();
-	TestadoPersonaje getEstado();
-	float getAlturaPersonaje();
-	float getAnchoPersonaje();
-	bool getDireccion();
-	bool getSentido();
+	Posicion posicionAnterior;
+	Trect rectanguloPj;
 
-	virtual ~Personaje();
+	Tdireccion direccionPj;
+	Tsentido sentidoPj;
 
+
+	float vida;
+
+	float yPiso;
+	float anchoPantalla;
+	int countLoops;
+
+	Accionador llevarACabo;
+
+	Poder* poder;
+
+	//-----------------------------------------------------------------------------
+	bool puedoRealizarAccion(TestadoPersonaje accion);
+	TestadoPersonaje generarEstado(Tinput orden);
+	Personaje(string nombre,Tdireccion direccionInicial,Trect cuerpo,float anchoPantalla);
+
+	Trect getRectangulo();
+	void modificarPosicion(Posicion nuevaPosicion);
+
+	void realizarAccion(Tinput orden);
+	void reducirVida(float danio);
+	void empujado(float desplazamiento, Tdireccion direccion);
+	void setPosicion(Posicion posicion);
+	~Personaje();
+
+	void verificarDireccion(Tinput tinput);
+
+	bool estadoActualContinuaElAnterior();
+
+	bool seguirLaPinia();
 };
+
 #endif /* PERSONAJE_H_ */
