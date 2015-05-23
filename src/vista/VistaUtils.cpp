@@ -110,7 +110,9 @@ void VistaUtils::changeColor(SDL_Surface* surface) {
             // obtengo el RGB del pixel y lo transformo en HSL
             Uint8 r, g, b;
             SDL_GetRGB(pixel, surface->format, &r, &g, &b);
+
             TcolorHSL hsl = TcolorHSL::fromRGB(r, g, b);
+
 
             // Si se encuentra dentro del rango a modificar
             if ((hsl.h >= mColorSettings.hmin) &&
@@ -121,6 +123,12 @@ void VistaUtils::changeColor(SDL_Surface* surface) {
 
                 // creo un pixel con el nuevo color y reemplazo el existente
                 TcolorRGB rgb = TcolorRGB::fromHSL(hsl.h, hsl.s, hsl.l);
+/**
+                cout << "COLOR RGB ORIGINAL "  << " " << to_string(r) << " " << to_string(g) << " " << to_string(b) << endl;
+                cout << "COLOR HSL MOD " << " " << to_string(hsl.h) << " " << to_string(hsl.s) << " " << to_string(hsl.l) << endl;
+                cout << "COLOR RGB MOD "  << " " << to_string(rgb.r) << " " << to_string(rgb.g) << " " << to_string(rgb.b) << endl;
+*/
+                pixel = SDL_MapRGB(surface->format, rgb.r, rgb.g, rgb.b);
                 pixel = SDL_MapRGB(surface->format, rgb.r, rgb.g, rgb.b);
                 putPixel(surface, i, pixel);
             }

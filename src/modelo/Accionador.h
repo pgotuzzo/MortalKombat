@@ -28,7 +28,7 @@ public:
 
     ~Accionador();
 
-    void initialize(Trect rectan, float anchoEscenario, float yPiso,Poder* nuevoPoder);
+    void initialize(Trect rectan, float anchoEscenario, float yPiso,Poder* nuevoPoder,Golpe* nuevoGolpe);
 
     Trect laAccion(TestadoPersonaje estadoPj,int loops, Posicion pos, Tsentido sentido, Tdireccion direccion);
 

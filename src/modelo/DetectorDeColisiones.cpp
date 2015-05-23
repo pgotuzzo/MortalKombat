@@ -114,7 +114,7 @@ void DetectorDeColisiones::colisionar(Personaje *personaje1, Golpe* golpe) {
 // Se setea a los dos poderes en COLISION (se desactiva en el siguiente loop).
 void DetectorDeColisiones::colisionar(Poder *poder1, Poder *poder2) {
 
-    float distanciaEntrePoderes = distancia(poder1,poder2);
+    float distanciaEntrePoderes = distancia(poder1,poder2) + poder1->rectanguloPoder.d.w;
     if(distanciaEntrePoderes<velocidadDelPoder*2 && detectarColisionenY(poder1,poder2) && !poder1->primerLoop && !poder2->primerLoop){
         poder1->avanzar(distanciaEntrePoderes/2);
         poder2->avanzar(distanciaEntrePoderes/2);
@@ -265,7 +265,7 @@ void DetectorDeColisiones::resolverColisionconEscenario(Personaje *PJ) {
 }
 
 void DetectorDeColisiones::colisionar(Personaje *PJ, Poder *poder) {
-    float distanciaPJPoder = distancia(PJ,poder);
+    float distanciaPJPoder = distancia(PJ,poder) + poder->rectanguloPoder.d.w;
     if((distanciaPJPoder < velocidadDelPoder && detectarColisionenY(PJ,poder)) && !poder->primerLoop){
         poder->avanzar(distanciaPJPoder);
         poder->estado = COLISION;

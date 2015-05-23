@@ -21,13 +21,13 @@ void Poder::activar(Trect rectPJ,Tdireccion direccion,float anchoPantalla) {
     if(estado == DESACTIVADO){
         estado = ACTIVADO;
         primerLoop = true;
-        rectanguloPoder.p.y = rectPJ.p.getY() + rectPJ.d.h /2 - rectanguloPoder.d.h-1;
+        rectanguloPoder.p.y = (float) (rectPJ.p.getY() + rectPJ.d.h /2 - rectanguloPoder.d.h-0.1);
         if (direccion == DERECHA) {
             rectanguloPoder.p.x = rectPJ.p.getX() + rectPJ.d.w;
             posFinalX = rectPJ.p.x + anchoPantalla;
         }
         else {
-            rectanguloPoder.p.x = rectPJ.p.getX() - rectPJ.d.w;
+            rectanguloPoder.p.x = rectPJ.p.getX() - rectanguloPoder.d.w;
             posFinalX = rectPJ.p.x - anchoPantalla;
         }
         this->danio = danio;
@@ -36,7 +36,7 @@ void Poder::activar(Trect rectPJ,Tdireccion direccion,float anchoPantalla) {
 }
 
 void Poder::avanzar(float avance) {
-    if(estado == ACTIVADO && primerLoop == false) {
+    if(estado == ACTIVADO && !primerLoop) {
         if (direccion == DERECHA){
             rectanguloPoder.p.x = rectanguloPoder.p.x + avance;
             if (rectanguloPoder.p.getX() >= posFinalX){

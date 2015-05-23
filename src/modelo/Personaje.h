@@ -40,6 +40,7 @@ public:
 	Accionador llevarACabo;
 
 	Poder* poder;
+	Golpe* golpe;
 
 	//-----------------------------------------------------------------------------
 	bool puedoRealizarAccion(TestadoPersonaje accion);
@@ -59,7 +60,6 @@ public:
 
 	bool estadoActualContinuaElAnterior();
 
-	bool seguirLaPinia();
 };
 
 #endif /* PERSONAJE_H_ */
