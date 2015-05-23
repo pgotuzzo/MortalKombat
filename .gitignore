@@ -29,7 +29,6 @@
 
 # Clion
 .idea
-#-/out/
 /bin/
 
 #Eclipse
