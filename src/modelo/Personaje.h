@@ -60,6 +60,7 @@ public:
 
 	bool estadoActualContinuaElAnterior();
 
+	bool realizarsegundaPinia();
 };
 
 #endif /* PERSONAJE_H_ */

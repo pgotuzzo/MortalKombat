@@ -343,7 +343,7 @@ void Accionador::golpeSaltoVertical(int loops,Tdireccion direccion) {
     if(direccion == DERECHA) rectan.p = rectan.p + Posicion(rectaDelPj.d.w,rectaDelPj.d.h-rectan.d.h);
     else rectan.p = rectan.p + Posicion(-rectan.d.w,rectaDelPj.d.h-rectan.d.h);
     if(loopsPara(ACC_PATADA_SALTO_VERTICAL)>loops){
-        golpe->setGolpe(patadasAltas,true,rectan,REA_GOLPE_ALTO);
+        golpe->setGolpe(patadasAltas,true,rectan,REA_GOLPE_FUERTE);
     }
 }
 //--------------------------------------------------------------------------------------
@@ -355,7 +355,7 @@ void Accionador::golpeSaltoOblicuo(int loops,Tdireccion direccion) {
     if(direccion == DERECHA) rectan.p = rectan.p + Posicion(rectaDelPj.d.w,rectaDelPj.d.h-rectan.d.h);
     else rectan.p = rectan.p + Posicion(-rectan.d.w,rectaDelPj.d.h-rectan.d.h);
     if(loopsPara(ACC_PATADA_SALTO)>loops){
-        golpe->setGolpe(patadasAltas,true,rectan,REA_LEVANTARSE);
+        golpe->setGolpe(patadasAltas,true,rectan,REA_GOLPE_FUERTE);
     }
 }
 //--------------------------------------------------------------------------------------
