@@ -58,10 +58,10 @@ set(SOURCE_FILES
     src/parser/log/WarningLog.cpp
 
     # Vista
-    src/vista/CapaInfo.h
-    src/vista/Capa.cpp
-    src/vista/Capa.h
-    src/vista/CapaInfo.cpp
+    src/vista/capas/CapaInfo.h
+    src/vista/capas/Capa.cpp
+    src/vista/capas/Capa.h
+    src/vista/capas/CapaInfo.cpp
     src/vista/Pantalla.h
     src/vista/Pantalla.cpp
     src/vista/VistaUtils.h

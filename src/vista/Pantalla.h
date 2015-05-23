@@ -3,8 +3,8 @@
 
 #include <SDL2/SDL_render.h>
 #include <vector>
-#include "Capa.h"
-#include "CapaInfo.h"
+#include "capas/Capa.h"
+#include "capas/CapaInfo.h"
 #include "personajes/PersonajeVista.h"
 
 using namespace std;

@@ -3,8 +3,7 @@
 
 #include <string>
 #include <SDL2/SDL_render.h>
-#include "../Common.h"
-#include "VistaUtils.h"
+#include "../VistaUtils.h"
 
 class Capa {
 private:
