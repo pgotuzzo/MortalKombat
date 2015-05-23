@@ -41,13 +41,8 @@ Mundo::Mundo(config configuracion) {
 	rectanguloPj1.p = {pos_x1, pos_y1};
 	rectanguloPj2.p = {pos_x2,pos_y2};
 
-	//TODO: EL PJ1 Y PJ2 EMPIEZAN EN LADOS OPUESTOS - lo dejamos asi por los controles del teclado
-
 	personaje1 = new Personaje(PJ1.nombre,direccion1,rectanguloPj1,anchoVentana);
-	//cout<<"Costado izquierdo personaje 1: "<<personaje1->rectanguloPj.p.getX() - personaje1->rectanguloPj.d.w<<endl;
 	personaje2 = new Personaje(PJ2.nombre,direccion2,rectanguloPj2,anchoVentana);
-	//cout<<"Costado derecho personaje 2: "<<personaje2->rectanguloPj.p.getX() + personaje2->rectanguloPj.d.w<<endl;
-
 
 	colisionador = DetectorDeColisiones(anchoVentana,anchoEscenario);
 
@@ -110,11 +105,8 @@ vector<Tcambio> Mundo::actualizarMundo(vector<Tinput> inputs) {
 	cambio1 = actualizarPJ(personaje1);
 	cambio2 = actualizarPJ(personaje2);
 
-	//personaje1->rectanguloPj.p.mostrarPar();
 	c.push_back(cambio1);
 	c.push_back(cambio2);
-
-	//mostrarEstado(personaje2->estadoActual);
 
 	return c;
 }
@@ -138,10 +130,6 @@ bool Mundo::huboGanador() {
 
 
 Mundo::~Mundo() {
-	if(personaje1->vida == 0) loguer->loguear("El personaje 1 esta muerto",Log::LOG_DEB);
-	else loguer->loguear("El personaje 1 sobrevivio",Log::LOG_DEB);
-	if(personaje2->vida == 0) loguer->loguear("El personaje 2 esta muerto",Log::LOG_DEB);
-	else loguer->loguear("El personaje 2 sobrevivio",Log::LOG_DEB);
 	delete personaje1;
 	delete personaje2;
 	loguer->loguear("Se libero a los personajes", Log::LOG_DEB);
