@@ -66,7 +66,7 @@ void Pantalla::InicializarPersonajes(vector<Tpersonaje> personajes) {
         if ((i != 0) && (personajes[i].sprites == personajes[0].sprites)){
             mUtils->setColorSetting(personajes[i].colorSettings);
             p = PersonajeVista(mUtils, personajes[i].sprites, personajes[i].d, personajes[i].orientacion);
-            mUtils->setColorSetting(TcolorSettings(0, 0, 0));
+            mUtils->setColorSetting(TcolorSettings());
         }else{
             p = PersonajeVista(mUtils, personajes[i].sprites, personajes[i].d, personajes[i].orientacion);
         }

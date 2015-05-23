@@ -134,7 +134,7 @@ struct TcolorHSL{
         max = fmax(aux, b);
 
         aux = fmin(r, g);
-        min = fmin(aux, g);
+        min = fmin(aux, b);
 
         delta = max - min;
 
@@ -211,12 +211,16 @@ struct TcolorSettings{
     float hmax;
     float delta;
 
-    TcolorSettings(){}
+    TcolorSettings(){
+        hmin = 0;
+        hmax = 0;
+        delta = 0;
+    }
 
-    TcolorSettings(float min, float max, float d){
-        hmin = (min < 0) ? - fmod(-min, 360) + 360 : fmod(min, 360);
-        hmax = (max < 0) ? - fmod(-max, 360) + 360 : fmod(max, 360);
-        delta = (d < 0) ? - fmod(-d, 360) + 360 : fmod(d, 360);
+    void initialize(){
+        hmin = (hmin < 0) ? - fmod(-hmin, 360) + 360 : fmod(hmin, 360);
+        hmax = (hmax < 0) ? - fmod(-hmax, 360) + 360 : fmod(hmax, 360);
+        delta = (delta < 0) ? - fmod(-delta, 360) + 360 : fmod(delta, 360);
     }
 
 };

@@ -11,7 +11,7 @@ class VistaUtils {
 private:
     float mRatio;
     float mScales[2]; // relacion = (pixel / unidad logica)
-    TcolorSettings mColorSettings = TcolorSettings(0, 0, 0);
+    TcolorSettings mColorSettings;
     SDL_Renderer* mRenderer;
     vector<SDL_Texture*> mAuxTextures;
 

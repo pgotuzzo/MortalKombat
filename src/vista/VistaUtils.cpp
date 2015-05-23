@@ -184,8 +184,17 @@ SDL_Texture* VistaUtils::loadTexture(std::string path) {
         string message = "Carga textura desde " + path;
         loguer->loguear(message.c_str(), Log::LOG_DEB);
 
-        if (mColorSettings.delta != 0)
-            changeColor(surface);
+        if (mColorSettings.delta != 0) {
+            SDL_Surface *aux = SDL_ConvertSurfaceFormat(surface, SDL_PIXELFORMAT_RGB888, 0);
+            if (aux == NULL){
+                loguer->loguear(SDL_GetError(), Log::LOG_ERR);
+                throw new exception();
+            }else{
+                SDL_FreeSurface(surface);
+                surface = aux;
+                changeColor(surface);
+            }
+        }
 
         SDL_Texture* aux = SDL_CreateTextureFromSurface(mRenderer, surface);
         mAuxTextures.push_back(aux);

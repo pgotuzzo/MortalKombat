@@ -199,6 +199,7 @@ TcolorSettings config::ObColor(Value partes,int i){
 			loguer->loguear("Error en color-alternativo. Se carga por defecto",Log::Tlog::LOG_WAR);
 			aux.delta=45;
 		}
+		aux.initialize();
 		return aux;
 
 	}else{
