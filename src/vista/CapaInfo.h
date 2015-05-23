@@ -9,10 +9,10 @@
 class CapaInfo {
 private:
     VistaUtils* mUtils;
-    SDL_Texture* barraVidaCompletaText;
-    SDL_Texture* barraVidaParcialText;
-    SDL_Texture* mNombre1;
-    SDL_Texture* mNombre2;
+    Ttexture barraVidaCompletaText;
+    Ttexture barraVidaParcialText;
+    Ttexture mNombre1;
+    Ttexture mNombre2;
     float anchoBorde, anchoRelleno,anchoPantalla, distBorde;
     Trect barraVidaCompleta1, barraVidaCompleta2, barraVidaParcialPedazo1,
             barraVidaParcialPedazo2, barraVidaParcialPantalla1, barraVidaParcialPantalla2,
@@ -35,7 +35,7 @@ public:
     *  Guarda el pedazo de la capa a mostrar en le pedazo de textura pasado por parametro.
     *  texture : puntero a una textura del tamaño de la pantalla
     */
-    void getTexture(SDL_Texture *texture);
+    void getTexture(Ttexture texture);
 
 
     /*

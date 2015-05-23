@@ -12,7 +12,6 @@ private:
     TestadoPoder mState;
     Tdireccion mDirection;
     array<Sprite, 2> mSprites;
-    float mScales[2];
 
 public:
     PoderVista(){};
@@ -20,7 +19,7 @@ public:
     void initialize(VistaUtils* vu, std::string path, float scales[2]);
 
     void update(TcambioPoder cambio, Tdireccion direccion);
-    void getTexture(SDL_Texture* ventana, float x);
+    void getTexture(Ttexture ventana, float x);
 
     void freeTextures();
 };

@@ -7,35 +7,43 @@
 #include <SDL2/SDL_ttf.h>
 #include "../Common.h"
 
+struct Ttexture{
+    SDL_Texture* t;
+    Tdimension d;
+};
+
 class VistaUtils {
 private:
     float mRatio;
     float mScales[2]; // relacion = (pixel / unidad logica)
+    bool mColorChangeEnable;
     TcolorSettings mColorSettings;
     SDL_Renderer* mRenderer;
     vector<SDL_Texture*> mAuxTextures;
 
-
-    void changeColor(SDL_Surface* surface);
+    SDL_Texture* createTexture(Tdimension pixelDimension);
     Uint32 getPixel(SDL_Surface* surface, int i);
     void putPixel(SDL_Surface* surface, int i, Uint32 pixel);
+    void changeColor(SDL_Surface* surface);
+    Tdimension getDimension(SDL_Texture* texture);
 
 public:
     VistaUtils(SDL_Renderer* renderer, float ratio, float scales[2]);
 
+    void enableColorChange(bool enable);
     void setColorSetting(TcolorSettings settings);
-    SDL_Texture* createTexture(Tdimension dimension);
-    SDL_Texture* loadTexture(std::string path);
+    void getScales(Ttexture texture, float scales[2]);
+
+    Ttexture loadTexture(std::string path);
+    Ttexture createTextureFromText(string fontPath, string string, int size);
+
     void copyTexture(SDL_Texture* src, SDL_Texture* dst);
     void copyTexture(SDL_Texture* src, SDL_Texture* dst, bool flip);
-    void copyTexture(SDL_Texture* src, SDL_Texture* dst, Trect* srcRect, Trect* dstRect, Tdimension* srcDim, Tdimension* dstDim);
-    void copyTexture(SDL_Texture* src, SDL_Texture* dst, Trect* srcRect, Trect* dstRect, Tdimension* srcDim, Tdimension* dstDim, bool flip);
-    Tdimension getDimension(SDL_Texture *texture);
-    Tdimension getDimension(SDL_Texture* tIndex, Tdimension* dIndex, SDL_Texture *texture);
-    void getScales(SDL_Texture* texture, Tdimension* dimension, float scales[2]);
+
+    void copyTexture(Ttexture src, Ttexture dst, Trect* srcRect, Trect* dstRect);
+    void copyTexture(Ttexture src, Ttexture dst, Trect* srcRect, Trect* dstRect, bool flip);
+
     Tdimension getDimension(SDL_Texture* texture, float scales[2]);
-    void cleanTexture(SDL_Texture* t);
-    SDL_Texture* createTexture(string fontPath, string string, int size);
 
     virtual ~VistaUtils();
 };

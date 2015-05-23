@@ -7,14 +7,11 @@ PoderVista::PoderVista(VistaUtils* vu, std::string path, float scales[2]) {
 void PoderVista::initialize(VistaUtils* vu, std::string path, float scales[2]) {
     mUtils = vu;
 
-    mScales[0] = scales[0];
-    mScales[1] = scales[1];
-
     mState = DESACTIVADO;
 
     mSprites = std::array<Sprite, 2>();
-    mSprites[0].initialize(mUtils, path + "/" + PODER_ACTIVADO_PATH + "/", false);
-    mSprites[1].initialize(mUtils, path + "/" + PODER_COLISION_PATH + "/", false);
+    mSprites[0].initialize(mUtils, path + "/" + PODER_ACTIVADO_PATH + "/", scales, false);
+    mSprites[1].initialize(mUtils, path + "/" + PODER_COLISION_PATH + "/", scales, false);
 }
 
 void PoderVista::update(TcambioPoder cambio, Tdireccion direccion) {
@@ -29,11 +26,11 @@ void PoderVista::update(TcambioPoder cambio, Tdireccion direccion) {
     mRect.d = cambio.d;
 }
 
-void PoderVista::getTexture(SDL_Texture *ventana, float x) {
+void PoderVista::getTexture(Ttexture ventana, float x) {
     if (mState != TestadoPoder::DESACTIVADO) {
         bool flip = (mDirection != Tdireccion::DERECHA);
 
-        SDL_Texture* texture = (mState == ACTIVADO) ? mSprites[0].getNext() : mSprites[1].getNext();
+        Ttexture texture = (mState == ACTIVADO) ? mSprites[0].getNext() : mSprites[1].getNext();
 
         /**
          * mRect = Trect que maneja el modelo
@@ -55,13 +52,13 @@ void PoderVista::getTexture(SDL_Texture *ventana, float x) {
          */
 
         Trect r;
-        r.d = mUtils->getDimension(texture, mScales);
+        r.d = texture.d;
         r.p.y = mRect.p.y + mRect.d.h / 2.0F - r.d.h / 2.0F;
         r.p.x = (mDirection == DERECHA) ?
                 mRect.p.x - x + mRect.d.w - r.d.w :
                 mRect.p.x - x;
 
-        mUtils->copyTexture(texture, ventana, NULL, &r, &r.d, NULL, flip);
+        mUtils->copyTexture(texture, ventana, NULL, &r, flip);
     }
 }
 

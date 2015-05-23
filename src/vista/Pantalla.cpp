@@ -57,6 +57,8 @@ void Pantalla::InicializarPersonajes(vector<Tpersonaje> personajes) {
         throw new exception;
     }
 
+    mUtils->setColorSetting(personajes.at(1).colorSettings);
+
     // zIndex y igual para ambos personajes
     zIndex = personajes[0].zIndex;
 
@@ -64,9 +66,9 @@ void Pantalla::InicializarPersonajes(vector<Tpersonaje> personajes) {
     for (unsigned i = 0; i < personajes.size(); i++) {
         PersonajeVista p;
         if ((i != 0) && (personajes[i].sprites == personajes[0].sprites)){
-            mUtils->setColorSetting(personajes[i].colorSettings);
+            mUtils->enableColorChange(true);
             p = PersonajeVista(mUtils, personajes[i].sprites, personajes[i].d, personajes[i].orientacion);
-            mUtils->setColorSetting(TcolorSettings());
+            mUtils->enableColorChange(false);
         }else{
             p = PersonajeVista(mUtils, personajes[i].sprites, personajes[i].d, personajes[i].orientacion);
         }
@@ -129,7 +131,9 @@ Pantalla::Pantalla(vector<Tcapa> capas, Tventana ventana, Tescenario escenario, 
  */
 void Pantalla::dibujar() {
 
-    SDL_Texture* ventana = SDL_GetRenderTarget(mRenderer);
+    Ttexture ventana;
+    ventana.t = SDL_GetRenderTarget(mRenderer);
+    ventana.d = mDimension;
 
     for (int i = 0; i < mCapas.size(); i++) {
         mCapas[i].getTexture(ventana);

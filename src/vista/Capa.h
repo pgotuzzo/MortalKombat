@@ -9,8 +9,7 @@
 class Capa {
 private:
     VistaUtils* mUtils;
-    SDL_Texture * mTexture;
-    float mAncho;
+    Ttexture mTexture;
     float mVelocidadCapa;
     Trect mRect;
 
@@ -30,7 +29,7 @@ public:
     *  Guarda el pedazo de la capa a mostrar en le pedazo de textura pasado por parametro.
     *  texture : puntero a una textura del tamaño de la pantalla
     */
-    void getTexture(SDL_Texture *texture);
+    void getTexture(Ttexture texture);
 
 
     /*

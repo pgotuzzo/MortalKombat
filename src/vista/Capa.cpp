@@ -12,21 +12,23 @@ Capa::Capa() {}
 *  capa en relacion a su tamaño total de la imagen
 *  anchoCapa : ancho total de la capa en unidades.
 */
-Capa::Capa(VistaUtils* utils, std::string dirPath, Trect rectPantalla, float anchoCapa, float anchoEscenario) {
+Capa::Capa(VistaUtils* utils, string dirPath, Trect rectPantalla, float anchoCapa, float anchoEscenario) {
     mUtils= utils;
-    mTexture = mUtils->loadTexture(dirPath);
-    mAncho = anchoCapa;
-    mVelocidadCapa = (mAncho - rectPantalla.d.w)/(anchoEscenario - rectPantalla.d.w);
     mRect = rectPantalla;
+
+    mTexture = mUtils->loadTexture(dirPath);
+    mTexture.d.w = anchoCapa;
+    mTexture.d.h = mRect.d.h;
+
+    mVelocidadCapa = (mTexture.d.w - rectPantalla.d.w)/(anchoEscenario - rectPantalla.d.w);
 }
 
 /*
 *  Guarda el pedazo de la capa a mostrar en le pedazo de textura pasado por parametro.
 *  texture : puntero a una textura del tamaño de la pantalla
 */
-void Capa::getTexture(SDL_Texture *texture) {
-    Tdimension dim = {mAncho, mRect.d.h};
-    mUtils->copyTexture(mTexture, texture, &mRect, NULL, &dim, NULL);
+void Capa::getTexture(Ttexture texture) {
+    mUtils->copyTexture(mTexture, texture, &mRect, NULL);
 }
 
 /*
@@ -38,7 +40,7 @@ void Capa::ajustar(float x) {
 
 void Capa::freeTextures() {
     loguer->loguear("Elimina capa", Log::LOG_DEB);
-    SDL_DestroyTexture(mTexture);
+    SDL_DestroyTexture(mTexture.t);
     loguer->loguear("Elimina capa", Log::LOG_DEB);
 }
 

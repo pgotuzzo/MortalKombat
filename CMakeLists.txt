@@ -17,10 +17,26 @@ file(COPY ${RESOURCES} DESTINATION ${PROJECT_SOURCE_DIR}/bin)
 
 # Sources
 set(SOURCE_FILES
-    src/modelo/Personaje.h
-    src/modelo/Personaje.cpp
+    # Modelo
+    src/modelo/Accionador.h
+    src/modelo/Accionador.cpp
+    src/modelo/DetectorDeColisiones.h
+    src/modelo/DetectorDeColisiones.cpp
+    src/modelo/Golpe.h
+    src/modelo/Golpe.cpp
     src/modelo/Mundo.h
     src/modelo/Mundo.cpp
+    src/modelo/ObjetoColisionable.h
+    src/modelo/Personaje.h
+    src/modelo/Personaje.cpp
+    src/modelo/Poder.h
+    src/modelo/Poder.cpp
+
+    # Parser
+    src/parser/config.h
+    src/parser/config.cpp
+    src/parser/json.h
+    src/parser/jsoncpp.cpp
     src/parser/include/json/assertions.h
     src/parser/include/json/autolink.h
     src/parser/include/json/config.h
@@ -31,48 +47,41 @@ set(SOURCE_FILES
     src/parser/include/json/value.h
     src/parser/include/json/version.h
     src/parser/include/json/writer.h
-    src/parser/log/DebugLog.cpp
-    src/parser/log/DebugLog.h
-    src/parser/log/ErrorLog.cpp
-    src/parser/log/ErrorLog.h
-    src/parser/log/Log.h
-    src/parser/log/WarningLog.cpp
-    src/parser/log/WarningLog.h
     src/parser/json/json.h
     src/parser/json/json-forwards.h
-    src/parser/config.cpp
-    src/parser/config.h
-    src/parser/json.h
-    src/parser/jsoncpp.cpp
-    src/vista/personajes/PersonajeVista.cpp
-    src/vista/personajes/PersonajeVista.h
-    src/vista/personajes/Sprite.cpp
-    src/vista/personajes/Sprite.h
-    src/vista/Capa.cpp
+    src/parser/log/DebugLog.h
+    src/parser/log/DebugLog.cpp
+    src/parser/log/ErrorLog.h
+    src/parser/log/ErrorLog.cpp
+    src/parser/log/Log.h
+    src/parser/log/WarningLog.h
+    src/parser/log/WarningLog.cpp
+
+    # Vista
     src/vista/CapaInfo.h
-    src/vista/CapaInfo.cpp
+    src/vista/Capa.cpp
     src/vista/Capa.h
-    src/vista/Pantalla.cpp
+    src/vista/CapaInfo.cpp
     src/vista/Pantalla.h
-    src/vista/VistaUtils.cpp
+    src/vista/Pantalla.cpp
     src/vista/VistaUtils.h
+    src/vista/VistaUtils.cpp
+    src/vista/personajes/PersonajeVista.h
+    src/vista/personajes/PersonajeVista.cpp
+    src/vista/personajes/PoderVista.h
+    src/vista/personajes/PoderVista.cpp
+    src/vista/personajes/Sprite.h
+    src/vista/personajes/Sprite.cpp
+
+    # Main
     src/Common.h
     src/main.cpp
-    src/modelo/ObjetoColisionable.h
-    src/modelo/Poder.h
-    src/modelo/Poder.cpp
-    src/modelo/Golpe.cpp
-    src/modelo/Golpe.h
-    src/controlador/ControladorTeclado.cpp
+
+    # Controlador
     src/controlador/ControladorTeclado.h
-    src/controlador/ControladorJoystick.cpp
+    src/controlador/ControladorTeclado.cpp
     src/controlador/ControladorJoystick.h
-    src/vista/personajes/PoderVista.cpp
-    src/vista/personajes/PoderVista.h
-    src/modelo/DetectorDeColisiones.cpp
-    src/modelo/DetectorDeColisiones.h
-    src/modelo/Accionador.cpp
-    src/modelo/Accionador.h
+    src/controlador/ControladorJoystick.cpp
     )
 
 add_executable(MortalKombat ${SOURCE_FILES} )

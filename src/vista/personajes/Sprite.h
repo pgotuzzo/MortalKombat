@@ -11,7 +11,7 @@ using namespace std;
 class Sprite {
 private:
     VistaUtils* mUtils;
-    vector<SDL_Texture *> mTextures;
+    vector<Ttexture> mTextures;
     vector<int> mDisabled;
     vector<int> mToDisable;
     int mCurrent;
@@ -20,12 +20,13 @@ private:
 
 public:
     Sprite(){};
-    Sprite(VistaUtils* utils, string dirPath, bool repeat);
-    void initialize(VistaUtils* utils, string dirPath, bool repeat);
+    Sprite(VistaUtils* utils, string dirPath, float scales[2], bool repeat);
+    void initialize(VistaUtils* utils, string dirPath, float scales[2], bool repeat);
+
     long getCount();
     void restart();
-    SDL_Texture* getNext();
-    SDL_Texture* getBefore();
+    Ttexture getNext();
+    Ttexture getBefore();
     void disable(int index);
 
     void freeTextures();

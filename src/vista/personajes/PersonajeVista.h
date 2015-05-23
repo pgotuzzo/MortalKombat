@@ -17,27 +17,17 @@ private:
      * Atributos que tendrán correlación con el modelo
      *  a través de setters
      */
-    TestadoPersonaje mCurrentState;
+    TestadoPersonaje mState;
     Tsentido mTarget;
     Tdireccion mDirection;
-    Trect mCurrentRect; // Posicion y dimension que tiene el personaje en el modelo.
-    PoderVista mPoder = PoderVista();
+    Trect mRect; // Posicion y dimension que tiene el personaje en el modelo.
+    PoderVista mPower = PoderVista();
 
     VistaUtils* mUtils;
+    Ttexture mAuxTexture;
     array <Sprite, TestadoPersonajeCount> mSprites;
 
-    /**
-     * Almaceno un imagen default del personaje (una imagen del personaje parado sin realizar ningun accion)
-     *  y tambien guardo la dimension en unidades logicas que tiene dicha imagen.
-     * Cuando quiera usar una imagen del personaje realizando una accion (saltar, pegar, etc). Voy a usar estos
-     *  datos para poder calcular la dimension de la imagen en unidades logicas.
-     */
-    SDL_Texture* mDefaultTexture;
-    Tdimension mDefaultTextureDimension;
-
-    float mScales[2];
-
-    void crearSprites(std::string path);
+    void initializeSprites(float scales[2], string path);
     bool greatHit();
 
 public:
@@ -46,7 +36,7 @@ public:
 
     Trect getRect();
     bool update(Tcambio);
-    void getTexture(SDL_Texture* ventana, float x);
+    void getTexture(Ttexture ventana, float x);
 
     void freeTextures();
 };

@@ -2,20 +2,21 @@
 #include <algorithm>
 #include "Sprite.h"
 
-Sprite::Sprite(VistaUtils* utils, string dirPath, bool repeat) {
-    initialize(utils, dirPath, repeat);
+Sprite::Sprite(VistaUtils* utils, string dirPath, float scales[2], bool repeat) {
+    initialize(utils, dirPath, scales, repeat);
 }
 
-void Sprite::initialize(VistaUtils *utils, string dirPath, bool repeat) {
+void Sprite::initialize(VistaUtils *utils, string dirPath, float scales[2], bool repeat) {
+    mUtils = utils;
+
     mCurrent = 0;
     mRepeat = repeat;
     mFirstPass = true;
-    mUtils = utils;
-    mTextures = vector<SDL_Texture *>();
-    mDisabled = vector<int>();
 
     bool end = false;
     do{
+        Ttexture textura;
+
         string filePath;
         string number; // number = XX ---> dos dígitos!!!
 
@@ -25,13 +26,13 @@ void Sprite::initialize(VistaUtils *utils, string dirPath, bool repeat) {
             number = to_string(getCount() + 1);
         }
         filePath = dirPath + number + SPRITES_FORMAT;
-        SDL_Texture* t = mUtils->loadTexture(filePath);
-        if (t == nullptr){
+        textura = mUtils->loadTexture(filePath);
+        if (textura.t == nullptr){
             end = true;
-        }else {
-            mTextures.push_back(t);
+        } else {
+            textura.d = mUtils->getDimension(textura.t, scales);
+            mTextures.push_back(textura);
         }
-
     }while(!end);
 }
 
@@ -46,9 +47,13 @@ void Sprite::restart() {
     mDisabled.clear();
 }
 
-SDL_Texture* Sprite::getNext() {
+void Sprite::disable(int index) {
+    mToDisable.push_back(index);
+}
+
+Ttexture Sprite::getNext() {
     bool show = true;
-    SDL_Texture *t = mTextures[mCurrent];
+    Ttexture t = mTextures[mCurrent];
 
     for (int i = 0; i < mDisabled.size(); i++) {
         if (mDisabled[i] == mCurrent) {
@@ -69,9 +74,9 @@ SDL_Texture* Sprite::getNext() {
     return (show) ? t : getNext();
 }
 
-SDL_Texture* Sprite::getBefore() {
+Ttexture Sprite::getBefore() {
     bool show = true;
-    SDL_Texture* t = mTextures[mCurrent];
+    Ttexture t = mTextures[mCurrent];
 
     for (int i = 0; i < mDisabled.size(); i++) {
         if (mDisabled[i] == mCurrent) {
@@ -100,11 +105,7 @@ void Sprite::freeTextures() {
     for(int i = 0; i < mTextures.size(); i++) {
         string message = "Elimina textura " + to_string(i + 1);
         loguer->loguear(message.c_str(), Log::LOG_DEB);
-        SDL_DestroyTexture(mTextures[i]);
+        SDL_DestroyTexture(mTextures[i].t);
     }
     loguer->loguear("Finaliza la eliminacion del vector de Sprites", Log::LOG_DEB);
-}
-
-void Sprite::disable(int index) {
-    mToDisable.push_back(index);
 }
