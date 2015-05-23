@@ -125,6 +125,8 @@ Trect Accionador::laAccion(TestadoPersonaje estadoPj, int loops, Posicion pos, T
             activarPoder(direccion);
             saltarVerticualmente(loops);
             break;
+        case ACC_AGARRE:
+            break;
 
             //case Reacciones ---------------------------------
         case REA_AGACHADO:
@@ -133,7 +135,7 @@ Trect Accionador::laAccion(TestadoPersonaje estadoPj, int loops, Posicion pos, T
             reaccionTrasPiniaAlta(loops,direccion);
             break;
         case REA_GOLPE_BAJO:
-            reaccionTrasPiniaAlta(loops,direccion);
+            //reaccionTrasPiniaAlta(loops,direccion);
             break;
         case REA_GOLPE_FUERTE:
             reaccionTrasGolpeFuerte(loops,direccion);
@@ -142,7 +144,9 @@ Trect Accionador::laAccion(TestadoPersonaje estadoPj, int loops, Posicion pos, T
             reaccionBarrida(loops,direccion);
             break;
         case REA_PINIA_ALTA:
-            reaccionTrasPiniaAlta(loops,direccion);
+            //reaccionTrasPiniaAlta(loops,direccion);
+            break;
+        case REA_AGARRE:
             break;
     }
     return rectaDelPj;

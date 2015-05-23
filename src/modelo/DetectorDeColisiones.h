@@ -27,11 +27,10 @@ private:
     void colisionar(Poder* poder1, Poder* poder2);
 
 
-
-
     void resolverColision(Personaje* PJ1, Personaje* PJ2);
     void resolverColision(Personaje* PJ,Golpe* golpe);
     void resolverColision(Poder* poder1,Poder* poder2);
+    void resolverColisionYAgarre(Personaje* personaje1,Personaje* personaje2);
     void resolverColisionconEscenario(Personaje* PJ);
     void resolverColisionconPantalla(Personaje* PJ1,Personaje* PJ2);
 

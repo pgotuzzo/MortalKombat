@@ -12,10 +12,9 @@ DetectorDeColisiones::DetectorDeColisiones(float anchoPantalla, float anchoEscen
 void DetectorDeColisiones::resolverColisiones(Personaje *personaje1, Personaje *personaje2) {
 
     colisionar(personaje1,personaje2);
-    if(personaje1->llevarACabo.getGolpe()->estado) colisionar(personaje2,personaje1->llevarACabo.getGolpe());
-    if(personaje2->llevarACabo.getGolpe()->estado) colisionar(personaje1,personaje2->llevarACabo.getGolpe());
 
-
+    resolverColisionYAgarre(personaje1,personaje2);
+    resolverColisionYAgarre(personaje2,personaje1);
 
     if(personaje1->poder->estado == ACTIVADO && personaje2->poder->estado == ACTIVADO){
         colisionar(personaje1->poder,personaje2->poder);
@@ -31,9 +30,22 @@ void DetectorDeColisiones::resolverColisiones(Personaje *personaje1, Personaje *
     resolverColisionconPantalla(personaje2,personaje1);
     resolverColisionconEscenario(personaje1);
     resolverColisionconEscenario(personaje2);
+
+
 }
 
 
+void DetectorDeColisiones::resolverColisionYAgarre(Personaje *personaje1, Personaje *personaje2) {
+    if(personaje1->llevarACabo.getGolpe()->estado){
+        if(personaje1->estadoActual == ACC_PINIA_BAJA && distancia(personaje1,personaje2) <= 1){
+            personaje1->estadoAnterior = personaje1->estadoActual;
+            personaje1->estadoActual = ACC_AGARRE;
+            personaje2->estadoAnterior = personaje2->estadoActual;
+            personaje2->estadoActual = REA_AGARRE;
+        }
+        else colisionar(personaje2,personaje1->llevarACabo.getGolpe());
+    }
+}
 
 // Detecta si dos objetos colisionaron (parte de uno dentro de otro)
 // Si objeto1 u objeto2 son NULL devuelvo false
