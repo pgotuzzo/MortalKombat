@@ -522,6 +522,7 @@ void config::validacionTamanioZindex(){
 	for(unsigned int i=0;i<(personajes.size()-1);i++){
 
 		if(personajes.at(i).zIndex!=personajes.at(i+1).zIndex){
+			loguer->loguear("Distintos Z-index, se igualan.", Log::Tlog::LOG_WAR);
 			personajes.at(i+1).zIndex=personajes.at(i).zIndex;
 		}
 	}

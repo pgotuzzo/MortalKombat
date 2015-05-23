@@ -30,14 +30,14 @@ Accionador::Accionador() {
 
 
 }
-void Accionador::initialize(Trect rectan, float anchoPanta, float yPiso,Poder* nuevoPoder) {
+void Accionador::initialize(Trect rectan, float anchoPanta, float yPiso,Poder* nuevoPoder,Golpe* nuevoGolpe) {
 
     rectaDelPj = rectan;
     anchoPantalla = anchoPanta;
     ydelPiso = yPiso;
     estAct = MOV_PARADO;
     estAnt = MOV_PARADO;
-    golpe = new Golpe();
+    golpe = nuevoGolpe;
     this->poder = nuevoPoder;
     alturaPj = rectan.d.h;
 
@@ -150,7 +150,6 @@ Trect Accionador::laAccion(TestadoPersonaje estadoPj, int loops, Posicion pos, T
     return rectaDelPj;
 }
 Accionador::~Accionador() {
-    delete golpe;
 }
 //--------------------------------------------------------------------------------------
 //                  ACCIONES
@@ -344,7 +343,7 @@ void Accionador::golpeSaltoVertical(int loops,Tdireccion direccion) {
     if(direccion == DERECHA) rectan.p = rectan.p + Posicion(rectaDelPj.d.w,rectaDelPj.d.h-rectan.d.h);
     else rectan.p = rectan.p + Posicion(-rectan.d.w,rectaDelPj.d.h-rectan.d.h);
     if(loopsPara(ACC_PATADA_SALTO_VERTICAL)>loops){
-        golpe->setGolpe(patadasAltas,true,rectan,REA_GOLPE_FUERTE);
+        golpe->setGolpe(patadasAltas,true,rectan,REA_GOLPE_ALTO);
     }
 }
 //--------------------------------------------------------------------------------------
@@ -355,9 +354,8 @@ void Accionador::golpeSaltoOblicuo(int loops,Tdireccion direccion) {
     rectan.p = rectaDelPj.p;
     if(direccion == DERECHA) rectan.p = rectan.p + Posicion(rectaDelPj.d.w,rectaDelPj.d.h-rectan.d.h);
     else rectan.p = rectan.p + Posicion(-rectan.d.w,rectaDelPj.d.h-rectan.d.h);
-    if(loopsPara(ACC_PATADA_SALTO)>=loops){
-        cout<<loops<<endl;
-        golpe->setGolpe(patadasAltas,true,rectan,REA_GOLPE_FUERTE);
+    if(loopsPara(ACC_PATADA_SALTO)>loops){
+        golpe->setGolpe(patadasAltas,true,rectan,REA_LEVANTARSE);
     }
 }
 //--------------------------------------------------------------------------------------
