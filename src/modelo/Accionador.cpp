@@ -125,6 +125,8 @@ Trect Accionador::laAccion(TestadoPersonaje estadoPj, int loops, Posicion pos, T
             activarPoder(direccion);
             saltarVerticualmente(loops);
             break;
+        case ACC_AGARRE:
+            break;
 
             //case Reacciones ---------------------------------
         case REA_AGACHADO:
@@ -133,7 +135,7 @@ Trect Accionador::laAccion(TestadoPersonaje estadoPj, int loops, Posicion pos, T
             reaccionTrasPiniaAlta(loops,direccion);
             break;
         case REA_GOLPE_BAJO:
-            reaccionTrasPiniaAlta(loops,direccion);
+            //reaccionTrasPiniaAlta(loops,direccion);
             break;
         case REA_GOLPE_FUERTE:
             reaccionTrasGolpeFuerte(loops,direccion);
@@ -142,9 +144,9 @@ Trect Accionador::laAccion(TestadoPersonaje estadoPj, int loops, Posicion pos, T
             reaccionBarrida(loops,direccion);
             break;
         case REA_PINIA_ALTA:
-            reaccionTrasPiniaAlta(loops,direccion);
+            //reaccionTrasPiniaAlta(loops,direccion);
             break;
-        case REA_LEVANTARSE:
+        case REA_AGARRE:
             break;
     }
     return rectaDelPj;
@@ -343,7 +345,7 @@ void Accionador::golpeSaltoVertical(int loops,Tdireccion direccion) {
     if(direccion == DERECHA) rectan.p = rectan.p + Posicion(rectaDelPj.d.w,rectaDelPj.d.h-rectan.d.h);
     else rectan.p = rectan.p + Posicion(-rectan.d.w,rectaDelPj.d.h-rectan.d.h);
     if(loopsPara(ACC_PATADA_SALTO_VERTICAL)>loops){
-        golpe->setGolpe(patadasAltas,true,rectan,REA_GOLPE_ALTO);
+        golpe->setGolpe(patadasAltas,true,rectan,REA_GOLPE_FUERTE);
     }
 }
 //--------------------------------------------------------------------------------------
@@ -355,7 +357,7 @@ void Accionador::golpeSaltoOblicuo(int loops,Tdireccion direccion) {
     if(direccion == DERECHA) rectan.p = rectan.p + Posicion(rectaDelPj.d.w,rectaDelPj.d.h-rectan.d.h);
     else rectan.p = rectan.p + Posicion(-rectan.d.w,rectaDelPj.d.h-rectan.d.h);
     if(loopsPara(ACC_PATADA_SALTO)>loops){
-        golpe->setGolpe(patadasAltas,true,rectan,REA_LEVANTARSE);
+        golpe->setGolpe(patadasAltas,true,rectan,REA_GOLPE_FUERTE);
     }
 }
 //--------------------------------------------------------------------------------------

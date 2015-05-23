@@ -32,8 +32,8 @@
             "nombre":"subzero",
             "sprites": "./resources/sprites/subzero",
             "color-alternativo": [
-                {"h-inicial": 210},
-                {"h-final":270},
+                {"h-inicial": 180},
+                {"h-final":200},
                 {"delta": 120}
             ]
         },
@@ -53,7 +53,7 @@
 
     "pelea": {
         "player1":"subzero",
-        "player2":"ermac"
+        "player2":"subzero"
     },
     "botones":{
         "piña-baja": 13,

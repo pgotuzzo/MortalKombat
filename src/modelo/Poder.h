@@ -14,6 +14,7 @@ public:
     TestadoPoder estado;
     float posFinalX;
     bool primerLoop;
+    TestadoPersonaje efecto;
 
 
     Poder();

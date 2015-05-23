@@ -338,7 +338,7 @@ struct Tcapa {
  * Estructuras y enums propios de los
  *  Personajes
  */
-static const int TestadoPersonajeCount = 30;
+static const int TestadoPersonajeCount = 31;
 
 enum TestadoPersonaje {
     // Movimient
@@ -368,6 +368,8 @@ enum TestadoPersonaje {
     ACC_PATADA_ALTA,
     ACC_PATADA_ALTA_ATRAS,
 
+    ACC_AGARRE,
+
     ACC_PROTECCION,
     ACC_PROTECCION_AGACHADO,
 
@@ -381,8 +383,10 @@ enum TestadoPersonaje {
     REA_GOLPE_FUERTE, // gancho y patada alta (+ atras)
     REA_PATADA_BARRIDA, // patada baja (+ atras)
     REA_PINIA_ALTA,
-    REA_LEVANTARSE,
-    REA_CAIDA
+    REA_CAIDA,
+    REA_AGARRE
+
+
 };
 
 static string TestadoPersonajeToString(TestadoPersonaje e){
@@ -411,6 +415,7 @@ static string TestadoPersonajeToString(TestadoPersonaje e){
         case TestadoPersonaje::ACC_PROTECCION_AGACHADO: return "acc_proteccion_agachado";
         case TestadoPersonaje::ACC_PODER: return "acc_poder";
         case TestadoPersonaje::ACC_PODER_SALTO: return "acc_poder";
+        case TestadoPersonaje::ACC_AGARRE: return "acc_agarre";
 
         case TestadoPersonaje::REA_AGACHADO: return "rea_agachado";
         case TestadoPersonaje::REA_GOLPE_ALTO: return "rea_golpe_alto";
@@ -419,7 +424,8 @@ static string TestadoPersonajeToString(TestadoPersonaje e){
         case TestadoPersonaje::REA_CAIDA: return "rea_golpe_fuerte";
         case TestadoPersonaje::REA_PATADA_BARRIDA: return "rea_patada_barrida";
         case TestadoPersonaje::REA_PINIA_ALTA: return "rea_pinia_alta";
-        case TestadoPersonaje::REA_LEVANTARSE: return "rea_levantarse";
+        case TestadoPersonaje::REA_AGARRE: return "rea_agarre";
+
 
 
     }
@@ -577,9 +583,11 @@ static int loopsPara(TestadoPersonaje accion){
             return 12;
         case REA_PINIA_ALTA:
             return 3;
-        case REA_LEVANTARSE:
-            return 8;
         case REA_CAIDA:
+            return 8;
+        case REA_AGARRE:
+            return 6;
+        case ACC_AGARRE:
             return 8;
     }
 }
@@ -672,11 +680,14 @@ static int mostrarEstado(TestadoPersonaje accion){
         case ACC_PODER_SALTO:
             cout<<"ACC_PODER_SALTO";
             break;
-        case REA_LEVANTARSE:
-            cout<<"REA_LEVANTARSE"<<endl;
-            break;
         case REA_CAIDA:
             cout<<"REA_CAIDA"<<endl;
+            break;
+        case REA_AGARRE:
+            cout<<"REA_AGARRE"<<endl;
+            break;
+        case ACC_AGARRE:
+            cout<<"ACC_AGARRE"<<endl;
             break;
     }
 }

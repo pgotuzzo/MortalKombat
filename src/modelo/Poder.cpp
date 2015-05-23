@@ -14,6 +14,7 @@ Poder::Poder() {
     rectanguloPoder.d.h = altoPoder;
     danio = danioPoder;
     primerLoop = false;
+    efecto = REA_GOLPE_ALTO;
 }
 
 void Poder::activar(Trect rectPJ,Tdireccion direccion,float anchoPantalla) {

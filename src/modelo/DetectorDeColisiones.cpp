@@ -12,10 +12,9 @@ DetectorDeColisiones::DetectorDeColisiones(float anchoPantalla, float anchoEscen
 void DetectorDeColisiones::resolverColisiones(Personaje *personaje1, Personaje *personaje2) {
 
     colisionar(personaje1,personaje2);
-    if(personaje1->llevarACabo.getGolpe()->estado) colisionar(personaje2,personaje1->llevarACabo.getGolpe());
-    if(personaje2->llevarACabo.getGolpe()->estado) colisionar(personaje1,personaje2->llevarACabo.getGolpe());
 
-
+    resolverColisionYAgarre(personaje1,personaje2);
+    resolverColisionYAgarre(personaje2,personaje1);
 
     if(personaje1->poder->estado == ACTIVADO && personaje2->poder->estado == ACTIVADO){
         colisionar(personaje1->poder,personaje2->poder);
@@ -34,6 +33,17 @@ void DetectorDeColisiones::resolverColisiones(Personaje *personaje1, Personaje *
 }
 
 
+void DetectorDeColisiones::resolverColisionYAgarre(Personaje *personaje1, Personaje *personaje2) {
+    if(personaje1->llevarACabo.getGolpe()->estado){
+        if(personaje1->estadoActual == ACC_PINIA_BAJA && distancia(personaje1,personaje2) <= 1){
+            personaje1->estadoAnterior = personaje1->estadoActual;
+            personaje1->estadoActual = ACC_AGARRE;
+            personaje2->estadoAnterior = personaje2->estadoActual;
+            personaje2->estadoActual = REA_AGARRE;
+        }
+        else colisionar(personaje2,personaje1->llevarACabo.getGolpe());
+    }
+}
 
 // Detecta si dos objetos colisionaron (parte de uno dentro de otro)
 // Si objeto1 u objeto2 son NULL devuelvo false
@@ -181,45 +191,9 @@ void DetectorDeColisiones::resolverColision(Personaje *PJ1, Personaje *PJ2) {
     separarPersonajes(PJ1,PJ2);
 }
 
-
-// Se resuelve la colision entre dos poderes.
-// Se coloca al poder1 en el costado del poder2.
-void DetectorDeColisiones::resolverColision(Poder *poder1, Poder *poder2) {
-    Trect rectanguloPoder1 = poder1->rectanguloPoder;
-    Trect rectanguloPoder2 = poder2->rectanguloPoder;
-    if(rectanguloPoder1.p.getX() < rectanguloPoder2.p.getX()) rectanguloPoder2.p.setX(rectanguloPoder1.p.getX() + rectanguloPoder1.d.w);
-    else rectanguloPoder1.p.setX(rectanguloPoder1.p.getX() - rectanguloPoder2.d.w);
-}
-
-// Se verifica si hay efecto tunel. Para esto verifica si estan a la misma altura los objetos
-// y verifica que se hayan pasado
-bool DetectorDeColisiones::hayEfectoTunel(ObjetoColisionable *objeto1, ObjetoColisionable *objeto2) {
-    if(detectarColisionenY(objeto1,objeto2)) {
-        switch(objeto1->getRectangulo().p.getX() < objeto2->getRectangulo().p.getX()){
-            case(true):
-                if (0<distanciaColisionadaenX(objeto2, objeto1)<=velocidadDelPoder) {
-                    return true;
-                }
-                break;
-            default:
-                if ( 0<distanciaColisionadaenX(objeto1, objeto2)<=velocidadDelPoder) {
-                    return true;
-                }
-                break;
-        }
-    }
-    return false;
-}
-
-
 // resuelve la colision entre golpe y personaje
 void DetectorDeColisiones::resolverColision(Personaje *PJ,Golpe *golpe) {
-    if (PJ->estadoActual == ACC_PROTECCION || PJ->estadoActual ==ACC_PROTECCION_AGACHADO) PJ->reducirVida(golpe->danio/2);
-    else PJ->reducirVida(golpe->danio);
-    PJ->estadoAnterior = PJ->estadoActual;
-    PJ->estadoActual = golpe->efectoSobreOponente;
-
-    // Ajustar la superrectanguloPj.picion del golpe con el personaje si es necesario
+    PJ->reducirVida(golpe->danio,golpe->efectoSobreOponente);
 }
 
 void DetectorDeColisiones::resolverColisionconPantalla(Personaje *PJ1,Personaje* PJ2) {
@@ -265,11 +239,10 @@ void DetectorDeColisiones::resolverColisionconEscenario(Personaje *PJ) {
 }
 
 void DetectorDeColisiones::colisionar(Personaje *PJ, Poder *poder) {
-    float distanciaPJPoder = distancia(PJ,poder) + poder->rectanguloPoder.d.w;
+    float distanciaPJPoder = distancia(PJ,poder) + PJ->rectanguloPj.d.w / 2;
     if((distanciaPJPoder < velocidadDelPoder && detectarColisionenY(PJ,poder)) && !poder->primerLoop){
         poder->avanzar(distanciaPJPoder);
         poder->estado = COLISION;
-        if(PJ->estadoActual == ACC_PROTECCION)PJ->reducirVida(poder->danio/2);
-        else PJ->reducirVida(poder->danio);
+        PJ->reducirVida(poder->danio,poder->efecto);
     }
 }

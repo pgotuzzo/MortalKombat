@@ -35,11 +35,8 @@ void Personaje::realizarAccion(Tinput orden) {
 		estadoAnterior = estadoActual;
 		estadoActual = estadoCompuesto;
 		verificarDireccion(orden);
-		//si el estado anterior es un salto y el nuevo es un golpe durante el salto, se usa el mismo contador de loops
 		if (estadoActualContinuaElAnterior())countLoops++;
-			// si el estado anterior es una pinia y el actual tmb se retrocede el contador para que tire una segunda pinia
-		else if(estadoAnterior == ACC_PINIA_ALTA && estadoActual == ACC_PINIA_ALTA) countLoops = countLoops-2;
-		else if(estadoAnterior == ACC_PINIA_BAJA && estadoActual == ACC_PINIA_BAJA) countLoops = countLoops-2;
+		else if(realizarsegundaPinia()) countLoops = countLoops-2;
 		else countLoops = 1;
 	}
 	else {
@@ -47,8 +44,7 @@ void Personaje::realizarAccion(Tinput orden) {
 		estadoAnterior = estadoActual;
 		countLoops++;
 	}
-	// TODO: cambie en generarEstado que devuelvan ACC_PROTECCION cuando este saltando y demas.
-	// TODO: con esta linea cada vez que apreto una tecla de mov cuando estoy protegido pasa por el estado parado
+
 	if (loopsPara(estadoActual) < countLoops) {
 		if (estadoActual == ACC_PINIA_BAJA_AGACHADO) estadoActual = MOV_AGACHADO;
 		else if(estadoActual == ACC_PATADA_AGACHADO)estadoActual = MOV_AGACHADO;
@@ -57,17 +53,10 @@ void Personaje::realizarAccion(Tinput orden) {
 			estadoActual = MOV_PARADO;
 		}
 	}
-	//TODO: con esto anda (linea de abajo) de no pasar por el estado parado mientras esta protegido pero si despresiono el boton sigue protegido (probado con joystick)
-	//if (loopsPara(estadoActual) < countLoops && estadoActual != ACC_PROTECCION) estadoActual = MOV_PARADO;
-
 	posicionAnterior = rectanguloPj.p;
-
 	if (poder->estado == ACTIVADO) poder->avanzar(velocidadDelPoder);
-
 	rectanguloPj = llevarACabo.laAccion(estadoActual, countLoops, rectanguloPj.p, sentidoPj, direccionPj);
-
 	if (poder->estado == COLISION) poder->setEstado(DESACTIVADO);
-
 }
 
 bool Personaje::puedoRealizarAccion(TestadoPersonaje accion) {
@@ -303,9 +292,14 @@ TestadoPersonaje Personaje::generarEstado(Tinput orden) {
 	}
 }
 
-void Personaje::reducirVida(float danio) {
+void Personaje::reducirVida(float danio, TestadoPersonaje reaccion) {
+	if(estadoActual == ACC_PROTECCION || estadoActual == ACC_PROTECCION_AGACHADO) danio = danio/2;
 	if(vida <= danio) vida = 0;
 	else vida = vida - danio;
+	if(estadoActual != ACC_PROTECCION && estadoActual != ACC_PROTECCION_AGACHADO) {
+		estadoAnterior = estadoActual;
+		estadoActual = reaccion;
+	}
 }
 
 bool Personaje::estadoActualContinuaElAnterior() {
@@ -329,4 +323,9 @@ void Personaje::setPosicion(Posicion posicion) {
 Personaje::~Personaje(){
 	delete poder;
 	delete golpe;
+}
+
+bool Personaje::realizarsegundaPinia() {
+	return ((estadoAnterior == ACC_PINIA_ALTA && estadoActual == ACC_PINIA_ALTA)||
+			(estadoAnterior == ACC_PINIA_BAJA && estadoActual == ACC_PINIA_BAJA));
 }

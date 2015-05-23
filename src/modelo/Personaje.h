@@ -51,7 +51,7 @@ public:
 	void modificarPosicion(Posicion nuevaPosicion);
 
 	void realizarAccion(Tinput orden);
-	void reducirVida(float danio);
+	void reducirVida(float danio,TestadoPersonaje reaccion);
 	void empujado(float desplazamiento, Tdireccion direccion);
 	void setPosicion(Posicion posicion);
 	~Personaje();
@@ -60,6 +60,7 @@ public:
 
 	bool estadoActualContinuaElAnterior();
 
+	bool realizarsegundaPinia();
 };
 
 #endif /* PERSONAJE_H_ */
