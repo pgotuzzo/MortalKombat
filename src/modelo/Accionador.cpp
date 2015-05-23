@@ -144,8 +144,6 @@ Trect Accionador::laAccion(TestadoPersonaje estadoPj, int loops, Posicion pos, T
         case REA_PINIA_ALTA:
             reaccionTrasPiniaAlta(loops,direccion);
             break;
-        case REA_LEVANTARSE:
-            break;
     }
     return rectaDelPj;
 }

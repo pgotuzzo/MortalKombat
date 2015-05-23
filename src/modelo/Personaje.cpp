@@ -292,9 +292,14 @@ TestadoPersonaje Personaje::generarEstado(Tinput orden) {
 	}
 }
 
-void Personaje::reducirVida(float danio) {
+void Personaje::reducirVida(float danio, TestadoPersonaje reaccion) {
+	if(estadoActual == ACC_PROTECCION || estadoActual == ACC_PROTECCION_AGACHADO) danio = danio/2;
 	if(vida <= danio) vida = 0;
 	else vida = vida - danio;
+	if(estadoActual != ACC_PROTECCION && estadoActual != ACC_PROTECCION_AGACHADO) {
+		estadoAnterior = estadoActual;
+		estadoActual = reaccion;
+	}
 }
 
 bool Personaje::estadoActualContinuaElAnterior() {

@@ -214,12 +214,7 @@ bool DetectorDeColisiones::hayEfectoTunel(ObjetoColisionable *objeto1, ObjetoCol
 
 // resuelve la colision entre golpe y personaje
 void DetectorDeColisiones::resolverColision(Personaje *PJ,Golpe *golpe) {
-    if (PJ->estadoActual == ACC_PROTECCION || PJ->estadoActual ==ACC_PROTECCION_AGACHADO) PJ->reducirVida(golpe->danio/2);
-    else PJ->reducirVida(golpe->danio);
-    PJ->estadoAnterior = PJ->estadoActual;
-    PJ->estadoActual = golpe->efectoSobreOponente;
-
-    // Ajustar la superrectanguloPj.picion del golpe con el personaje si es necesario
+    PJ->reducirVida(golpe->danio,golpe->efectoSobreOponente);
 }
 
 void DetectorDeColisiones::resolverColisionconPantalla(Personaje *PJ1,Personaje* PJ2) {
@@ -269,7 +264,6 @@ void DetectorDeColisiones::colisionar(Personaje *PJ, Poder *poder) {
     if((distanciaPJPoder < velocidadDelPoder && detectarColisionenY(PJ,poder)) && !poder->primerLoop){
         poder->avanzar(distanciaPJPoder);
         poder->estado = COLISION;
-        if(PJ->estadoActual == ACC_PROTECCION)PJ->reducirVida(poder->danio/2);
-        else PJ->reducirVida(poder->danio);
+        PJ->reducirVida(poder->danio,poder->efecto);
     }
 }
