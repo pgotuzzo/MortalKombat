@@ -21,6 +21,9 @@ class Personaje: public ObjetoColisionable{
 public:
 
 	string nombre;
+
+	Posicion posInicial;
+
 	TestadoPersonaje estadoActual;
 	TestadoPersonaje estadoAnterior;
 
@@ -55,6 +58,8 @@ public:
 	void empujado(float desplazamiento, Tdireccion direccion);
 	void setPosicion(Posicion posicion);
 	~Personaje();
+
+	void reinicializar();
 
 	void verificarDireccion(Tinput tinput);
 

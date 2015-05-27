@@ -2,11 +2,7 @@
 #include "../parser/config.h"
 #include "Mundo.h"
 
-const float delta = 5.00;
-const float deltaLejania = 80;
-const float deltaCero = 0;
-const float deltaParaPelea = 25.00;
-const float deltaParaPoder = 5.00;
+const int tiempoInicialRound = 99;
 
 /* Constructor de Mundo.
  * Recibe la configuracion que se devuelve del parser.
@@ -47,12 +43,13 @@ Mundo::Mundo(config configuracion) {
 	colisionador = DetectorDeColisiones(anchoVentana,anchoEscenario);
 
 	anchoPantalla = configuracion.getVentana().ancho;
+
+	roundsPJ1 = roundsPJ2 = 0;
+
+	tiempoRound = tiempoInicialRound;
+
+	tiempoInicial = SDL_GetTicks();
 }
-
-
-vector<Personaje*> Mundo::getPersonajes(){
-	return vector<Personaje*> {personaje1,personaje2};
-};
 
 void Mundo::verificarDireccionDeLosPersonajes() {
 	//direccion derecha igual true
@@ -92,6 +89,15 @@ vector<Tcambio> Mundo::actualizarMundo(vector<Tinput> inputs) {
 	vector<Tcambio> c;
 	Tcambio cambio1, cambio2;
 
+	verificarGanadorDelRound();
+	Uint32 tiempo = SDL_GetTicks();
+	//cout<<tiempoInicial<<"----"<<tiempo<<endl;
+	if(SDL_TICKS_PASSED(tiempo, tiempoInicial + 1000)) {
+		tiempoInicial = tiempo;
+		tiempoRound--;
+	}
+
+
 	//Verifica y da vuelta la direccion de los personajes si se pasan
 	verificarDireccionDeLosPersonajes();
 
@@ -112,19 +118,11 @@ vector<Tcambio> Mundo::actualizarMundo(vector<Tinput> inputs) {
 }
 
 
+
+
+
 bool Mundo::huboGanador() {
-	string mensaje;
-	if(personaje1->vida == 0){
-		mensaje = "Ganador: "+personaje2->nombre+" ---> Personaje 2";
-		loguer->loguear(mensaje.c_str(),Log::LOG_DEB);
-		return true;
-	}
-	if(personaje2->vida == 0){
-		mensaje = "Ganador: "+personaje1->nombre+" ---> Personaje 1";
-		loguer->loguear(mensaje.c_str(),Log::LOG_DEB);
-		return true;
-	}
-	return false;
+	return roundsPJ1 == 2 || roundsPJ2 == 2;
 }
 
 
@@ -135,3 +133,52 @@ Mundo::~Mundo() {
 	loguer->loguear("Se libero a los personajes", Log::LOG_DEB);
 }
 
+void Mundo::verificarGanadorDelRound() {
+	string mensaje;
+	mensaje = "Ganador Round N°" + to_string(roundsPJ1 + roundsPJ2) + ": ";
+	if(tiempoRound >= 0) {
+		if (personaje1->vida == 0) {
+			mensaje = mensaje + personaje2->nombre + " ---> Personaje 2";
+			loguer->loguear(mensaje.c_str(), Log::LOG_DEB);
+			personaje1->reinicializar();
+			personaje2->reinicializar();
+			roundsPJ1++;
+			tiempoRound = tiempoInicialRound;
+		}
+		else {
+			if (personaje2->vida == 0) {
+				mensaje = mensaje + personaje1->nombre + " ---> Personaje 1";
+				loguer->loguear(mensaje.c_str(), Log::LOG_DEB);
+				personaje1->reinicializar();
+				personaje2->reinicializar();
+				roundsPJ2++;
+				tiempoRound = tiempoInicialRound;
+			}
+		}
+	}
+	else{
+		if (personaje1->vida == personaje2->vida) {
+			loguer->loguear("EMPATARONNNN", Log::LOG_DEB);
+			personaje1->reinicializar();
+			personaje2->reinicializar();
+			roundsPJ1++;
+			tiempoRound = tiempoInicialRound;
+		}
+		else if(personaje1->vida > personaje2->vida){
+			mensaje = mensaje + personaje1->nombre + " ---> Personaje 1";
+			loguer->loguear(mensaje.c_str(), Log::LOG_DEB);
+			personaje1->reinicializar();
+			personaje2->reinicializar();
+			roundsPJ2++;
+			tiempoRound = tiempoInicialRound;
+		}
+		else{
+			mensaje = mensaje + personaje2->nombre + " ---> Personaje 2";
+			loguer->loguear(mensaje.c_str(), Log::LOG_DEB);
+			personaje1->reinicializar();
+			personaje2->reinicializar();
+			roundsPJ2++;
+			tiempoRound = tiempoInicialRound;
+		}
+	}
+}
