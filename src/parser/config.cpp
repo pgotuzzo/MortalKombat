@@ -679,6 +679,7 @@ void config::cargaExitosa(string parte){
 }
 
 Tventana config::getVentana(){
+	ventana.distTope = MIN_DISTANCE_FROM_BOUND;
 	return this->ventana;
 }
 
