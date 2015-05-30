@@ -1,10 +1,12 @@
 #ifndef SRC_MODELO_MUNDO_H_
 #define SRC_MODELO_MUNDO_H_
 
+#include <SDL2/SDL_stdinc.h>
 #include "../parser/config.h"
 #include "Personaje.h"
 #include "../Common.h"
 #include "DetectorDeColisiones.h"
+#include "SDL2/SDL.h"
 
 class Mundo {
 private:
@@ -15,27 +17,22 @@ private:
 	Personaje* personaje2;
 	float anchoPantalla;
 
+	int roundsPJ1, roundsPJ2;
+	int tiempoRound;
+
+	Uint32 tiempoInicial;
+
 public:
 	DetectorDeColisiones colisionador;
 	Mundo(config configuracion);
 
-	vector<Personaje*> getPersonajes();
-	float getAncho();
-	float getAlto();
-	float getAltoPiso();
-
-	int loopsReaccionGolpeFuerte;
 	vector<Tcambio> actualizarMundo(vector<Tinput> inputs);
 
 	virtual ~Mundo();
 
 	void verificarDireccionDeLosPersonajes();
 
-	void VerificarSiPjsColisionanaEnElAire();
-
-	void verificarQueNoSeVallaDeLaPantalla();
-
-	void verificarColision(bool generaViolencia,Personaje* agresor,Personaje* PJ,ObjetoColisionable* objeto,bool esPoder);
+	void verificarGanadorDelRound();
 
 	Tcambio actualizarPJ(Personaje* PJ);
 

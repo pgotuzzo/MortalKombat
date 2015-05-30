@@ -2,9 +2,13 @@
 #include "Personaje.h"
 
 
+const float vidaInicial = 100;
+
 Personaje::Personaje(string nombre,Tdireccion direccionInicial,Trect cuerpo, float anchoPantalla) {
 
 	this->nombre = nombre;
+
+	posInicial = cuerpo.p;
 
 	rectanguloPj = cuerpo;
 	posicionAnterior = cuerpo.p;
@@ -19,7 +23,7 @@ Personaje::Personaje(string nombre,Tdireccion direccionInicial,Trect cuerpo, flo
 
 	poder = new Poder();
 	golpe = new Golpe();
-	vida = 100;
+	vida = vidaInicial;
 
 	llevarACabo.initialize(rectanguloPj,anchoPantalla,yPiso,poder,golpe);
 	countLoops = 0;
@@ -304,11 +308,11 @@ void Personaje::reducirVida(float danio, TestadoPersonaje reaccion) {
 
 bool Personaje::estadoActualContinuaElAnterior() {
 	return (estadoAnterior == MOV_SALTANDO_OBLICUO && estadoActual == ACC_PINIA_SALTO) ||
-	(estadoAnterior == MOV_SALTANDO_OBLICUO && estadoActual == ACC_PATADA_SALTO)||
-	//Si el estado anterior era salto oblicuo y el actual patada salto o pinia salto tiene que seguir
-	// con los loops del estado anterior
-	(estadoAnterior == MOV_SALTANDO_VERTICAL && estadoActual == ACC_PINIA_SALTO_VERTICAL)||
-	(estadoAnterior == MOV_SALTANDO_VERTICAL && estadoActual == ACC_PATADA_SALTO_VERTICAL);
+		   (estadoAnterior == MOV_SALTANDO_OBLICUO && estadoActual == ACC_PATADA_SALTO)||
+		   //Si el estado anterior era salto oblicuo y el actual patada salto o pinia salto tiene que seguir
+		   // con los loops del estado anterior
+		   (estadoAnterior == MOV_SALTANDO_VERTICAL && estadoActual == ACC_PINIA_SALTO_VERTICAL)||
+		   (estadoAnterior == MOV_SALTANDO_VERTICAL && estadoActual == ACC_PATADA_SALTO_VERTICAL);
 	//Si el estado anterior era salto vertical y el actual patada salto vertical o pinia salto tiene que seguir
 	// con los loops del estado anterior
 }
@@ -328,4 +332,11 @@ Personaje::~Personaje(){
 bool Personaje::realizarsegundaPinia() {
 	return ((estadoAnterior == ACC_PINIA_ALTA && estadoActual == ACC_PINIA_ALTA)||
 			(estadoAnterior == ACC_PINIA_BAJA && estadoActual == ACC_PINIA_BAJA));
+}
+
+void Personaje::reinicializar() {
+	rectanguloPj.p = posInicial;
+	llevarACabo.rectaDelPj.p = posInicial;
+	estadoAnterior = estadoActual = MOV_PARADO;
+	vida = vidaInicial;
 }
