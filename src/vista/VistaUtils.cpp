@@ -355,7 +355,7 @@ Tdimension VistaUtils::getDimension(SDL_Texture *texture, float scales[2]) {
     return dimension;
 }
 
-VistaUtils::~VistaUtils() {
+void VistaUtils::freeTextures() {
     for (unsigned i = 0; i < mAuxTextures.size(); i++){
         SDL_DestroyTexture(mAuxTextures.at(i));
     }

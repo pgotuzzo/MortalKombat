@@ -45,7 +45,7 @@ public:
 
     Tdimension getDimension(SDL_Texture* texture, float scales[2]);
 
-    virtual ~VistaUtils();
+    void freeTextures();
 };
 
 #endif //MORTALKOMBAT_VISTAUTILS_H

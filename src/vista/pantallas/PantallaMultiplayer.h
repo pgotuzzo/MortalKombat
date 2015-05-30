@@ -3,28 +3,22 @@
 
 #include <SDL2/SDL_render.h>
 #include <vector>
-#include "capas/Capa.h"
-#include "capas/CapaInfo.h"
-#include "personajes/PersonajeVista.h"
+#include "Pantalla.h"
+#include "../capas/Capa.h"
+#include "../personajes/PersonajeVista.h"
+#include "../capas/CapaInfo.h"
 
-using namespace std;
-
-class Pantalla {
+class PantallaMultiplayer : public Pantalla{
 private:
-    SDL_Window* mWindow;
-    SDL_Renderer* mRenderer;
-    VistaUtils* mUtils;
     vector<Capa> mCapas;
     vector<PersonajeVista> mPersonajes;
     int zIndex;
-    Tdimension mDimension;
     CapaInfo capaInfo;
 
     float distTope;
     float mAnchoEscenario;
     float posEscenario;
 
-    void InicializarSdl(Tdimension d);
     void InicializarPersonajes(vector<Tpersonaje> personajes);
     void InicializarCapas(vector<Tcapa> capas, string personajes[2]);
 
@@ -38,12 +32,12 @@ public:
      * escenario : formato del escenario.
      * personaje : formato del personaje.
      */
-    Pantalla(vector<Tcapa> capas, Tventana ventana, Tescenario escenario, vector<Tpersonaje> personajes);
+    PantallaMultiplayer(vector<Tcapa> capas, Tventana ventana, Tescenario escenario, vector<Tpersonaje> personajes);
 
     /*
      * Dibuja todos los objetos en pantalla.
      */
-    void dibujar();
+    void print();
 
     /*
      * Actualiza todos los objetos de pantalla.
@@ -53,7 +47,7 @@ public:
 
     void vibrar();
 
-    virtual ~Pantalla();
+    virtual ~PantallaMultiplayer();
 };
 
 
