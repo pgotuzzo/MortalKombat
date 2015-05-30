@@ -1,6 +1,6 @@
 #include "CapaInfo.h"
 
-const float porcBarraRelleno = 162.0/168.0;
+const float porcBarraRelleno = (const float) (162.0/168.0);
 const float porcTamBarraPantallaX = 0.35;
 const float porcTamBarraPantallaY = 0.05;
 const float porcDistBarraPantallaX = 0.05;
@@ -22,7 +22,7 @@ CapaInfo::CapaInfo() {}
 *  anchoCapa : ancho total de la capa en unidades.
 */
 CapaInfo::CapaInfo(VistaUtils* utils, Tdimension dimPantalla, string nombres[2]) {
-    mUtils= utils;
+    mUtils = utils;
 
     // Barras de vida
     float anchoBarra = dimPantalla.w * porcTamBarraPantallaX;
@@ -32,12 +32,13 @@ CapaInfo::CapaInfo(VistaUtils* utils, Tdimension dimPantalla, string nombres[2])
     barraVidaCompletaText.d = Tdimension(anchoBarra, altoBarra);
 
     barraVidaParcialText = mUtils->loadTexture(dirPathVidaVerde);
+    barraVidaParcialText.d = Tdimension(anchoBarra, altoBarra);
 
     barraVidaCompleta1.d = Tdimension(anchoBarra, altoBarra);
     barraVidaCompleta2.d = Tdimension(anchoBarra, altoBarra);
 
     float posX1 = dimPantalla.w * porcDistBarraPantallaX;
-    float posX2 = dimPantalla.w - anchoBarra-posX1;
+    float posX2 = dimPantalla.w - anchoBarra - posX1;
     float posY = dimPantalla.h * porcDistBarraPantallaY;
     barraVidaCompleta1.p = Posicion(posX1, posY);
     barraVidaCompleta2.p = Posicion(posX2, posY);
