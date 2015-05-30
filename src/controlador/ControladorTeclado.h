@@ -8,8 +8,8 @@ using namespace std;
 
 class ControladorTeclado {
 private:
-    Tinput esAnterior1(const Uint8 *state);
-    Tinput esAnterior2(const Uint8 *state);
+    Tinput esAnterior1(const unsigned char *state);
+    Tinput esAnterior2(const unsigned char *state);
 public:
     Tinput inputAnterior1;
     Tinput inputAnterior2;
