@@ -62,8 +62,8 @@ set(SOURCE_FILES
     src/vista/capas/Capa.cpp
     src/vista/capas/Capa.h
     src/vista/capas/CapaInfo.cpp
-    src/vista/Pantalla.h
-    src/vista/Pantalla.cpp
+    src/vista/pantallas/PantallaMultiplayer.h
+    src/vista/pantallas/PantallaMultiplayer.cpp
     src/vista/VistaUtils.h
     src/vista/VistaUtils.cpp
     src/vista/personajes/PersonajeVista.h
@@ -72,10 +72,15 @@ set(SOURCE_FILES
     src/vista/personajes/PoderVista.cpp
     src/vista/personajes/Sprite.h
     src/vista/personajes/Sprite.cpp
+    src/vista/pantallas/MenuModoJuego.cpp
+    src/vista/pantallas/MenuModoJuego.h
+    src/vista/pantallas/Pantalla.cpp
+    src/vista/pantallas/Pantalla.h
 
     # Main
     src/Common.h
     src/main.cpp
+    src/Game.cpp src/Game.h
 
     # Controlador
     src/controlador/ControladorTeclado.h
@@ -84,7 +89,7 @@ set(SOURCE_FILES
     src/controlador/ControladorJoystick.cpp
     )
 
-add_executable(MortalKombat ${SOURCE_FILES} )
+add_executable(MortalKombat ${SOURCE_FILES})
 
 # Bibliotecas
 target_link_libraries(MortalKombat
