@@ -502,6 +502,7 @@ enum class TinputGame{
     KEY_NADA,
 
     KEY_RESTART,
+    KEY_ESC,
     KEY_EXIT
 };
 
@@ -510,9 +511,9 @@ enum class TinputGame{
  *  juego debe ser capaz de manejar.
  */
 struct Tinput{
-    TinputMovimiento movimiento=TinputMovimiento::KEY_NADA;
-    TinputAccion accion=TinputAccion::KEY_NADA;
-    TinputGame game= TinputGame::KEY_NADA;
+    TinputMovimiento movimiento = TinputMovimiento::KEY_NADA;
+    TinputAccion accion = TinputAccion::KEY_NADA;
+    TinputGame game = TinputGame::KEY_NADA;
 };
 
 
