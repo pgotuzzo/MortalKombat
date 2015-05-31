@@ -15,6 +15,7 @@ Poder::Poder(string creador) {
     danio = danioPoder;
     primerLoop = false;
     if(creador.compare("subzero") == 0) efecto = REA_CONGELADO;
+    else if(creador.compare("ermac") == 0)efecto = REA_PODER_ERMAC;
     else efecto = REA_GOLPE_ALTO;
 }
 

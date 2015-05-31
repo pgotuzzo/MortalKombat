@@ -27,13 +27,14 @@ Personaje::Personaje(string nombre,Tdireccion direccionInicial,Trect cuerpo, flo
 
 	llevarACabo.initialize(rectanguloPj,anchoPantalla,yPiso,poder,golpe);
 	countLoops = 0;
-
+	debuff = 0;
 }
 
 
 void Personaje::realizarAccion(Tinput orden) {
 
 	TestadoPersonaje estadoCompuesto = generarEstado(orden);
+	verificarDebuff();
 
 	if (puedoRealizarAccion(estadoCompuesto)) {
 		estadoAnterior = estadoActual;
@@ -340,4 +341,16 @@ void Personaje::reinicializar() {
 	llevarACabo.rectaDelPj.p = posInicial;
 	estadoAnterior = estadoActual = MOV_PARADO;
 	vida = vidaInicial;
+}
+
+void Personaje::debuffVida(int danio) {
+	vida = vida -danio;
+}
+
+void Personaje::verificarDebuff() {
+	if(estadoActual == REA_PODER_ERMAC && debuff == 0) debuff = 120;
+	if(debuff>0){
+		if(debuff%30 == 0) debuffVida(1);
+		debuff--;
+	}
 }

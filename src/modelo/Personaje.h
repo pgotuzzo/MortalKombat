@@ -42,6 +42,8 @@ public:
 
 	Accionador llevarACabo;
 
+	int debuff;
+
 	Poder* poder;
 	Golpe* golpe;
 
@@ -66,6 +68,10 @@ public:
 	bool estadoActualContinuaElAnterior();
 
 	bool realizarsegundaPinia();
+
+	void debuffVida(int danio);
+
+	void verificarDebuff();
 };
 
 #endif /* PERSONAJE_H_ */
