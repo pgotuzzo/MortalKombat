@@ -68,6 +68,10 @@ public:
     Trect setPosicionPersonaje(Posicion posicion);
 
     void ajustarPiso();
+
+    void agarrado(int loops, Tdireccion direccion, Tsentido sentido);
+
+    void agarrar(int loops);
 };
 
 

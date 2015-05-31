@@ -126,8 +126,11 @@ Trect Accionador::laAccion(TestadoPersonaje estadoPj, int loops, Posicion pos, T
             saltarVerticualmente(loops);
             break;
         case ACC_AGARRE:
+            agarrar(loops);
             break;
-
+        case REA_AGARRE:
+            agarrado(loops,direccion,sentido);
+            break;
             //case Reacciones ---------------------------------
         case REA_AGACHADO:
             break;
@@ -146,8 +149,7 @@ Trect Accionador::laAccion(TestadoPersonaje estadoPj, int loops, Posicion pos, T
         case REA_PINIA_ALTA:
             //reaccionTrasPiniaAlta(loops,direccion);
             break;
-        case REA_AGARRE:
-            break;
+
     }
     return rectaDelPj;
 }
@@ -230,8 +232,8 @@ void Accionador::agachar() {
     }
 }
 void Accionador::ponerseDePie() {
-    rectaDelPj.p = rectaDelPj.p + Posicion(0,-(rectaDelPj.d.h));
-    rectaDelPj.d.h = rectaDelPj.d.h*2;
+    rectaDelPj.p = rectaDelPj.p + Posicion(0,-alturaPj/2);
+    rectaDelPj.d.h = alturaPj;
 }
 
 //--------------------------------------------------------------------------------------
@@ -427,5 +429,31 @@ Trect Accionador::setPosicionPersonaje(Posicion posicion) {
 
 void Accionador::ajustarPiso() {
     rectaDelPj.p.y = ydelPiso - rectaDelPj.d.h;
+
+}
+
+void Accionador::agarrado(int loops, Tdireccion direccion, Tsentido sentido) {
+    if(loops == 2){
+        rectaDelPj.d.h = (rectaDelPj.d.h/2) - 5;
+        direcBloqueada = direccion;
+    }else if(loops == 3){
+        if(direccion == DERECHA) rectaDelPj.p = rectaDelPj.p + Posicion(rectaDelPj.d.w,0);
+        else rectaDelPj.p = rectaDelPj.p + Posicion(-rectaDelPj.d.w,0);
+    }else if(loops>3){
+        if(loops <= ((loopsPara(MOV_SALTANDO_OBLICUO)/2)-2)){
+            subirEnSaltoOblicuo(intervaloSaltoOblicuo*3,intervaloSaltoOblicuo,sentido);
+        }else{
+            bajarEnSaltoOblicuo(intervaloSaltoOblicuo*3,intervaloSaltoOblicuo,sentido);
+        }
+    }
+    if(loops == 10) ponerseDePie();
+}
+
+void Accionador::agarrar(int loops) {
+    if(loops == 2){
+        rectaDelPj.d.h = (rectaDelPj.d.h/2) - 5;
+        rectaDelPj.p = rectaDelPj.p + Posicion(0,rectaDelPj.d.h+10);
+    }
+    if(loops == 10) ponerseDePie();
 
 }
