@@ -338,7 +338,7 @@ struct Tcapa {
  * Estructuras y enums propios de los
  *  Personajes
  */
-static const int TestadoPersonajeCount = 31;
+static const int TestadoPersonajeCount = 32;
 
 enum TestadoPersonaje {
     // Movimient
@@ -384,7 +384,8 @@ enum TestadoPersonaje {
     REA_PATADA_BARRIDA, // patada baja (+ atras)
     REA_PINIA_ALTA,
     REA_CAIDA,
-    REA_AGARRE
+    REA_AGARRE,
+    REA_CONGELADO,
 
 
 };
@@ -425,6 +426,7 @@ static string TestadoPersonajeToString(TestadoPersonaje e){
         case TestadoPersonaje::REA_PATADA_BARRIDA: return "rea_patada_barrida";
         case TestadoPersonaje::REA_PINIA_ALTA: return "rea_pinia_alta";
         case TestadoPersonaje::REA_AGARRE: return "rea_agarre";
+        case TestadoPersonaje::REA_CONGELADO: return "rea_congelado";
 
 
 
@@ -590,13 +592,17 @@ static int loopsPara(TestadoPersonaje accion){
             return 10;
         case ACC_AGARRE:
             return 10;
+        case REA_CONGELADO:
+            return 40;
     }
 }
 
 static int mostrarEstado(TestadoPersonaje accion){
 
     switch (accion){
-
+        case REA_CONGELADO:
+            cout<<"REA_CONGELADO"<<endl;
+            break;
         case MOV_PARADO:
             cout<<"MOV_PARADO"<<endl;
             break;

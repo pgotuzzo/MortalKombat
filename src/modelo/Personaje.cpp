@@ -21,7 +21,7 @@ Personaje::Personaje(string nombre,Tdireccion direccionInicial,Trect cuerpo, flo
 	direccionPj = direccionInicial;
 	sentidoPj = ADELANTE;
 
-	poder = new Poder();
+	poder = new Poder(nombre);
 	golpe = new Golpe();
 	vida = vidaInicial;
 
@@ -45,6 +45,7 @@ void Personaje::realizarAccion(Tinput orden) {
 	}
 	else {
 		if (estadoActual == REA_GOLPE_FUERTE && estadoAnterior != REA_GOLPE_FUERTE) countLoops = 0;
+		if (estadoActual == REA_CONGELADO && estadoAnterior!= REA_CONGELADO) countLoops =0 ;
 		estadoAnterior = estadoActual;
 		countLoops++;
 	}

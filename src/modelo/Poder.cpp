@@ -8,13 +8,14 @@ const float proporcionPosYPoder = 0.2;
 const float proporcionPosXPoder = 0.52;
 const float danioPoder = 5;
 
-Poder::Poder() {
+Poder::Poder(string creador) {
     estado = DESACTIVADO;
     rectanguloPoder.d.w = anchoPoder;
     rectanguloPoder.d.h = altoPoder;
     danio = danioPoder;
     primerLoop = false;
-    efecto = REA_GOLPE_ALTO;
+    if(creador.compare("subzero") == 0) efecto = REA_CONGELADO;
+    else efecto = REA_GOLPE_ALTO;
 }
 
 void Poder::activar(Trect rectPJ,Tdireccion direccion,float anchoPantalla) {

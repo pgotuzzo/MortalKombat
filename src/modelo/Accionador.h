@@ -72,6 +72,10 @@ public:
     void agarrado(int loops, Tdireccion direccion, Tsentido sentido);
 
     void agarrar(int loops);
+
+    Posicion posCongelado;
+
+    void congelado();
 };
 
 

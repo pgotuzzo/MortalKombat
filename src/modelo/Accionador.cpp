@@ -40,6 +40,7 @@ void Accionador::initialize(Trect rectan, float anchoPanta, float yPiso,Poder* n
     golpe = nuevoGolpe;
     this->poder = nuevoPoder;
     alturaPj = rectan.d.h;
+    posCongelado = rectan.p;
 
 }
 
@@ -148,6 +149,14 @@ Trect Accionador::laAccion(TestadoPersonaje estadoPj, int loops, Posicion pos, T
             break;
         case REA_PINIA_ALTA:
             //reaccionTrasPiniaAlta(loops,direccion);
+            break;
+        case REA_CONGELADO:
+            cout<<loops<<endl;
+            if(loops == 1) {
+                posCongelado = rectaDelPj.p;
+                posCongelado.mostrarPar();
+            }
+            congelado();
             break;
 
     }
@@ -455,5 +464,10 @@ void Accionador::agarrar(int loops) {
         rectaDelPj.p = rectaDelPj.p + Posicion(0,rectaDelPj.d.h+10);
     }
     if(loops == 10) ponerseDePie();
+
+}
+
+void Accionador::congelado() {
+    rectaDelPj.p = posCongelado;
 
 }

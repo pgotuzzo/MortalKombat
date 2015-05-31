@@ -17,7 +17,7 @@ public:
     TestadoPersonaje efecto;
 
 
-    Poder();
+    Poder(string creador);
     void activar(Trect rectPJ,Tdireccion direccion,float anchoPantalla);
     void avanzar(float avance);
     void setEstado(TestadoPoder nuevoEstado);

@@ -114,26 +114,18 @@ vector<Tcambio> Mundo::actualizarMundo(vector<Tinput> inputs) {
 	personaje2->realizarAccion(inputs[0]);
 	// COLISIONES
 	colisionador.resolverColisiones(personaje1,personaje2);
-
 	//Se actualizan a los personajes
 	cambio1 = actualizarPJ(personaje1);
 	cambio2 = actualizarPJ(personaje2);
 
 	c.push_back(cambio1);
 	c.push_back(cambio2);
-
 	return c;
 }
-
-
-
-
 
 bool Mundo::huboGanador() {
 	return roundsPJ1 == 2 || roundsPJ2 == 2;
 }
-
-
 
 Mundo::~Mundo() {
 	delete personaje1;
