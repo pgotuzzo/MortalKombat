@@ -69,8 +69,6 @@ public:
 
 	bool realizarsegundaPinia();
 
-	void debuffVida(int danio);
-
 	void verificarDebuff();
 };
 

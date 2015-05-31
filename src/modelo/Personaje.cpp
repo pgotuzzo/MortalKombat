@@ -343,14 +343,13 @@ void Personaje::reinicializar() {
 	vida = vidaInicial;
 }
 
-void Personaje::debuffVida(int danio) {
-	vida = vida -danio;
-}
-
 void Personaje::verificarDebuff() {
-	if(estadoActual == REA_PODER_ERMAC && debuff == 0) debuff = 120;
+	//Activa el debuff y cada 30 loops le saca 1 de vida
+	if(estadoActual == REA_PODER_ERMAC && debuff == 0) debuff = 150;
 	if(debuff>0){
-		if(debuff%30 == 0) debuffVida(1);
+		if(debuff%30 == 0) {
+			vida = vida - 1;
+		}
 		debuff--;
 	}
 }
