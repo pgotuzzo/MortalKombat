@@ -441,10 +441,10 @@ void Accionador::ajustarPiso() {
 }
 
 void Accionador::agarrado(int loops, Tdireccion direccion, Tsentido sentido) {
-    if(loops == 4){
+
+    if(loops == 6){
         rectaDelPj.d.h = (rectaDelPj.d.h/2) - 5;
         direcBloqueada = direccion;
-    }else if(loops == 6){
         if(direccion == DERECHA) rectaDelPj.p = rectaDelPj.p + Posicion(rectaDelPj.d.w/2,0);
         else rectaDelPj.p = rectaDelPj.p + Posicion(-rectaDelPj.d.w/2,0);
     }else if(loops == 7){
