@@ -17,6 +17,7 @@
 #include "parser/log/WarningLog.h"
 #include "parser/log/DebugLog.h"
 #include "parser/log/ErrorLog.h"
+#include "SDL2/SDL.h"
 
 /**
  * Constantes
@@ -518,6 +519,19 @@ struct Tinput{
     TinputMovimiento movimiento = TinputMovimiento::KEY_NADA;
     TinputAccion accion = TinputAccion::KEY_NADA;
     TinputGame game = TinputGame::KEY_NADA;
+
+    unsigned int tiempo;
+
+    bool operator==(Tinput input){
+        return (input.movimiento == movimiento) && (input.accion == accion);
+    }
+};
+
+struct TComboData{
+    unsigned int tiempoMaximo;
+    string nombre;
+    int tolerancia;
+    vector<Tinput> teclas;
 };
 
 

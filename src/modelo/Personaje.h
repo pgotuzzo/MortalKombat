@@ -13,6 +13,7 @@
 #include "Poder.h"
 #include "Golpe.h"
 #include "Accionador.h"
+#include "Combo.h"
 
 
 using namespace std;
@@ -33,6 +34,7 @@ public:
 	Tdireccion direccionPj;
 	Tsentido sentidoPj;
 
+	Combo* combo;
 
 	float vida;
 

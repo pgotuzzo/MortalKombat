@@ -23,6 +23,19 @@ Personaje::Personaje(string nombre,Tdireccion direccionInicial,Trect cuerpo, flo
 
 	poder = new Poder(nombre);
 	golpe = new Golpe();
+
+	Tinput input1,input2,input3;
+	input1.movimiento = TinputMovimiento::KEY_ABAJO;
+	input2.movimiento = TinputMovimiento::KEY_IZQUIERDA;
+	input3.accion = TinputAccion::KEY_PINIA_ALTA;
+	TComboData datosCombo;
+	datosCombo.tiempoMaximo = 5000;
+	datosCombo.tolerancia = 10;
+	datosCombo.nombre = "Poder";
+	datosCombo.teclas = {input1,input2,input3};
+
+	combo = new Combo(datosCombo);
+
 	vida = vidaInicial;
 
 	llevarACabo.initialize(rectanguloPj,anchoPantalla,yPiso,poder,golpe);
@@ -59,6 +72,13 @@ void Personaje::realizarAccion(Tinput orden) {
 			estadoActual = MOV_PARADO;
 		}
 	}
+
+	combo->actualizar(orden);
+	if(combo->puedoRealizarCombo()){
+		estadoAnterior = MOV_PARADO;
+		estadoActual = ACC_PODER;
+	}
+
 	posicionAnterior = rectanguloPj.p;
 	if (poder->estado == ACTIVADO) poder->avanzar(velocidadDelPoder);
 	rectanguloPj = llevarACabo.laAccion(estadoActual, countLoops, rectanguloPj.p, sentidoPj, direccionPj);
