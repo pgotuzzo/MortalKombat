@@ -605,9 +605,9 @@ static int loopsPara(TestadoPersonaje accion){
         case REA_CAIDA:
             return 8;
         case REA_AGARRE:
-            return 10;
+            return 13;
         case ACC_AGARRE:
-            return 10;
+            return 9;
         case REA_CONGELADO:
             return 40;
         case REA_PODER_ERMAC:

@@ -151,7 +151,6 @@ Trect Accionador::laAccion(TestadoPersonaje estadoPj, int loops, Posicion pos, T
             //reaccionTrasPiniaAlta(loops,direccion);
             break;
         case REA_CONGELADO:
-            cout<<loops<<endl;
             if(loops == 1) {
                 posCongelado = rectaDelPj.p;
                 posCongelado.mostrarPar();
@@ -442,13 +441,16 @@ void Accionador::ajustarPiso() {
 }
 
 void Accionador::agarrado(int loops, Tdireccion direccion, Tsentido sentido) {
-    if(loops == 2){
+    if(loops == 4){
         rectaDelPj.d.h = (rectaDelPj.d.h/2) - 5;
         direcBloqueada = direccion;
-    }else if(loops == 3){
-        if(direccion == DERECHA) rectaDelPj.p = rectaDelPj.p + Posicion(rectaDelPj.d.w,0);
-        else rectaDelPj.p = rectaDelPj.p + Posicion(-rectaDelPj.d.w,0);
-    }else if(loops>3){
+    }else if(loops == 6){
+        if(direccion == DERECHA) rectaDelPj.p = rectaDelPj.p + Posicion(rectaDelPj.d.w/2,0);
+        else rectaDelPj.p = rectaDelPj.p + Posicion(-rectaDelPj.d.w/2,0);
+    }else if(loops == 7){
+        if(direccion == DERECHA) rectaDelPj.p = rectaDelPj.p + Posicion(rectaDelPj.d.w/2,0);
+        else rectaDelPj.p = rectaDelPj.p + Posicion(-rectaDelPj.d.w/2,0);
+    }else if(loops >7){
         if(loops <= ((loopsPara(MOV_SALTANDO_OBLICUO)/2)-2)){
             subirEnSaltoOblicuo(intervaloSaltoOblicuo*3,intervaloSaltoOblicuo,sentido);
         }else{
@@ -463,7 +465,7 @@ void Accionador::agarrar(int loops) {
         rectaDelPj.d.h = (rectaDelPj.d.h/2) - 5;
         rectaDelPj.p = rectaDelPj.p + Posicion(0,rectaDelPj.d.h+10);
     }
-    if(loops == 10) ponerseDePie();
+    if(loops == 9) ponerseDePie();
 
 }
 

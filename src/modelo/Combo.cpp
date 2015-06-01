@@ -20,7 +20,7 @@ bool Combo::teclaPresionada(Tinput input) {
 
 void Combo::actualizar(Tinput input) {
 
-    cout<<errores<<endl;
+//    cout<<errores<<endl;
     // El tiempo se comienza a contar luego de la primer tecla correcta
     if(ocurrencias > 0) tiempoFinal = input.tiempo;
 
