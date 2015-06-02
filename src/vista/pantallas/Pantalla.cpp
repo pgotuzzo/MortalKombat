@@ -43,6 +43,9 @@ Pantalla::Pantalla(Tdimension dimPixels, Tdimension dimUl) {
     mUtils = new VistaUtils(mRenderer, mDimension.w / mDimension.h, scales);
 }
 
+void Pantalla::update(vector<Tcambio> changes) {}
+void Pantalla::update(EmodeSelection selection) {}
+
 Pantalla::~Pantalla(){
     loguer->loguear("Destruccion de la pantalla", Log::LOG_DEB);
     mUtils->freeTextures();
@@ -54,3 +57,4 @@ Pantalla::~Pantalla(){
     TTF_Quit();
     SDL_Quit();
 }
+

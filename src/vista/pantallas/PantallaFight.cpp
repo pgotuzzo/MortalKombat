@@ -1,4 +1,4 @@
-#include "PantallaMultiplayer.h"
+#include "PantallaFight.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
@@ -11,7 +11,7 @@ const float distVibracion = 5;
  * \observacion Para que se puedan inicializar los personajes, previamente se tuvo que inicializar los
  *              componentes de SDL (mUtils)
  */
-void PantallaMultiplayer::InicializarPersonajes(vector<Tpersonaje> personajes) {
+void PantallaFight::InicializarPersonajes(vector<Tpersonaje> personajes) {
     if (mUtils == nullptr){
         loguer->loguear("No se pueden crear las vistas de los personajes sin antes inicializar SDL", Log::LOG_ERR);
         throw new exception;
@@ -43,7 +43,7 @@ void PantallaMultiplayer::InicializarPersonajes(vector<Tpersonaje> personajes) {
  * \observacion Para que se puedan inicializar las capas, previamente se tuvo que inicializar los
  *              componentes de SDL (mUtils)
  */
-void PantallaMultiplayer::InicializarCapas(vector<Tcapa> capas, string personajes[2]) {
+void PantallaFight::InicializarCapas(vector<Tcapa> capas, string personajes[2]) {
     if (mUtils == nullptr){
         loguer->loguear("No se pueden crear las vistas de las capas sin antes inicializar SDL", Log::LOG_ERR);
         throw new exception;
@@ -68,7 +68,7 @@ void PantallaMultiplayer::InicializarCapas(vector<Tcapa> capas, string personaje
  * escenario : formato del escenario.
  * personaje : formato del personaje.
  */
-PantallaMultiplayer::PantallaMultiplayer(vector<Tcapa> capas, Tventana ventana,
+PantallaFight::PantallaFight(vector<Tcapa> capas, Tventana ventana,
                                              Tescenario escenario, vector<Tpersonaje> personajes)
         : Pantalla(ventana.dimPx, Tdimension(ventana.ancho, escenario.d.h)) {
 
@@ -88,7 +88,7 @@ PantallaMultiplayer::PantallaMultiplayer(vector<Tcapa> capas, Tventana ventana,
 /*
  * Dibuja todos los objetos en pantalla.
  */
-void PantallaMultiplayer::print() {
+void PantallaFight::print() {
 
     Ttexture ventana;
     ventana.t = SDL_GetRenderTarget(mRenderer);
@@ -110,7 +110,7 @@ void PantallaMultiplayer::print() {
  * Actualiza todos los objetos de pantalla.
  * change : contiene los cambios a realizar.
  */
-void PantallaMultiplayer::update(vector<Tcambio> changes) {
+void PantallaFight::update(vector<Tcambio> changes) {
     for (unsigned i = 0; i < mPersonajes.size(); i++){
         if (mPersonajes[i].update(changes[i]))
             this->vibrar();
@@ -146,7 +146,7 @@ void PantallaMultiplayer::update(vector<Tcambio> changes) {
     capaInfo.update(changes[0].vida/100,changes[1].vida/100);
 }
 
-void PantallaMultiplayer::vibrar(){
+void PantallaFight::vibrar(){
     if (vibroADerecha) {
         posEscenario = posEscenario - distVibracion;
         vibroADerecha = false;
@@ -156,18 +156,13 @@ void PantallaMultiplayer::vibrar(){
     }
 }
 
-PantallaMultiplayer::~PantallaMultiplayer() {
+PantallaFight::~PantallaFight(){
     loguer->loguear("Destruccion de la pantalla", Log::LOG_DEB);
     for (int i = 0; i < mCapas.size(); i++)
         mCapas[i].freeTextures();
     capaInfo.freeTextures();
     for (int i = 0; i < mPersonajes.size(); i++)
         mPersonajes[i].freeTextures();
-    SDL_DestroyRenderer(mRenderer);
-    SDL_DestroyWindow(mWindow);
     loguer->loguear("Cierra SDL", Log::LOG_DEB);
-    IMG_Quit();
-    TTF_Quit();
-    SDL_Quit();
 }
 

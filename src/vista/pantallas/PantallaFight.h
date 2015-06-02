@@ -1,14 +1,14 @@
-#ifndef _MORTALKOMBAT_PANTALLA_H_
-#define _MORTALKOMBAT_PANTALLA_H_
+#ifndef _MORTALKOMBAT_PANTALLAFIGHT_H_
+#define _MORTALKOMBAT_PANTALLAFIGHT_H_
 
 #include <SDL2/SDL_render.h>
 #include <vector>
 #include "Pantalla.h"
 #include "../capas/Capa.h"
-#include "../personajes/PersonajeVista.h"
 #include "../capas/CapaInfo.h"
+#include "../personajes/PersonajeVista.h"
 
-class PantallaMultiplayer : public Pantalla{
+class PantallaFight : public Pantalla{
 private:
     vector<Capa> mCapas;
     vector<PersonajeVista> mPersonajes;
@@ -32,7 +32,7 @@ public:
      * escenario : formato del escenario.
      * personaje : formato del personaje.
      */
-    PantallaMultiplayer(vector<Tcapa> capas, Tventana ventana, Tescenario escenario, vector<Tpersonaje> personajes);
+    PantallaFight(vector<Tcapa> capas, Tventana ventana, Tescenario escenario, vector<Tpersonaje> personajes);
 
     /*
      * Dibuja todos los objetos en pantalla.
@@ -47,8 +47,8 @@ public:
 
     void vibrar();
 
-    virtual ~PantallaMultiplayer();
+    virtual ~PantallaFight();
 };
 
 
-#endif //_MORTALKOMBAT_PANTALLA_H_
+#endif //_MORTALKOMBAT_PANTALLAFIGHT_H_

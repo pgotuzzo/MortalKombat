@@ -2,6 +2,7 @@
 #define MORTALKOMBAT_PANTALLA_H
 
 
+#include "../../GameUtils.h"
 #include "../VistaUtils.h"
 
 class Pantalla {
@@ -15,7 +16,22 @@ protected:
 public:
     Pantalla(Tdimension dimPixels, Tdimension dimUl);
     virtual void print() = 0;
-    virtual void update(vector<Tcambio> changes) = 0;
+
+    /**
+     * PELEA
+     */
+    virtual void update(vector<Tcambio> changes);
+
+    /**
+     * MENU DE SELECCION DE MODOS DE JUEGO
+     */
+    virtual void update(EmodeSelection selection);
+
+    /**
+     * MENU DE SELECCION DE PERSONAJES
+     * TODO - Mas de lo mismo
+     */
+
 
     virtual ~Pantalla();
 };
