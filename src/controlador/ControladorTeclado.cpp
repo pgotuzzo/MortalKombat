@@ -491,6 +491,13 @@ vector<Tinput> ControladorTeclado::getInputs() {
 				inputs.clear();
 				inputs.push_back(aux);
 				return inputs;
+			} else if (event.key.keysym.sym == SDLK_SPACE) {
+				// TODO - SEBASTIAN. Deberia capturar el enter...no se fijate que onda. Esto se puede (y debe) cambiar
+				aux.game = TinputGame::KEY_ENTER;
+				inputs.clear();
+				inputs.push_back(aux);
+				inputs.push_back(aux);
+				return inputs;
 			}
 		};
 		default:
