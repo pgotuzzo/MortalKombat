@@ -68,14 +68,14 @@ set(SOURCE_FILES
     src/parser/log/WarningLog.cpp
 
     # Vista
+    src/vista/VistaUtils.h
+    src/vista/VistaUtils.cpp
     src/vista/capas/CapaInfo.h
     src/vista/capas/Capa.cpp
     src/vista/capas/Capa.h
     src/vista/capas/CapaInfo.cpp
     src/vista/pantallas/PantallaFight.h
     src/vista/pantallas/PantallaFight.cpp
-    src/vista/utils/VistaUtils.h
-    src/vista/utils/VistaUtils.cpp
     src/vista/personajes/PersonajeVista.h
     src/vista/personajes/PersonajeVista.cpp
     src/vista/personajes/PoderVista.h
