@@ -140,7 +140,7 @@ EgameResult Game::fight(vector<Tinput> inputs) {
             return EgameResult::END;
         default:{
             vector<Tcambio> c = mMundo->actualizarMundo(inputs);
-            mPantalla->update(c);
+            mPantalla->update(c,inputs[0]);
             mPantalla->print();
             return ( mMundo->huboGanador() ) ? EgameResult::END : EgameResult::CONTINUE;
         }

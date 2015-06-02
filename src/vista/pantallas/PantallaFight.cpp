@@ -110,7 +110,7 @@ void PantallaFight::print() {
  * Actualiza todos los objetos de pantalla.
  * change : contiene los cambios a realizar.
  */
-void PantallaFight::update(vector<Tcambio> changes) {
+void PantallaFight::update(vector<Tcambio> changes,Tinput input) {
     for (unsigned i = 0; i < mPersonajes.size(); i++){
         if (mPersonajes[i].update(changes[i]))
             this->vibrar();
@@ -143,7 +143,7 @@ void PantallaFight::update(vector<Tcambio> changes) {
         mCapas[i].ajustar(posEscenario);
     }
 
-    capaInfo.update(changes[0].vida/100,changes[1].vida/100);
+    capaInfo.update(changes[0].vida/100,changes[1].vida/100,input);
 }
 
 void PantallaFight::vibrar(){

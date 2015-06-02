@@ -4,9 +4,17 @@
 #include <string>
 #include <SDL2/SDL_render.h>
 #include "../VistaUtils.h"
+#include <queue>
+
+using namespace std;
 
 class CapaInfo {
 private:
+    struct TeclaBuffer {
+        Ttexture textura;
+        Uint32 tiempoInicial;
+    };
+
     VistaUtils* mUtils;
     Ttexture barraVidaCompletaText;
     Ttexture barraVidaParcialText;
@@ -16,6 +24,8 @@ private:
     Trect barraVidaCompleta1, barraVidaCompleta2, barraVidaParcialPedazo1,
             barraVidaParcialPedazo2, barraVidaParcialPantalla1, barraVidaParcialPantalla2,
             mNombre1Rect, mNombre2Rect;
+    vector<Trect> rectBotones;
+    queue<TeclaBuffer> buffer;
 
 
 public:
@@ -40,7 +50,7 @@ public:
     /*
      * Cambia la posicion de la capa ajustandola a la posicion del escenario
      */
-    void update(float porcVida1,float porcVida2);
+    void update(float porcVida1,float porcVida2,Tinput input);
 
     void freeTextures();
 

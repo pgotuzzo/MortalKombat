@@ -43,7 +43,7 @@ public:
      * Actualiza todos los objetos de pantalla.
      * change : contiene los cambios a realizar.
      */
-    void update(vector<Tcambio> changes);
+    void update(vector<Tcambio> changes,Tinput input);
 
     void vibrar();
 

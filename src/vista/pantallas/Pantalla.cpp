@@ -43,7 +43,7 @@ Pantalla::Pantalla(Tdimension dimPixels, Tdimension dimUl) {
     mUtils = new VistaUtils(mRenderer, mDimension.w / mDimension.h, scales);
 }
 
-void Pantalla::update(vector<Tcambio> changes) {}
+void Pantalla::update(vector<Tcambio> changes,Tinput input) {}
 void Pantalla::update(EmodeSelection selection) {}
 
 Pantalla::~Pantalla(){

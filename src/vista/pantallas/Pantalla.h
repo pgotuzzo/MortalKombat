@@ -20,7 +20,7 @@ public:
     /**
      * PELEA
      */
-    virtual void update(vector<Tcambio> changes);
+    virtual void update(vector<Tcambio> changes,Tinput input);
 
     /**
      * MENU DE SELECCION DE MODOS DE JUEGO
