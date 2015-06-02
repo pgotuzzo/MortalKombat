@@ -503,6 +503,7 @@ enum class TinputGame{
 
     KEY_RESTART,
     KEY_ESC,
+    KEY_ENTER,
     KEY_EXIT
 };
 
@@ -692,4 +693,5 @@ static int mostrarEstado(TestadoPersonaje accion){
             break;
     }
 }
+
 #endif //_MORTALKOMBAT_COMMON_H_
