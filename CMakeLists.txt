@@ -17,6 +17,14 @@ file(COPY ${RESOURCES} DESTINATION ${PROJECT_SOURCE_DIR}/bin)
 
 # Sources
 set(SOURCE_FILES
+
+    # Main
+    src/Common.h
+    src/main.cpp
+    src/Game.h
+    src/Game.cpp
+    src/GameUtils.h
+
     # Modelo
     src/modelo/Accionador.h
     src/modelo/Accionador.cpp
@@ -24,6 +32,8 @@ set(SOURCE_FILES
     src/modelo/DetectorDeColisiones.cpp
     src/modelo/Golpe.h
     src/modelo/Golpe.cpp
+    src/modelo/MenuGameMode.h
+    src/modelo/MenuGameMode.cpp
     src/modelo/Mundo.h
     src/modelo/Mundo.cpp
     src/modelo/ObjetoColisionable.h
@@ -62,25 +72,22 @@ set(SOURCE_FILES
     src/vista/capas/Capa.cpp
     src/vista/capas/Capa.h
     src/vista/capas/CapaInfo.cpp
-    src/vista/pantallas/PantallaMultiplayer.h
-    src/vista/pantallas/PantallaMultiplayer.cpp
-    src/vista/VistaUtils.h
-    src/vista/VistaUtils.cpp
+    src/vista/pantallas/PantallaFight.h
+    src/vista/pantallas/PantallaFight.cpp
+    src/vista/utils/VistaUtils.h
+    src/vista/utils/VistaUtils.cpp
     src/vista/personajes/PersonajeVista.h
     src/vista/personajes/PersonajeVista.cpp
     src/vista/personajes/PoderVista.h
     src/vista/personajes/PoderVista.cpp
     src/vista/personajes/Sprite.h
     src/vista/personajes/Sprite.cpp
-    src/vista/pantallas/MenuModoJuego.cpp
-    src/vista/pantallas/MenuModoJuego.h
+    src/vista/pantallas/PantallaMenuModoJuego.cpp
+    src/vista/pantallas/PantallaMenuModoJuego.h
     src/vista/pantallas/Pantalla.cpp
     src/vista/pantallas/Pantalla.h
 
-    # Main
-    src/Common.h
-    src/main.cpp
-    src/Game.cpp src/Game.h
+
 
     # Controlador
     src/controlador/ControladorTeclado.h
