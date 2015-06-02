@@ -85,6 +85,8 @@ Tcambio Mundo::actualizarPJ(Personaje *PJ) {
 	cambio.poder.p = PJ->poder->rectanguloPoder.p;
 	cambio.poder.e = PJ->poder->estado;
 
+	cambio.tiempoRound = tiempoRound;
+
 	return cambio;
 }
 

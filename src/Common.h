@@ -470,6 +470,7 @@ struct Tcambio{
     Tsentido sentido;
     Tdimension dPJ;
 
+    int tiempoRound;
     float vida;
 
     // Para el poder
