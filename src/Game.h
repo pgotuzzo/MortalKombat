@@ -1,15 +1,15 @@
-#ifndef MORTALKOMBAT_JUEGO_H
-#define MORTALKOMBAT_JUEGO_H
+#ifndef MORTALKOMBAT_GAME_H
+#define MORTALKOMBAT_GAME_H
 
-
-#include "parser/config.h"
+#include "GameUtils.h"
 #include "modelo/Mundo.h"
+#include "modelo/MenuGameMode.h"
+#include "parser/config.h"
 #include "vista/pantallas/Pantalla.h"
 
 class Game {
 private:
-
-    enum GameState{
+    enum class EgameState {
         // seleccion del modo practica/arcade/multiplayer
         MENU_MODE,
 
@@ -17,7 +17,7 @@ private:
         MENU_PLAYERS,
 
         // finalizar o volver al menu principal
-        MENU_END,
+        //MENU_END,
 
         /** animacion para enfrentar al siguiente oponente
          * NEXT_OPONENT_ANIMATION,
@@ -30,24 +30,30 @@ private:
     };
 
     int mLoopPeriod;
-    GameState mState;
+    EgameState mState;
+    EmodeSelection mModeSelection;
 
+    config* mConfiguration;
     Pantalla* mPantalla;
     Mundo* mMundo;
+    MenuGameMode* mMenuGameMode;
 
     // metodos privados
-    void restart();
-    bool fight(vector<Tinput> inputs);
+    void clean();
+    void initialize();
+
+    EgameResult selectMode(Tinput input);
+    EgameResult fight(vector<Tinput> inputs);
 
 
 public:
-    Game(config configuracion, const int gameloop);
+    Game(config* configuration, const int gameloop);
 
-    bool play(vector<Tinput> inputs);
+    void play(vector<Tinput> inputs);
     string getWinner();
 
     virtual ~Game();
 };
 
 
-#endif //MORTALKOMBAT_JUEGO_H
+#endif //MORTALKOMBAT_GAME_H

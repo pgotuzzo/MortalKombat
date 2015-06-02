@@ -15,13 +15,12 @@ int main(int argc, char **argv) {
     loguer->loguear("------------------INICIANDO MORTAL KOMBAT--------------------------", Log::LOG_DEB);
 
     bool endGame = false;
-    bool restart = false;
     while (!endGame) {
 
         loguer->loguear("-------------- Cargando la configuracion -------------------", Log::LOG_DEB);
         loguer->loguear("Inicia la creacion del controlador", Log::LOG_DEB);
 
-        config configuracion = config(jsonPath);
+        config* configuracion = new config(jsonPath);
 
         //TODO: Modificar los dos controladores para que devuelvan los nuevos inputs del struct Tinput
         ControladorTeclado controlador = ControladorTeclado();
@@ -31,6 +30,7 @@ int main(int argc, char **argv) {
         loguer->loguear("-------------- Iniciando el Juego -------------------", Log::LOG_DEB);
 
         Game game = Game(configuracion, frameRate);
+        bool restart = false;
         do {
             vector<Tinput> inputs = controlador.getInputs();
             switch (inputs.at(0).game) {
@@ -41,7 +41,7 @@ int main(int argc, char **argv) {
                     restart = true;
                     break;
                 default:
-                    restart = !(game.play(inputs));
+                    game.play(inputs);
             }
         } while (!restart && !endGame);
 
