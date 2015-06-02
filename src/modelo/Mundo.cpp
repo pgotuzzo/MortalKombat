@@ -53,14 +53,21 @@ Mundo::Mundo(config configuracion) {
 
 void Mundo::verificarDireccionDeLosPersonajes() {
 	//direccion derecha igual true
-	if(personaje1->rectanguloPj.p.getX() < personaje2->rectanguloPj.p.getX()){
-		personaje1->direccionPj = DERECHA;
-		personaje2->direccionPj = IZQUIERDA;
+	//TODO: ESTO DEBERIA ANDAR AL REVEZ, PERO NO ME ANDA. VER DESPUES
+	//osea pidiendo que el estado actual sea diferente de la accion y la reaccion agarre
+	// para que haga el cambio de direccion
+	if(personaje1->estadoActual == ACC_AGARRE || personaje1->estadoActual == REA_AGARRE) {
+		cout<<"No entro"<<endl;
+	}else {
+		if (personaje1->rectanguloPj.p.getX() < personaje2->rectanguloPj.p.getX()) {
+			personaje1->direccionPj = DERECHA;
+			personaje2->direccionPj = IZQUIERDA;
 
-	}
-	else if(personaje1->rectanguloPj.p.getX() > personaje2->rectanguloPj.p.getX()){
-		personaje1->direccionPj = IZQUIERDA;
-		personaje2->direccionPj = DERECHA;
+		}
+		else if (personaje1->rectanguloPj.p.getX() > personaje2->rectanguloPj.p.getX()) {
+			personaje1->direccionPj = IZQUIERDA;
+			personaje2->direccionPj = DERECHA;
+		}
 	}
 }
 
@@ -91,7 +98,7 @@ vector<Tcambio> Mundo::actualizarMundo(vector<Tinput> inputs) {
 
 	verificarGanadorDelRound();
 	Uint32 tiempo = SDL_GetTicks();
-	//cout<<tiempoInicial<<"----"<<tiempo<<endl;
+	//cout<<tiempoInicial<<"----"<<tiempo<<endl;d
 	if(SDL_TICKS_PASSED(tiempo, tiempoInicial + 1000)) {
 		tiempoInicial = tiempo;
 		tiempoRound--;
@@ -101,31 +108,24 @@ vector<Tcambio> Mundo::actualizarMundo(vector<Tinput> inputs) {
 	//Verifica y da vuelta la direccion de los personajes si se pasan
 	verificarDireccionDeLosPersonajes();
 
+
 	// Los personajes realizan sus acciones
 	personaje1->realizarAccion(inputs[1]);
 	personaje2->realizarAccion(inputs[0]);
 	// COLISIONES
 	colisionador.resolverColisiones(personaje1,personaje2);
-
 	//Se actualizan a los personajes
 	cambio1 = actualizarPJ(personaje1);
 	cambio2 = actualizarPJ(personaje2);
 
 	c.push_back(cambio1);
 	c.push_back(cambio2);
-
 	return c;
 }
-
-
-
-
 
 bool Mundo::huboGanador() {
 	return roundsPJ1 == 2 || roundsPJ2 == 2;
 }
-
-
 
 Mundo::~Mundo() {
 	delete personaje1;

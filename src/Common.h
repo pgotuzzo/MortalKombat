@@ -17,6 +17,7 @@
 #include "parser/log/WarningLog.h"
 #include "parser/log/DebugLog.h"
 #include "parser/log/ErrorLog.h"
+#include "SDL2/SDL.h"
 
 /**
  * Constantes
@@ -338,7 +339,7 @@ struct Tcapa {
  * Estructuras y enums propios de los
  *  Personajes
  */
-static const int TestadoPersonajeCount = 31;
+static const int TestadoPersonajeCount = 33;
 
 enum TestadoPersonaje {
     // Movimient
@@ -384,7 +385,9 @@ enum TestadoPersonaje {
     REA_PATADA_BARRIDA, // patada baja (+ atras)
     REA_PINIA_ALTA,
     REA_CAIDA,
-    REA_AGARRE
+    REA_AGARRE,
+    REA_CONGELADO,
+    REA_PODER_ERMAC
 
 
 };
@@ -425,6 +428,8 @@ static string TestadoPersonajeToString(TestadoPersonaje e){
         case TestadoPersonaje::REA_PATADA_BARRIDA: return "rea_patada_barrida";
         case TestadoPersonaje::REA_PINIA_ALTA: return "rea_pinia_alta";
         case TestadoPersonaje::REA_AGARRE: return "rea_agarre";
+        case TestadoPersonaje::REA_CONGELADO: return "rea_congelado";
+        case TestadoPersonaje::REA_PODER_ERMAC: return"rea_poder_ermac";
 
 
 
@@ -515,6 +520,19 @@ struct Tinput{
     TinputMovimiento movimiento = TinputMovimiento::KEY_NADA;
     TinputAccion accion = TinputAccion::KEY_NADA;
     TinputGame game = TinputGame::KEY_NADA;
+
+    unsigned int tiempo;
+
+    bool operator==(Tinput input){
+        return (input.movimiento == movimiento) && (input.accion == accion);
+    }
+};
+
+struct TComboData{
+    unsigned int tiempoMaximo;
+    string nombre;
+    int tolerancia;
+    vector<Tinput> teclas;
 };
 
 
@@ -588,16 +606,25 @@ static int loopsPara(TestadoPersonaje accion){
         case REA_CAIDA:
             return 8;
         case REA_AGARRE:
-            return 6;
+            return 13;
         case ACC_AGARRE:
-            return 8;
+            return 9;
+        case REA_CONGELADO:
+            return 40;
+        case REA_PODER_ERMAC:
+            return 6;
     }
 }
 
 static int mostrarEstado(TestadoPersonaje accion){
 
     switch (accion){
-
+        case(REA_PODER_ERMAC):
+            cout<<"REA_PODER_ERMAC"<<endl;
+            break;
+        case REA_CONGELADO:
+            cout<<"REA_CONGELADO"<<endl;
+            break;
         case MOV_PARADO:
             cout<<"MOV_PARADO"<<endl;
             break;

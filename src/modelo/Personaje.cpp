@@ -21,19 +21,33 @@ Personaje::Personaje(string nombre,Tdireccion direccionInicial,Trect cuerpo, flo
 	direccionPj = direccionInicial;
 	sentidoPj = ADELANTE;
 
-	poder = new Poder();
+	poder = new Poder(nombre);
 	golpe = new Golpe();
+
+	Tinput input1,input2,input3;
+	input1.movimiento = TinputMovimiento::KEY_ABAJO;
+	input2.movimiento = TinputMovimiento::KEY_IZQUIERDA;
+	input3.accion = TinputAccion::KEY_PINIA_ALTA;
+	TComboData datosCombo;
+	datosCombo.tiempoMaximo = 5000;
+	datosCombo.tolerancia = 10;
+	datosCombo.nombre = "Poder";
+	datosCombo.teclas = {input1,input2,input3};
+
+	combo = new Combo(datosCombo);
+
 	vida = vidaInicial;
 
 	llevarACabo.initialize(rectanguloPj,anchoPantalla,yPiso,poder,golpe);
 	countLoops = 0;
-
+	debuff = 0;
 }
 
 
 void Personaje::realizarAccion(Tinput orden) {
 
 	TestadoPersonaje estadoCompuesto = generarEstado(orden);
+	verificarDebuff();
 
 	if (puedoRealizarAccion(estadoCompuesto)) {
 		estadoAnterior = estadoActual;
@@ -45,6 +59,7 @@ void Personaje::realizarAccion(Tinput orden) {
 	}
 	else {
 		if (estadoActual == REA_GOLPE_FUERTE && estadoAnterior != REA_GOLPE_FUERTE) countLoops = 0;
+		if (estadoActual == REA_CONGELADO && estadoAnterior!= REA_CONGELADO) countLoops =0 ;
 		estadoAnterior = estadoActual;
 		countLoops++;
 	}
@@ -57,6 +72,13 @@ void Personaje::realizarAccion(Tinput orden) {
 			estadoActual = MOV_PARADO;
 		}
 	}
+
+	combo->actualizar(orden);
+	if(combo->puedoRealizarCombo()){
+		estadoAnterior = MOV_PARADO;
+		estadoActual = ACC_PODER;
+	}
+
 	posicionAnterior = rectanguloPj.p;
 	if (poder->estado == ACTIVADO) poder->avanzar(velocidadDelPoder);
 	rectanguloPj = llevarACabo.laAccion(estadoActual, countLoops, rectanguloPj.p, sentidoPj, direccionPj);
@@ -339,4 +361,15 @@ void Personaje::reinicializar() {
 	llevarACabo.rectaDelPj.p = posInicial;
 	estadoAnterior = estadoActual = MOV_PARADO;
 	vida = vidaInicial;
+}
+
+void Personaje::verificarDebuff() {
+	//Activa el debuff y cada 30 loops le saca 1 de vida
+	if(estadoActual == REA_PODER_ERMAC && debuff == 0) debuff = 150;
+	if(debuff>0){
+		if(debuff%30 == 0) {
+			vida = vida - 1;
+		}
+		debuff--;
+	}
 }

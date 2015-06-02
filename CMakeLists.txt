@@ -28,6 +28,8 @@ set(SOURCE_FILES
     # Modelo
     src/modelo/Accionador.h
     src/modelo/Accionador.cpp
+    src/modelo/Combo.h
+    src/modelo/Combo.cpp
     src/modelo/DetectorDeColisiones.h
     src/modelo/DetectorDeColisiones.cpp
     src/modelo/Golpe.h

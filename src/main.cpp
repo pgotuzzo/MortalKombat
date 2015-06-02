@@ -33,6 +33,10 @@ int main(int argc, char **argv) {
         bool restart = false;
         do {
             vector<Tinput> inputs = controlador.getInputs();
+            if(inputs[0].game == TinputGame::KEY_NADA) {
+                inputs[0].tiempo = SDL_GetTicks();
+                inputs[1].tiempo = SDL_GetTicks();
+            }
             switch (inputs.at(0).game) {
                 case TinputGame::KEY_EXIT:
                     endGame = true;

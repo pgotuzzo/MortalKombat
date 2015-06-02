@@ -13,6 +13,7 @@
 #include "Poder.h"
 #include "Golpe.h"
 #include "Accionador.h"
+#include "Combo.h"
 
 
 using namespace std;
@@ -33,6 +34,7 @@ public:
 	Tdireccion direccionPj;
 	Tsentido sentidoPj;
 
+	Combo* combo;
 
 	float vida;
 
@@ -41,6 +43,8 @@ public:
 	int countLoops;
 
 	Accionador llevarACabo;
+
+	int debuff;
 
 	Poder* poder;
 	Golpe* golpe;
@@ -66,6 +70,8 @@ public:
 	bool estadoActualContinuaElAnterior();
 
 	bool realizarsegundaPinia();
+
+	void verificarDebuff();
 };
 
 #endif /* PERSONAJE_H_ */
