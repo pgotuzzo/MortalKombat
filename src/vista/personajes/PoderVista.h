@@ -1,9 +1,9 @@
+#ifndef MORTALKOMBAT_PODERVISTAA_H
+#define MORTALKOMBAT_PODERVISTAA_H
+
 #include <array>
 #include "../../Common.h"
 #include "Sprite.h"
-
-#ifndef MORTALKOMBAT_PODERVISTAA_H
-#define MORTALKOMBAT_PODERVISTAA_H
 
 class PoderVista {
 private:

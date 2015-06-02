@@ -2,10 +2,7 @@
 #define _MORTALKOMBAT_PERSONAJE_H_
 
 #include <array>
-#include <SDL2/SDL_render.h>
 #include "Sprite.h"
-#include "../../Common.h"
-#include "../VistaUtils.h"
 #include "PoderVista.h"
 
 using namespace std;

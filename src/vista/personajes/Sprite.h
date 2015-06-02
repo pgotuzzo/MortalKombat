@@ -2,7 +2,6 @@
 #define _MORTALKOMBAT_SPRITE_H_
 
 #include <string>
-#include <SDL2/SDL_render.h>
 #include <vector>
 #include "../VistaUtils.h"
 
