@@ -94,11 +94,15 @@ set(SOURCE_FILES
     # Controlador
     src/controlador/ControladorTeclado.h
     src/controlador/ControladorTeclado.cpp
+    src/controlador/ControladorMouse.h
+    src/controlador/ControladorMouse.cpp
     src/controlador/ControladorJoystick.h
     src/controlador/ControladorJoystick.cpp
+    src/controlador/ControladorTexto.h
+    src/controlador/ControladorTexto.cpp
     )
 
-add_executable(MortalKombat ${SOURCE_FILES})
+add_executable(MortalKombat ${SOURCE_FILES} )
 
 # Bibliotecas
 target_link_libraries(MortalKombat
