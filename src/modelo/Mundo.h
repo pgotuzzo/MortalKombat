@@ -38,6 +38,9 @@ public:
 
 	bool huboGanador();
 
+	string quienGano();
+
+	void verificarGanador();
 };
 
 #endif /* SRC_MODELO_MUNDO_H_ */

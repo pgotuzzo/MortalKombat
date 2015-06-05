@@ -76,6 +76,8 @@ public:
     Posicion posCongelado;
 
     void congelado();
+
+    Posicion posInicial;
 };
 
 

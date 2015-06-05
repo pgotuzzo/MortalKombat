@@ -63,7 +63,7 @@ public:
 	void setPosicion(Posicion posicion);
 	~Personaje();
 
-	void reinicializar();
+	void reinicializar(TestadoPersonaje nuevoEstado);
 
 	void verificarDireccion(Tinput tinput);
 

@@ -113,8 +113,7 @@ string Game::getWinner() {
         case EgameState::MODE_ARCADE:
         case EgameState::MODE_MULTIPLAYER:{
             if (mMundo->huboGanador())
-                // TODO - ANDRES & MIKI: Como verifico quien gano???
-                return "Alguno gano";
+                return mMundo->quienGano();
             return "Empate";
         };
         default:

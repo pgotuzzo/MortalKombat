@@ -356,16 +356,17 @@ bool Personaje::realizarsegundaPinia() {
 			(estadoAnterior == ACC_PINIA_BAJA && estadoActual == ACC_PINIA_BAJA));
 }
 
-void Personaje::reinicializar() {
-	rectanguloPj.p = posInicial;
-	llevarACabo.rectaDelPj.p = posInicial;
-	estadoAnterior = estadoActual = MOV_PARADO;
+void Personaje::reinicializar(TestadoPersonaje nuevoEstado) {
 	vida = vidaInicial;
+	countLoops = 0;
+	estadoAnterior = estadoActual;
+	estadoActual = nuevoEstado;
+
 }
 
 void Personaje::verificarDebuff() {
 	//Activa el debuff y cada 30 loops le saca 1 de vida
-	if(estadoActual == REA_PODER_ERMAC && debuff == 0) debuff = 150;
+	if(estadoActual == REA_MALDITO && debuff == 0) debuff = 150;
 	if(debuff>0){
 		if(debuff%30 == 0) {
 			vida = vida - 1;

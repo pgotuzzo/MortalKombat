@@ -339,7 +339,7 @@ struct Tcapa {
  * Estructuras y enums propios de los
  *  Personajes
  */
-static const int TestadoPersonajeCount = 33;
+static const int TestadoPersonajeCount = 36;
 
 enum TestadoPersonaje {
     // Movimient
@@ -387,7 +387,10 @@ enum TestadoPersonaje {
     REA_CAIDA,
     REA_AGARRE,
     REA_CONGELADO,
-    REA_PODER_ERMAC
+    REA_MALDITO,
+    REA_DERROTA,
+    REA_VICTORIA,
+    REA_MAREADO
 
 
 };
@@ -429,7 +432,10 @@ static string TestadoPersonajeToString(TestadoPersonaje e){
         case TestadoPersonaje::REA_PINIA_ALTA: return "rea_pinia_alta";
         case TestadoPersonaje::REA_AGARRE: return "rea_agarre";
         case TestadoPersonaje::REA_CONGELADO: return "rea_congelado";
-        case TestadoPersonaje::REA_PODER_ERMAC: return"rea_poder_ermac";
+        case TestadoPersonaje::REA_MALDITO: return"rea_poder_ermac";
+        case TestadoPersonaje::REA_DERROTA: return"rea_derrota";
+        case TestadoPersonaje::REA_MAREADO: return"rea_mareado";
+        case TestadoPersonaje::REA_VICTORIA: return"rea_victoria";
 
 
 
@@ -544,84 +550,50 @@ struct TComboData{
 static int loopsPara(TestadoPersonaje accion){
 
     switch (accion){
-
-        case MOV_PARADO:
-            // infinito (?
-            return 1;
-        case MOV_CAMINANDO:
-            return 1;
-        case MOV_SALTANDO_VERTICAL:
-            return 14;
-        case MOV_SALTANDO_OBLICUO:
-            return 20;
-        case MOV_AGACHADO:
-            return 3;
-        case ACC_PINIA_BAJA:
-            // OJO VER COMO SOLUCIONAR VARIOS ESTADOS
-            return 4;
-        case ACC_PINIA_BAJA_AGACHADO:
-            return 4;
-        case ACC_PINIA_ALTA:
-            //pensar lo mismo que pinia baja
-            return 4;
-        case ACC_PINIA_ALTA_AGACHADO:
-            return 5;
-        case ACC_PINIA_SALTO:
-            return 20;
-        case ACC_PATADA_BAJA:
-            return 9;
-        case ACC_PATADA_BAJA_ATRAS:
-            return 8;
-        case ACC_PATADA_AGACHADO:
-            return 4;
-        case ACC_PATADA_SALTO_VERTICAL:
-            return 14;
-        case ACC_PINIA_SALTO_VERTICAL:
-            return 14;
-        case ACC_PATADA_SALTO:
-            return 20;
-        case ACC_PATADA_ALTA:
-            return 8;
-        case ACC_PATADA_ALTA_ATRAS:
-            return 8;
-        case ACC_PROTECCION:
-            return 3;
-        case ACC_PROTECCION_AGACHADO:
-            return 3;
-        case ACC_PODER:
-            return 3;
-        case ACC_PODER_SALTO:
-            return 10;
-        case REA_AGACHADO:
-            return 1;
-        case REA_GOLPE_ALTO:
-            return 8;
-        case REA_GOLPE_BAJO:
-            return 3;
-        case REA_GOLPE_FUERTE:
-            return 8;
-        case REA_PATADA_BARRIDA:
-            return 12;
-        case REA_PINIA_ALTA:
-            return 3;
-        case REA_CAIDA:
-            return 8;
-        case REA_AGARRE:
-            return 13;
-        case ACC_AGARRE:
-            return 9;
-        case REA_CONGELADO:
-            return 40;
-        case REA_PODER_ERMAC:
-            return 6;
+        case MOV_PARADO:return 1;
+        case MOV_CAMINANDO:return 1;
+        case MOV_SALTANDO_VERTICAL:return 14;
+        case MOV_SALTANDO_OBLICUO:return 20;
+        case MOV_AGACHADO:return 3;
+        case ACC_PINIA_BAJA:return 4;
+        case ACC_PINIA_BAJA_AGACHADO:return 4;
+        case ACC_PINIA_ALTA:return 4;
+        case ACC_PINIA_ALTA_AGACHADO:return 5;
+        case ACC_PINIA_SALTO:return 20;
+        case ACC_PATADA_BAJA:return 9;
+        case ACC_PATADA_BAJA_ATRAS:return 8;
+        case ACC_PATADA_AGACHADO:return 4;
+        case ACC_PATADA_SALTO_VERTICAL:return 14;
+        case ACC_PINIA_SALTO_VERTICAL:return 14;
+        case ACC_PATADA_SALTO:return 20;
+        case ACC_PATADA_ALTA:return 8;
+        case ACC_PATADA_ALTA_ATRAS:return 8;
+        case ACC_PROTECCION:return 3;
+        case ACC_PROTECCION_AGACHADO:return 3;
+        case ACC_PODER:return 3;
+        case ACC_PODER_SALTO:return 10;
+        case REA_AGACHADO:return 1;
+        case REA_GOLPE_ALTO:return 8;
+        case REA_GOLPE_BAJO:return 3;
+        case REA_GOLPE_FUERTE:return 8;
+        case REA_PATADA_BARRIDA:return 12;
+        case REA_PINIA_ALTA:return 3;
+        case REA_CAIDA:return 8;
+        case REA_AGARRE:return 13;
+        case ACC_AGARRE:return 9;
+        case REA_CONGELADO:return 40;
+        case REA_MALDITO:return 6;
+        case REA_DERROTA:return 15;
+        case REA_VICTORIA:return 15;
+        case REA_MAREADO:return 200;
     }
 }
 
 static int mostrarEstado(TestadoPersonaje accion){
 
     switch (accion){
-        case(REA_PODER_ERMAC):
-            cout<<"REA_PODER_ERMAC"<<endl;
+        case(REA_MALDITO):
+            cout<<"REA_MALDITO"<<endl;
             break;
         case REA_CONGELADO:
             cout<<"REA_CONGELADO"<<endl;
@@ -718,6 +690,15 @@ static int mostrarEstado(TestadoPersonaje accion){
             break;
         case ACC_AGARRE:
             cout<<"ACC_AGARRE"<<endl;
+            break;
+        case REA_DERROTA:
+            cout<<"REA_DERROTA"<<endl;
+            break;
+        case REA_VICTORIA:
+            cout<<"REA_VICTORIA"<<endl;
+            break;
+        case REA_MAREADO:
+            cout<<"REA_MAREADO"<<endl;
             break;
     }
 }

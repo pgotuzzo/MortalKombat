@@ -95,10 +95,12 @@ Tcambio Mundo::actualizarPJ(Personaje *PJ) {
  * Se asigna todos los datos pertinentes de personaje a Tcambio.
  */
 vector<Tcambio> Mundo::actualizarMundo(vector<Tinput> inputs) {
+	cout<<roundsPJ1<<endl;
 	vector<Tcambio> c;
 	Tcambio cambio1, cambio2;
 
 	verificarGanadorDelRound();
+	verificarGanador();
 	Uint32 tiempo = SDL_GetTicks();
 	//cout<<tiempoInicial<<"----"<<tiempo<<endl;d
 	if(SDL_TICKS_PASSED(tiempo, tiempoInicial + 1000)) {
@@ -138,49 +140,74 @@ Mundo::~Mundo() {
 void Mundo::verificarGanadorDelRound() {
 	string mensaje;
 	mensaje = "Ganador Round N°" + to_string(roundsPJ1 + roundsPJ2) + ": ";
-	if(tiempoRound >= 0) {
-		if (personaje1->vida == 0) {
-			mensaje = mensaje + personaje2->nombre + " ---> Personaje 2";
-			loguer->loguear(mensaje.c_str(), Log::LOG_DEB);
-			personaje1->reinicializar();
-			personaje2->reinicializar();
-			roundsPJ1++;
-			tiempoRound = tiempoInicialRound;
-		}
-		else {
-			if (personaje2->vida == 0) {
-				mensaje = mensaje + personaje1->nombre + " ---> Personaje 1";
-				loguer->loguear(mensaje.c_str(), Log::LOG_DEB);
-				personaje1->reinicializar();
-				personaje2->reinicializar();
-				roundsPJ2++;
-				tiempoRound = tiempoInicialRound;
-			}
-		}
-	}
-	else{
-		if (personaje1->vida == personaje2->vida) {
-			loguer->loguear("EMPATARONNNN", Log::LOG_DEB);
-			personaje1->reinicializar();
-			personaje2->reinicializar();
-			roundsPJ1++;
-			tiempoRound = tiempoInicialRound;
-		}
-		else if(personaje1->vida > personaje2->vida){
+	// Si el tiempo se termino me fijo quien tiene mas vida -------------------------
+	if(tiempoRound == 0) {
+		if (personaje1->vida > personaje2->vida ) {
 			mensaje = mensaje + personaje1->nombre + " ---> Personaje 1";
 			loguer->loguear(mensaje.c_str(), Log::LOG_DEB);
-			personaje1->reinicializar();
-			personaje2->reinicializar();
-			roundsPJ2++;
+//			roundsPJ1++;
+			personaje1->reinicializar(REA_VICTORIA);
+			if(roundsPJ1 == 1 && roundsPJ2 == 0) personaje2->reinicializar(REA_MAREADO);
+			else personaje2->reinicializar(REA_DERROTA);
 			tiempoRound = tiempoInicialRound;
-		}
-		else{
+		}else if(personaje2->vida > personaje1->vida ){
 			mensaje = mensaje + personaje2->nombre + " ---> Personaje 2";
 			loguer->loguear(mensaje.c_str(), Log::LOG_DEB);
-			personaje1->reinicializar();
-			personaje2->reinicializar();
-			roundsPJ2++;
+//			roundsPJ2++;
+			personaje2->reinicializar(REA_VICTORIA);
+			if(roundsPJ2 == 1 && roundsPJ1 == 0) personaje1->reinicializar(REA_MAREADO);
+			else personaje1->reinicializar(REA_DERROTA);
+			tiempoRound = tiempoInicialRound;
+		}else{
+			loguer->loguear("EMPATARONNNN", Log::LOG_DEB);
+			personaje1->reinicializar(REA_VICTORIA);
+			personaje2->reinicializar(REA_VICTORIA);
+//			roundsPJ1++;
+//			roundsPJ2++;
+			tiempoRound = tiempoInicialRound;
+		};
+	}
+	//-------------------------------------------------------
+	else{
+		if (personaje1->vida <= 0) {
+			mensaje = mensaje + personaje2->nombre + " ---> Personaje 2";
+			loguer->loguear(mensaje.c_str(), Log::LOG_DEB);
+//			roundsPJ2++;
+			personaje2->reinicializar(REA_VICTORIA);
+			if(roundsPJ2 == 1 & roundsPJ1 == 0) personaje1->reinicializar(REA_MAREADO);
+			else personaje1->reinicializar(REA_DERROTA);
+			tiempoRound = tiempoInicialRound;
+
+		}else if(personaje2->vida <= 0){
+			mensaje = mensaje + personaje2->nombre + " ---> Personaje 1";
+			loguer->loguear(mensaje.c_str(), Log::LOG_DEB);
+//			roundsPJ1++;
+			personaje1->reinicializar(REA_VICTORIA);
+			if(roundsPJ1 == 1 && roundsPJ2 == 0) personaje2->reinicializar(REA_MAREADO);
+			else personaje2->reinicializar(REA_DERROTA);
 			tiempoRound = tiempoInicialRound;
 		}
 	}
+}
+string Mundo::quienGano(){
+	if(personaje1->estadoActual == REA_VICTORIA) return personaje1->nombre;
+	if(personaje2->estadoActual == REA_VICTORIA) return personaje2->nombre;
+}
+
+void Mundo::verificarGanador() {
+	if((personaje1->estadoActual != REA_DERROTA && personaje1->estadoAnterior == REA_DERROTA) &&
+			(personaje2->estadoActual != REA_DERROTA && personaje2->estadoAnterior == REA_DERROTA)){
+		roundsPJ2++;
+		roundsPJ1++;
+		tiempoRound = tiempoInicialRound;
+	}else if((personaje1->estadoActual != REA_DERROTA && personaje1->estadoAnterior == REA_DERROTA)||
+			(personaje1->estadoActual != REA_MAREADO && personaje1->estadoAnterior == REA_MAREADO)){
+		roundsPJ2++;
+		tiempoRound = tiempoInicialRound;
+	}else if((personaje2->estadoActual != REA_DERROTA && personaje2->estadoAnterior == REA_DERROTA)||
+			(personaje2->estadoActual != REA_MAREADO && personaje2->estadoAnterior == REA_MAREADO)){
+		roundsPJ1++;
+		tiempoRound = tiempoInicialRound;
+	}
+
 }

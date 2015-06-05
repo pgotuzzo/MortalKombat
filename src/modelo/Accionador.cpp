@@ -41,6 +41,7 @@ void Accionador::initialize(Trect rectan, float anchoPanta, float yPiso,Poder* n
     this->poder = nuevoPoder;
     alturaPj = rectan.d.h;
     posCongelado = rectan.p;
+    posInicial = rectan.p;
 
 }
 
@@ -157,7 +158,17 @@ Trect Accionador::laAccion(TestadoPersonaje estadoPj, int loops, Posicion pos, T
             }
             congelado();
             break;
-
+        case REA_DERROTA:
+            if(loops == 12){
+                rectaDelPj.p = posInicial;
+            }
+            break;
+        case REA_VICTORIA:
+            if(loops == 12){
+                rectaDelPj.p = posInicial;
+            }
+            break;
+        case REA_MAREADO:break;
     }
     return rectaDelPj;
 }
