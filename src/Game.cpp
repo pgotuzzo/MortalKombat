@@ -128,12 +128,23 @@ void Game::play(vector<Tinput> inputs) {
     switch (mState){
         case EgameState::MENU_MODE:{
             if ( selectMode(inputs.front()) == EgameResult::END ) {
-                /**
-                 * TODO - Corregir
-                 * mState = EgameState::MENU_PLAYERS;
-                 */
-                mState = EgameState::MODE_PRACTICE ;
-                initialize();
+                switch (mModeSelection){
+                    case EmodeSelection::MULTIPLAYER: {
+                        mState = EgameState::MODE_MULTIPLAYER;
+                        initialize();
+                        break;
+                    };
+                    case EmodeSelection::ARCADE: {
+                        mState = EgameState::MODE_ARCADE;
+                        initialize();
+                        break;
+                    };
+                    case EmodeSelection::PRACTICE: {
+                        mState = EgameState::MODE_PRACTICE;
+                        initialize();
+                        break;
+                    };
+                }
             }
             break;
         };
