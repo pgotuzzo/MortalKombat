@@ -2,7 +2,7 @@
 #define MORTALKOMBAT_CONTROLADORTECLADO_H
 
 #include <vector>
-#include "../Common.h"
+#include "../utils/Common.h"
 
 using namespace std;
 

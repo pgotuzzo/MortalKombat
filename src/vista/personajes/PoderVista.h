@@ -2,8 +2,8 @@
 #define MORTALKOMBAT_PODERVISTAA_H
 
 #include <array>
-#include "../../Common.h"
 #include "Sprite.h"
+#include "../../utils/PersonajeUtils.h"
 
 class PoderVista {
 private:

@@ -19,11 +19,14 @@ file(COPY ${RESOURCES} DESTINATION ${PROJECT_SOURCE_DIR}/bin)
 set(SOURCE_FILES
 
     # Main
-    src/Common.h
     src/main.cpp
     src/Game.h
     src/Game.cpp
-    src/GameUtils.h
+
+    # Utils
+    src/utils/Common.h
+    src/utils/GameUtils.h
+    src/utils/PersonajeUtils.h
 
     # Modelo
     src/modelo/Accionador.h
@@ -34,8 +37,10 @@ set(SOURCE_FILES
     src/modelo/DetectorDeColisiones.cpp
     src/modelo/Golpe.h
     src/modelo/Golpe.cpp
-    src/modelo/MenuGameMode.h
-    src/modelo/MenuGameMode.cpp
+    src/modelo/menu/MenuGameMode.h
+    src/modelo/menu/MenuGameMode.cpp
+    src/modelo/menu/MenuPlayers.cpp
+    src/modelo/menu/MenuPlayers.h
     src/modelo/Mundo.h
     src/modelo/Mundo.cpp
     src/modelo/ObjetoColisionable.h
@@ -102,7 +107,7 @@ set(SOURCE_FILES
     src/controlador/ControladorTexto.cpp
     )
 
-add_executable(MortalKombat ${SOURCE_FILES} )
+add_executable(MortalKombat ${SOURCE_FILES})
 
 # Bibliotecas
 target_link_libraries(MortalKombat

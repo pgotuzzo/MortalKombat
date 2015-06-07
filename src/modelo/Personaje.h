@@ -8,7 +8,7 @@
 #include "math.h"
 #include <string>
 #include <tr1/unordered_map>
-#include "../Common.h"
+#include "../utils/PersonajeUtils.h"
 #include "ObjetoColisionable.h"
 #include "Poder.h"
 #include "Golpe.h"

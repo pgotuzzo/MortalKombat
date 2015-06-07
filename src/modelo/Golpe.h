@@ -3,6 +3,7 @@
 
 //#include "../Common.h"
 #include "ObjetoColisionable.h"
+#include "../utils/PersonajeUtils.h"
 
 class Golpe: public ObjetoColisionable{
 

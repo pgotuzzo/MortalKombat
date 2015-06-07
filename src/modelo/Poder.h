@@ -4,6 +4,7 @@
 
 
 #include "ObjetoColisionable.h"
+#include "../utils/PersonajeUtils.h"
 
 class Poder: public ObjetoColisionable {
 

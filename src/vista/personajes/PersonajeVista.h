@@ -4,6 +4,7 @@
 #include <array>
 #include "Sprite.h"
 #include "PoderVista.h"
+#include "../../utils/GameUtils.h"
 
 using namespace std;
 

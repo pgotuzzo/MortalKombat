@@ -2,7 +2,7 @@
 #define MORTALKOMBAT_PANTALLA_H
 
 
-#include "../../GameUtils.h"
+#include "../../utils/GameUtils.h"
 #include "../VistaUtils.h"
 
 class Pantalla {

@@ -2,8 +2,8 @@
 #define MORTALKOMBAT_MENUGAMEMODE_H
 
 
-#include "../GameUtils.h"
-#include "../Common.h"
+#include "../../utils/GameUtils.h"
+#include "../../utils/Common.h"
 
 class MenuGameMode {
 private:

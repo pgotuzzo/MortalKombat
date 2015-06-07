@@ -1,11 +1,11 @@
 #ifndef MORTALKOMBAT_GAME_H
 #define MORTALKOMBAT_GAME_H
 
-#include "GameUtils.h"
 #include "modelo/Mundo.h"
-#include "modelo/MenuGameMode.h"
 #include "parser/config.h"
 #include "vista/pantallas/Pantalla.h"
+#include "modelo/menu/MenuGameMode.h"
+#include "utils/GameUtils.h"
 
 class Game {
 private:

@@ -5,7 +5,7 @@
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL.h>
 #include <vector>
-#include "../Common.h"
+#include "../utils/Common.h"
 #include <fstream>
 
 class ControladorJoystick {

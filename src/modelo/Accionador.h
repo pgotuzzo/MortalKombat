@@ -2,7 +2,7 @@
 #define MORTALKOMBAT_ACCIONADOR_H
 
 
-#include "../Common.h"
+#include "../utils/Common.h"
 #include "Golpe.h"
 #include "Poder.h"
 

@@ -1,7 +1,7 @@
 #ifndef MORTALKOMBAT_CONTROLADORTEXTO_H
 #define MORTALKOMBAT_CONTROLADORTEXTO_H
 
-#include "../Common.h"
+#include "../utils/Common.h"
 #include "SDL2/SDL_events.h"
 
 using namespace std;

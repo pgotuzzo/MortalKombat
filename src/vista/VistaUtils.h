@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 #include <SDL2/SDL_ttf.h>
-#include "../Common.h"
+#include "../utils/Common.h"
 
 struct Ttexture{
     SDL_Texture* t;

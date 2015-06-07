@@ -2,7 +2,7 @@
 #define MORTALKOMBAT_MENUMODOJUEGO_H
 
 #include "Pantalla.h"
-#include "../../GameUtils.h"
+#include "../../utils/GameUtils.h"
 
 class PantallaMenuModoJuego : public Pantalla {
 private:

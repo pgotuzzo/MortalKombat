@@ -2,7 +2,7 @@
 #define MORTALKOMBAT_CONTROLADORMOUSE_H
 
 #include "SDL2/SDL_events.h"
-#include "../Common.h"
+#include "../utils/Common.h"
 
 class ControladorMouse {
 

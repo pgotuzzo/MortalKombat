@@ -4,9 +4,9 @@
 #include <SDL2/SDL_stdinc.h>
 #include "../parser/config.h"
 #include "Personaje.h"
-#include "../Common.h"
 #include "DetectorDeColisiones.h"
 #include "SDL2/SDL.h"
+#include "../utils/GameUtils.h"
 
 class Mundo {
 private:

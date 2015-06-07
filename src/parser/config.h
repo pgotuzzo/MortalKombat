@@ -3,7 +3,7 @@
 #include <string>
 #include <iostream>
 #include "json.h"
-#include "../Common.h"
+#include "../utils/PersonajeUtils.h"
 #include <vector>
 
 using namespace std;

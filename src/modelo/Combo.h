@@ -3,7 +3,7 @@
 #ifndef MORTALKOMBAT_COMBO_H
 #define MORTALKOMBAT_COMBO_H
 
-#include "../Common.h"
+#include "../utils/Common.h"
 
 class Combo {
 
