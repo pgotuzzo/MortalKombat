@@ -1,6 +1,8 @@
 #include "Game.h"
 #include "vista/pantallas/PantallaMenuModoJuego.h"
 #include "vista/pantallas/PantallaFight.h"
+#include "vista/pantallas/PantallaPractice.h"
+#include "vista/pantallas/PantallaArcade.h"
 
 Game::Game(config* configuration, const int gameLoopPeriod) {
     mConfiguration = configuration;
@@ -49,9 +51,8 @@ void Game::initialize() {
             break;
         };
         case EgameState::MODE_MULTIPLAYER:
-        case EgameState::MODE_ARCADE:
-        case EgameState::MODE_PRACTICE:{
-            loguer->loguear("[--- MODO MULTIPLAYER ---]", Log::LOG_DEB);
+        case EgameState::MODE_ARCADE:{
+            loguer->loguear("[--- MODO MULTIPLAYER/ARCADE ---]", Log::LOG_DEB);
             loguer->loguear("Creando la pantalla...", Log::LOG_DEB);
 
             vector<Tcapa> capas = mConfiguration->getCapas();
@@ -59,7 +60,31 @@ void Game::initialize() {
             Tventana ventana = mConfiguration->getVentana();
             Tescenario escenario = mConfiguration->getEscenario();
 
-            mPantalla = new PantallaFight(capas, ventana, escenario, personajes);
+            mPantalla = new PantallaArcade(capas, ventana, escenario, personajes);// Capas
+            string nombres[2] = {personajes[0].nombre, personajes[1].nombre};
+            mPantalla->initialize(capas, nombres);
+
+            loguer->loguear("Finaliza la creacion de la pantalla", Log::LOG_DEB);
+            loguer->loguear("Creando el modelo...", Log::LOG_DEB);
+
+            mMundo = new Mundo(*mConfiguration);
+
+            loguer->loguear("Finaliza la creacion del modelo", Log::LOG_DEB);
+            break;
+        };
+        case EgameState::MODE_PRACTICE:{
+            loguer->loguear("[--- MODO PRACTICE ---]", Log::LOG_DEB);
+            loguer->loguear("Creando la pantalla...", Log::LOG_DEB);
+
+            vector<Tcapa> capas = mConfiguration->getCapas();
+            vector<Tpersonaje> personajes = mConfiguration->getPersonajes();
+            Tventana ventana = mConfiguration->getVentana();
+            Tescenario escenario = mConfiguration->getEscenario();
+
+            mPantalla = new PantallaPractice(capas, ventana, escenario, personajes);
+            // Capas
+            string nombres[2] = {personajes[0].nombre, personajes[1].nombre};
+            mPantalla->initialize(capas, nombres);
 
             loguer->loguear("Finaliza la creacion de la pantalla", Log::LOG_DEB);
             loguer->loguear("Creando el modelo...", Log::LOG_DEB);
@@ -85,7 +110,7 @@ void Game::play(vector<Tinput> inputs) {
                  * TODO - Corregir
                  * mState = EgameState::MENU_PLAYERS;
                  */
-                mState = EgameState::MODE_MULTIPLAYER;
+                mState = EgameState::MODE_PRACTICE ;
                 initialize();
             }
             break;

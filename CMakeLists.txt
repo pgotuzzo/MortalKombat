@@ -107,7 +107,7 @@ set(SOURCE_FILES
     src/controlador/ControladorTexto.cpp
     )
 
-add_executable(MortalKombat ${SOURCE_FILES})
+add_executable(MortalKombat ${SOURCE_FILES} src/vista/pantallas/PantallaPractice.cpp src/vista/pantallas/PantallaPractice.h src/vista/capas/CapaInfoPractice.cpp src/vista/capas/CapaInfoPractice.h src/vista/pantallas/PantallaArcade.cpp src/vista/pantallas/PantallaArcade.h src/vista/capas/CapaInfoArcade.cpp src/vista/capas/CapaInfoArcade.h)
 
 # Bibliotecas
 target_link_libraries(MortalKombat

@@ -16,6 +16,10 @@ protected:
 public:
     Pantalla(Tdimension dimPixels, Tdimension dimUl);
     virtual void print() = 0;
+    /**
+     * YOLO
+     */
+    virtual void initialize(vector<Tcapa> capas, string personajes[2]);
 
     /**
      * PELEA
