@@ -6,6 +6,7 @@
 #include "vista/pantallas/Pantalla.h"
 #include "modelo/menu/MenuGameMode.h"
 #include "utils/GameUtils.h"
+#include "modelo/menu/MenuPlayers.h"
 
 class Game {
 private:
@@ -37,6 +38,7 @@ private:
     Pantalla* mPantalla;
     Mundo* mMundo;
     MenuGameMode* mMenuGameMode;
+    MenuPlayers* mMenuPlayers;
 
     // metodos privados
     void clean();

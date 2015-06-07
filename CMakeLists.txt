@@ -89,12 +89,12 @@ set(SOURCE_FILES
     src/vista/personajes/PoderVista.cpp
     src/vista/personajes/Sprite.h
     src/vista/personajes/Sprite.cpp
-    src/vista/pantallas/PantallaMenuModoJuego.cpp
-    src/vista/pantallas/PantallaMenuModoJuego.h
+    src/vista/pantallas/menu/PantallaMenuModoJuego.cpp
+    src/vista/pantallas/menu/PantallaMenuModoJuego.h
+    src/vista/pantallas/menu/PantallaMenuPlayers.cpp
+    src/vista/pantallas/menu/PantallaMenuPlayers.h
     src/vista/pantallas/Pantalla.cpp
     src/vista/pantallas/Pantalla.h
-
-
 
     # Controlador
     src/controlador/ControladorTeclado.h

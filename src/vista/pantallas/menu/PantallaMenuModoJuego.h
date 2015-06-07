@@ -1,8 +1,8 @@
 #ifndef MORTALKOMBAT_MENUMODOJUEGO_H
 #define MORTALKOMBAT_MENUMODOJUEGO_H
 
-#include "Pantalla.h"
-#include "../../utils/GameUtils.h"
+#include "../Pantalla.h"
+#include "../../../utils/GameUtils.h"
 
 class PantallaMenuModoJuego : public Pantalla {
 private:
