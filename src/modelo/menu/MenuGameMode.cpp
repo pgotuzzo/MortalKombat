@@ -19,7 +19,7 @@ void MenuGameMode::updateSelection(Tdireccion direction) {
     }
 }
 
-EmodeSelection MenuGameMode:: update(Tinput input) {
+EmodeSelection MenuGameMode::update(Tinput input) {
     switch (input.movimiento){
         case TinputMovimiento::KEY_DERECHA:
         case TinputMovimiento::KEY_ARRIBA_DERECHA:

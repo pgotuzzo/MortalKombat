@@ -8,19 +8,17 @@
 
 class MenuPlayers {
 private:
-    static const int ROWS = 4;
-    static const int COLUMNS = 3;
+    static const int ROWS = 3;
+    static const int COLUMNS = 4;
     /**
      *  Este sera el menu de selección, gráficamente.
-     *  //===================\\
-     *  || SZ  || ER  || LK  ||
-     *  ||=====||=====||=====||
-     *  || SZg || ERg || LKb ||
-     *  ||=====||=====||=====||
-     *  || SZr || ERr || LKg ||
-     *  ||=====||=====||=====||
-     *  || SZy || ERy || LKy ||
-     *  \\===================//
+     *  //==========================\\
+     *  || SZ  || SZg || SZr || SZy ||
+     *  ||=====||=====||=====||=====||
+     *  || ER  || ERb || ERg || ERy ||
+     *  ||=====||=====||=====||=====||
+     *  || LK  || LKb || LKg || LKy ||
+     *  \\==========================//
      */
 
     Posicion mSelection[2];
@@ -32,7 +30,7 @@ private:
 public:
     MenuPlayers();
 
-    array<EtipoPersonaje, 2> update(array<Tinput, 2> inputs);
+    vector<EtipoPersonaje> update(vector<Tinput> inputs);
     bool selectionComplete();
 };
 

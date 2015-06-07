@@ -29,9 +29,8 @@ public:
 
     /**
      * MENU DE SELECCION DE PERSONAJES
-     * TODO - Mas de lo mismo
      */
-
+    virtual void update(vector<EtipoPersonaje> players);
 
     virtual ~Pantalla();
 };

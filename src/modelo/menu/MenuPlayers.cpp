@@ -3,16 +3,18 @@
 MenuPlayers::MenuPlayers() {
     mSelectionConfirmed[0] = false;
     mSelectionConfirmed[1] = false;
+    mSelection[0] = Posicion(0,0);
+    mSelection[1] = Posicion(0,0);
 }
 
 EtipoPersonaje MenuPlayers::getType(Posicion p) {
-    if (p == Posicion(0, 0)) return EtipoPersonaje::SUBZERO;
+         if (p == Posicion(0, 0)) return EtipoPersonaje::SUBZERO;
     else if (p == Posicion(0, 1)) return EtipoPersonaje::SUBZERO_GREEN;
     else if (p == Posicion(0, 2)) return EtipoPersonaje::SUBZERO_RED;
     else if (p == Posicion(0, 3)) return EtipoPersonaje::SUBZERO_YELLOW;
     else if (p == Posicion(1, 0)) return EtipoPersonaje::ERMAC;
-    else if (p == Posicion(1, 1)) return EtipoPersonaje::ERMAC_GREEN;
-    else if (p == Posicion(1, 2)) return EtipoPersonaje::ERMAC_RED;
+    else if (p == Posicion(1, 1)) return EtipoPersonaje::ERMAC_BLUE;
+    else if (p == Posicion(1, 2)) return EtipoPersonaje::ERMAC_GREEN;
     else if (p == Posicion(1, 3)) return EtipoPersonaje::ERMAC_YELLOW;
     else if (p == Posicion(2, 0)) return EtipoPersonaje::LIUKANG;
     else if (p == Posicion(2, 1)) return EtipoPersonaje::LIUKANG_BLUE;
@@ -27,46 +29,52 @@ void MenuPlayers::updateSelection(TinputMovimiento movimientos[2]) {
             case TinputMovimiento::KEY_ABAJO:{
                 if (mSelection[i].y < ROWS)
                     mSelection[i].y++;
+                break;
             };
             case TinputMovimiento::KEY_ARRIBA:{
                 if (mSelection[i].y > 0)
                     mSelection[i].y--;
+                break;
             };
             case TinputMovimiento::KEY_DERECHA:{
                 if (mSelection[i].x < COLUMNS)
                     mSelection[i].x++;
+                break;
             };
             case TinputMovimiento::KEY_IZQUIERDA:{
                 if (mSelection[i].x > 0)
                     mSelection[i].x--;
+                break;
             };
             case TinputMovimiento::KEY_ARRIBA_DERECHA:{
                 if (mSelection[i].x < COLUMNS)
                     mSelection[i].x++;
                 if (mSelection[i].y > 0)
                     mSelection[i].y--;
+                break;
             };
             case TinputMovimiento::KEY_ARRIBA_IZQUIERDA:{
                 if (mSelection[i].x > 0)
                     mSelection[i].x--;
                 if (mSelection[i].y > 0)
                     mSelection[i].y--;
+                break;
             };
         }
     }
 }
 
-array<EtipoPersonaje, 2> MenuPlayers::update(array<Tinput, 2> inputs) {
+vector<EtipoPersonaje> MenuPlayers::update(vector<Tinput> inputs) {
     TinputMovimiento movimientos[2] = {
             (mSelectionConfirmed[0]) ? TinputMovimiento::KEY_NADA : inputs.at(0).movimiento,
             (mSelectionConfirmed[1]) ? TinputMovimiento::KEY_NADA : inputs.at(1).movimiento
     };
     updateSelection(movimientos);
-    array<EtipoPersonaje, 2> array = {
+    vector<EtipoPersonaje> vector = {
             getType(mSelection[0]),
             getType(mSelection[1])
     };
-    return array;
+    return vector;
 };
 
 bool MenuPlayers::selectionComplete() {

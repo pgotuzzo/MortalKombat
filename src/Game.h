@@ -45,6 +45,7 @@ private:
     void initialize();
 
     EgameResult selectMode(Tinput input);
+    EgameResult selectPlayers(vector<Tinput> inputs);
     EgameResult fight(vector<Tinput> inputs);
 
 

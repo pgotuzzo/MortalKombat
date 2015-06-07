@@ -19,14 +19,31 @@ enum class EtipoPersonaje {
     SUBZERO_YELLOW,
 
     ERMAC,
+    ERMAC_BLUE,
     ERMAC_GREEN,
-    ERMAC_RED,
     ERMAC_YELLOW,
 
     LIUKANG,
     LIUKANG_BLUE,
     LIUKANG_GREEN,
     LIUKANG_YELLOW
+};
+
+static Posicion getPosition(EtipoPersonaje type){
+    switch (type){
+        case EtipoPersonaje::SUBZERO: return Posicion(0,0);
+        case EtipoPersonaje::SUBZERO_GREEN: return Posicion(0,1);
+        case EtipoPersonaje::SUBZERO_RED: return Posicion(0,2);
+        case EtipoPersonaje::SUBZERO_YELLOW: return Posicion(0,3);
+        case EtipoPersonaje::ERMAC: return Posicion(1,0);
+        case EtipoPersonaje::ERMAC_BLUE: return Posicion(1,1);
+        case EtipoPersonaje::ERMAC_GREEN: return Posicion(1,2);
+        case EtipoPersonaje::ERMAC_YELLOW: return Posicion(1,3);
+        case EtipoPersonaje::LIUKANG: return Posicion(2,0);
+        case EtipoPersonaje::LIUKANG_BLUE: return Posicion(2,1);
+        case EtipoPersonaje::LIUKANG_GREEN: return Posicion(2,2);
+        case EtipoPersonaje::LIUKANG_YELLOW: return Posicion(2,3);
+    }
 };
 
 enum TestadoPersonaje {

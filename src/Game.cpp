@@ -1,6 +1,7 @@
 #include "Game.h"
 #include "vista/pantallas/menu/PantallaMenuModoJuego.h"
 #include "vista/pantallas/PantallaFight.h"
+#include "vista/pantallas/menu/PantallaMenuPlayers.h"
 
 Game::Game(config* configuration, const int gameLoopPeriod) {
     mConfiguration = configuration;
@@ -59,7 +60,7 @@ void Game::initialize() {
                     mConfiguration->getEscenario().d.h,
             };
 
-            mPantalla = new PantallaMenuModoJuego(dimPx, dim);
+            mPantalla = new PantallaMenuPlayers(dimPx, dim);
 
             loguer->loguear("Finaliza la creacion de la pantalla", Log::LOG_DEB);
             loguer->loguear("Creando el modelo...", Log::LOG_DEB);
@@ -102,12 +103,14 @@ void Game::play(vector<Tinput> inputs) {
     switch (mState){
         case EgameState::MENU_MODE:{
             if ( selectMode(inputs.front()) == EgameResult::END ) {
-                /**
-                 * TODO - Corregir
-                 * mState = EgameState::MENU_PLAYERS;
-                 */
-                mState = EgameState::MODE_MULTIPLAYER;
+                mState = EgameState::MENU_PLAYERS;
                 initialize();
+            }
+            break;
+        };
+        case EgameState::MENU_PLAYERS:{
+            if ( selectPlayers(inputs) == EgameResult::END ) {
+                cout << "@22";
             }
             break;
         };
@@ -149,6 +152,17 @@ EgameResult Game::selectMode(Tinput input) {
 
     if ( mMenuGameMode->selectionComplete() ) {
         mModeSelection = selection;
+        return EgameResult::END;
+    }
+    return EgameResult::CONTINUE;
+}
+
+EgameResult Game::selectPlayers(vector<Tinput> inputs) {
+    vector<EtipoPersonaje> players = mMenuPlayers->update(inputs);
+    mPantalla->update(players);
+    mPantalla->print();
+
+    if ( mMenuPlayers->selectionComplete() ) {
         return EgameResult::END;
     }
     return EgameResult::CONTINUE;
