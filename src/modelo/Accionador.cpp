@@ -154,7 +154,7 @@ Trect Accionador::laAccion(TestadoPersonaje estadoPj, int loops, Posicion pos, T
         case REA_CONGELADO:
             if(loops == 1) {
                 posCongelado = rectaDelPj.p;
-                posCongelado.mostrarPar();
+                //posCongelado.mostrarPar();
             }
             congelado();
             break;

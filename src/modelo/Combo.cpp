@@ -26,7 +26,7 @@ void Combo::actualizar(Tinput input) {
 
     // Se paso el tiempo maximo
     if(SDL_TICKS_PASSED(tiempoFinal-tiempoInicial,datosDelCombo.tiempoMaximo)){
-        cout<<tiempoFinal-tiempoInicial<<endl;
+        //cout<<tiempoFinal-tiempoInicial<<endl;
         inicializarCombo();
     }
     // Se pasaron los errores
