@@ -43,6 +43,10 @@ Pantalla::Pantalla(Tdimension dimPixels, Tdimension dimUl) {
     mUtils = new VistaUtils(mRenderer, mDimension.w / mDimension.h, scales);
 }
 
+vector<float> Pantalla::getEscalas(){
+    return mUtils->getEscala();
+}
+
 void Pantalla::update(vector<Tcambio> changes,Tinput input) {}
 void Pantalla::update(EmodeSelection selection) {}
 void Pantalla::update(vector<EtipoPersonaje> players) {}
@@ -60,3 +64,6 @@ Pantalla::~Pantalla(){
     SDL_Quit();
 }
 
+vector<Trect> Pantalla::getCuadradoModos() {
+    return std::vector<Trect>();
+}

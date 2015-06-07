@@ -11,7 +11,7 @@ public:
 
     ControladorMouse();
 
-    void moverMouse();
+    TinputGame moverMouse(SDL_Event event);
 
     bool dentroDeRectangulo(Trect rectangulo);
 

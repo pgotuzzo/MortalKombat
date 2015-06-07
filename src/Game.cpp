@@ -121,13 +121,13 @@ void Game::initialize() {
 }
 
 
-void Game::play(vector<Tinput> inputs) {
+void Game::play(vector<Tinput> inputs, Posicion coordenadasMouse) {
     clock_t t1, t2, deltaT;
     t1 = clock();
 
     switch (mState){
         case EgameState::MENU_MODE:{
-            if ( selectMode(inputs.front()) == EgameResult::END ) {
+            if ( selectMode(inputs.front(),coordenadasMouse) == EgameResult::END ) {
                 switch (mModeSelection){
                     case EmodeSelection::MULTIPLAYER: {
                         mState = EgameState::MODE_MULTIPLAYER;
@@ -149,7 +149,7 @@ void Game::play(vector<Tinput> inputs) {
             break;
         };
         case EgameState::MENU_PLAYERS:{
-            if ( selectPlayers(inputs) == EgameResult::END ) {}
+            if (selectPlayers(inputs) == EgameResult::END ) {}
             break;
         };
         case EgameState::MODE_ARCADE:
@@ -183,8 +183,14 @@ string Game::getWinner() {
     }
 }
 
-EgameResult Game::selectMode(Tinput input) {
-    EmodeSelection selection = mMenuGameMode->update(input);
+EgameResult Game::selectMode(Tinput input,Posicion coordenadasMouse) {
+    vector<float> escalas = mPantalla->getEscalas();
+
+    coordenadasMouse.x = coordenadasMouse.x / escalas[0];
+    coordenadasMouse.y = coordenadasMouse.y / escalas[1];
+
+    EmodeSelection selection = mMenuGameMode->update(coordenadasMouse,mPantalla->getCuadradoModos());
+    selection = mMenuGameMode->update(input);
     mPantalla->update(selection);
     mPantalla->print();
 

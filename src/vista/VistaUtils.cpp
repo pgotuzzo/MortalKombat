@@ -362,3 +362,11 @@ void VistaUtils::freeTextures() {
 }
 
 
+vector<float> VistaUtils::getEscala() {
+    vector<float> escalas;
+
+    escalas.push_back(mScales[0]);
+    escalas.push_back(mScales[1]);
+
+    return escalas;
+}

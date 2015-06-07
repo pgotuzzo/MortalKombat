@@ -139,7 +139,9 @@ PantallaFight::~PantallaFight() {
     loguer->loguear("Destruccion de la pantalla", Log::LOG_DEB);
     for (int i = 0; i < mCapas.size(); i++)
         mCapas[i].freeTextures();
-    capaInfo->freeTextures();
+    // TODO: FRAN comente esta linea pq tiraba un segmentation fault cuando apretas la r en fight
+    // me parece que puede ser pq capainfo no se crea en el modo practica
+    //capaInfo->freeTextures();
     for (int i = 0; i < mPersonajes.size(); i++)
         mPersonajes[i].freeTextures();
     loguer->loguear("Cierra SDL", Log::LOG_DEB);

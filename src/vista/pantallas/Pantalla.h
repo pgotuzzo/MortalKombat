@@ -32,6 +32,18 @@ public:
     virtual void update(EmodeSelection selection);
 
     /**
+     * GET CUADRADO DE LOS MODOS DE JUEGO
+     */
+
+    virtual vector<Trect> getCuadradoModos();
+
+    /**
+     * GET ESCALAS DE PIXELES A LOGICAS
+     */
+
+    virtual vector<float> getEscalas();
+
+    /**
      * MENU DE SELECCION DE PERSONAJES
      */
     virtual void update(vector<EtipoPersonaje> players);

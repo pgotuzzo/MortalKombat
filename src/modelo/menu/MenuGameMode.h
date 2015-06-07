@@ -12,10 +12,14 @@ private:
 
     void updateSelection(Tdireccion direction);
 
+    bool dentroDelModo(Posicion posMouse,Trect modo);
+
 public:
     MenuGameMode();
 
     EmodeSelection update(Tinput input);
+    EmodeSelection update(Posicion coordenadasMouse,vector<Trect> modos);
+
     bool selectionComplete();
 };
 

@@ -39,7 +39,7 @@ public:
     Tinput inputAnterior2;
     ControladorJoystick(Tbotones);
     void cerrarJoysticks();
-    vector<Tinput> getInputs();
+    vector<Tinput> getInputs(SDL_Event);
 
 };
 

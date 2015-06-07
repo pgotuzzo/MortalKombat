@@ -48,3 +48,27 @@ PantallaMenuModoJuego::~PantallaMenuModoJuego() {
     SDL_DestroyTexture(mTextBackground.t);
     SDL_DestroyTexture(mTextSelector.t);
 }
+
+vector<Trect> PantallaMenuModoJuego::getCuadradoModos() {
+    Trect primerModo, segundoModo, tercerModo;
+
+    primerModo.d = mTextSelector.d;
+    segundoModo.d = mTextSelector.d;
+    tercerModo.d = mTextSelector.d;
+
+    primerModo.p.y = mTextBackground.d.h - mTextSelector.d.h;
+    segundoModo.p.y = mTextBackground.d.h - mTextSelector.d.h;
+    tercerModo.p.y = mTextBackground.d.h - mTextSelector.d.h;
+
+    primerModo.p.x = 0;
+    segundoModo.p.x = mTextBackground.d.w / 2 - mTextSelector.d.w / 2;
+    tercerModo.p.x = mTextBackground.d.w - mTextSelector.d.w;
+
+    vector<Trect> modos;
+    modos.push_back(primerModo);
+    modos.push_back(segundoModo);
+    modos.push_back(tercerModo);
+
+    return modos;
+
+}

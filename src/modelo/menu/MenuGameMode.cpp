@@ -32,13 +32,41 @@ EmodeSelection MenuGameMode::update(Tinput input) {
         default:;
     }
 
-    if (input.game == TinputGame::KEY_ENTER){
+    if (input.game == TinputGame::KEY_ENTER || input.accion == TinputAccion::KEY_PINIA_ALTA){
         mSelectionConfirmed = true;
     }
 
     return mSelection;
 }
 
+
+EmodeSelection MenuGameMode::update(Posicion coordenadasMouse,vector<Trect> modos) {
+
+    if(dentroDelModo(coordenadasMouse,modos[0])){
+        mSelection = EmodeSelection::MULTIPLAYER;
+    }
+    if(dentroDelModo(coordenadasMouse,modos[1])){
+        mSelection = EmodeSelection::ARCADE;
+    }
+    if(dentroDelModo(coordenadasMouse,modos[2])){
+        mSelection = EmodeSelection::PRACTICE;
+    }
+
+    return mSelection;
+}
+
+
+
 bool MenuGameMode::selectionComplete() {
     return mSelectionConfirmed;
+}
+
+
+bool MenuGameMode::dentroDelModo(Posicion posMouse,Trect modo) {
+    if (posMouse.x < (modo.p.x + modo.d.w) && (posMouse.x >= modo.p.x)) {
+        if(posMouse.y >= modo.p.y){
+            return true;
+        }
+    }
+    return false;
 }

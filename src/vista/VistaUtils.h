@@ -34,6 +34,8 @@ public:
     void setColorSetting(TcolorSettings settings);
     void getScales(Ttexture texture, float scales[2]);
 
+    vector<float> getEscala();
+
     Ttexture loadTexture(std::string path);
     Ttexture createTextureFromText(string fontPath, string string, int size);
 

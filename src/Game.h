@@ -44,15 +44,16 @@ private:
     void clean();
     void initialize();
 
-    EgameResult selectMode(Tinput input);
+    EgameResult selectMode(Tinput input,Posicion coordenadasMouse);
     EgameResult selectPlayers(vector<Tinput> inputs);
+
     EgameResult fight(vector<Tinput> inputs);
 
 
 public:
     Game(config* configuration, const int gameloop);
 
-    void play(vector<Tinput> inputs);
+    void play(vector<Tinput> inputs,Posicion coordenandasMouse);
     string getWinner();
 
     virtual ~Game();

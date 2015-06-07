@@ -483,16 +483,13 @@ void ControladorJoystick::setInputAnteriorX(SDL_Joystick* playerX,Tinput& auxInp
 
 }
 
-vector<Tinput> ControladorJoystick::getInputs() {
+vector<Tinput> ControladorJoystick::getInputs(SDL_Event event) {
 
     vector<Tinput> inputs;
 
-
-    SDL_Event event;
     SDL_Event auxE;
     Tinput aux;
-    while (SDL_PollEvent(&event) != 0) {}
-    SDL_PollEvent(&event);
+
     auxE=event;
     switch (event.type) {
         case SDL_QUIT:

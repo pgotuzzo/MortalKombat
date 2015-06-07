@@ -469,14 +469,11 @@ Tinput ControladorTeclado::esAnterior2(const Uint8 *state) {
 	return aux;
 }
 
-vector<Tinput> ControladorTeclado::getInputs() {
+vector<Tinput> ControladorTeclado::getInputs(SDL_Event event) {
 
 	const Uint8 *state = SDL_GetKeyboardState(NULL);
 	vector<Tinput> inputs;
 	Tinput aux;
-	SDL_Event event;
-	while (SDL_PollEvent(&event) != 0) {}
-	SDL_PollEvent(&event);
 	switch (event.type) {
 		case SDL_QUIT:
 			aux.game=TinputGame::KEY_EXIT;

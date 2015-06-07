@@ -1,26 +1,19 @@
 
 #include "ControladorMouse.h"
+#include "../utils/Common.h"
 
 ControladorMouse::ControladorMouse() {
     posicionMouse = Posicion();
 }
 
-void ControladorMouse::moverMouse() {
-
-    SDL_Event e;
-    while(SDL_PollEvent(&e) != 0){
-
-        if(e.type == SDL_MOUSEMOTION){
-            //TODO: PASARLO A COORDENADAS LOGICAS. ESTA EN PIXELES
-            posicionMouse.x = e.button.x;
-            posicionMouse.y = e.button.y;
-            posicionMouse.mostrarPar();
-        }
-        if(e.type == SDL_MOUSEBUTTONDOWN){
-            if(e.button.button == SDL_BUTTON_LEFT) {
-                cout << "Se apreto boton del mouse" << endl;
-            }
-        }
+TinputGame ControladorMouse::moverMouse(SDL_Event event) {
+    if(event.type == SDL_MOUSEMOTION){
+        //TODO: PASARLO A COORDENADAS LOGICAS. ESTA EN PIXELES
+        posicionMouse.x = event.button.x;
+        posicionMouse.y = event.button.y;
+    }
+    if(event.type == SDL_MOUSEBUTTONDOWN){
+        if(event.button.button == SDL_BUTTON_LEFT) return TinputGame::KEY_ENTER;
     }
 }
 

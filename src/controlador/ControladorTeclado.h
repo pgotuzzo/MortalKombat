@@ -14,7 +14,7 @@ public:
     Tinput inputAnterior1;
     Tinput inputAnterior2;
     ControladorTeclado();
-    vector<Tinput> getInputs();
+    vector<Tinput> getInputs(SDL_Event event);
 };
 
 
