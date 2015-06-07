@@ -7,8 +7,9 @@
 const int tamBuffer = 10;
 const float anchoBoton = 10;
 const float altoBoton = 10;
-const float posXBoton = 20;
-const float posYBoton = 20;
+const float posXBoton = 10;
+const float posYBoton = 10;
+const Uint32 tiempoMax = 1500;
 
 const string FONT_PATH = "resources/font/mortalkombat2.ttf";
 const int FONT_SIZE = 18;
@@ -20,7 +21,7 @@ CapaInfoPractice::CapaInfoPractice(VistaUtils* utils, Tdimension dimPantalla, st
         Trect rect;
         rect.d.w = anchoBoton;
         rect.d.h = altoBoton;
-        rect.p.x = posXBoton+i*(3/2)*anchoBoton;
+        rect.p.x = posXBoton+i*3*anchoBoton/2;
         rect.p.y = posYBoton;
         rectBotones.push_back(rect);
     }

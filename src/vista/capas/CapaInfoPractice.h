@@ -19,7 +19,6 @@ protected:
     float anchoBorde, anchoRelleno,anchoPantalla, distBorde;
     vector<Trect> rectBotones;
     queue<TeclaBuffer> buffer;
-    const Uint32 tiempoMax = 1000;
 
 
 public:
