@@ -7,7 +7,27 @@
  * Estructuras y enums propios de los
  *  Personajes
  */
+
+static const string PODER_ACTIVADO_PATH = "pod_poder";
+static const string PODER_COLISION_PATH = "pod_colision";
 static const int TestadoPersonajeCount = 36;
+
+enum class EtipoPersonaje {
+    SUBZERO,
+    SUBZERO_GREEN,
+    SUBZERO_RED,
+    SUBZERO_YELLOW,
+
+    ERMAC,
+    ERMAC_GREEN,
+    ERMAC_RED,
+    ERMAC_YELLOW,
+
+    LIUKANG,
+    LIUKANG_BLUE,
+    LIUKANG_GREEN,
+    LIUKANG_YELLOW
+};
 
 enum TestadoPersonaje {
     // Movimient
@@ -121,9 +141,6 @@ enum TestadoPoder{
     DESACTIVADO,
     COLISION
 };
-
-static const string PODER_ACTIVADO_PATH = "pod_poder";
-static const string PODER_COLISION_PATH = "pod_colision";
 
 struct TcambioPoder{
     TestadoPoder e;

@@ -1,5 +1,5 @@
 #include "Game.h"
-#include "vista/pantallas/PantallaMenuModoJuego.h"
+#include "vista/pantallas/menu/PantallaMenuModoJuego.h"
 #include "vista/pantallas/PantallaFight.h"
 #include "vista/pantallas/PantallaPractice.h"
 #include "vista/pantallas/PantallaArcade.h"
@@ -14,6 +14,7 @@ Game::Game(config* configuration, const int gameLoopPeriod) {
     mPantalla = nullptr;
     mMundo = nullptr;
     mMenuGameMode = nullptr;
+    mMenuPlayers = nullptr;
 
     initialize();
 };
@@ -46,6 +47,26 @@ void Game::initialize() {
             loguer->loguear("Creando el modelo...", Log::LOG_DEB);
 
             mMenuGameMode = new MenuGameMode();
+
+            loguer->loguear("Finaliza la creacion del modelo", Log::LOG_DEB);
+            break;
+        };
+        case EgameState::MENU_PLAYERS:{
+            loguer->loguear("[--- MENU DE JUGADORES ---]", Log::LOG_DEB);
+            loguer->loguear("Creando la pantalla...", Log::LOG_DEB);
+
+            Tdimension dimPx = mConfiguration->getVentana().dimPx;
+            Tdimension dim = {
+                    mConfiguration->getVentana().ancho,
+                    mConfiguration->getEscenario().d.h,
+            };
+
+            mPantalla = new PantallaMenuModoJuego(dimPx, dim);
+
+            loguer->loguear("Finaliza la creacion de la pantalla", Log::LOG_DEB);
+            loguer->loguear("Creando el modelo...", Log::LOG_DEB);
+
+            mMenuPlayers = new MenuPlayers();
 
             loguer->loguear("Finaliza la creacion del modelo", Log::LOG_DEB);
             break;

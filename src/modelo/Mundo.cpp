@@ -57,7 +57,7 @@ void Mundo::verificarDireccionDeLosPersonajes() {
 	//osea pidiendo que el estado actual sea diferente de la accion y la reaccion agarre
 	// para que haga el cambio de direccion
 	if(personaje1->estadoActual == ACC_AGARRE || personaje1->estadoActual == REA_AGARRE) {
-		cout<<"No entro"<<endl;
+		//cout<<"No entro"<<endl;
 	}else {
 		if (personaje1->rectanguloPj.p.getX() < personaje2->rectanguloPj.p.getX()) {
 			personaje1->direccionPj = DERECHA;
@@ -95,7 +95,7 @@ Tcambio Mundo::actualizarPJ(Personaje *PJ) {
  * Se asigna todos los datos pertinentes de personaje a Tcambio.
  */
 vector<Tcambio> Mundo::actualizarMundo(vector<Tinput> inputs) {
-	cout<<roundsPJ1<<endl;
+	//cout<<roundsPJ1<<endl;
 	vector<Tcambio> c;
 	Tcambio cambio1, cambio2;
 

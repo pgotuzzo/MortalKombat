@@ -36,10 +36,12 @@ void DetectorDeColisiones::resolverColisiones(Personaje *personaje1, Personaje *
 void DetectorDeColisiones::resolverColisionYAgarre(Personaje *personaje1, Personaje *personaje2) {
     if(personaje1->llevarACabo.getGolpe()->estado){
         if(personaje1->estadoActual == ACC_PINIA_BAJA && distancia(personaje1,personaje2) <= 1){
-            personaje1->estadoAnterior = personaje1->estadoActual;
-            personaje1->estadoActual = ACC_AGARRE;
-            personaje2->estadoAnterior = personaje2->estadoActual;
-            personaje2->estadoActual = REA_AGARRE;
+            if(personaje2->estadoActual == MOV_PARADO || personaje2->estadoActual == MOV_CAMINANDO) {
+                personaje1->estadoAnterior = personaje1->estadoActual;
+                personaje1->estadoActual = ACC_AGARRE;
+                personaje2->estadoAnterior = personaje2->estadoActual;
+                personaje2->estadoActual = REA_AGARRE;
+            }
         }
         else colisionar(personaje2,personaje1->llevarACabo.getGolpe());
     }
