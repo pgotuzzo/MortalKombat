@@ -9,25 +9,7 @@
 using namespace std;
 
 class CapaInfo {
-private:
-    struct TeclaBuffer {
-        Ttexture textura;
-        Uint32 tiempoInicial;
-    };
-
-    VistaUtils* mUtils;
-    Ttexture barraVidaCompletaText;
-    Ttexture barraVidaParcialText;
-    Ttexture mNombre1;
-    Ttexture mNombre2;
-    float anchoBorde, anchoRelleno,anchoPantalla, distBorde;
-    Trect barraVidaCompleta1, barraVidaCompleta2, barraVidaParcialPedazo1,
-            barraVidaParcialPedazo2, barraVidaParcialPantalla1, barraVidaParcialPantalla2,
-            mNombre1Rect, mNombre2Rect;
-    vector<Trect> rectBotones;
-    queue<TeclaBuffer> buffer;
-
-
+protected:
 public:
     CapaInfo();
     /*
@@ -44,15 +26,15 @@ public:
     *  Guarda el pedazo de la capa a mostrar en le pedazo de textura pasado por parametro.
     *  texture : puntero a una textura del tamaño de la pantalla
     */
-    void getTexture(Ttexture texture);
+    virtual void getTexture(Ttexture texture)=0;
 
 
     /*
      * Cambia la posicion de la capa ajustandola a la posicion del escenario
      */
-    void update(float porcVida1,float porcVida2,Tinput input);
+    virtual void update(float porcVida1,float porcVida2,Tinput input);
 
-    void freeTextures();
+    virtual void freeTextures();
 
     virtual ~CapaInfo();
 };

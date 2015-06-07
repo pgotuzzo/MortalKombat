@@ -12,7 +12,7 @@ const float distVibracion = 5;
  *              componentes de SDL (mUtils)
  */
 void PantallaFight::InicializarPersonajes(vector<Tpersonaje> personajes) {
-    if (mUtils == nullptr){
+    if (mUtils == nullptr) {
         loguer->loguear("No se pueden crear las vistas de los personajes sin antes inicializar SDL", Log::LOG_ERR);
         throw new exception;
     }
@@ -25,41 +25,18 @@ void PantallaFight::InicializarPersonajes(vector<Tpersonaje> personajes) {
     mPersonajes.push_back(p);
 
     // Personaje 2
-    if (personajes[1].sprites == personajes[0].sprites){
+    if (personajes[1].sprites == personajes[0].sprites) {
         mUtils->setColorSetting(personajes.at(1).colorSettings);
         mUtils->enableColorChange(true);
         p = PersonajeVista(mUtils, personajes[1].sprites, personajes[1].d, personajes[1].orientacion);
         mUtils->enableColorChange(false);
-    }else{
+    } else {
         p = PersonajeVista(mUtils, personajes[1].sprites, personajes[1].d, personajes[1].orientacion);
     }
     mPersonajes.push_back(p);
 
 }
 
-/**
- * Crea las capas
- *
- * \observacion Para que se puedan inicializar las capas, previamente se tuvo que inicializar los
- *              componentes de SDL (mUtils)
- */
-void PantallaFight::InicializarCapas(vector<Tcapa> capas, string personajes[2]) {
-    if (mUtils == nullptr){
-        loguer->loguear("No se pueden crear las vistas de las capas sin antes inicializar SDL", Log::LOG_ERR);
-        throw new exception;
-    }
-
-    for (int i = 0; i < capas.size(); i++){
-        Trect rect;
-        rect.d = mDimension;
-        rect.p.x = (capas[i].ancho - mDimension.w)/2;
-        rect.p.y = 0;
-        Capa capa = Capa(mUtils, capas[i].dirCapa, rect, capas[i].ancho, mAnchoEscenario);
-        mCapas.push_back(capa);
-    }
-
-    capaInfo = CapaInfo(mUtils, mDimension, personajes);
-}
 
 /*
  * Crea una pantalla.
@@ -69,21 +46,23 @@ void PantallaFight::InicializarCapas(vector<Tcapa> capas, string personajes[2]) 
  * personaje : formato del personaje.
  */
 PantallaFight::PantallaFight(vector<Tcapa> capas, Tventana ventana,
-                                             Tescenario escenario, vector<Tpersonaje> personajes)
+                             Tescenario escenario, vector<Tpersonaje> personajes)
         : Pantalla(ventana.dimPx, Tdimension(ventana.ancho, escenario.d.h)) {
 
     mAnchoEscenario = escenario.d.w;
-    posEscenario = ( mAnchoEscenario - mDimension.w ) / 2;
+    posEscenario = (mAnchoEscenario - mDimension.w) / 2;
     distTope = ventana.distTope;
 
     // Personajes
     InicializarPersonajes(personajes);
 
-    // Capas
-    string nombres[2] = {personajes[0].nombre, personajes[1].nombre};
-    InicializarCapas(capas, nombres);
-    vibroADerecha = false;
+        vibroADerecha = false;
 };
+
+
+void PantallaFight::initialize(vector<Tcapa> capas, string personajes[2]){
+    InicializarCapas( capas,  personajes);
+}
 
 /*
  * Dibuja todos los objetos en pantalla.
@@ -98,10 +77,10 @@ void PantallaFight::print() {
         mCapas[i].getTexture(ventana);
         if (i == zIndex) {
             for (unsigned i = 0; i < mPersonajes.size(); i++)
-               mPersonajes[i].getTexture(ventana, posEscenario);
+                mPersonajes[i].getTexture(ventana, posEscenario);
         }
     }
-    capaInfo.getTexture(ventana);
+    capaInfo->getTexture(ventana);
     SDL_RenderPresent(mRenderer);
 
 }
@@ -110,8 +89,8 @@ void PantallaFight::print() {
  * Actualiza todos los objetos de pantalla.
  * change : contiene los cambios a realizar.
  */
-void PantallaFight::update(vector<Tcambio> changes,Tinput input) {
-    for (unsigned i = 0; i < mPersonajes.size(); i++){
+void PantallaFight::update(vector<Tcambio> changes, Tinput input) {
+    for (unsigned i = 0; i < mPersonajes.size(); i++) {
         if (mPersonajes[i].update(changes[i]))
             this->vibrar();
     }
@@ -143,10 +122,10 @@ void PantallaFight::update(vector<Tcambio> changes,Tinput input) {
         mCapas[i].ajustar(posEscenario);
     }
 
-    capaInfo.update(changes[0].vida/100,changes[1].vida/100,input);
+    capaInfo->update(changes[0].vida / 100, changes[1].vida / 100, input);
 }
 
-void PantallaFight::vibrar(){
+void PantallaFight::vibrar() {
     if (vibroADerecha) {
         posEscenario = posEscenario - distVibracion;
         vibroADerecha = false;
@@ -156,11 +135,11 @@ void PantallaFight::vibrar(){
     }
 }
 
-PantallaFight::~PantallaFight(){
+PantallaFight::~PantallaFight() {
     loguer->loguear("Destruccion de la pantalla", Log::LOG_DEB);
     for (int i = 0; i < mCapas.size(); i++)
         mCapas[i].freeTextures();
-    capaInfo.freeTextures();
+    capaInfo->freeTextures();
     for (int i = 0; i < mPersonajes.size(); i++)
         mPersonajes[i].freeTextures();
     loguer->loguear("Cierra SDL", Log::LOG_DEB);

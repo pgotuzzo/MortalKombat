@@ -46,6 +46,7 @@ Pantalla::Pantalla(Tdimension dimPixels, Tdimension dimUl) {
 void Pantalla::update(vector<Tcambio> changes,Tinput input) {}
 void Pantalla::update(EmodeSelection selection) {}
 void Pantalla::update(vector<EtipoPersonaje> players) {}
+void Pantalla::initialize(vector<Tcapa> capas, string personajes[2]){}
 
 Pantalla::~Pantalla(){
     loguer->loguear("Destruccion de la pantalla", Log::LOG_DEB);
@@ -58,3 +59,4 @@ Pantalla::~Pantalla(){
     TTF_Quit();
     SDL_Quit();
 }
+

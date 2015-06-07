@@ -9,22 +9,23 @@
 #include "../personajes/PersonajeVista.h"
 
 class PantallaFight : public Pantalla{
-private:
+protected:
     vector<Capa> mCapas;
     vector<PersonajeVista> mPersonajes;
     int zIndex;
-    CapaInfo capaInfo;
+    CapaInfo* capaInfo;
 
     float distTope;
     float mAnchoEscenario;
     float posEscenario;
 
     void InicializarPersonajes(vector<Tpersonaje> personajes);
-    void InicializarCapas(vector<Tcapa> capas, string personajes[2]);
 
     bool vibroADerecha;
 
 public:
+    virtual void InicializarCapas(vector<Tcapa> capas, string personajes[2])=0;
+    void initialize(vector<Tcapa> capas, string personajes[2]);
     /*
      * Crea una pantalla.
      * capas : formato de cada capa.
@@ -44,6 +45,7 @@ public:
      * change : contiene los cambios a realizar.
      */
     void update(vector<Tcambio> changes,Tinput input);
+
 
     void vibrar();
 
