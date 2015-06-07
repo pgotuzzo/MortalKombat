@@ -73,7 +73,7 @@ void Game::initialize() {
             break;
         };
         case EgameState::MODE_MULTIPLAYER:
-        case EgameState::MODE_ARCADE:
+        case EgameState::MODE_ARCADE:{
             loguer->loguear("[--- MODO MULTIPLAYER/ARCADE ---]", Log::LOG_DEB);
             loguer->loguear("Creando la pantalla...", Log::LOG_DEB);
 
