@@ -104,7 +104,7 @@ void CapaInfo::getTexture(Ttexture texture) {
     mUtils->copyTexture(mNombre1, texture, NULL, &mNombre1Rect);
     mUtils->copyTexture(mNombre2, texture, NULL, &mNombre2Rect);
 
-    for (int i=0;i<buffer.size();i++) {
+    for (int i=0;i<buffer.size() ;i++) {
         TeclaBuffer aux = buffer.front();
         mUtils->copyTexture(aux.textura, texture, NULL, &rectBotones.at(i));
         buffer.pop();
@@ -183,6 +183,14 @@ void CapaInfo::update(float porcVida1,float porcVida2,Tinput input) {
         buffer.push(tecla);
         buffer.size();
     }
+
+    if (!buffer.empty()) {
+        if (SDL_GetTicks()-buffer.front().tiempoInicial >= tiempoMax || buffer.size() >= tamBuffer) {
+            SDL_DestroyTexture(buffer.front().textura.t);
+            buffer.pop();
+        }
+    }
+
     if (input.movimiento != TinputMovimiento::KEY_NADA) {
         TeclaBuffer tecla;
         tecla.tiempoInicial = SDL_GetTicks();
