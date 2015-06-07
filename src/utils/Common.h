@@ -361,7 +361,7 @@ enum class TinputAccion{
 
 enum class TinputGame{
     KEY_NADA,
-
+    CLICK_IZQ_MOUSE,
     KEY_RESTART,
     KEY_ESC,
     KEY_ENTER,

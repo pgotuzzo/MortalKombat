@@ -10,15 +10,18 @@ private:
     EmodeSelection mSelection;
     bool mSelectionConfirmed;
 
+    bool seleccionandoConMouse;
+
     void updateSelection(Tdireccion direction);
 
     bool dentroDelModo(Posicion posMouse,Trect modo);
+
 
 public:
     MenuGameMode();
 
     EmodeSelection update(Tinput input);
-    EmodeSelection update(Posicion coordenadasMouse,vector<Trect> modos);
+    EmodeSelection update(Tinput input,Posicion coordenadasMouse,vector<Trect> modos);
 
     bool selectionComplete();
 };

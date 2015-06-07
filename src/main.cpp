@@ -46,7 +46,7 @@ int main(int argc, char **argv) {
             inputs = inputsT;
 
             TinputGame inputGame = controladorMouse.moverMouse(event);
-            if(inputGame == TinputGame::KEY_ENTER)inputs[0].game = inputGame;
+            if(inputGame == TinputGame::CLICK_IZQ_MOUSE)inputs[0].game = inputGame;
             if(inputs[0].game == TinputGame::KEY_NADA) {
                 inputs[0].tiempo = SDL_GetTicks();
                 inputs[1].tiempo = SDL_GetTicks();

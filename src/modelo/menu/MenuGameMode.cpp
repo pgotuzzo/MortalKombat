@@ -3,6 +3,7 @@
 MenuGameMode::MenuGameMode() {
     mSelection = EmodeSelection::MULTIPLAYER;
     mSelectionConfirmed = false;
+    seleccionandoConMouse = false;
 }
 
 void MenuGameMode::updateSelection(Tdireccion direction) {
@@ -40,21 +41,27 @@ EmodeSelection MenuGameMode::update(Tinput input) {
 }
 
 
-EmodeSelection MenuGameMode::update(Posicion coordenadasMouse,vector<Trect> modos) {
+EmodeSelection MenuGameMode::update(Tinput input,Posicion coordenadasMouse,vector<Trect> modos) {
 
     if(dentroDelModo(coordenadasMouse,modos[0])){
         mSelection = EmodeSelection::MULTIPLAYER;
     }
-    if(dentroDelModo(coordenadasMouse,modos[1])){
+    else if(dentroDelModo(coordenadasMouse,modos[1])){
         mSelection = EmodeSelection::ARCADE;
     }
-    if(dentroDelModo(coordenadasMouse,modos[2])){
+    else if(dentroDelModo(coordenadasMouse,modos[2])){
         mSelection = EmodeSelection::PRACTICE;
+    }
+
+    else seleccionandoConMouse = false;
+
+    if (input.game == TinputGame::CLICK_IZQ_MOUSE && seleccionandoConMouse){
+
+        mSelectionConfirmed = true;
     }
 
     return mSelection;
 }
-
 
 
 bool MenuGameMode::selectionComplete() {
@@ -65,6 +72,7 @@ bool MenuGameMode::selectionComplete() {
 bool MenuGameMode::dentroDelModo(Posicion posMouse,Trect modo) {
     if (posMouse.x < (modo.p.x + modo.d.w) && (posMouse.x >= modo.p.x)) {
         if(posMouse.y >= modo.p.y){
+            seleccionandoConMouse = true;
             return true;
         }
     }

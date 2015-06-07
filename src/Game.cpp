@@ -52,7 +52,7 @@ void Game::initialize() {
             loguer->loguear("Finaliza la creacion del modelo", Log::LOG_DEB);
             break;
         };
-        case EgameState::MENU_PLAYERS:{
+        /*case EgameState::MENU_PLAYERS:{
             loguer->loguear("[--- MENU DE JUGADORES ---]", Log::LOG_DEB);
             loguer->loguear("Creando la pantalla...", Log::LOG_DEB);
 
@@ -71,7 +71,7 @@ void Game::initialize() {
 
             loguer->loguear("Finaliza la creacion del modelo", Log::LOG_DEB);
             break;
-        };
+        };*/
         case EgameState::MODE_MULTIPLAYER:
         case EgameState::MODE_ARCADE:{
             loguer->loguear("[--- MODO MULTIPLAYER/ARCADE ---]", Log::LOG_DEB);
@@ -189,7 +189,7 @@ EgameResult Game::selectMode(Tinput input,Posicion coordenadasMouse) {
     coordenadasMouse.x = coordenadasMouse.x / escalas[0];
     coordenadasMouse.y = coordenadasMouse.y / escalas[1];
 
-    EmodeSelection selection = mMenuGameMode->update(coordenadasMouse,mPantalla->getCuadradoModos());
+    EmodeSelection selection = mMenuGameMode->update(input,coordenadasMouse,mPantalla->getCuadradoModos());
     selection = mMenuGameMode->update(input);
     mPantalla->update(selection);
     mPantalla->print();
