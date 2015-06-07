@@ -42,3 +42,7 @@ void PantallaPractice::InicializarCapas(vector<Tcapa> capas, string personajes[2
 
     capaInfo = new CapaInfoPractice(mUtils, mDimension, personajes);
 }
+
+PantallaPractice::~PantallaPractice() {
+    delete capaInfo;
+}

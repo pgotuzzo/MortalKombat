@@ -40,3 +40,7 @@ void PantallaArcade::InicializarCapas(vector<Tcapa> capas, string personajes[2])
 
     capaInfo = new CapaInfoArcade(mUtils, mDimension, personajes);
 }
+
+PantallaArcade::~PantallaArcade() {
+    delete capaInfo;
+}

@@ -29,6 +29,7 @@ public:
      */
     PantallaPractice(vector<Tcapa> capas, Tventana ventana, Tescenario escenario, vector<Tpersonaje> personajes);
 
+    ~PantallaPractice();
 };
 
 
