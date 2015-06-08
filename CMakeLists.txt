@@ -81,8 +81,16 @@ set(SOURCE_FILES
     src/vista/capas/Capa.cpp
     src/vista/capas/Capa.h
     src/vista/capas/CapaInfo.cpp
+    src/vista/capas/CapaInfoPractice.cpp
+    src/vista/capas/CapaInfoPractice.h
+    src/vista/capas/CapaInfoArcade.cpp
+    src/vista/capas/CapaInfoArcade.h
     src/vista/pantallas/PantallaFight.h
     src/vista/pantallas/PantallaFight.cpp
+    src/vista/pantallas/PantallaPractice.h
+    src/vista/pantallas/PantallaPractice.cpp
+    src/vista/pantallas/PantallaArcade.h
+    src/vista/pantallas/PantallaArcade.cpp
     src/vista/personajes/PersonajeVista.h
     src/vista/personajes/PersonajeVista.cpp
     src/vista/personajes/PoderVista.h
@@ -107,12 +115,13 @@ set(SOURCE_FILES
     src/controlador/ControladorTexto.cpp
     )
 
-add_executable(MortalKombat ${SOURCE_FILES} src/vista/pantallas/PantallaPractice.cpp src/vista/pantallas/PantallaPractice.h src/vista/capas/CapaInfoPractice.cpp src/vista/capas/CapaInfoPractice.h src/vista/pantallas/PantallaArcade.cpp src/vista/pantallas/PantallaArcade.h src/vista/capas/CapaInfoArcade.cpp src/vista/capas/CapaInfoArcade.h)
+add_executable(MortalKombat ${SOURCE_FILES} src/Musica.cpp src/Musica.h)
 
 # Bibliotecas
 target_link_libraries(MortalKombat
                         SDL2main
                         SDL2
                         SDL2_image
-                        SDL2_ttf)
+                        SDL2_ttf
+                        SDL2_mixer)
 

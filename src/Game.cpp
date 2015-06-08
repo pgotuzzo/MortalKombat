@@ -44,10 +44,15 @@ void Game::initialize() {
 
             mPantalla = new PantallaMenuModoJuego(dimPx, dim);
 
+            musicaDelJuego = new Musica();
+
+            musicaDelJuego->musicPractica();
+
             loguer->loguear("Finaliza la creacion de la pantalla", Log::LOG_DEB);
             loguer->loguear("Creando el modelo...", Log::LOG_DEB);
 
             mMenuGameMode = new MenuGameMode();
+
 
             loguer->loguear("Finaliza la creacion del modelo", Log::LOG_DEB);
             break;
@@ -83,6 +88,12 @@ void Game::initialize() {
             Tescenario escenario = mConfiguration->getEscenario();
 
             mPantalla = new PantallaArcade(capas, ventana, escenario, personajes);// Capas
+
+            delete musicaDelJuego;
+            sonidoPJ1 = new Musica();
+            sonidoPJ2 = new Musica();
+
+            sonidoPJ1->musicPractica();
             string nombres[2] = {personajes[0].nombre, personajes[1].nombre};
             mPantalla->initialize(capas, nombres);
 
@@ -97,13 +108,19 @@ void Game::initialize() {
         case EgameState::MODE_PRACTICE:{
             loguer->loguear("[--- MODO PRACTICE ---]", Log::LOG_DEB);
             loguer->loguear("Creando la pantalla...", Log::LOG_DEB);
-
             vector<Tcapa> capas = mConfiguration->getCapas();
             vector<Tpersonaje> personajes = mConfiguration->getPersonajes();
             Tventana ventana = mConfiguration->getVentana();
             Tescenario escenario = mConfiguration->getEscenario();
 
             mPantalla = new PantallaPractice(capas, ventana, escenario, personajes);
+
+            delete musicaDelJuego;
+            sonidoPJ1 = new Musica();
+            sonidoPJ2 = new Musica();
+
+            sonidoPJ1->musicPractica();
+
             // Capas
             string nombres[2] = {personajes[0].nombre, personajes[1].nombre};
             mPantalla->initialize(capas, nombres);
@@ -218,6 +235,10 @@ EgameResult Game::fight(vector<Tinput> inputs) {
             return EgameResult::END;
         default:{
             vector<Tcambio> c = mMundo->actualizarMundo(inputs);
+
+            sonidoPJ1->playFX(c.at(0).estado);
+            sonidoPJ2->playFX(c.at(1).estado);
+
             mPantalla->update(c,inputs[0]);
             mPantalla->print();
             return ( mMundo->huboGanador() ) ? EgameResult::END : EgameResult::CONTINUE;
@@ -226,6 +247,9 @@ EgameResult Game::fight(vector<Tinput> inputs) {
 }
 
 Game::~Game() {
+    //delete musicaDelJuego;
+    delete sonidoPJ1;
+    delete sonidoPJ2;
     delete(mPantalla);
     delete(mMundo);
     delete(mConfiguration);

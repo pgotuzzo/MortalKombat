@@ -8,6 +8,8 @@
 #include "utils/GameUtils.h"
 #include "modelo/menu/MenuPlayers.h"
 
+#include "Musica.h"
+
 class Game {
 private:
     enum class EgameState {
@@ -49,6 +51,10 @@ private:
 
     EgameResult fight(vector<Tinput> inputs);
 
+    Musica* sonidoPJ1;
+    Musica* sonidoPJ2;
+
+    Musica* musicaDelJuego;
 
 public:
     Game(config* configuration, const int gameloop);
