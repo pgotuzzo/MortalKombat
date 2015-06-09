@@ -12,11 +12,7 @@
 Pantalla::Pantalla(Tdimension dimPixels, Tdimension dimUl) {
 
     loguer->loguear("Inicia SDL", Log::LOG_DEB);
-    if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
-        loguer->loguear("Fallo la inicializacion general de SDL.", Log::LOG_ERR);
-        loguer->loguear(SDL_GetError(), Log::LOG_ERR);
-        throw new exception();
-    }
+
 
     if (TTF_Init() < 0) {
         loguer->loguear("Fallo la inicializacion de TTF.", Log::LOG_ERR);
@@ -59,9 +55,7 @@ Pantalla::~Pantalla(){
     SDL_DestroyRenderer(mRenderer);
     SDL_DestroyWindow(mWindow);
     loguer->loguear("Cierra SDL", Log::LOG_DEB);
-    IMG_Quit();
-    TTF_Quit();
-    SDL_Quit();
+
 }
 
 vector<Trect> Pantalla::getCuadradoModos() {

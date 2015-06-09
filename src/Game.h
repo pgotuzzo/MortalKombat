@@ -14,7 +14,7 @@ class Game {
 private:
 
     int mLoopPeriod;
-    EgameState mState;
+
     EmodeSelection mModeSelection;
 
     config* mConfiguration;
@@ -38,6 +38,9 @@ private:
     Musica* musicaDelJuego;
 
 public:
+
+    EgameState mState;
+
     Game(config* configuration, const int gameloop);
 
     void play(vector<Tinput> inputs,Posicion coordenandasMouse);
