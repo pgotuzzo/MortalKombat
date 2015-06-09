@@ -30,7 +30,7 @@
             "alto": 60,
             "z-index": 2,
             "nombre":"subzero",
-            "sprites": "./resources/sprites/subzero",
+            "sprites": "./resources/sprites/liukang",
             "color-alternativo": [
                 {"h-inicial": 210},
                 {"h-final":270},

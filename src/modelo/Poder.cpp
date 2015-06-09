@@ -14,12 +14,14 @@ Poder::Poder(string creador) {
     rectanguloPoder.d.h = altoPoder;
     danio = danioPoder;
     primerLoop = false;
-    if(creador.compare("subzero") == 0) efecto = REA_CONGELADO;
-    else if(creador.compare("ermac") == 0)efecto = REA_MALDITO;
-    else efecto = REA_GOLPE_ALTO;
+    if(creador.compare("subzero") == 0) efectoPoder = REA_CONGELADO;
+    else if(creador.compare("ermac") == 0)efectoPoder = REA_MALDITO;
+    else efectoPoder = REA_GOLPE_ALTO;
+    efecto = efectoPoder;
+    efectoFatFuego = REA_FAT_FUEGO;
 }
-
-void Poder::activar(Trect rectPJ,Tdireccion direccion,float anchoPantalla) {
+//Si esfectoFat es 0 el poder se activa con el efecto de la fatality
+void Poder::activar(Trect rectPJ,Tdireccion direccion,float anchoPantalla,int efectoFat) {
 
     if(estado == DESACTIVADO){
         estado = ACTIVADO;
@@ -35,7 +37,9 @@ void Poder::activar(Trect rectPJ,Tdireccion direccion,float anchoPantalla) {
         }
         this->danio = danio;
         this->direccion = direccion;
-        }
+    }
+    if(efectoFat == 0) efecto = efectoFatFuego;
+    else efecto = efectoPoder;
 }
 
 void Poder::avanzar(float avance) {

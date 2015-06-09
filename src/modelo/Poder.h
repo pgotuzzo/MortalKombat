@@ -16,10 +16,12 @@ public:
     float posFinalX;
     bool primerLoop;
     TestadoPersonaje efecto;
+    TestadoPersonaje efectoPoder;
+    TestadoPersonaje efectoFatFuego;
 
 
     Poder(string creador);
-    void activar(Trect rectPJ,Tdireccion direccion,float anchoPantalla);
+    void activar(Trect rectPJ,Tdireccion direccion,float anchoPantalla,int efectoFat);
     void avanzar(float avance);
     void setEstado(TestadoPoder nuevoEstado);
     Trect getRectangulo();

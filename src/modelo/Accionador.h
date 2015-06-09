@@ -54,7 +54,7 @@ public:
     void golpeSaltoOblicuo(int loops, Tdireccion direccion);
     void patadaAgachado(int loops,Tdireccion direccion);
     //PODER
-    void activarPoder(Tdireccion direccion);
+    void activarPoder(Tdireccion direccion,int efectoPoder);
     Golpe* getGolpe();
 
 

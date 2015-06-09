@@ -10,7 +10,7 @@
 
 static const string PODER_ACTIVADO_PATH = "pod_poder";
 static const string PODER_COLISION_PATH = "pod_colision";
-static const int TestadoPersonajeCount = 36;
+static const int TestadoPersonajeCount = 38;
 
 enum class EtipoPersonaje {
     SUBZERO,
@@ -48,7 +48,7 @@ static Posicion getPosition(EtipoPersonaje type){
 
 enum TestadoPersonaje {
     // Movimient
-    MOV_PARADO,
+            MOV_PARADO,
     MOV_CAMINANDO,
     MOV_SALTANDO_VERTICAL,
     MOV_SALTANDO_OBLICUO,
@@ -57,28 +57,20 @@ enum TestadoPersonaje {
     // Accion
             ACC_PINIA_BAJA,
     ACC_PINIA_BAJA_AGACHADO,
-
     ACC_PINIA_ALTA,
     ACC_PINIA_ALTA_AGACHADO, //gancho
-
     ACC_PINIA_SALTO,
-
     ACC_PATADA_BAJA,
     ACC_PATADA_BAJA_ATRAS,
     ACC_PINIA_SALTO_VERTICAL,
-
     ACC_PATADA_AGACHADO,
     ACC_PATADA_SALTO_VERTICAL,
     ACC_PATADA_SALTO, //oblicuo
-
     ACC_PATADA_ALTA,
     ACC_PATADA_ALTA_ATRAS,
-
     ACC_AGARRE,
-
     ACC_PROTECCION,
     ACC_PROTECCION_AGACHADO,
-
     ACC_PODER,
     ACC_PODER_SALTO,
 
@@ -95,7 +87,11 @@ enum TestadoPersonaje {
     REA_MALDITO,
     REA_DERROTA,
     REA_VICTORIA,
-    REA_MAREADO
+    REA_MAREADO,
+
+    REA_FAT_FUEGO,
+
+    FAT_FUEGO,
 
 
 };
@@ -142,6 +138,10 @@ static string TestadoPersonajeToString(TestadoPersonaje e){
         case TestadoPersonaje::REA_MAREADO: return"rea_mareado";
         case TestadoPersonaje::REA_VICTORIA: return"rea_victoria";
 
+        case TestadoPersonaje::REA_FAT_FUEGO: return"rea_fat_fuego";
+        case TestadoPersonaje::FAT_FUEGO: return"fat_fuego";
+
+
 
 
     }
@@ -174,6 +174,7 @@ static int loopsPara(TestadoPersonaje accion){
         case MOV_SALTANDO_VERTICAL:return 14;
         case MOV_SALTANDO_OBLICUO:return 20;
         case MOV_AGACHADO:return 3;
+
         case ACC_PINIA_BAJA:return 4;
         case ACC_PINIA_BAJA_AGACHADO:return 4;
         case ACC_PINIA_ALTA:return 4;
@@ -191,6 +192,8 @@ static int loopsPara(TestadoPersonaje accion){
         case ACC_PROTECCION_AGACHADO:return 3;
         case ACC_PODER:return 3;
         case ACC_PODER_SALTO:return 10;
+        case ACC_AGARRE:return 9;
+
         case REA_AGACHADO:return 1;
         case REA_GOLPE_ALTO:return 8;
         case REA_GOLPE_BAJO:return 3;
@@ -199,125 +202,95 @@ static int loopsPara(TestadoPersonaje accion){
         case REA_PINIA_ALTA:return 3;
         case REA_CAIDA:return 8;
         case REA_AGARRE:return 13;
-        case ACC_AGARRE:return 9;
         case REA_CONGELADO:return 40;
         case REA_MALDITO:return 6;
         case REA_DERROTA:return 15;
         case REA_VICTORIA:return 15;
         case REA_MAREADO:return 200;
+
+        case REA_FAT_FUEGO: return 20;
+        case FAT_FUEGO: return 10;
     }
 }
 
 static int mostrarEstado(TestadoPersonaje accion){
 
     switch (accion){
-        case(REA_MALDITO):
-            cout<<"REA_MALDITO"<<endl;
+        case(REA_MALDITO):cout<<"REA_MALDITO"<<endl;
             break;
-        case REA_CONGELADO:
-            cout<<"REA_CONGELADO"<<endl;
+        case REA_CONGELADO:cout<<"REA_CONGELADO"<<endl;
             break;
-        case MOV_PARADO:
-            cout<<"MOV_PARADO"<<endl;
+        case MOV_PARADO:cout<<"MOV_PARADO"<<endl;
             break;
-        case MOV_CAMINANDO:
-            cout<<"MOV_CAMINANDO"<<endl;
+        case MOV_CAMINANDO:cout<<"MOV_CAMINANDO"<<endl;
             break;
-        case MOV_SALTANDO_VERTICAL:
-            cout<<"MOV_SALTANDO_VERTICAL"<<endl;
+        case MOV_SALTANDO_VERTICAL:cout<<"MOV_SALTANDO_VERTICAL"<<endl;
             break;
-        case MOV_SALTANDO_OBLICUO:
-            cout<<"MOV_SALTANDO_OBLICUO"<<endl;
+        case MOV_SALTANDO_OBLICUO:cout<<"MOV_SALTANDO_OBLICUO"<<endl;
             break;
-        case MOV_AGACHADO:
-            cout<<"MOV_AGACHADO"<<endl;
+        case MOV_AGACHADO:cout<<"MOV_AGACHADO"<<endl;
             break;
-        case ACC_PINIA_BAJA:
-            cout<<"ACC_PINIA_BAJA"<<endl;
+        case ACC_PINIA_BAJA:cout<<"ACC_PINIA_BAJA"<<endl;
             break;
-        case ACC_PINIA_BAJA_AGACHADO:
-            cout<<"ACC_PINIA_BAJA_AGACHADO"<<endl;
+        case ACC_PINIA_BAJA_AGACHADO:cout<<"ACC_PINIA_BAJA_AGACHADO"<<endl;
             break;
-        case ACC_PINIA_ALTA:
-            cout<<"ACC_PINIA_ALTA"<<endl;
+        case ACC_PINIA_ALTA:cout<<"ACC_PINIA_ALTA"<<endl;
             break;
-        case ACC_PINIA_ALTA_AGACHADO:
-            cout<<"ACC_PINIA_ALTA_AGACHADO"<<endl;
+        case ACC_PINIA_ALTA_AGACHADO: cout<<"ACC_PINIA_ALTA_AGACHADO"<<endl;
             break;
-        case ACC_PINIA_SALTO:
-            cout<<"ACC_PINIA_SALTO"<<endl;
+        case ACC_PINIA_SALTO:cout<<"ACC_PINIA_SALTO"<<endl;
             break;
-        case ACC_PATADA_BAJA:
-            cout<<"ACC_PATADA_BAJA"<<endl;
+        case ACC_PATADA_BAJA:cout<<"ACC_PATADA_BAJA"<<endl;
             break;
-        case ACC_PATADA_BAJA_ATRAS:
-            cout<<"ACC_PATADA_BAJA_ATRAS"<<endl;
+        case ACC_PATADA_BAJA_ATRAS:cout<<"ACC_PATADA_BAJA_ATRAS"<<endl;
             break;
-        case ACC_PATADA_AGACHADO:
-            cout<<"ACC_PATADA_AGACHADO"<<endl;
+        case ACC_PATADA_AGACHADO:cout<<"ACC_PATADA_AGACHADO"<<endl;
             break;
-        case ACC_PATADA_SALTO_VERTICAL:
-            cout<<"ACC_PATADA_SALTO_VERTICAL"<<endl;
+        case ACC_PATADA_SALTO_VERTICAL:cout<<"ACC_PATADA_SALTO_VERTICAL"<<endl;
             break;
-        case ACC_PATADA_SALTO:
-            cout<<"ACC_PATADA_SALTO"<<endl;
+        case ACC_PATADA_SALTO:cout<<"ACC_PATADA_SALTO"<<endl;
             break;
-        case ACC_PATADA_ALTA:
-            cout<<"ACC_PATADA_ALTA"<<endl;
+        case ACC_PATADA_ALTA:cout<<"ACC_PATADA_ALTA"<<endl;
             break;
-        case ACC_PATADA_ALTA_ATRAS:
-            cout<<"ACC_PATADA_ALTA_ATRAS"<<endl;
+        case ACC_PATADA_ALTA_ATRAS:cout<<"ACC_PATADA_ALTA_ATRAS"<<endl;
             break;
-        case ACC_PROTECCION:
-            cout<<"ACC_PROTECCION"<<endl;
+        case ACC_PROTECCION:cout<<"ACC_PROTECCION"<<endl;
             break;
-        case ACC_PROTECCION_AGACHADO:
-            cout<<"ACC_PROTECCION_AGACHADO"<<endl;
+        case ACC_PROTECCION_AGACHADO:cout<<"ACC_PROTECCION_AGACHADO"<<endl;
             break;
-        case ACC_PODER:
-            cout<<"ACC_PODER"<<endl;
+        case ACC_PODER:cout<<"ACC_PODER"<<endl;
             break;
-        case REA_AGACHADO:
-            cout<<"REA_AGACHADO"<<endl;
+        case REA_AGACHADO:cout<<"REA_AGACHADO"<<endl;
             break;
-        case REA_GOLPE_ALTO:
-            cout<<"REA_GOLPE_ALTO"<<endl;
+        case REA_GOLPE_ALTO:cout<<"REA_GOLPE_ALTO"<<endl;
             break;
-        case REA_GOLPE_BAJO:
-            cout<<"REA_GOLPE_BAJO"<<endl;
+        case REA_GOLPE_BAJO:cout<<"REA_GOLPE_BAJO"<<endl;
             break;
-        case REA_GOLPE_FUERTE:
-            cout<<"REA_GOLPE_FUERTE"<<endl;
+        case REA_GOLPE_FUERTE:cout<<"REA_GOLPE_FUERTE"<<endl;
             break;
-        case REA_PATADA_BARRIDA:
-            cout<<"REA_PATADA_BARRIDA"<<endl;
+        case REA_PATADA_BARRIDA:cout<<"REA_PATADA_BARRIDA"<<endl;
             break;
-        case REA_PINIA_ALTA:
-            cout<<"REA_PINIA_ALTA"<<endl;
+        case REA_PINIA_ALTA:cout<<"REA_PINIA_ALTA"<<endl;
             break;
-        case ACC_PINIA_SALTO_VERTICAL:
-            cout<<"ACC_PATADA_SALTO_VERTICAL"<<endl;
+        case ACC_PINIA_SALTO_VERTICAL:cout<<"ACC_PATADA_SALTO_VERTICAL"<<endl;
             break;
-        case ACC_PODER_SALTO:
-            cout<<"ACC_PODER_SALTO";
+        case ACC_PODER_SALTO:cout<<"ACC_PODER_SALTO";
             break;
-        case REA_CAIDA:
-            cout<<"REA_CAIDA"<<endl;
+        case REA_CAIDA:cout<<"REA_CAIDA"<<endl;
             break;
-        case REA_AGARRE:
-            cout<<"REA_AGARRE"<<endl;
+        case REA_AGARRE:cout<<"REA_AGARRE"<<endl;
             break;
-        case ACC_AGARRE:
-            cout<<"ACC_AGARRE"<<endl;
+        case ACC_AGARRE:cout<<"ACC_AGARRE"<<endl;
             break;
-        case REA_DERROTA:
-            cout<<"REA_DERROTA"<<endl;
+        case REA_DERROTA:cout<<"REA_DERROTA"<<endl;
             break;
-        case REA_VICTORIA:
-            cout<<"REA_VICTORIA"<<endl;
+        case REA_VICTORIA:cout<<"REA_VICTORIA"<<endl;
             break;
-        case REA_MAREADO:
-            cout<<"REA_MAREADO"<<endl;
+        case REA_MAREADO:cout<<"REA_MAREADO"<<endl;
+            break;
+        case REA_FAT_FUEGO:cout<<"REA_FAT_FUEGO"<<endl;
+            break;
+        case FAT_FUEGO:cout<<"FAT_FUEGO"<<endl;
             break;
     }
 }

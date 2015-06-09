@@ -121,10 +121,10 @@ Trect Accionador::laAccion(TestadoPersonaje estadoPj, int loops, Posicion pos, T
         case ACC_PROTECCION_AGACHADO:
             break;
         case ACC_PODER:
-            activarPoder(direccion);
+            activarPoder(direccion,1);
             break;
         case ACC_PODER_SALTO:
-            activarPoder(direccion);
+            activarPoder(direccion,1);
             saltarVerticualmente(loops);
             break;
         case ACC_AGARRE:
@@ -168,7 +168,13 @@ Trect Accionador::laAccion(TestadoPersonaje estadoPj, int loops, Posicion pos, T
                 rectaDelPj.p = posInicial;
             }
             break;
-        case REA_MAREADO:break;
+        case FAT_FUEGO:
+            if(loops== 8) activarPoder(direccion,0);
+            break;
+        case REA_FAT_FUEGO:
+            break;
+        case REA_MAREADO:
+            break;
     }
     return rectaDelPj;
 }
@@ -342,8 +348,8 @@ void Accionador::patadaAltaAtras(int loops,Tdireccion direccion) {
     else rectan.p = rectan.p - Posicion(rectan.d.w, 0);
     if(loopsPara(ACC_PATADA_ALTA_ATRAS)>loops){
         golpe->setGolpe(poderFuerte, loops == 5,rectan,REA_GOLPE_FUERTE);
-        }
     }
+}
 //--------------------------------------------------------------------------------------
 //                  PATADA ALTA
 void Accionador::patadaAlta(int loops,Tdireccion direccion) {
@@ -396,9 +402,9 @@ void Accionador::patadaAgachado(int loops,Tdireccion direccion) {
 }
 //--------------------------------------------------------------------------------------
 //                  PODER
-void Accionador::activarPoder(Tdireccion direccion) {
+void Accionador::activarPoder(Tdireccion direccion,int efectoPoder) {
     if(poder->estado == DESACTIVADO) {
-        poder->activar(rectaDelPj, direccion, anchoPantalla);
+        poder->activar(rectaDelPj, direccion, anchoPantalla,efectoPoder);
     }
 }
 //--------------------------------------------------------------------------------------

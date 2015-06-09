@@ -226,7 +226,7 @@ TestadoPersonaje Personaje::generarEstado(Tinput orden) {
 				case TinputAccion::KEY_PROTECCION:
 					return ACC_PROTECCION;
 				case TinputAccion::KEY_PODER:
-					return ACC_PODER;
+					return FAT_FUEGO;
 			}
 			break;
 		case TinputMovimiento:: KEY_ABAJO:
