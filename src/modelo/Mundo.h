@@ -26,7 +26,7 @@ public:
 	DetectorDeColisiones colisionador;
 	Mundo(config configuracion);
 
-	vector<Tcambio> actualizarMundo(vector<Tinput> inputs);
+	vector<Tcambio> actualizarMundo(vector<Tinput> inputs,EgameState modoDeJuego);
 
 	virtual ~Mundo();
 

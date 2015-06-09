@@ -22,7 +22,6 @@ Mundo::Mundo(config configuracion) {
 	altoEscenario = escenario.d.h;
 	altoPiso = escenario.yPiso;
 
-
 	float pos_x1 = anchoEscenario/2 - anchoVentana/2 + MIN_DISTANCE_FROM_BOUND;
 	float pos_x2 = anchoEscenario/2 + anchoVentana/2 - PJ2.d.w - MIN_DISTANCE_FROM_BOUND;
 	float pos_y1 = altoEscenario - altoPiso - PJ1.d.h;
@@ -94,7 +93,7 @@ Tcambio Mundo::actualizarPJ(Personaje *PJ) {
  * Personaje realiza su respectiva accion.
  * Se asigna todos los datos pertinentes de personaje a Tcambio.
  */
-vector<Tcambio> Mundo::actualizarMundo(vector<Tinput> inputs) {
+vector<Tcambio> Mundo::actualizarMundo(vector<Tinput> inputs,EgameState modoDeJuego) {
 	//cout<<roundsPJ1<<endl;
 	vector<Tcambio> c;
 	Tcambio cambio1, cambio2;
@@ -115,7 +114,21 @@ vector<Tcambio> Mundo::actualizarMundo(vector<Tinput> inputs) {
 
 	// Los personajes realizan sus acciones
 	personaje1->realizarAccion(inputs[1]);
-	personaje2->realizarAccion(inputs[0]);
+
+	if(modoDeJuego == EgameState::MODE_PRACTICE){
+		Tinput input;
+		input.movimiento = TinputMovimiento::KEY_NADA;
+		input.accion = TinputAccion::KEY_NADA;
+		personaje2->realizarAccion(input);
+	}
+
+	else if(modoDeJuego == EgameState::MODE_ARCADE){
+		// INTELIGENCIA ARTIFICIAL
+		personaje2->realizarAccion(inputs[0]);
+	}
+	else if(modoDeJuego == EgameState::MODE_MULTIPLAYER) personaje2->realizarAccion(inputs[0]);
+
+
 	// COLISIONES
 	colisionador.resolverColisiones(personaje1,personaje2);
 	//Se actualizan a los personajes

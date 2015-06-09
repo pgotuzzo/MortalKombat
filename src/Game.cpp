@@ -235,12 +235,12 @@ EgameResult Game::fight(vector<Tinput> inputs) {
         case TinputGame::KEY_ESC:
             return EgameResult::END;
         default:{
-            vector<Tcambio> c = mMundo->actualizarMundo(inputs);
+            vector<Tcambio> c = mMundo->actualizarMundo(inputs,mState);
 
             sonidoPJ1->playFX(c.at(0).estado);
             sonidoPJ2->playFX(c.at(1).estado);
 
-            mPantalla->update(c,inputs[0]);
+            mPantalla->update(c,inputs[1]);
             mPantalla->print();
             return ( mMundo->huboGanador() ) ? EgameResult::END : EgameResult::CONTINUE;
         }

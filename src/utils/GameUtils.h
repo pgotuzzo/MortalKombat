@@ -10,6 +10,26 @@ enum class EmodeSelection {
     PRACTICE
 };
 
+enum class EgameState {
+    // seleccion del modo practica/arcade/multiplayer
+            MENU_MODE,
+
+    // seleccion de los personajes
+            MENU_PLAYERS,
+
+    // finalizar o volver al menu principal
+    //MENU_END,
+
+    /** animacion para enfrentar al siguiente oponente
+     * NEXT_OPONENT_ANIMATION,
+     */
+
+    // modos de juego
+            MODE_PRACTICE,
+    MODE_MULTIPLAYER,
+    MODE_ARCADE,
+};
+
 enum class EgameResult {
     CONTINUE,
     END
