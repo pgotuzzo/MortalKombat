@@ -384,6 +384,14 @@ struct Tinput{
     }
 };
 
+struct Tcombos{
+    vector<Tinput> poder;
+    vector<Tinput> agarre;
+    vector<Tinput> fatality;
+    int tiempo;
+    int errores;
+};
+
 struct TComboData{
     unsigned int tiempoMaximo;
     string nombre;

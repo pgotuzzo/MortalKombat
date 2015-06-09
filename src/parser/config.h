@@ -51,7 +51,7 @@ public:
 
 	config(string path);
 	virtual ~config();
-	vector< vector<Tinput> > getCombos();
+	Tcombos getCombos();
 	int getTiempo();
 	int getError();
 	Tventana getVentana();

@@ -873,16 +873,13 @@ Tbotones config::getBotones(){
 	return botones;
 }
 
-vector< vector<Tinput> > config::getCombos(){
-	vector<Tinput> combosI1 = letrasAinput(combo1.combo);
-	vector<Tinput> combosI2 = letrasAinput(combo2.combo);
-	vector<Tinput> combosI3 = letrasAinput(fata1.combo);
-	vector< vector<Tinput> > combos;
-
-	combos.push_back(combosI1);
-	combos.push_back(combosI2);
-	combos.push_back(combosI3);
-
+Tcombos config::getCombos(){
+	Tcombos combos;
+	combos.poder = letrasAinput(combo1.combo);
+	combos.agarre = letrasAinput(combo2.combo);
+	combos.fatality = letrasAinput(fata1.combo);
+	combos.errores = errorCombo;
+	combos.tiempo = tiempoCombo;
 	return  combos;
 }
 
