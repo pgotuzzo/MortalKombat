@@ -67,16 +67,12 @@ int main(int argc, char **argv) {
             }
             switch (inputs.at(0).game) {
                 case TinputGame::KEY_EXIT:
-                    IMG_Quit();
-                    TTF_Quit();
                     SDL_Quit();
                     endGame = true;
                     break;
                 case TinputGame::KEY_RESTART:
-                    restart = true;
-                    IMG_Quit();
-                    TTF_Quit();
                     SDL_Quit();
+                    restart = true;
                     break;
                 default:
                     game.play(inputs,controladorMouse.posicionMouse);

@@ -173,6 +173,7 @@ void Game::play(vector<Tinput> inputs, Posicion coordenadasMouse) {
         case EgameState::MODE_MULTIPLAYER:
         case EgameState::MODE_PRACTICE:{
             if ( fight(inputs) == EgameResult::END){
+                cout<<"hola"<<endl;
                 mState = EgameState::MENU_MODE;
                 initialize();
             }
