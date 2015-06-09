@@ -329,7 +329,7 @@ void config::original(Tparte tipoParte,Value partes){
 		case FATALITIE1: {
 			fata1.combo= partes["fatalities"].get("fatal","iddi").asString();
 			fata1.nombre="fatal1";break;}
-		case GLOBALE:errorCombo=partes["global"].get("error",3).asInt();break;
+		case GLOBALE:errorCombo=partes["global"].get("errores",10).asInt();break;
 		case GLOBALT:tiempoCombo=partes["global"].get("tiempo",10).asInt();;break;
 
 	}
@@ -363,7 +363,7 @@ void config::defecto(Tparte tipoParte,int defecto){
 		case FATALITIE1:
 			fata1.nombre="fatal1";
 			fata1.combo="iddi";;break;
-		case GLOBALE:errorCombo=3;break;
+		case GLOBALE:errorCombo=5;break;
 		case GLOBALT:tiempoCombo=10;break;
 	}
 }
@@ -537,7 +537,7 @@ void config::botonesDefecto(){
 
 void config::globalDefecto(){
 	tiempoCombo=10;
-	errorCombo=3;
+	errorCombo=5;
 }
 
 void config::validacionPath(string path){
@@ -664,8 +664,8 @@ void config::validaCombos(){
 		bool parecido5 = fata1.combo.find(combo1.combo) != string::npos;
 		bool parecido6 = fata1.combo.find(combo2.combo) != string::npos;
 
-		if( !parecido1 || !parecido2 || !parecido3 || !parecido4
-			|| !parecido5 || !parecido6 ){
+		if( parecido1 || parecido2 || parecido3 || parecido4
+			|| parecido5 || parecido6 ){
 			letrasCorrectas = false;
 		}
 	}

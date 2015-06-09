@@ -3,7 +3,7 @@
 
 const float vidaInicial = 100;
 
-Personaje::Personaje(string nombre,Tdireccion direccionInicial,Trect cuerpo, float anchoPantalla) {
+Personaje::Personaje(string nombre,Tdireccion direccionInicial,Trect cuerpo, float anchoPantalla,Tcombos combos) {
 
 	this->nombre = nombre;
 
@@ -23,17 +23,7 @@ Personaje::Personaje(string nombre,Tdireccion direccionInicial,Trect cuerpo, flo
 	poder = new Poder(nombre);
 	golpe = new Golpe();
 
-	Tinput input1,input2,input3;
-	input1.movimiento = TinputMovimiento::KEY_ABAJO;
-	input2.movimiento = TinputMovimiento::KEY_IZQUIERDA;
-	input3.accion = TinputAccion::KEY_PINIA_ALTA;
-	TComboData datosCombo;
-	datosCombo.tiempoMaximo = 5000;
-	datosCombo.tolerancia = 10;
-	datosCombo.nombre = "Poder";
-	datosCombo.teclas = {input1,input2,input3};
-
-	combo = new Combo(datosCombo);
+	crearCombosdelPersonaje(combos);
 
 	vida = vidaInicial;
 
@@ -41,6 +31,34 @@ Personaje::Personaje(string nombre,Tdireccion direccionInicial,Trect cuerpo, flo
 	countLoops = 0;
 	debuff = 0;
 }
+
+void Personaje::crearCombosdelPersonaje(Tcombos combos) {
+
+	TComboData datosPoder, datosAgarre, datosFatality;
+
+	// TODO: Cambiar datos hardcodeados cuando se arregle la parte de combos del parser
+	datosPoder.nombre = "Poder";
+	datosPoder.teclas = combos.poder;
+	datosPoder.tiempoMaximo = (unsigned int) combos.tiempo * 1000;
+	datosPoder.tolerancia = combos.errores;
+
+	datosAgarre.nombre = "Agarre";
+	datosAgarre.teclas = combos.agarre;
+	datosAgarre.tiempoMaximo = (unsigned int) combos.tiempo * 1000;
+	datosAgarre.tolerancia = combos.errores;
+
+	datosFatality.nombre = "Fatality";
+	datosFatality.teclas = combos.fatality;
+	datosFatality.tiempoMaximo = (unsigned int) combos.tiempo * 1000;
+	datosFatality.tolerancia = combos.errores;
+
+	comboPoder = new Combo(datosPoder);
+	comboAgarre = new Combo(datosAgarre);
+	comboFatality = new Combo(datosFatality);
+
+
+}
+
 
 
 void Personaje::realizarAccion(Tinput orden) {
@@ -72,8 +90,18 @@ void Personaje::realizarAccion(Tinput orden) {
 		}
 	}
 
-	combo->actualizar(orden);
-	if(combo->puedoRealizarCombo()){
+	comboPoder->actualizar(orden);
+	if(comboPoder->puedoRealizarCombo()){
+		estadoAnterior = MOV_PARADO;
+		estadoActual = ACC_PODER;
+	}
+	comboAgarre->actualizar(orden);
+	if(comboAgarre->puedoRealizarCombo()){
+		estadoAnterior = MOV_PARADO;
+		estadoActual = ACC_PODER;
+	}
+	comboFatality->actualizar(orden);
+	if(comboFatality->puedoRealizarCombo()){
 		estadoAnterior = MOV_PARADO;
 		estadoActual = ACC_PODER;
 	}
@@ -348,6 +376,9 @@ void Personaje::setPosicion(Posicion posicion) {
 Personaje::~Personaje(){
 	delete poder;
 	delete golpe;
+	delete comboPoder;
+	delete comboAgarre;
+	delete comboFatality;
 }
 
 bool Personaje::realizarsegundaPinia() {

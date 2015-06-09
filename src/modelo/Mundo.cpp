@@ -36,8 +36,11 @@ Mundo::Mundo(config configuracion) {
 	rectanguloPj1.p = {pos_x1, pos_y1};
 	rectanguloPj2.p = {pos_x2,pos_y2};
 
-	personaje1 = new Personaje(PJ1.nombre,direccion1,rectanguloPj1,anchoVentana);
-	personaje2 = new Personaje(PJ2.nombre,direccion2,rectanguloPj2,anchoVentana);
+
+	// TODO: Cuando se seleccionan los personajes hay que pasarles los nombres
+
+	personaje1 = new Personaje(PJ1.nombre,direccion1,rectanguloPj1,anchoVentana,configuracion.getCombos());
+	personaje2 = new Personaje(PJ2.nombre,direccion2,rectanguloPj2,anchoVentana,configuracion.getCombos());
 
 	colisionador = DetectorDeColisiones(anchoVentana,anchoEscenario);
 
@@ -120,6 +123,7 @@ vector<Tcambio> Mundo::actualizarMundo(vector<Tinput> inputs,EgameState modoDeJu
 		input.movimiento = TinputMovimiento::KEY_NADA;
 		input.accion = TinputAccion::KEY_NADA;
 		personaje2->realizarAccion(input);
+		if(personaje2->vida <= 50) personaje2->vida += 50;
 	}
 
 	else if(modoDeJuego == EgameState::MODE_ARCADE){

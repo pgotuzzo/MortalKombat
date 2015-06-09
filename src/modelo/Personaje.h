@@ -34,7 +34,9 @@ public:
 	Tdireccion direccionPj;
 	Tsentido sentidoPj;
 
-	Combo* combo;
+	Combo* comboPoder;
+	Combo* comboAgarre;
+	Combo* comboFatality;
 
 	float vida;
 
@@ -52,7 +54,7 @@ public:
 	//-----------------------------------------------------------------------------
 	bool puedoRealizarAccion(TestadoPersonaje accion);
 	TestadoPersonaje generarEstado(Tinput orden);
-	Personaje(string nombre,Tdireccion direccionInicial,Trect cuerpo,float anchoPantalla);
+	Personaje(string nombre,Tdireccion direccionInicial,Trect cuerpo,float anchoPantalla,Tcombos combos);
 
 	Trect getRectangulo();
 	void modificarPosicion(Posicion nuevaPosicion);
@@ -70,6 +72,8 @@ public:
 	bool estadoActualContinuaElAnterior();
 
 	bool realizarsegundaPinia();
+
+	void crearCombosdelPersonaje(Tcombos combos);
 
 	void verificarDebuff();
 };
