@@ -7,11 +7,16 @@ const float porcTamBarraPantallaX = 0.35;
 const float porcTamBarraPantallaY = 0.05;
 const float porcDistBarraPantallaX = 0.05;
 const float porcDistBarraPantallaY = 0.04;
+
+const float ajusteYTimer = -2;
+const float ajusteXTimer = -5;
+
 const string dirPathVidaRoja = "resources/accesorios/barraVidaRoja.gif";
 const string dirPathVidaVerde = "resources/accesorios/barraVidaVerde.gif";
 
 const string FONT_PATH = "resources/font/mortalkombat2.ttf";
 const int FONT_SIZE = 18;
+const int FONT_SIZE_FOR_TIMER = 40;
 
 
 CapaInfoArcade::CapaInfoArcade() {}
@@ -24,7 +29,7 @@ CapaInfoArcade::CapaInfoArcade() {}
 *  capa en relacion a su tamaño total de la imagen
 *  anchoCapa : ancho total de la capa en unidades.
 */
-CapaInfoArcade::CapaInfoArcade(VistaUtils* utils, Tdimension dimPantalla, string nombres[2]) {
+CapaInfoArcade::CapaInfoArcade(VistaUtils* utils, Tdimension dimPantalla, string nombres[2],string timer) {
     mUtils = utils;
 
     // Barras de vida
@@ -72,6 +77,15 @@ CapaInfoArcade::CapaInfoArcade(VistaUtils* utils, Tdimension dimPantalla, string
     mNombre2Rect.d = mNombre2.d;
     mNombre2Rect.p.x = barraVidaCompleta2.p.x + barraVidaCompleta2.d.w - mNombre2Rect.d.w;
     mNombre2Rect.p.y = barraVidaCompleta2.p.y + barraVidaCompleta2.d.h;
+
+    // Timer
+
+    mTimer = mUtils->createTextureFromText(FONT_PATH, timer, FONT_SIZE_FOR_TIMER);
+
+    mTimerRect.d = mTimer.d;
+    mTimerRect.p.x = dimPantalla.w / 2 + ajusteXTimer;
+    mTimerRect.p.y = barraVidaCompleta1.p.y + ajusteYTimer;
+
 }
 
 /*
@@ -88,18 +102,28 @@ void CapaInfoArcade::getTexture(Ttexture texture) {
     // Nombres
     mUtils->copyTexture(mNombre1, texture, NULL, &mNombre1Rect);
     mUtils->copyTexture(mNombre2, texture, NULL, &mNombre2Rect);
+
+    //Timer
+    mUtils->copyTexture(mTimer, texture, NULL, &mTimerRect);
 }
 
 /*
  * Cambia la posicion de la capa ajustandola a la posicion del escenario
  */
-void CapaInfoArcade::update(float porcVida1,float porcVida2,Tinput input) {
+void CapaInfoArcade::update(float porcVida1,float porcVida2,Tinput input,string timer) {
     barraVidaParcialPedazo1.d.w = anchoBorde + anchoRelleno * porcVida1;
     barraVidaParcialPedazo2.d.w = anchoBorde + anchoRelleno * porcVida2;
     barraVidaParcialPantalla1.d.w = barraVidaParcialPedazo1.d.w;
     barraVidaParcialPantalla2.d.w = barraVidaParcialPedazo2.d.w;
     barraVidaParcialPedazo2.p.x = barraVidaCompleta1.d.w - barraVidaParcialPedazo2.d.w;
     barraVidaParcialPantalla2.p.x = anchoPantalla - barraVidaParcialPedazo2.d.w - distBorde;
+
+    SDL_DestroyTexture(mTimer.t);
+    mTimer = mUtils->createTextureFromText(FONT_PATH, timer, FONT_SIZE_FOR_TIMER);
+}
+
+void CapaInfoArcade::update(float porcVida1,float porcVida2,Tinput input){
+
 }
 
 void CapaInfoArcade::freeTextures() {

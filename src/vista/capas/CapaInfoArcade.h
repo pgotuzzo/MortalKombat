@@ -17,10 +17,11 @@ protected:
     Ttexture barraVidaParcialText;
     Ttexture mNombre1;
     Ttexture mNombre2;
+    Ttexture mTimer;
     float anchoBorde, anchoRelleno,anchoPantalla, distBorde;
     Trect barraVidaCompleta1, barraVidaCompleta2, barraVidaParcialPedazo1,
             barraVidaParcialPedazo2, barraVidaParcialPantalla1, barraVidaParcialPantalla2,
-            mNombre1Rect, mNombre2Rect;
+            mNombre1Rect, mNombre2Rect, mTimerRect;
 
 public:
     CapaInfoArcade();
@@ -31,7 +32,7 @@ public:
     *  rectPantalla : contiene el tamaño de la pantalla y la posicion inicial de la
     *  capa en relacion a su tamaño total de la imagen
     */
-    CapaInfoArcade(VistaUtils* utils, Tdimension dimPantalla, string nombres[2]);
+    CapaInfoArcade(VistaUtils* utils, Tdimension dimPantalla, string nombres[2],string timer);
 
 
     /*
@@ -49,6 +50,8 @@ public:
     void freeTextures();
 
     virtual ~CapaInfoArcade();
+
+    void update(float porcVida1, float porcVida2, Tinput input, string timer);
 };
 
 

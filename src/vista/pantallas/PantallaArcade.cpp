@@ -38,7 +38,7 @@ void PantallaArcade::InicializarCapas(vector<Tcapa> capas, string personajes[2])
         mCapas.push_back(capa);
     }
 
-    capaInfo = new CapaInfoArcade(mUtils, mDimension, personajes);
+    capaInfo = new CapaInfoArcade(mUtils, mDimension, personajes,"99");
 }
 
 PantallaArcade::~PantallaArcade() {

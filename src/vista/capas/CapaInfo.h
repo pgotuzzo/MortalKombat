@@ -32,6 +32,8 @@ public:
     /*
      * Cambia la posicion de la capa ajustandola a la posicion del escenario
      */
+    virtual void update(float porcVida1,float porcVida2,Tinput input,string timer);
+
     virtual void update(float porcVida1,float porcVida2,Tinput input);
 
     virtual void freeTextures();

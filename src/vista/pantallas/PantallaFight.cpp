@@ -122,7 +122,7 @@ void PantallaFight::update(vector<Tcambio> changes, Tinput input) {
         mCapas[i].ajustar(posEscenario);
     }
 
-    capaInfo->update(changes[0].vida / 100, changes[1].vida / 100, input);
+    capaInfo->update(changes[0].vida / 100, changes[1].vida / 100, input,to_string(changes[0].tiempoRound));
 }
 
 void PantallaFight::vibrar() {
