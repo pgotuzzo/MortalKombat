@@ -52,12 +52,12 @@
     ],
 
     "combos":{
-	"poder":"abcdd",
-	"agarre":"abdaa"
+	"poder":"abd",
+	"agarre":"bcd"
     },
 
    "fatalities":{
-	"fatal":"biaa"
+	"fatal":"bce"
 },
 
    "global":{
