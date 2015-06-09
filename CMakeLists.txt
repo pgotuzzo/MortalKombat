@@ -22,6 +22,8 @@ set(SOURCE_FILES
     src/main.cpp
     src/Game.h
     src/Game.cpp
+    src/Musica.cpp
+    src/Musica.h
 
     # Utils
     src/utils/Common.h
@@ -37,6 +39,8 @@ set(SOURCE_FILES
     src/modelo/DetectorDeColisiones.cpp
     src/modelo/Golpe.h
     src/modelo/Golpe.cpp
+    src/modelo/InteligenciaArtificial.cpp
+    src/modelo/InteligenciaArtificial.h
     src/modelo/menu/MenuGameMode.h
     src/modelo/menu/MenuGameMode.cpp
     src/modelo/menu/MenuPlayers.cpp
@@ -115,7 +119,7 @@ set(SOURCE_FILES
     src/controlador/ControladorTexto.cpp
     )
 
-add_executable(MortalKombat ${SOURCE_FILES} src/Musica.cpp src/Musica.h)
+add_executable(MortalKombat ${SOURCE_FILES})
 
 # Bibliotecas
 target_link_libraries(MortalKombat

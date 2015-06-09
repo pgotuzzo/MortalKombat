@@ -58,6 +58,11 @@ Pantalla::~Pantalla(){
     IMG_Quit();
     TTF_Quit();
     SDL_QuitSubSystem(SDL_INIT_VIDEO);
+    SDL_QuitSubSystem(SDL_INIT_AUDIO);
+    SDL_QuitSubSystem(SDL_INIT_HAPTIC);
+    SDL_QuitSubSystem(SDL_INIT_NOPARACHUTE);
+    SDL_QuitSubSystem(SDL_INIT_AUDIO);
+
 }
 
 vector<Trect> Pantalla::getCuadradoModos() {

@@ -1,6 +1,7 @@
 #include <functional>
 #include "../parser/config.h"
 #include "Mundo.h"
+#include "InteligenciaArtificial.h"
 
 const int tiempoInicialRound = 99;
 
@@ -132,8 +133,9 @@ vector<Tcambio> Mundo::actualizarMundo(vector<Tinput> inputs,EgameState modoDeJu
 	}
 
 	else if(modoDeJuego == EgameState::MODE_ARCADE){
-		// INTELIGENCIA ARTIFICIAL
-		personaje2->realizarAccion(inputs[0]);
+		InteligenciaArtificial inteligencia;
+		Tinput input = inteligencia.responderDeacuerdoa(personaje1->estadoActual,personaje1->rectanguloPj,personaje2->rectanguloPj);
+		personaje2->realizarAccion(input);
 	}
 	else if(modoDeJuego == EgameState::MODE_MULTIPLAYER) personaje2->realizarAccion(inputs[0]);
 
