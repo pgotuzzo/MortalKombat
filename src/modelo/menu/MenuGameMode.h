@@ -4,7 +4,7 @@
 
 #include "../../utils/GameUtils.h"
 #include "../../utils/Common.h"
-
+#include "../../Musica.h"
 class MenuGameMode {
 private:
     EmodeSelection mSelection;
@@ -15,6 +15,8 @@ private:
     void updateSelection(Tdireccion direction);
 
     bool dentroDelModo(Posicion posMouse,Trect modo);
+
+    Musica* select;
 
 
 public:

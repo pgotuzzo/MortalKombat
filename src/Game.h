@@ -14,10 +14,10 @@ class Game {
 private:
     enum class EgameState {
         // seleccion del modo practica/arcade/multiplayer
-        MENU_MODE,
+                MENU_MODE,
 
         // seleccion de los personajes
-        MENU_PLAYERS,
+                MENU_PLAYERS,
 
         // finalizar o volver al menu principal
         //MENU_END,
@@ -27,7 +27,7 @@ private:
          */
 
         // modos de juego
-        MODE_PRACTICE,
+                MODE_PRACTICE,
         MODE_MULTIPLAYER,
         MODE_ARCADE,
     };

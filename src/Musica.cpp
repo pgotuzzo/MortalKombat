@@ -19,13 +19,25 @@ Musica::Musica() {
         if( musicaPractica == NULL )
             loguer->loguear("Error al cargar Musica Practica",Log::Tlog::LOG_WAR);
 
+        musicaMenu = Mix_LoadMUS( (ruta + "musicaMenu.wav").c_str() );
+        if( musicaMenu == NULL )
+            loguer->loguear("Error al cargar Musica Menu",Log::Tlog::LOG_WAR);
+
         seleccionPersonaje = Mix_LoadMUS( (ruta + "selecciondePersonaje.wav").c_str() );
         if( seleccionPersonaje == NULL )
             loguer->loguear("Error al cargar Musica Seleccion Personaje",Log::Tlog::LOG_WAR);
 
+        movimientoEntreseleccion = Mix_LoadWAV( (ruta + "movimientoEntreseleccion.wav").c_str() );
+        if( movimientoEntreseleccion == NULL )
+            loguer->loguear("Error al cargar movimientoEntreseleccion",Log::Tlog::LOG_WAR);
+
         golpe = Mix_LoadWAV( (ruta + "golpe.wav").c_str() );
         if( golpe == NULL )
             loguer->loguear("Error al cargar golpe",Log::Tlog::LOG_WAR);
+
+        apreto = Mix_LoadWAV( (ruta + "apreto.wav").c_str() );
+        if( apreto == NULL )
+            loguer->loguear("Error al cargar apreto",Log::Tlog::LOG_WAR);
 
         gancho = Mix_LoadWAV( (ruta + "Gancho.wav").c_str() );
         if( gancho == NULL )
@@ -114,8 +126,10 @@ Musica::~Musica() {
     Mix_FreeChunk( tiraPinia );
     Mix_FreeChunk( congelado );
     Mix_FreeChunk( dizzy );
+    Mix_FreeChunk( apreto );
     congelado = NULL;
     dizzy = NULL;
+    apreto=NULL;
     gancho = NULL;
     tiraPinia=NULL;
     agarraYtira = NULL;
@@ -134,9 +148,11 @@ Musica::~Musica() {
     Mix_FreeMusic( musicaVersus );
     Mix_FreeMusic( musicaPractica );
     Mix_FreeMusic( seleccionPersonaje );
+    Mix_FreeMusic( musicaMenu );
     musicaVersus = NULL;
     musicaPractica = NULL;
     seleccionPersonaje = NULL;
+    musicaMenu = NULL;
     Mix_CloseAudio();
     Mix_Quit();
 
@@ -146,6 +162,18 @@ void Musica::musicVs(){
 
     if( Mix_PlayingMusic() == 0 ){
         Mix_PlayMusic( musicaVersus, -1 );
+
+    }else if( Mix_PausedMusic() == 1 ){
+        Mix_ResumeMusic();
+
+    }else
+        Mix_PauseMusic();
+}
+
+void Musica::musicMenu(){
+
+    if( Mix_PlayingMusic() == 0 ){
+        Mix_PlayMusic( musicaMenu, -1 );
 
     }else if( Mix_PausedMusic() == 1 ){
         Mix_ResumeMusic();
@@ -178,10 +206,18 @@ void Musica::musicSeleccion(){
         Mix_PauseMusic();
 }
 
+void Musica::selecciona(){
+    Mix_PlayChannel( -1, movimientoEntreseleccion, 0 );
+}
+
+void Musica::click(){
+    Mix_PlayChannel( -1, apreto, 0 );
+}
+
 void Musica::playFX(TestadoPersonaje estado){
     contadores[estado]++;
 
-    mostrarEstado(estado);
+    //mostrarEstado(estado);
     if ( contadores[estado] == 1 )
 
         switch( estado ){

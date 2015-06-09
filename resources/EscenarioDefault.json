@@ -32,8 +32,8 @@
             "nombre":"subzero",
             "sprites": "./resources/sprites/subzero",
             "color-alternativo": [
-                {"h-inicial": 180},
-                {"h-final":200},
+                {"h-inicial": 210},
+                {"h-final":270},
                 {"delta": 120}
             ]
         },
@@ -50,6 +50,20 @@
             ]
         }
     ],
+
+    "combos":{
+	"poder":"abcdd",
+	"agarre":"abdaa"
+    },
+
+   "fatalities":{
+	"fatal":"biaa"
+},
+
+   "global":{
+	"errores": 3,
+	"tiempo":10
+},
 
     "pelea": {
         "player1":"subzero",

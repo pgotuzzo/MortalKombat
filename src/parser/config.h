@@ -3,6 +3,7 @@
 #include <string>
 #include <iostream>
 #include "json.h"
+#include "../utils/Common.h"
 #include "../utils/PersonajeUtils.h"
 #include <vector>
 
@@ -17,7 +18,6 @@ public:
 		DOUBLE,
 		INT,
 		STRING,
-		ARRAY,
 	};
 
 	enum Tparte{
@@ -38,11 +38,22 @@ public:
 				BOTONES_POD,//PODER
 				PLAYER1,//PELEA
 				PLAYER2,//PELEA
+				COMBOP,
+		COMBOA,
+		FATALITIE1,
+		GLOBALE,
+		GLOBALT,
+	};
+	struct Tcombo{
+		string nombre;
+		string combo;
 	};
 
 	config(string path);
 	virtual ~config();
-
+	vector< vector<Tinput> > getCombos();
+	int getTiempo();
+	int getError();
 	Tventana getVentana();
 	Tescenario getEscenario();
 	vector<Tcapa> getCapas();
@@ -54,11 +65,16 @@ private:
 	Tventana ventana;
 	Tescenario escenario;
 	Tpersonaje personaje1;
-	Tpersonaje personaje2;
+	Tpersonaje personaje2;;
 	vector<Tpersonaje> personajes;
 	Tpelea pelea;
 	Tbotones botones;
 	Tcapa capa;
+	Tcombo combo1;
+	Tcombo combo2;
+	Tcombo fata1;
+	int tiempoCombo;
+	int errorCombo;
 	vector<Tcapa> vectorCapas;
 	int zIndexDefecto;
 
@@ -73,6 +89,9 @@ private:
 	int cantSprites(TestadoPersonaje);
 	bool directorioExiste(const char*);
 	void cargaExitosa(string);
+
+	vector<Tinput>letrasAinput(string);
+	void validaCombos();
 
 	//Validacion de direcciones de archivos, numeros positivos, y tamaños deseados.
 	void validacionPath(string);
@@ -91,6 +110,10 @@ private:
 	void colorDefecto();
 	void capasDefecto();
 	void botonesDefecto();
+
+	void fatalitiesDefecto();
+	void combosDefecto();
+	void globalDefecto();
 
 
 };

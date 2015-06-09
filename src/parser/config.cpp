@@ -1,6 +1,7 @@
 #include "config.h"
 #include <fstream>
 #include <string.h>
+#include <algorithm>
 
 const int cantidadDeCapasDefault = 4;
 const int cantidadTotalSprites=40;
@@ -77,6 +78,29 @@ void config::setValores(Value partes){
 	cargaExitosa("ventana");
 
 	this->setCapa(partes);
+
+	if ( ! partes["combos"].isNull() ) {
+		obtiene(partes,"combos","poder",Tparte::COMBOP,99,Tdato::STRING);
+		obtiene(partes,"combos","agarre",Tparte::COMBOA,99,Tdato::STRING);
+	}else
+		combosDefecto();
+	cargaExitosa( "combos" );
+
+	if ( ! partes["fatalities"].isNull() ) {
+		obtiene(partes,"fatalities","fatal",Tparte::FATALITIE1,99,Tdato::STRING);
+
+	}else
+		fatalitiesDefecto();
+	cargaExitosa( "fatalities" );
+
+	validaCombos();
+
+	if ( ! partes["global"].isNull() ) {
+		obtiene(partes,"global","errores",Tparte::GLOBALE,3,Tdato::INT);
+		obtiene(partes,"global","tiempo",Tparte::GLOBALT,10,Tdato::INT);
+	}else
+		globalDefecto();
+	cargaExitosa( "variables globales" );
 
 	setPersonajeX(partes);
 
@@ -199,7 +223,6 @@ TcolorSettings config::ObColor(Value partes,int i){
 			loguer->loguear("Error en color-alternativo. Se carga por defecto",Log::Tlog::LOG_WAR);
 			aux.delta=45;
 		}
-		aux.initialize();
 		return aux;
 
 	}else{
@@ -208,15 +231,56 @@ TcolorSettings config::ObColor(Value partes,int i){
 	}
 }
 
+vector<Tinput> config::letrasAinput(string combo) {
+
+	vector<Tinput> inputs;
+
+	for(size_t i=0;i<combo.size();i++){
+
+		Tinput aux;
+
+		switch (combo.at(i)){
+			case 'a':
+				aux.movimiento=TinputMovimiento::KEY_ABAJO;
+				break;
+			case 'b':
+				aux.movimiento=TinputMovimiento::KEY_IZQUIERDA;
+				break;
+			case 'c':
+				aux.movimiento=TinputMovimiento::KEY_DERECHA;
+				break;
+			case 'd':
+				aux.accion=TinputAccion::KEY_PINIA_ALTA;
+				break;
+			case 'e':
+				aux.accion=TinputAccion::KEY_PINIA_BAJA;
+				break;
+			case 'f':
+				aux.accion=TinputAccion::KEY_PATADA_ALTA;
+				break;
+			case 'g':
+				aux.accion=TinputAccion::KEY_PATADA_BAJA;
+				break;
+			case 'h':
+				aux.accion=TinputAccion::KEY_PODER;
+				break;
+			case 'i':
+				aux.accion=TinputAccion::KEY_PROTECCION;
+				break;
+		}
+
+		inputs.push_back(aux);
+	}
+
+	return inputs;
+}
+
 void config::obtiene(Value partes,string parte,string subParte, Tparte tparte,int defecto,Tdato tipo){
 	bool tipoDato=false;
 	switch (tipo) {
-		case DOUBLE: tipoDato=partes[parte].get(subParte, defecto).isDouble();
-
-			break;
+		case DOUBLE: tipoDato=partes[parte].get(subParte, defecto).isDouble();break;
 		case INT: tipoDato=partes[parte].get(subParte, defecto).isInt();break;
 		case STRING: tipoDato=partes[parte].get(subParte, "defecto").isString();break;
-		case ARRAY: tipoDato=partes[parte].get(subParte, "defecto").isArray();break;
 	}
 
 	if(!tipoDato){
@@ -254,6 +318,20 @@ void config::original(Tparte tipoParte,Value partes){
 		case BOTONES_PROTEC: this->botones.proteccion=partes["botones"].get("proteccion",10).asInt();break;
 		case PLAYER1: pelea.player1=partes["pelea"].get("player1","subzero").asString();break;
 		case PLAYER2: pelea.player2=partes["pelea"].get("player2","ermac").asString();break;
+		case COMBOP:{
+			combo1.combo= partes["combos"].get("poder","abcd").asString();
+			combo1.nombre="poder";
+			break;}
+
+		case COMBOA: {
+			combo2.combo= partes["combos"].get("agarre","defi").asString();
+			combo2.nombre="agarre";break;}
+		case FATALITIE1: {
+			fata1.combo= partes["fatalities"].get("fatal","iddi").asString();
+			fata1.nombre="fatal1";break;}
+		case GLOBALE:errorCombo=partes["global"].get("error",3).asInt();break;
+		case GLOBALT:tiempoCombo=partes["global"].get("tiempo",10).asInt();;break;
+
 	}
 }
 
@@ -276,6 +354,17 @@ void config::defecto(Tparte tipoParte,int defecto){
 		case BOTONES_PROTEC: this->botones.proteccion=defecto;break;
 		case PLAYER1: pelea.player1=personajes.at(0).nombre;break;
 		case PLAYER2: pelea.player2=personajes.at(0).nombre;break;
+		case COMBOP:
+			combo1.nombre="poder";
+			combo1.combo="abcd";break;
+		case COMBOA:
+			combo2.nombre="agarre";
+			combo2.combo="defi"; break;
+		case FATALITIE1:
+			fata1.nombre="fatal1";
+			fata1.combo="iddi";;break;
+		case GLOBALE:errorCombo=3;break;
+		case GLOBALT:tiempoCombo=10;break;
 	}
 }
 
@@ -383,6 +472,25 @@ void config::ventanaDefecto(){
 	this->ventana.ancho=200;
 }
 
+void config::combosDefecto() {
+	string mensajeError="Combos mal ingresados en el archivo Json. Se carga por defecto todas sus partes.";
+	loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_WAR);
+	combo1.nombre="poder";
+	combo1.combo="abcd";
+
+	combo2.nombre="agarre";
+	combo2.combo="defi";
+
+}
+
+void config::fatalitiesDefecto() {
+	string mensajeError="Fatalities mal ingresadas en el archivo Json. Se carga por defecto todas sus partes.";
+	loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_WAR);
+	fata1.nombre="fatal1";
+	fata1.combo="iddi";
+
+}
+
 void config::colorDefecto(){
 	string mensajeError="No se encuentra: color-alternativo en el archivo Json. Se carga por defecto todas sus partes.";
 	loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_WAR);
@@ -425,6 +533,11 @@ void config::botonesDefecto(){
 	botones.lowPunch=15;
 	botones.poder=11;
 	botones.proteccion=10;
+}
+
+void config::globalDefecto(){
+	tiempoCombo=10;
+	errorCombo=3;
 }
 
 void config::validacionPath(string path){
@@ -518,12 +631,57 @@ void config::validacionTamanioYpiso(){
 	}
 }
 
+void config::validaCombos(){
+
+	vector<Tcombo> vectC;
+	std::transform(combo1.combo.begin(), combo1.combo.end(), combo1.combo.begin(), ::tolower);
+	std::transform(combo2.combo.begin(), combo2.combo.end(), combo2.combo.begin(), ::tolower);
+	std::transform(fata1.combo.begin(), fata1.combo.end(), fata1.combo.begin(), ::tolower);
+
+	vectC.push_back(combo1);vectC.push_back(combo2);vectC.push_back(fata1);
+
+	bool letrasCorrectas = true;
+
+	for( size_t i = 0 ; i < vectC.size() ; i++ ){
+
+		string combo = vectC.at(i).combo;
+
+		size_t j = 0;
+		while ( letrasCorrectas && j < combo.size() ){
+
+			if( (int)combo[j] < 97 && (int)combo[j] > 105 )
+				letrasCorrectas = false;
+			j++;
+		}
+	}
+
+	if ( letrasCorrectas ){
+
+		bool parecido1 = combo2.combo.find(combo1.combo) != string::npos;
+		bool parecido2 = combo2.combo.find(fata1.combo) != string::npos;
+		bool parecido3 = combo1.combo.find(combo2.combo) != string::npos;
+		bool parecido4 = combo1.combo.find(fata1.combo) != string::npos;
+		bool parecido5 = fata1.combo.find(combo1.combo) != string::npos;
+		bool parecido6 = fata1.combo.find(combo2.combo) != string::npos;
+
+		if( !parecido1 || !parecido2 || !parecido3 || !parecido4
+			|| !parecido5 || !parecido6 ){
+			letrasCorrectas = false;
+		}
+	}
+
+	if ( !letrasCorrectas ){
+		combosDefecto();
+		fatalitiesDefecto();
+	}
+
+}
+
 void config::validacionTamanioZindex(){
 
 	for(unsigned int i=0;i<(personajes.size()-1);i++){
 
 		if(personajes.at(i).zIndex!=personajes.at(i+1).zIndex){
-			loguer->loguear("Distintos Z-index, se igualan.", Log::Tlog::LOG_WAR);
 			personajes.at(i+1).zIndex=personajes.at(i).zIndex;
 		}
 	}
@@ -679,7 +837,6 @@ void config::cargaExitosa(string parte){
 }
 
 Tventana config::getVentana(){
-	ventana.distTope = MIN_DISTANCE_FROM_BOUND;
 	return this->ventana;
 }
 
@@ -714,6 +871,27 @@ vector<Tcapa> config::getCapas(){
 }
 Tbotones config::getBotones(){
 	return botones;
+}
+
+vector< vector<Tinput> > config::getCombos(){
+	vector<Tinput> combosI1 = letrasAinput(combo1.combo);
+	vector<Tinput> combosI2 = letrasAinput(combo2.combo);
+	vector<Tinput> combosI3 = letrasAinput(fata1.combo);
+	vector< vector<Tinput> > combos;
+
+	combos.push_back(combosI1);
+	combos.push_back(combosI2);
+	combos.push_back(combosI3);
+
+	return  combos;
+}
+
+int config::getError(){
+	return errorCombo;
+}
+
+int config::getTiempo(){
+	return tiempoCombo;
 }
 
 config::~config() {

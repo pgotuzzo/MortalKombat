@@ -13,6 +13,10 @@ private:
     Mix_Music *musicaVersus = NULL;
     Mix_Music *musicaPractica = NULL;
     Mix_Music *seleccionPersonaje = NULL;
+    Mix_Music *musicaMenu = NULL;
+
+    Mix_Chunk * movimientoEntreseleccion= NULL;
+    Mix_Chunk * apreto= NULL;
 
     // efectos
     Mix_Chunk *dizzy = NULL;//
@@ -44,6 +48,9 @@ public:
     void musicVs();
     void musicPractica();
     void musicSeleccion();
+    void musicMenu();
+    void selecciona();
+    void click();
     void playFX(TestadoPersonaje);
 
 

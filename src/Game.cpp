@@ -46,7 +46,7 @@ void Game::initialize() {
 
             musicaDelJuego = new Musica();
 
-            musicaDelJuego->musicPractica();
+            musicaDelJuego->musicMenu();
 
             loguer->loguear("Finaliza la creacion de la pantalla", Log::LOG_DEB);
             loguer->loguear("Creando el modelo...", Log::LOG_DEB);
@@ -57,26 +57,26 @@ void Game::initialize() {
             loguer->loguear("Finaliza la creacion del modelo", Log::LOG_DEB);
             break;
         };
-        /*case EgameState::MENU_PLAYERS:{
-            loguer->loguear("[--- MENU DE JUGADORES ---]", Log::LOG_DEB);
-            loguer->loguear("Creando la pantalla...", Log::LOG_DEB);
+            /*case EgameState::MENU_PLAYERS:{
+                loguer->loguear("[--- MENU DE JUGADORES ---]", Log::LOG_DEB);
+                loguer->loguear("Creando la pantalla...", Log::LOG_DEB);
 
-            Tdimension dimPx = mConfiguration->getVentana().dimPx;
-            Tdimension dim = {
-                    mConfiguration->getVentana().ancho,
-                    mConfiguration->getEscenario().d.h,
-            };
+                Tdimension dimPx = mConfiguration->getVentana().dimPx;
+                Tdimension dim = {
+                        mConfiguration->getVentana().ancho,
+                        mConfiguration->getEscenario().d.h,
+                };
 
-            mPantalla = new PantallaMenuPlayers(dimPx, dim);
+                mPantalla = new PantallaMenuPlayers(dimPx, dim);
 
-            loguer->loguear("Finaliza la creacion de la pantalla", Log::LOG_DEB);
-            loguer->loguear("Creando el modelo...", Log::LOG_DEB);
+                loguer->loguear("Finaliza la creacion de la pantalla", Log::LOG_DEB);
+                loguer->loguear("Creando el modelo...", Log::LOG_DEB);
 
-            mMenuPlayers = new MenuPlayers();
+                mMenuPlayers = new MenuPlayers();
 
-            loguer->loguear("Finaliza la creacion del modelo", Log::LOG_DEB);
-            break;
-        };*/
+                loguer->loguear("Finaliza la creacion del modelo", Log::LOG_DEB);
+                break;
+            };*/
         case EgameState::MODE_MULTIPLAYER:
         case EgameState::MODE_ARCADE:{
             loguer->loguear("[--- MODO MULTIPLAYER/ARCADE ---]", Log::LOG_DEB);
@@ -93,7 +93,7 @@ void Game::initialize() {
             sonidoPJ1 = new Musica();
             sonidoPJ2 = new Musica();
 
-            sonidoPJ1->musicPractica();
+            sonidoPJ1->musicVs();
             string nombres[2] = {personajes[0].nombre, personajes[1].nombre};
             mPantalla->initialize(capas, nombres);
 
@@ -214,6 +214,7 @@ EgameResult Game::selectMode(Tinput input,Posicion coordenadasMouse) {
     if ( mMenuGameMode->selectionComplete() ) {
         mModeSelection = selection;
         return EgameResult::END;
+
     }
     return EgameResult::CONTINUE;
 }
@@ -254,4 +255,3 @@ Game::~Game() {
     delete(mMundo);
     delete(mConfiguration);
 }
-
