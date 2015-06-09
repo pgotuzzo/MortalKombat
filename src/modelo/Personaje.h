@@ -51,6 +51,7 @@ public:
 	Poder* poder;
 	Golpe* golpe;
 
+	bool estadoFatality;
 	//-----------------------------------------------------------------------------
 	bool puedoRealizarAccion(TestadoPersonaje accion);
 	TestadoPersonaje generarEstado(Tinput orden);

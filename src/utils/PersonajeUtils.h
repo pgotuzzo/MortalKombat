@@ -209,7 +209,7 @@ static int loopsPara(TestadoPersonaje accion){
         case REA_MAREADO:return 200;
 
         case REA_FAT_FUEGO: return 20;
-        case FAT_FUEGO: return 10;
+        case FAT_FUEGO: return 20;
     }
 }
 

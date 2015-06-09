@@ -42,7 +42,7 @@
             "alto": 60,
             "z-index": 3,
             "nombre":"ermac",
-            "sprites": "./resources/sprites/ermac",
+            "sprites": "./resources/sprites/subzero",
             "color-alternativo": [
                 {"h-inicial": -30},
                 {"h-final":30},

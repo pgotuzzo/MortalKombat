@@ -74,6 +74,10 @@ void Mundo::verificarDireccionDeLosPersonajes() {
 }
 
 Tcambio Mundo::actualizarPJ(Personaje *PJ) {
+
+	if(personaje1->estadoActual == REA_MAREADO) personaje2->estadoFatality = true;
+	if(personaje2->estadoActual == REA_MAREADO) personaje1->estadoFatality = true;
+
 	Tcambio cambio;
 	cambio.dPJ = PJ->rectanguloPj.d;
 	cambio.posicion = PJ->rectanguloPj.p;
@@ -124,6 +128,7 @@ vector<Tcambio> Mundo::actualizarMundo(vector<Tinput> inputs,EgameState modoDeJu
 		input.accion = TinputAccion::KEY_NADA;
 		personaje2->realizarAccion(input);
 		if(personaje2->vida <= 50) personaje2->vida += 50;
+		personaje1->estadoFatality = true;
 	}
 
 	else if(modoDeJuego == EgameState::MODE_ARCADE){
@@ -162,7 +167,6 @@ void Mundo::verificarGanadorDelRound() {
 		if (personaje1->vida > personaje2->vida ) {
 			mensaje = mensaje + personaje1->nombre + " ---> Personaje 1";
 			loguer->loguear(mensaje.c_str(), Log::LOG_DEB);
-//			roundsPJ1++;
 			personaje1->reinicializar(REA_VICTORIA);
 			if(roundsPJ1 == 1 && roundsPJ2 == 0) personaje2->reinicializar(REA_MAREADO);
 			else personaje2->reinicializar(REA_DERROTA);
@@ -170,7 +174,6 @@ void Mundo::verificarGanadorDelRound() {
 		}else if(personaje2->vida > personaje1->vida ){
 			mensaje = mensaje + personaje2->nombre + " ---> Personaje 2";
 			loguer->loguear(mensaje.c_str(), Log::LOG_DEB);
-//			roundsPJ2++;
 			personaje2->reinicializar(REA_VICTORIA);
 			if(roundsPJ2 == 1 && roundsPJ1 == 0) personaje1->reinicializar(REA_MAREADO);
 			else personaje1->reinicializar(REA_DERROTA);
@@ -179,8 +182,6 @@ void Mundo::verificarGanadorDelRound() {
 			loguer->loguear("EMPATARONNNN", Log::LOG_DEB);
 			personaje1->reinicializar(REA_VICTORIA);
 			personaje2->reinicializar(REA_VICTORIA);
-//			roundsPJ1++;
-//			roundsPJ2++;
 			tiempoRound = tiempoInicialRound;
 		};
 	}

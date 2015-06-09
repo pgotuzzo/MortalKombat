@@ -121,10 +121,10 @@ Trect Accionador::laAccion(TestadoPersonaje estadoPj, int loops, Posicion pos, T
         case ACC_PROTECCION_AGACHADO:
             break;
         case ACC_PODER:
-            activarPoder(direccion,1);
+            activarPoder(direccion);
             break;
         case ACC_PODER_SALTO:
-            activarPoder(direccion,1);
+            activarPoder(direccion);
             saltarVerticualmente(loops);
             break;
         case ACC_AGARRE:
@@ -169,7 +169,7 @@ Trect Accionador::laAccion(TestadoPersonaje estadoPj, int loops, Posicion pos, T
             }
             break;
         case FAT_FUEGO:
-            if(loops== 8) activarPoder(direccion,0);
+            if(loops== 14) activarPoder(direccion,0);
             break;
         case REA_FAT_FUEGO:
             break;
@@ -405,6 +405,11 @@ void Accionador::patadaAgachado(int loops,Tdireccion direccion) {
 void Accionador::activarPoder(Tdireccion direccion,int efectoPoder) {
     if(poder->estado == DESACTIVADO) {
         poder->activar(rectaDelPj, direccion, anchoPantalla,efectoPoder);
+    }
+}
+void Accionador::activarPoder(Tdireccion direccion) {
+    if(poder->estado == DESACTIVADO) {
+        poder->activar(rectaDelPj, direccion, anchoPantalla);
     }
 }
 //--------------------------------------------------------------------------------------

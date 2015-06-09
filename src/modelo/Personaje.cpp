@@ -30,6 +30,7 @@ Personaje::Personaje(string nombre,Tdireccion direccionInicial,Trect cuerpo, flo
 	llevarACabo.initialize(rectanguloPj,anchoPantalla,yPiso,poder,golpe);
 	countLoops = 0;
 	debuff = 0;
+	estadoFatality = false;
 }
 
 void Personaje::crearCombosdelPersonaje(Tcombos combos) {
@@ -71,7 +72,7 @@ void Personaje::realizarAccion(Tinput orden) {
 		estadoActual = estadoCompuesto;
 		verificarDireccion(orden);
 		if (estadoActualContinuaElAnterior())countLoops++;
-		else if(realizarsegundaPinia()) countLoops = countLoops-2;
+		else if(realizarsegundaPinia()) countLoops = countLoops--;
 		else countLoops = 1;
 	}
 	else {
@@ -226,7 +227,8 @@ TestadoPersonaje Personaje::generarEstado(Tinput orden) {
 				case TinputAccion::KEY_PROTECCION:
 					return ACC_PROTECCION;
 				case TinputAccion::KEY_PODER:
-					return FAT_FUEGO;
+					if(estadoFatality)return FAT_FUEGO;
+					return MOV_PARADO;
 			}
 			break;
 		case TinputMovimiento:: KEY_ABAJO:

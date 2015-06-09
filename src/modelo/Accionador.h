@@ -78,6 +78,8 @@ public:
     void congelado();
 
     Posicion posInicial;
+
+    void activarPoder(Tdireccion direccion);
 };
 
 
