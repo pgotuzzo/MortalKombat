@@ -17,16 +17,25 @@ Game::Game(config* configuration, const int gameLoopPeriod) {
     mMenuGameMode = nullptr;
     mMenuPlayers = nullptr;
 
+    sonidoPJ1 = new Musica();
+    sonidoPJ2 = new Musica();
+
     initialize();
 };
 
 void Game::clean(){
-    if (mPantalla != nullptr)
+    if (mPantalla != nullptr) {
         delete(mPantalla);
-    if (mMundo != nullptr)
+        mPantalla = NULL;
+    }
+    if (mMundo != nullptr) {
         delete(mMundo);
-    if (mMenuGameMode != nullptr)
+        mMundo = NULL;
+    }
+    if (mMenuGameMode != nullptr) {
         delete(mMenuGameMode);
+        mMenuGameMode = NULL;
+    }
 }
 
 void Game::initialize() {
@@ -89,11 +98,6 @@ void Game::initialize() {
 
             mPantalla = new PantallaArcade(capas, ventana, escenario, personajes);// Capas
 
-            delete musicaDelJuego;
-            sonidoPJ1 = new Musica();
-            sonidoPJ2 = new Musica();
-
-            sonidoPJ1->musicVs();
             string nombres[2] = {personajes[0].nombre, personajes[1].nombre};
             mPantalla->initialize(capas, nombres);
 
@@ -114,12 +118,6 @@ void Game::initialize() {
             Tescenario escenario = mConfiguration->getEscenario();
 
             mPantalla = new PantallaPractice(capas, ventana, escenario, personajes);
-
-            delete musicaDelJuego;
-            sonidoPJ1 = new Musica();
-            sonidoPJ2 = new Musica();
-
-            sonidoPJ1->musicPractica();
 
             // Capas
             string nombres[2] = {personajes[0].nombre, personajes[1].nombre};
@@ -149,15 +147,24 @@ void Game::play(vector<Tinput> inputs, Posicion coordenadasMouse) {
                     case EmodeSelection::MULTIPLAYER: {
                         mState = EgameState::MODE_MULTIPLAYER;
                         initialize();
+                        delete musicaDelJuego;
+                        musicaDelJuego = new Musica();
+                        musicaDelJuego->musicVs();
                         break;
                     };
                     case EmodeSelection::ARCADE: {
                         mState = EgameState::MODE_ARCADE;
+                        delete musicaDelJuego;
+                        musicaDelJuego = new Musica();
+                        musicaDelJuego->musicVs();
                         initialize();
                         break;
                     };
                     case EmodeSelection::PRACTICE: {
                         mState = EgameState::MODE_PRACTICE;
+                        delete musicaDelJuego;
+                        musicaDelJuego = new Musica();
+                        musicaDelJuego->musicPractica();
                         initialize();
                         break;
                     };
@@ -173,8 +180,8 @@ void Game::play(vector<Tinput> inputs, Posicion coordenadasMouse) {
         case EgameState::MODE_MULTIPLAYER:
         case EgameState::MODE_PRACTICE:{
             if ( fight(inputs) == EgameResult::END){
-                cout<<"hola"<<endl;
                 mState = EgameState::MENU_MODE;
+                delete musicaDelJuego;
                 initialize();
             }
             break;
@@ -249,7 +256,7 @@ EgameResult Game::fight(vector<Tinput> inputs) {
 }
 
 Game::~Game() {
-    //delete musicaDelJuego;
+    delete musicaDelJuego;
     delete sonidoPJ1;
     delete sonidoPJ2;
     delete(mPantalla);

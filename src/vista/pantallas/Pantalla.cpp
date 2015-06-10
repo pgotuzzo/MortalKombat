@@ -13,6 +13,10 @@ Pantalla::Pantalla(Tdimension dimPixels, Tdimension dimUl) {
 
     loguer->loguear("Inicia SDL", Log::LOG_DEB);
 
+    if(SDL_WasInit(SDL_INIT_VIDEO)==0) SDL_InitSubSystem(SDL_INIT_VIDEO);
+    if(SDL_WasInit(SDL_INIT_AUDIO)==0)SDL_InitSubSystem(SDL_INIT_AUDIO);
+    if(SDL_WasInit(SDL_INIT_HAPTIC)==0)SDL_InitSubSystem(SDL_INIT_HAPTIC);
+    if(SDL_WasInit(SDL_INIT_NOPARACHUTE)==0)SDL_InitSubSystem(SDL_INIT_NOPARACHUTE);
 
     if (TTF_Init() < 0) {
         loguer->loguear("Fallo la inicializacion de TTF.", Log::LOG_ERR);
@@ -57,11 +61,9 @@ Pantalla::~Pantalla(){
     loguer->loguear("Cierra SDL", Log::LOG_DEB);
     IMG_Quit();
     TTF_Quit();
-    SDL_QuitSubSystem(SDL_INIT_VIDEO);
-    SDL_QuitSubSystem(SDL_INIT_AUDIO);
-    SDL_QuitSubSystem(SDL_INIT_HAPTIC);
-    SDL_QuitSubSystem(SDL_INIT_NOPARACHUTE);
-    SDL_QuitSubSystem(SDL_INIT_AUDIO);
+    if(SDL_WasInit(SDL_INIT_VIDEO)!=0) SDL_QuitSubSystem(SDL_INIT_VIDEO);
+    if(SDL_WasInit(SDL_INIT_HAPTIC)!=0)SDL_QuitSubSystem(SDL_INIT_HAPTIC);
+    if(SDL_WasInit(SDL_INIT_NOPARACHUTE)!=0)SDL_QuitSubSystem(SDL_INIT_NOPARACHUTE);
 
 }
 

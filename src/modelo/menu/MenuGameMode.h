@@ -18,6 +18,8 @@ private:
 
     Musica* select;
 
+    Musica* click;
+
 
 public:
     MenuGameMode();

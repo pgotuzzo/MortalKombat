@@ -4,8 +4,7 @@ const string ruta = "/home/miguel/ClionProjects/MortalKombat/resources/musica/";
 Musica::Musica() {
     for(size_t i = 0 ; i < 36 ; i++)
         contadores[i] = 0;
-
-    SDL_Init(SDL_INIT_AUDIO);
+    if(SDL_WasInit(SDL_INIT_AUDIO)==0)SDL_InitSubSystem(SDL_INIT_AUDIO);
     //abre SDL_mixer
     if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0 ){
         loguer->loguear("SDL_mixer error no se pudo iniciar",Log::Tlog::LOG_ERR );
@@ -155,12 +154,10 @@ Musica::~Musica() {
     musicaMenu = NULL;
     Mix_CloseAudio();
     Mix_Quit();
-
 }
 
 void Musica::musicVs(){
-
-    if( Mix_PlayingMusic() == 0 ){
+        if( Mix_PlayingMusic() == 0 ){
         Mix_PlayMusic( musicaVersus, -1 );
 
     }else if( Mix_PausedMusic() == 1 ){
@@ -171,7 +168,6 @@ void Musica::musicVs(){
 }
 
 void Musica::musicMenu(){
-
     if( Mix_PlayingMusic() == 0 ){
         Mix_PlayMusic( musicaMenu, -1 );
 

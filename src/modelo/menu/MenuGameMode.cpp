@@ -5,6 +5,7 @@ MenuGameMode::MenuGameMode() {
     mSelectionConfirmed = false;
     seleccionandoConMouse = false;
     select = new Musica();
+    click = new Musica();
 }
 
 void MenuGameMode::updateSelection(Tdireccion direction) {
@@ -38,6 +39,7 @@ EmodeSelection MenuGameMode::update(Tinput input) {
 
     if (input.game == TinputGame::KEY_ENTER || input.accion == TinputAccion::KEY_PINIA_ALTA){
         delete select;
+        click->click();
         mSelectionConfirmed = true;
     }
 
@@ -72,6 +74,7 @@ EmodeSelection MenuGameMode::update(Tinput input,Posicion coordenadasMouse,vecto
 
     if (input.game == TinputGame::CLICK_IZQ_MOUSE && seleccionandoConMouse){
         delete(select);
+        click->click();
         mSelectionConfirmed = true;
     }
 

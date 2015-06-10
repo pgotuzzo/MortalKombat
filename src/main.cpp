@@ -34,6 +34,8 @@ int main(int argc, char **argv) {
         //TODO: Modificar los dos controladores para que devuelvan los nuevos inputs del struct Tinput
         ControladorTeclado controlador = ControladorTeclado();
         ControladorMouse controladorMouse = ControladorMouse();
+        ControladorJoystick controladorJ = ControladorJoystick(configuracion->getBotones());
+
 
 
         loguer->loguear("Finaliza la creacion del controlador", Log::LOG_DEB);
@@ -42,7 +44,7 @@ int main(int argc, char **argv) {
 
         Game game = Game(configuracion, frameRate);
 
-        ControladorJoystick controladorJ = ControladorJoystick(configuracion->getBotones());
+
         bool restart = false;
         do {
             vector<Tinput> inputs;
@@ -67,9 +69,13 @@ int main(int argc, char **argv) {
             }
             switch (inputs.at(0).game) {
                 case TinputGame::KEY_EXIT:
+                    SDL_Quit();
                     endGame = true;
                     break;
                 case TinputGame::KEY_RESTART:
+                    if(SDL_WasInit(SDL_INIT_VIDEO)!=0) SDL_QuitSubSystem(SDL_INIT_VIDEO);
+                    if(SDL_WasInit(SDL_INIT_HAPTIC)!=0)SDL_QuitSubSystem(SDL_INIT_HAPTIC);
+                    if(SDL_WasInit(SDL_INIT_NOPARACHUTE)!=0)SDL_QuitSubSystem(SDL_INIT_NOPARACHUTE);
                     restart = true;
                     break;
                 default:
