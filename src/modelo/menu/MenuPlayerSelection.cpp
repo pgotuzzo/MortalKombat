@@ -6,6 +6,8 @@ MenuPlayerSelection::MenuPlayerSelection() {
     mSelectionConfirmed[1] = false;
     mSelection[0] = Posicion(0,0);
     mSelection[1] = Posicion(3,0);
+    movimientoSelec = new Musica();
+    seleccion = new Musica();
 }
 
 EtipoPersonaje MenuPlayerSelection::getType(Posicion p) {
@@ -27,26 +29,31 @@ EtipoPersonaje MenuPlayerSelection::getType(Posicion p) {
 void MenuPlayerSelection::updateSelection(TinputMovimiento movimiento,int jugador) {
     switch ( movimiento ){
         case TinputMovimiento::KEY_ABAJO:{
+            movimientoSelec->selecciona();
             if (mSelection[jugador].y < ROWS-1)
                 mSelection[jugador].y++;
             break;
         };
         case TinputMovimiento::KEY_ARRIBA:{
+            movimientoSelec->selecciona();
             if (mSelection[jugador].y > 0)
                 mSelection[jugador].y--;
             break;
         };
         case TinputMovimiento::KEY_DERECHA:{
+            movimientoSelec->selecciona();
             if (mSelection[jugador].x < COLUMNS-1)
                 mSelection[jugador].x++;
             break;
         };
         case TinputMovimiento::KEY_IZQUIERDA:{
+            movimientoSelec->selecciona();
             if (mSelection[jugador].x > 0)
                 mSelection[jugador].x--;
             break;
         };
         case TinputMovimiento::KEY_ARRIBA_DERECHA:{
+            movimientoSelec->selecciona();
             if (mSelection[jugador].x < COLUMNS-1)
                 mSelection[jugador].x++;
             if (mSelection[jugador].y > 0)
@@ -54,6 +61,7 @@ void MenuPlayerSelection::updateSelection(TinputMovimiento movimiento,int jugado
             break;
         };
         case TinputMovimiento::KEY_ARRIBA_IZQUIERDA:{
+            movimientoSelec->selecciona();
             if (mSelection[jugador].x > 0)
                 mSelection[jugador].x--;
             if (mSelection[jugador].y > 0)
@@ -70,6 +78,8 @@ vector<Posicion> MenuPlayerSelection::update(vector<Tinput> inputs) {
     updateSelection(movimiento1,0);
 
     if (inputs[0].accion == TinputAccion::KEY_PINIA_ALTA){
+        //delete movimientoSelec;
+        seleccion->click();
         mSelectionConfirmed[0] = true;
         personajesElegidos[0] = this->getType(mSelection[0]);
 
@@ -77,6 +87,7 @@ vector<Posicion> MenuPlayerSelection::update(vector<Tinput> inputs) {
     if(mSelectionConfirmed[0]){
         updateSelection(movimiento2,1);
         if (inputs[1].accion == TinputAccion::KEY_PINIA_ALTA){
+            seleccion->click();
             mSelectionConfirmed[1] = true;
             personajesElegidos[1] = this->getType(mSelection[1]);
         }

@@ -4,6 +4,7 @@
 #include <array>
 #include "../../utils/Common.h"
 #include "../../utils/PersonajeUtils.h"
+#include "../../Musica.h"
 
 class MenuPlayerSelection {
 
@@ -29,6 +30,9 @@ private:
 public:
     MenuPlayerSelection();
     EtipoPersonaje getType(Posicion p);
+
+    Musica* movimientoSelec;
+    Musica* seleccion;
 
     EtipoPersonaje personajesElegidos[2];
 

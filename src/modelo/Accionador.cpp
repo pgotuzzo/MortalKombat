@@ -172,15 +172,19 @@ Trect Accionador::laAccion(TestadoPersonaje estadoPj, int loops, Posicion pos, T
             }
             break;
         case FAT_FUEGO:
-            if(loops== 14) {
+            if(loops== 19) {
                 activarPoder(direccion,0);
                 resultado = GANO_MATCH;
             }
             break;
         case REA_FAT_FUEGO:
-            if(loops == 19) resultado = PERDIO_MATCH;
+            if(loops == 29) resultado = PERDIO_MATCH;
             break;
         case REA_MAREADO:
+            if( loops == 1){
+                if(direccion == DERECHA) rectaDelPj.p = rectaDelPj.p + Posicion(-6,0);
+                else rectaDelPj.p = rectaDelPj.p + Posicion(6,0);
+            }
             if(loops == 199) resultado = PERDIO_MATCH;
             break;
     }

@@ -71,7 +71,6 @@ private:
 	Tbotones botones;
 	Tcapa capa;
 	Tcombo combo1;
-	Tcombo combo2;
 	Tcombo fata1;
 	int tiempoCombo;
 	int errorCombo;

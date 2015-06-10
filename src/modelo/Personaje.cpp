@@ -56,7 +56,6 @@ void Personaje::crearCombosdelPersonaje(Tcombos combos) {
 
 
 void Personaje::realizarAccion(Tinput orden) {
-	if(estadoActual != REA_MAREADO && estadoAnterior == REA_MAREADO) setResultado(PERDIO_MATCH);
 	TestadoPersonaje estadoCompuesto = generarEstado(orden);
 	verificarDebuff();
 

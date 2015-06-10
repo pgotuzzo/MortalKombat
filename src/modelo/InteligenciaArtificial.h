@@ -10,6 +10,11 @@ class InteligenciaArtificial {
 public:
     bool proteccion=false;
     int loopEnProtec=0;
+    bool sigue=false;
+    bool acercandose=false;
+    bool pegado=false;
+    TinputMovimiento dirPatada(Trect,Trect);
+    TinputMovimiento meAcerco(Trect,Trect);
     InteligenciaArtificial();
     virtual ~InteligenciaArtificial();
     Tinput responderDeacuerdoa(TestadoPersonaje,Trect,Trect);

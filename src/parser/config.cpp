@@ -81,7 +81,7 @@ void config::setValores(Value partes){
 
 	if ( ! partes["combos"].isNull() ) {
 		obtiene(partes,"combos","poder",Tparte::COMBOP,99,Tdato::STRING);
-		obtiene(partes,"combos","agarre",Tparte::COMBOA,99,Tdato::STRING);
+
 	}else
 		combosDefecto();
 	cargaExitosa( "combos" );
@@ -323,9 +323,6 @@ void config::original(Tparte tipoParte,Value partes){
 			combo1.nombre="poder";
 			break;}
 
-		case COMBOA: {
-			combo2.combo= partes["combos"].get("agarre","defi").asString();
-			combo2.nombre="agarre";break;}
 		case FATALITIE1: {
 			fata1.combo= partes["fatalities"].get("fatal","iddi").asString();
 			fata1.nombre="fatal1";break;}
@@ -357,9 +354,6 @@ void config::defecto(Tparte tipoParte,int defecto){
 		case COMBOP:
 			combo1.nombre="poder";
 			combo1.combo="abcd";break;
-		case COMBOA:
-			combo2.nombre="agarre";
-			combo2.combo="defi"; break;
 		case FATALITIE1:
 			fata1.nombre="fatal1";
 			fata1.combo="iddi";;break;
@@ -477,9 +471,6 @@ void config::combosDefecto() {
 	loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_WAR);
 	combo1.nombre="poder";
 	combo1.combo="abcd";
-
-	combo2.nombre="agarre";
-	combo2.combo="defi";
 
 }
 
@@ -635,10 +626,9 @@ void config::validaCombos(){
 
 	vector<Tcombo> vectC;
 	std::transform(combo1.combo.begin(), combo1.combo.end(), combo1.combo.begin(), ::tolower);
-	std::transform(combo2.combo.begin(), combo2.combo.end(), combo2.combo.begin(), ::tolower);
 	std::transform(fata1.combo.begin(), fata1.combo.end(), fata1.combo.begin(), ::tolower);
 
-	vectC.push_back(combo1);vectC.push_back(combo2);vectC.push_back(fata1);
+	vectC.push_back(combo1);vectC.push_back(fata1);
 
 	bool letrasCorrectas = true;
 
@@ -657,15 +647,10 @@ void config::validaCombos(){
 
 	if ( letrasCorrectas ){
 
-		bool parecido1 = combo2.combo.find(combo1.combo) != string::npos;
-		bool parecido2 = combo2.combo.find(fata1.combo) != string::npos;
-		bool parecido3 = combo1.combo.find(combo2.combo) != string::npos;
 		bool parecido4 = combo1.combo.find(fata1.combo) != string::npos;
 		bool parecido5 = fata1.combo.find(combo1.combo) != string::npos;
-		bool parecido6 = fata1.combo.find(combo2.combo) != string::npos;
 
-		if( parecido1 || parecido2 || parecido3 || parecido4
-			|| parecido5 || parecido6 ){
+		if(  parecido4 || parecido5  ){
 			letrasCorrectas = false;
 		}
 	}
@@ -876,7 +861,6 @@ Tbotones config::getBotones(){
 Tcombos config::getCombos(){
 	Tcombos combos;
 	combos.poder = letrasAinput(combo1.combo);
-	combos.agarre = letrasAinput(combo2.combo);
 	combos.fatality = letrasAinput(fata1.combo);
 	combos.errores = errorCombo;
 	combos.tiempo = tiempoCombo;

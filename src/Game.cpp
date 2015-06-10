@@ -117,7 +117,6 @@ void Game::initialize() {
             loguer->loguear("Creando el modelo...", Log::LOG_DEB);
 
             mMundo = new Mundo(*mConfiguration,nombrePjs);
-
             loguer->loguear("Finaliza la creacion del modelo", Log::LOG_DEB);
             break;
         };
@@ -290,12 +289,14 @@ EgameResult Game::fight(vector<Tinput> inputs) {
         default:{
             vector<Tcambio> c = mMundo->actualizarMundo(inputs,mState);
 
-            sonidoPJ1->playFX(c.at(0).estado);
-            sonidoPJ2->playFX(c.at(1).estado);
+            sonidoPJ1->soundRounds(mState,mMundo->roundsPJ1, mMundo->roundsPJ2);
 
-            mPantalla->update(c,inputs[1]);
+            sonidoPJ1->playFX(c.at(0).estado,inputs[0]);
+            sonidoPJ2->playFX(c.at(1).estado,inputs[1]);
+
+            mPantalla->update(c,inputs[0]);
             mPantalla->print();
-            return ( mMundo->huboGanador() ) ? EgameResult::END : EgameResult::CONTINUE;
+            return ( mMundo->huboGanador() && modoDeJuegoElegido != EmodeSelection::PRACTICE ) ? EgameResult::END : EgameResult::CONTINUE;
         }
     };
 }

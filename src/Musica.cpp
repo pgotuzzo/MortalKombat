@@ -102,12 +102,59 @@ Musica::Musica() {
         if( dizzy == NULL )
             loguer->loguear("Error al cargar dizzy",Log::Tlog::LOG_WAR);
 
+
+
+        youNeverWin = Mix_LoadWAV( (ruta + "youNeverWinFight.wav").c_str() );
+        if( youNeverWin == NULL )
+            loguer->loguear("Error al cargar youNeverWin",Log::Tlog::LOG_WAR);
+
+        round1 = Mix_LoadWAV( (ruta + "round1Fight.wav").c_str() );
+        if( round1 == NULL )
+            loguer->loguear("Error al cargar round1",Log::Tlog::LOG_WAR);
+
+        round2 = Mix_LoadWAV( (ruta + "round2Fight.wav").c_str() );
+        if( round2 == NULL )
+            loguer->loguear("Error al cargar round2",Log::Tlog::LOG_WAR);
+
+        round3 = Mix_LoadWAV( (ruta + "round3Fight.wav").c_str() );
+        if( round3 == NULL )
+            loguer->loguear("Error al cargar round3",Log::Tlog::LOG_WAR);
+
+        fatality = Mix_LoadWAV( (ruta + "fatality.wav").c_str() );
+        if( fatality == NULL )
+            loguer->loguear("Error al cargar fatality",Log::Tlog::LOG_WAR);
+
+        reacGancho = Mix_LoadWAV( (ruta + "reacGancho.wav").c_str() );
+        if( reacGancho == NULL )
+            loguer->loguear("Error al cargar reacGancho",Log::Tlog::LOG_WAR);
+
+        caeAgarre = Mix_LoadWAV( (ruta + "caeAgarre.wav").c_str() );
+        if( caeAgarre == NULL )
+            loguer->loguear("Error al cargar caeAgarre",Log::Tlog::LOG_WAR);
+
+        atrasBaja = Mix_LoadWAV( (ruta + "atrasBaja.wav").c_str() );
+        if( atrasBaja == NULL )
+            loguer->loguear("Error al cargar atrasBaja",Log::Tlog::LOG_WAR);
+
+        atrasAlta = Mix_LoadWAV( (ruta + "atrasAlta.wav").c_str() );
+        if( atrasAlta == NULL )
+            loguer->loguear("Error al cargar atrasAlta",Log::Tlog::LOG_WAR);
+
+        quema = Mix_LoadWAV( (ruta + "quema.wav").c_str() );
+        if( quema == NULL )
+            loguer->loguear("Error al cargar quema",Log::Tlog::LOG_WAR);
+
+        tiraFat = Mix_LoadWAV( (ruta + "tiraFat.wav").c_str() );
+        if( tiraFat == NULL )
+            loguer->loguear("Error al cargar tiraFat",Log::Tlog::LOG_WAR);
     }
 
 }
 
 Musica::~Musica() {
 
+    Mix_FreeChunk( atrasBaja );
+    Mix_FreeChunk( atrasAlta );
     Mix_FreeChunk( gancho );
     Mix_FreeChunk( ganchoRisa );
     Mix_FreeChunk( tiraCongela );
@@ -121,15 +168,35 @@ Musica::~Musica() {
     Mix_FreeChunk( patada );
     Mix_FreeChunk( recibioGolpe );
     Mix_FreeChunk( recibioGolpePatada );
-    Mix_FreeChunk( resbalada );
     Mix_FreeChunk( tiraPinia );
     Mix_FreeChunk( congelado );
     Mix_FreeChunk( dizzy );
     Mix_FreeChunk( apreto );
+    Mix_FreeChunk( fatality );
+    Mix_FreeChunk( round1 );
+    Mix_FreeChunk( round2 );
+    Mix_FreeChunk( round3 );
+    Mix_FreeChunk( youNeverWin );
+    Mix_FreeChunk( reacGancho );
+    Mix_FreeChunk( caeAgarre );
+    Mix_FreeChunk( resbalada );
+    Mix_FreeChunk( quema );
+    Mix_FreeChunk( tiraFat );
+    tiraFat=NULL;
+    quema= NULL;
+    caeAgarre = NULL;
+    reacGancho = NULL;;
+    atrasBaja = NULL;
+    atrasAlta = NULL;
+    round3 = NULL;
+    round2 = NULL;
+    round1 = NULL;
+    fatality = NULL;
     congelado = NULL;
     dizzy = NULL;
     apreto=NULL;
     gancho = NULL;
+    youNeverWin = NULL;
     tiraPinia=NULL;
     agarraYtira = NULL;
     golpe = NULL;
@@ -149,6 +216,7 @@ Musica::~Musica() {
     Mix_FreeMusic( seleccionPersonaje );
     Mix_FreeMusic( musicaMenu );
     musicaVersus = NULL;
+    resbalada=NULL;
     musicaPractica = NULL;
     seleccionPersonaje = NULL;
     musicaMenu = NULL;
@@ -157,7 +225,7 @@ Musica::~Musica() {
 }
 
 void Musica::musicVs(){
-        if( Mix_PlayingMusic() == 0 ){
+    if( Mix_PlayingMusic() == 0 ){
         Mix_PlayMusic( musicaVersus, -1 );
 
     }else if( Mix_PausedMusic() == 1 ){
@@ -210,21 +278,87 @@ void Musica::click(){
     Mix_PlayChannel( -1, apreto, 0 );
 }
 
-void Musica::playFX(TestadoPersonaje estado){
+
+void Musica::sRound1(){
+    Mix_PlayChannel( -1, round1, 0 );
+}
+
+void Musica::sRound2(){
+    Mix_PlayChannel( -1, round2, 0 );
+}
+
+void Musica::sRound3(){
+    Mix_PlayChannel( -1, round3, 0 );
+}
+
+void Musica::sYouNeverWin(){
+    Mix_PlayChannel( -1, youNeverWin, 0 );
+}
+
+void Musica::sFatality(){
+    Mix_PlayChannel( -1, fatality, 0 );
+}
+
+void Musica::soundRounds(EgameState mState, int roundP1 , int roundP2){
+    int rounds = roundP1 + roundP2 + 1 ;
+
+    if(rounds != anteriorRound && (mState == EgameState::MODE_ARCADE
+                                   || mState == EgameState::MODE_MULTIPLAYER )){
+
+        if ( mState == EgameState:: MODE_ARCADE && rounds == 1 )
+            sYouNeverWin();
+
+        else if( rounds == 1 && mState != EgameState:: MODE_ARCADE ){
+            sRound1();
+
+        }else if( rounds == 2 ){
+            sRound2();
+
+        } else if( rounds == 3 && roundP1 == 1 && roundP2 == 1){
+            sRound3();
+        }
+
+    }
+    anteriorRound = rounds;
+
+}
+
+void Musica::playFX(TestadoPersonaje estado, Tinput input){
     contadores[estado]++;
 
     //mostrarEstado(estado);
-    if ( contadores[estado] == 1 )
+    if ( ( contadores[estado] == 1 && estado != REA_FAT_FUEGO  && estado != REA_AGARRE && estado != FAT_FUEGO  ) ||
+         ( estado == REA_FAT_FUEGO && contadores[REA_FAT_FUEGO] == loopsPara(REA_FAT_FUEGO) )
+         || ( estado == REA_AGARRE && contadores[REA_AGARRE] == loopsPara(REA_AGARRE) )
+         || ( estado == FAT_FUEGO && contadores[FAT_FUEGO] == 8 ))
 
         switch( estado ){
 
+            case REA_AGARRE: Mix_PlayChannel( -1, caeAgarre, 0 );break;
+
+            case FAT_FUEGO:Mix_PlayChannel( -1, tiraFat, 0 );break;
+
+            case REA_FAT_FUEGO:
+                Mix_PlayChannel( -1, fatality, 0 );
+                Mix_PlayChannel( -1, quema, 0 );
+                break;
+
             case REA_CONGELADO: Mix_PlayChannel( -1, congelado, 0 );break;
 
+            case REA_GOLPE_ALTO:
+            case REA_GOLPE_BAJO:
             case REA_PINIA_ALTA: Mix_PlayChannel( -1, golpe, 0 );break;
 
             case REA_MAREADO: Mix_PlayChannel( -1, dizzy, 0 );break;
 
-                //case REA_GOLPE_FUERTE:Mix_PlayChannel( -1, ganchoRisa, 0 );break;
+            case REA_GOLPE_FUERTE:{
+                Mix_PlayChannel( -1, reacGancho, 0 );
+                if(input.accion == TinputAccion::KEY_PINIA_ALTA)
+                    Mix_PlayChannel( -1, ganchoRisa, 0 );break;
+
+            }
+
+            case ACC_AGARRE: Mix_PlayChannel( -1, agarraYtira, 0 );break;
 
             case ACC_PINIA_ALTA_AGACHADO:Mix_PlayChannel( -1, gancho, 0 );break;
 
@@ -232,8 +366,6 @@ void Musica::playFX(TestadoPersonaje estado){
             case ACC_PINIA_ALTA: Mix_PlayChannel( -1, tiraPinia, 0 );break;
 
             case REA_AGACHADO:Mix_PlayChannel( -1, golpePequenio, 0 );break;
-
-            case REA_GOLPE_ALTO:Mix_PlayChannel( -1, resbalada, 0 );break;
 
             case MOV_SALTANDO_OBLICUO:
             case MOV_SALTANDO_VERTICAL:{
@@ -251,8 +383,15 @@ void Musica::playFX(TestadoPersonaje estado){
             case ACC_PATADA_ALTA:
             case ACC_PATADA_BAJA:Mix_PlayChannel( -1, patada, 0 );break;
 
+            case ACC_PATADA_ALTA_ATRAS:Mix_PlayChannel( -1, atrasAlta, 0 );break;
+
+            case ACC_PATADA_BAJA_ATRAS: Mix_PlayChannel( -1, atrasBaja, 0 );break;
+
             case REA_PATADA_BARRIDA:Mix_PlayChannel( -1, recibioGolpePatada, 0 );break;
         }
+
+    if( ( estado == REA_GOLPE_FUERTE && contadores[REA_GOLPE_FUERTE] == loopsPara(REA_GOLPE_FUERTE) ) )
+        Mix_PlayChannel( -1, caeAgarre, 0 );
 
     int loopTotal1 = contadores[MOV_SALTANDO_VERTICAL] + contadores[ACC_PINIA_SALTO_VERTICAL];
     int loopTotal2=  contadores[MOV_SALTANDO_VERTICAL] + contadores[ACC_PATADA_SALTO_VERTICAL ];
@@ -287,4 +426,5 @@ void Musica::playFX(TestadoPersonaje estado){
 
     if ( contadores[estado] == loopsPara ( estado ) )
         contadores[estado]=0;
+
 }

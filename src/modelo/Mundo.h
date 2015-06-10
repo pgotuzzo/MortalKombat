@@ -7,9 +7,10 @@
 #include "DetectorDeColisiones.h"
 #include "SDL2/SDL.h"
 #include "../utils/GameUtils.h"
+#include "InteligenciaArtificial.h"
 
 class Mundo {
-private:
+public:
 	float anchoEscenario;
 	float altoEscenario;
 	float altoPiso;
@@ -22,7 +23,7 @@ private:
 
 	Uint32 tiempoInicial;
 
-public:
+	InteligenciaArtificial inteligencia;
 	DetectorDeColisiones colisionador;
 	Mundo(config configuracion,string nombrePjs[2]);
 

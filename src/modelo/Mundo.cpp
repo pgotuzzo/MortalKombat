@@ -1,7 +1,6 @@
 #include <functional>
 #include "../parser/config.h"
 #include "Mundo.h"
-#include "InteligenciaArtificial.h"
 
 const int tiempoInicialRound = 99;
 
@@ -52,6 +51,8 @@ Mundo::Mundo(config configuracion,string nombrePjs[2]) {
 	tiempoRound = tiempoInicialRound;
 
 	tiempoInicial = SDL_GetTicks();
+
+	InteligenciaArtificial inteligencia = InteligenciaArtificial();
 }
 
 void Mundo::verificarDireccionDeLosPersonajes() {
@@ -131,8 +132,6 @@ vector<Tcambio> Mundo::actualizarMundo(vector<Tinput> inputs,EgameState modoDeJu
 	}
 
 	else if(modoDeJuego == EgameState::MODE_ARCADE){
-		// INTELIGENCIA ARTIFICIAL
-		InteligenciaArtificial inteligencia;
 		Tinput input = inteligencia.responderDeacuerdoa(personaje1->estadoActual,personaje1->rectanguloPj,personaje2->rectanguloPj);
 		personaje2->realizarAccion(input);
 
@@ -152,7 +151,8 @@ vector<Tcambio> Mundo::actualizarMundo(vector<Tinput> inputs,EgameState modoDeJu
 }
 
 bool Mundo::huboGanador() {
-	return (personaje1->getResultado() == PERDIO_MATCH) ||  (personaje2->getResultado() == PERDIO_MATCH);
+	return ((personaje1->getResultado() == PERDIO_MATCH) &&  (personaje2->getResultado() == GANO_MATCH)||
+			((personaje2->getResultado() == PERDIO_MATCH) &&  (personaje1->getResultado() == GANO_MATCH)));
 }
 
 Mundo::~Mundo() {
