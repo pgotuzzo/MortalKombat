@@ -13,7 +13,7 @@ private:
 
 public:
     PantallaMenuPlayers(Tdimension dimPixels, Tdimension dimUl);
-    void update(vector<EtipoPersonaje> players);
+    void update(vector<Posicion> players);
     void print();
 
     virtual ~PantallaMenuPlayers();

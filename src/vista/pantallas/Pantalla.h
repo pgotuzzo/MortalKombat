@@ -46,7 +46,7 @@ public:
     /**
      * MENU DE SELECCION DE PERSONAJES
      */
-    virtual void update(vector<EtipoPersonaje> players);
+    virtual void update(vector<Posicion> players);
 
     virtual ~Pantalla();
 };

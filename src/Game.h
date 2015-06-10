@@ -7,6 +7,7 @@
 #include "modelo/menu/MenuGameMode.h"
 #include "utils/GameUtils.h"
 #include "modelo/menu/MenuPlayers.h"
+#include "modelo/menu/MenuPlayerSelection.h"
 
 #include "Musica.h"
 
@@ -21,7 +22,9 @@ private:
     Pantalla* mPantalla;
     Mundo* mMundo;
     MenuGameMode* mMenuGameMode;
-    MenuPlayers* mMenuPlayers;
+    MenuPlayerSelection* mMenuPlayers;
+
+
 
     // metodos privados
     void clean();
@@ -40,6 +43,15 @@ private:
 public:
 
     EgameState mState;
+
+    EmodeSelection modoDeJuegoElegido;
+
+    EtipoPersonaje personajesElegidos[2];
+
+    string nombrePjs[2];
+    string rutaSprites[2];
+
+    void setInformacionPersonajesElegidos(int jugador);
 
     Game(config* configuration, const int gameloop);
 

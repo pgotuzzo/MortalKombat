@@ -11,7 +11,7 @@ const int tiempoInicialRound = 99;
  * Tambien se inicializa el alto, ancho y yPiso del escenario.
 
  */
-Mundo::Mundo(config configuracion) {
+Mundo::Mundo(config configuracion,string nombrePjs[2]) {
 	Tescenario escenario = configuracion.getEscenario();
 	vector<Tpersonaje> personajes = configuracion.getPersonajes();
 	float anchoVentana = configuracion.getVentana().ancho;
@@ -40,8 +40,8 @@ Mundo::Mundo(config configuracion) {
 
 	// TODO: Cuando se seleccionan los personajes hay que pasarles los nombres
 
-	personaje1 = new Personaje(PJ1.nombre,direccion1,rectanguloPj1,anchoVentana,configuracion.getCombos());
-	personaje2 = new Personaje(PJ2.nombre,direccion2,rectanguloPj2,anchoVentana,configuracion.getCombos());
+	personaje1 = new Personaje(nombrePjs[0],direccion1,rectanguloPj1,anchoVentana,configuracion.getCombos());
+	personaje2 = new Personaje(nombrePjs[1],direccion2,rectanguloPj2,anchoVentana,configuracion.getCombos());
 
 	colisionador = DetectorDeColisiones(anchoVentana,anchoEscenario);
 

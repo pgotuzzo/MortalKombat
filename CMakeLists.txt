@@ -45,6 +45,8 @@ set(SOURCE_FILES
     src/modelo/menu/MenuGameMode.cpp
     src/modelo/menu/MenuPlayers.cpp
     src/modelo/menu/MenuPlayers.h
+    src/modelo/menu/MenuPlayerSelection.cpp
+    src/modelo/menu/MenuPlayerSelection.h
     src/modelo/Mundo.h
     src/modelo/Mundo.cpp
     src/modelo/ObjetoColisionable.h

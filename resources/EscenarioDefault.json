@@ -29,11 +29,11 @@
             "ancho": 25,
             "alto": 60,
             "z-index": 2,
-            "nombre":"subzero",
+            "nombre":"liukang",
             "sprites": "./resources/sprites/liukang",
             "color-alternativo": [
-                {"h-inicial": 210},
-                {"h-final":270},
+                {"h-inicial": 0},
+                {"h-final":350},
                 {"delta": 120}
             ]
         },
@@ -41,11 +41,11 @@
             "ancho": 25,
             "alto": 60,
             "z-index": 3,
-            "nombre":"ermac",
-            "sprites": "./resources/sprites/ermac",
+            "nombre":"subzero",
+            "sprites": "./resources/sprites/subzero",
             "color-alternativo": [
-                {"h-inicial": -30},
-                {"h-final":30},
+                {"h-inicial": 0},
+                {"h-final":350},
                 {"delta": 120}
             ]
         }

@@ -24,7 +24,7 @@ private:
 
 public:
 	DetectorDeColisiones colisionador;
-	Mundo(config configuracion);
+	Mundo(config configuracion,string nombrePjs[2]);
 
 	vector<Tcambio> actualizarMundo(vector<Tinput> inputs,EgameState modoDeJuego);
 
@@ -39,6 +39,8 @@ public:
 	bool huboGanador();
 
 	string quienGano();
+
+	void verificarGanador();
 
 	void validarAlGanador();
 };

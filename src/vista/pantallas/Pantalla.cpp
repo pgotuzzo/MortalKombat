@@ -49,7 +49,7 @@ vector<float> Pantalla::getEscalas(){
 
 void Pantalla::update(vector<Tcambio> changes,Tinput input) {}
 void Pantalla::update(EmodeSelection selection) {}
-void Pantalla::update(vector<EtipoPersonaje> players) {}
+void Pantalla::update(vector<Posicion> players) {}
 void Pantalla::initialize(vector<Tcapa> capas, string personajes[2]){}
 
 Pantalla::~Pantalla(){
