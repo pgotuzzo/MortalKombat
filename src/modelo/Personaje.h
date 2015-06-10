@@ -35,7 +35,6 @@ public:
 	Tsentido sentidoPj;
 
 	Combo* comboPoder;
-	Combo* comboAgarre;
 	Combo* comboFatality;
 
 	float vida;

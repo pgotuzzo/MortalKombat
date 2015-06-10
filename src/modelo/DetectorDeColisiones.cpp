@@ -41,6 +41,8 @@ void DetectorDeColisiones::resolverColisionYAgarre(Personaje *personaje1, Person
                 personaje1->estadoActual = ACC_AGARRE;
                 personaje2->estadoAnterior = personaje2->estadoActual;
                 personaje2->estadoActual = REA_AGARRE;
+                if(personaje2->vida <= 5) personaje2->vida = 0;
+                else personaje2->vida -= 5;
             }
         }
         else colisionar(personaje2,personaje1->llevarACabo.getGolpe());

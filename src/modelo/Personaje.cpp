@@ -43,18 +43,12 @@ void Personaje::crearCombosdelPersonaje(Tcombos combos) {
 	datosPoder.tiempoMaximo = (unsigned int) combos.tiempo * 1000;
 	datosPoder.tolerancia = combos.errores;
 
-	datosAgarre.nombre = "Agarre";
-	datosAgarre.teclas = combos.agarre;
-	datosAgarre.tiempoMaximo = (unsigned int) combos.tiempo * 1000;
-	datosAgarre.tolerancia = combos.errores;
-
 	datosFatality.nombre = "Fatality";
 	datosFatality.teclas = combos.fatality;
 	datosFatality.tiempoMaximo = (unsigned int) combos.tiempo * 1000;
 	datosFatality.tolerancia = combos.errores;
 
 	comboPoder = new Combo(datosPoder);
-	comboAgarre = new Combo(datosAgarre);
 	comboFatality = new Combo(datosFatality);
 
 }
@@ -95,15 +89,10 @@ void Personaje::realizarAccion(Tinput orden) {
 		estadoAnterior = MOV_PARADO;
 		estadoActual = ACC_PODER;
 	}
-	comboAgarre->actualizar(orden);
-	if(comboAgarre->puedoRealizarCombo()){
-		estadoAnterior = MOV_PARADO;
-		estadoActual = ACC_PODER;
-	}
 	comboFatality->actualizar(orden);
-	if(comboFatality->puedoRealizarCombo()){
+	if(comboFatality->puedoRealizarCombo() && estadoFatality){
 		estadoAnterior = MOV_PARADO;
-		estadoActual = ACC_PODER;
+		estadoActual = FAT_FUEGO;
 	}
 
 	posicionAnterior = rectanguloPj.p;
@@ -378,7 +367,6 @@ Personaje::~Personaje(){
 	delete poder;
 	delete golpe;
 	delete comboPoder;
-	delete comboAgarre;
 	delete comboFatality;
 }
 

@@ -40,8 +40,6 @@ public:
 
 	string quienGano();
 
-	void verificarGanador();
-
 	void validarAlGanador();
 };
 
