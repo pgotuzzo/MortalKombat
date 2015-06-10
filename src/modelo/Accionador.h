@@ -10,6 +10,7 @@ class Accionador {
 
 public:
 
+    Tresultado resultado;
     float alturaPj;
     Trect rectaDelPj;
 

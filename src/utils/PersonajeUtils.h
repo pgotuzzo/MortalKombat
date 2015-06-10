@@ -165,6 +165,27 @@ struct TcambioPoder{
     Tdimension d;
 };
 
+enum Tresultado{
+    NADA,
+    GANO,
+    GANO_MATCH,
+    PERDIO,
+    PERDIO_MATCH
+};
+static int mostrarResultado(Tresultado resultado){
+    switch (resultado) {
+        case (NADA):cout<<"NADA"<<endl;
+                    break;
+        case (GANO):cout<<"GANO"<<endl;
+                    break;
+        case (GANO_MATCH):cout<<"GANO_MATCH"<<endl;
+                    break;
+        case (PERDIO):cout<<"PERDIO"<<endl;
+                    break;
+        case (PERDIO_MATCH):cout<<"PERDIO_MATCH"<<endl;
+                    break;
+    }
+}
 //funcion que devuelve la cantidad de loops que se hacen para cada accion
 static int loopsPara(TestadoPersonaje accion){
 

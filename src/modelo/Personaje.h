@@ -77,6 +77,10 @@ public:
 	void crearCombosdelPersonaje(Tcombos combos);
 
 	void verificarDebuff();
+
+	Tresultado getResultado();
+
+	void setResultado(Tresultado resultado);
 };
 
 #endif /* PERSONAJE_H_ */

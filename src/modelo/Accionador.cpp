@@ -42,7 +42,7 @@ void Accionador::initialize(Trect rectan, float anchoPanta, float yPiso,Poder* n
     alturaPj = rectan.d.h;
     posCongelado = rectan.p;
     posInicial = rectan.p;
-
+    resultado = NADA;
 }
 
 Trect Accionador::laAccion(TestadoPersonaje estadoPj, int loops, Posicion pos, Tsentido sentido, Tdireccion direccion) {
@@ -154,26 +154,34 @@ Trect Accionador::laAccion(TestadoPersonaje estadoPj, int loops, Posicion pos, T
         case REA_CONGELADO:
             if(loops == 1) {
                 posCongelado = rectaDelPj.p;
-                //posCongelado.mostrarPar();
             }
             congelado();
             break;
         case REA_DERROTA:
-            if(loops == 12){
+            if(loops == 1) if(rectaDelPj.p.y != ydelPiso-rectaDelPj.d.h) ajustarPiso();
+            if(loops == 15){
                 rectaDelPj.p = posInicial;
+                resultado = PERDIO;
             }
             break;
         case REA_VICTORIA:
-            if(loops == 12){
+            if(loops == 1) if(rectaDelPj.p.y != ydelPiso-rectaDelPj.d.h) ajustarPiso();
+            if(loops == 15){
                 rectaDelPj.p = posInicial;
+                resultado = GANO;
             }
             break;
         case FAT_FUEGO:
-            if(loops== 14) activarPoder(direccion,0);
+            if(loops== 14) {
+                activarPoder(direccion,0);
+                resultado = GANO_MATCH;
+            }
             break;
         case REA_FAT_FUEGO:
+            if(loops == 19) resultado = PERDIO_MATCH;
             break;
         case REA_MAREADO:
+            if(loops == 199) resultado = PERDIO_MATCH;
             break;
     }
     return rectaDelPj;

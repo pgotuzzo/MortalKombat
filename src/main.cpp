@@ -48,21 +48,21 @@ int main(int argc, char **argv) {
         bool restart = false;
         do {
             vector<Tinput> inputs;
-            //if(game.mState == EgameState::MENU_MODE || game.mState == EgameState::MENU_PLAYERS){
+            if(game.mState == EgameState::MENU_MODE || game.mState == EgameState::MENU_PLAYERS){
                 SDL_Event event;
                 while(SDL_PollEvent(&event) != 0){}
                 SDL_PollEvent(&event);
 
                 vector<Tinput> inputsT = controlador.getInputs(event);
                 vector<Tinput> inputsJ = controladorJ.getInputs(event);
-                inputs = inputsT;
+                inputs = inputsJ;
 
                 TinputGame inputGame = controladorMouse.moverMouse(event);
                 if(inputGame == TinputGame::CLICK_IZQ_MOUSE)inputs[0].game = inputGame;
-            //}
-            /*else if (game.mState == EgameState::MODE_MULTIPLAYER || game.mState == EgameState::MODE_ARCADE || game.mState == EgameState::MODE_PRACTICE){
+            }
+            else if (game.mState == EgameState::MODE_MULTIPLAYER || game.mState == EgameState::MODE_ARCADE || game.mState == EgameState::MODE_PRACTICE){
                 inputs = controladorJ.getInputs();
-            }*/
+            }
             if(inputs[0].game == TinputGame::KEY_NADA) {
                 inputs[0].tiempo = SDL_GetTicks();
                 inputs[1].tiempo = SDL_GetTicks();

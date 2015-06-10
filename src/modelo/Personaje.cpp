@@ -57,13 +57,12 @@ void Personaje::crearCombosdelPersonaje(Tcombos combos) {
 	comboAgarre = new Combo(datosAgarre);
 	comboFatality = new Combo(datosFatality);
 
-
 }
 
 
 
 void Personaje::realizarAccion(Tinput orden) {
-
+	if(estadoActual != REA_MAREADO && estadoAnterior == REA_MAREADO) setResultado(PERDIO_MATCH);
 	TestadoPersonaje estadoCompuesto = generarEstado(orden);
 	verificarDebuff();
 
@@ -114,7 +113,6 @@ void Personaje::realizarAccion(Tinput orden) {
 }
 
 bool Personaje::puedoRealizarAccion(TestadoPersonaje accion) {
-
 
 	if(estadoActual == ACC_PINIA_ALTA)
 		return accion == ACC_PINIA_ALTA;
@@ -354,6 +352,7 @@ void Personaje::reducirVida(float danio, TestadoPersonaje reaccion) {
 	if(estadoActual != ACC_PROTECCION && estadoActual != ACC_PROTECCION_AGACHADO) {
 		estadoAnterior = estadoActual;
 		estadoActual = reaccion;
+		countLoops = 0;
 	}
 }
 
@@ -405,4 +404,11 @@ void Personaje::verificarDebuff() {
 		}
 		debuff--;
 	}
+}
+
+Tresultado Personaje::getResultado(){
+	return llevarACabo.resultado;
+}
+void Personaje::setResultado(Tresultado resultado){
+	llevarACabo.resultado = resultado;
 }

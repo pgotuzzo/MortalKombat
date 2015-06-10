@@ -40,7 +40,7 @@ public:
 
 	string quienGano();
 
-	void verificarGanador();
+	void validarAlGanador();
 };
 
 #endif /* SRC_MODELO_MUNDO_H_ */
