@@ -78,7 +78,6 @@ vector<Posicion> MenuPlayerSelection::update(vector<Tinput> inputs) {
     updateSelection(movimiento1,0);
 
     if (inputs[0].accion == TinputAccion::KEY_PINIA_ALTA){
-        //delete movimientoSelec;
         seleccion->click();
         mSelectionConfirmed[0] = true;
         personajesElegidos[0] = this->getType(mSelection[0]);
@@ -100,4 +99,9 @@ vector<Posicion> MenuPlayerSelection::update(vector<Tinput> inputs) {
 
 bool MenuPlayerSelection::selectionComplete() {
     return mSelectionConfirmed[0] && mSelectionConfirmed[1];
+}
+
+MenuPlayerSelection::~MenuPlayerSelection() {
+    delete movimientoSelec;
+    delete seleccion;
 }

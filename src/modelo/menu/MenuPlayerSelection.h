@@ -34,6 +34,8 @@ public:
     Musica* movimientoSelec;
     Musica* seleccion;
 
+    ~MenuPlayerSelection();
+
     EtipoPersonaje personajesElegidos[2];
 
     vector<Posicion> update(vector<Tinput> inputs);

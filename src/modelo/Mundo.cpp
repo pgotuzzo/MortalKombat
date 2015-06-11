@@ -53,6 +53,7 @@ Mundo::Mundo(config configuracion,string nombrePjs[2]) {
 	tiempoInicial = SDL_GetTicks();
 
 	InteligenciaArtificial inteligencia = InteligenciaArtificial();
+
 }
 
 void Mundo::verificarDireccionDeLosPersonajes() {
@@ -169,7 +170,7 @@ void Mundo::verificarGanadorDelRound() {
 		if (personaje1->vida > personaje2->vida ) {
 			mensaje = mensaje + personaje1->nombre + " ---> Personaje 1";
 			loguer->loguear(mensaje.c_str(), Log::LOG_DEB);
-			if(roundsPJ1 == 1 && roundsPJ2 == 0) {
+			if(roundsPJ1 == 1) {
 				personaje2->reinicializar(REA_MAREADO);
 			}else {
 				personaje1->reinicializar(REA_VICTORIA);
@@ -179,7 +180,7 @@ void Mundo::verificarGanadorDelRound() {
 		}else if(personaje2->vida > personaje1->vida ){
 			mensaje = mensaje + personaje2->nombre + " ---> Personaje 2";
 			loguer->loguear(mensaje.c_str(), Log::LOG_DEB);
-			if(roundsPJ2 == 1 && roundsPJ1 == 0) {
+			if(roundsPJ2 == 1) {
 				personaje1->reinicializar(REA_MAREADO);
 			}else{
 				personaje2->reinicializar(REA_VICTORIA);
@@ -198,7 +199,7 @@ void Mundo::verificarGanadorDelRound() {
 		if (personaje1->vida <= 0) {
 			mensaje = mensaje + personaje2->nombre + " ---> Personaje 2";
 			loguer->loguear(mensaje.c_str(), Log::LOG_DEB);
-			if(roundsPJ2 == 1 && roundsPJ1 == 0) {
+			if(roundsPJ2 == 1) {
 				personaje1->reinicializar(REA_MAREADO);
 			}
 			else{
@@ -210,7 +211,7 @@ void Mundo::verificarGanadorDelRound() {
 		}else if(personaje2->vida <= 0){
 			mensaje = mensaje + personaje2->nombre + " ---> Personaje 1";
 			loguer->loguear(mensaje.c_str(), Log::LOG_DEB);
-			if(roundsPJ1 == 1 && roundsPJ2 == 0){
+			if(roundsPJ1 == 1){
 				personaje2->reinicializar(REA_MAREADO);
 			}
 			else{
@@ -227,13 +228,33 @@ void Mundo::verificarGanadorDelRound() {
 void Mundo::validarAlGanador() {
 	if (personaje1->getResultado() == PERDIO) {
 		roundsPJ2++;
-		personaje1->setResultado(NADA);
-		personaje2->setResultado(NADA);
+		if(roundsPJ2 == 2 || roundsPJ1 == 2){
+			if(roundsPJ2 == 2){
+				personaje1->setResultado(PERDIO_MATCH);
+				personaje2->setResultado(GANO_MATCH);
+			}else{
+				personaje1->setResultado(GANO_MATCH);
+				personaje2->setResultado(PERDIO_MATCH);
+			}
+		}else{
+			personaje1->setResultado(NADA);
+			personaje2->setResultado(NADA);
+		}
 		tiempoRound = tiempoInicialRound;
 	} else if (personaje2->getResultado() == PERDIO) {
 		roundsPJ1++;
-		personaje1->setResultado(NADA);
-		personaje2->setResultado(NADA);
+		if(roundsPJ2 == 2 || roundsPJ1 == 2){
+			if(roundsPJ2 == 2){
+				personaje1->setResultado(PERDIO_MATCH);
+				personaje2->setResultado(GANO_MATCH);
+			}else{
+				personaje1->setResultado(GANO_MATCH);
+				personaje2->setResultado(PERDIO_MATCH);
+			}
+		}else{
+			personaje1->setResultado(NADA);
+			personaje2->setResultado(NADA);
+		}
 		tiempoRound = tiempoInicialRound;
 	}
 }

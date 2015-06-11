@@ -340,7 +340,7 @@ void Personaje::reducirVida(float danio, TestadoPersonaje reaccion) {
 	if(estadoActual != ACC_PROTECCION && estadoActual != ACC_PROTECCION_AGACHADO) {
 		estadoAnterior = estadoActual;
 		estadoActual = reaccion;
-		countLoops = 0;
+		countLoops = 1;
 	}
 }
 

@@ -2,9 +2,9 @@
 
 const string ruta = "/home/miguel/ClionProjects/MortalKombat/resources/musica/";
 Musica::Musica() {
-    for(size_t i = 0 ; i < 36 ; i++)
+    for(size_t i = 0 ; i < 38 ; i++)
         contadores[i] = 0;
-    if(SDL_WasInit(SDL_INIT_AUDIO)==0)SDL_InitSubSystem(SDL_INIT_AUDIO);
+    SDL_InitSubSystem(SDL_INIT_AUDIO);
     //abre SDL_mixer
     if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0 ){
         loguer->loguear("SDL_mixer error no se pudo iniciar",Log::Tlog::LOG_ERR );
@@ -182,6 +182,9 @@ Musica::~Musica() {
     Mix_FreeChunk( resbalada );
     Mix_FreeChunk( quema );
     Mix_FreeChunk( tiraFat );
+    Mix_FreeChunk(movimientoEntreseleccion);
+
+
     tiraFat=NULL;
     quema= NULL;
     caeAgarre = NULL;
@@ -210,13 +213,14 @@ Musica::~Musica() {
     saltaPatada = NULL;
     saltaPinia = NULL;
     ganchoRisa = NULL;
+    resbalada=NULL;
+    movimientoEntreseleccion=NULL;
 
     Mix_FreeMusic( musicaVersus );
     Mix_FreeMusic( musicaPractica );
     Mix_FreeMusic( seleccionPersonaje );
     Mix_FreeMusic( musicaMenu );
     musicaVersus = NULL;
-    resbalada=NULL;
     musicaPractica = NULL;
     seleccionPersonaje = NULL;
     musicaMenu = NULL;
@@ -274,10 +278,14 @@ void Musica::selecciona(){
     Mix_PlayChannel( -1, movimientoEntreseleccion, 0 );
 }
 
+void Musica::clickConDelay(){
+    Mix_PlayChannel( -1, apreto, 0 );
+    SDL_Delay(300);
+}
+
 void Musica::click(){
     Mix_PlayChannel( -1, apreto, 0 );
 }
-
 
 void Musica::sRound1(){
     Mix_PlayChannel( -1, round1, 0 );
@@ -326,11 +334,14 @@ void Musica::soundRounds(EgameState mState, int roundP1 , int roundP2){
 void Musica::playFX(TestadoPersonaje estado, Tinput input){
     contadores[estado]++;
 
+    if (  estado == REA_FAT_FUEGO)
+        cout<<contadores[estado]<<endl;
+
     //mostrarEstado(estado);
     if ( ( contadores[estado] == 1 && estado != REA_FAT_FUEGO  && estado != REA_AGARRE && estado != FAT_FUEGO  ) ||
-         ( estado == REA_FAT_FUEGO && contadores[REA_FAT_FUEGO] == loopsPara(REA_FAT_FUEGO) )
+        ( ( estado == REA_FAT_FUEGO && contadores[REA_FAT_FUEGO] == 2)
          || ( estado == REA_AGARRE && contadores[REA_AGARRE] == loopsPara(REA_AGARRE) )
-         || ( estado == FAT_FUEGO && contadores[FAT_FUEGO] == 8 ))
+         || ( estado == FAT_FUEGO && contadores[FAT_FUEGO] == 8 )))
 
         switch( estado ){
 
@@ -339,8 +350,9 @@ void Musica::playFX(TestadoPersonaje estado, Tinput input){
             case FAT_FUEGO:Mix_PlayChannel( -1, tiraFat, 0 );break;
 
             case REA_FAT_FUEGO:
-                Mix_PlayChannel( -1, fatality, 0 );
                 Mix_PlayChannel( -1, quema, 0 );
+                Mix_PlayChannel( -1, fatality, 0 );
+
                 break;
 
             case REA_CONGELADO: Mix_PlayChannel( -1, congelado, 0 );break;
@@ -425,6 +437,13 @@ void Musica::playFX(TestadoPersonaje estado, Tinput input){
     }
 
     if ( contadores[estado] == loopsPara ( estado ) )
-        contadores[estado]=0;
+        contadores[estado] = 0;
 
+
+
+}
+
+
+void Musica::pararMusica() {
+    Mix_HaltMusic();
 }

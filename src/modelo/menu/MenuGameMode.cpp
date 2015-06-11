@@ -38,8 +38,7 @@ EmodeSelection MenuGameMode::update(Tinput input) {
     }
 
     if (input.game == TinputGame::KEY_ENTER || input.accion == TinputAccion::KEY_PINIA_ALTA){
-        delete select;
-        click->click();
+        click->clickConDelay();
         mSelectionConfirmed = true;
     }
 
@@ -73,8 +72,7 @@ EmodeSelection MenuGameMode::update(Tinput input,Posicion coordenadasMouse,vecto
     else seleccionandoConMouse = false;
 
     if (input.game == TinputGame::CLICK_IZQ_MOUSE && seleccionandoConMouse){
-        delete(select);
-        click->click();
+        click->clickConDelay();
         mSelectionConfirmed = true;
     }
 
@@ -95,4 +93,9 @@ bool MenuGameMode::dentroDelModo(Posicion posMouse,Trect modo) {
         }
     }
     return false;
+}
+
+MenuGameMode::~MenuGameMode() {
+    delete select;
+    delete click;
 }

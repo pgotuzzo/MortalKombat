@@ -24,6 +24,8 @@ private:
 public:
     MenuGameMode();
 
+    ~MenuGameMode();
+
     EmodeSelection update(Tinput input);
     EmodeSelection update(Tinput input,Posicion coordenadasMouse,vector<Trect> modos);
 

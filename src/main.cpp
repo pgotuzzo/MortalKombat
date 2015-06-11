@@ -42,27 +42,27 @@ int main(int argc, char **argv) {
         loguer->loguear("-------------- Iniciando el Juego -------------------", Log::LOG_DEB);
 
 
-        Game game = Game(configuracion, frameRate);
+        Game* game = new Game(configuracion, frameRate);
 
 
         bool restart = false;
         do {
             vector<Tinput> inputs;
-            if(game.mState == EgameState::MENU_MODE || game.mState == EgameState::MENU_PLAYERS){
+            //if(game.mState == EgameState::MENU_MODE || game.mState == EgameState::MENU_PLAYERS){
                 SDL_Event event;
                 while(SDL_PollEvent(&event) != 0){}
                 SDL_PollEvent(&event);
 
                 vector<Tinput> inputsT = controlador.getInputs(event);
                 vector<Tinput> inputsJ = controladorJ.getInputs(event);
-                inputs = inputsJ;
+                inputs = inputsT;
 
                 TinputGame inputGame = controladorMouse.moverMouse(event);
                 if(inputGame == TinputGame::CLICK_IZQ_MOUSE)inputs[0].game = inputGame;
-            }
-            else if (game.mState == EgameState::MODE_MULTIPLAYER || game.mState == EgameState::MODE_ARCADE || game.mState == EgameState::MODE_PRACTICE){
+            //}
+            /*else if (game.mState == EgameState::MODE_MULTIPLAYER || game.mState == EgameState::MODE_ARCADE || game.mState == EgameState::MODE_PRACTICE){
                 inputs = controladorJ.getInputs();
-            }
+            }*/
             if(inputs[0].game == TinputGame::KEY_NADA) {
                 inputs[0].tiempo = SDL_GetTicks();
                 inputs[1].tiempo = SDL_GetTicks();
@@ -70,21 +70,23 @@ int main(int argc, char **argv) {
             switch (inputs.at(0).game) {
                 case TinputGame::KEY_EXIT:
                     SDL_Quit();
+                    delete game;
                     endGame = true;
                     break;
                 case TinputGame::KEY_RESTART:
                     if(SDL_WasInit(SDL_INIT_VIDEO)!=0) SDL_QuitSubSystem(SDL_INIT_VIDEO);
+                    if(SDL_WasInit(SDL_INIT_AUDIO)!=0) SDL_QuitSubSystem(SDL_INIT_AUDIO);
                     if(SDL_WasInit(SDL_INIT_HAPTIC)!=0)SDL_QuitSubSystem(SDL_INIT_HAPTIC);
                     if(SDL_WasInit(SDL_INIT_NOPARACHUTE)!=0)SDL_QuitSubSystem(SDL_INIT_NOPARACHUTE);
+                    delete game;
                     restart = true;
                     break;
                 default:
-                    game.play(inputs,controladorMouse.posicionMouse);
+                    game->play(inputs,controladorMouse.posicionMouse);
             }
         } while (!restart && !endGame);
 
     }
-
 
     loguer->loguear("---------------------FIN DEL JUEGO--------------------------", Log::LOG_DEB);
 

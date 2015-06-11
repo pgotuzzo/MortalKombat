@@ -54,7 +54,9 @@ private:
     //vector<int> contadores;
     int anteriorRound=0;
 
-    int contadores[36];
+    int contadores[38];
+
+    bool uno= true;
 
 public:
 
@@ -67,6 +69,7 @@ public:
 
     void selecciona();
     void click();
+    void clickConDelay();
 
     void sFatality();
     void sYouNeverWin();
@@ -75,6 +78,8 @@ public:
     void sRound3();
 
     void soundRounds(EgameState,int,int);
+
+    void pararMusica();
 
     void playFX(TestadoPersonaje, Tinput);
 

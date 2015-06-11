@@ -46,4 +46,8 @@ void PantallaMenuPlayers::print() {
     SDL_RenderPresent(mRenderer);
 }
 
-PantallaMenuPlayers::~PantallaMenuPlayers() {}
+PantallaMenuPlayers::~PantallaMenuPlayers() {
+    SDL_DestroyTexture(mTextBackground.t);
+    SDL_DestroyTexture(mTextSelector[0].t);
+    SDL_DestroyTexture(mTextSelector[1].t);
+}

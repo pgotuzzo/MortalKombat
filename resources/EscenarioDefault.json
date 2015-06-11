@@ -52,16 +52,15 @@
     ],
 
     "combos":{
-	"poder":"abd",
-	"agarre":"bcd"
+	"poder":"abd"
     },
 
    "fatalities":{
-	"fatal":"bce"
+	"fatal":"acef"
 },
 
    "global":{
-	"errores": 15,
+	"errores": 10,
 	"tiempo":10
 },
 

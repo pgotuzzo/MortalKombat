@@ -14,7 +14,6 @@ Pantalla::Pantalla(Tdimension dimPixels, Tdimension dimUl) {
     loguer->loguear("Inicia SDL", Log::LOG_DEB);
 
     if(SDL_WasInit(SDL_INIT_VIDEO)==0) SDL_InitSubSystem(SDL_INIT_VIDEO);
-    if(SDL_WasInit(SDL_INIT_AUDIO)==0)SDL_InitSubSystem(SDL_INIT_AUDIO);
     if(SDL_WasInit(SDL_INIT_HAPTIC)==0)SDL_InitSubSystem(SDL_INIT_HAPTIC);
     if(SDL_WasInit(SDL_INIT_NOPARACHUTE)==0)SDL_InitSubSystem(SDL_INIT_NOPARACHUTE);
 
