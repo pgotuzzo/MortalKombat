@@ -6,7 +6,6 @@
 #include "Game.h"
 #include "controlador/ControladorJoystick.h"
 
-
 const int frameRate = 45;
 
 void inicializarSDL(){
@@ -23,13 +22,9 @@ void finalizarSDL(){
     SDL_Quit();
 }
 
-
 int main(int argc, char **argv) {
-
     loguer->borrar();
-
     inicializarSDL();
-
     string jsonPath = (argv[1] == nullptr) ? string("") : argv[1];
 
     loguer->loguear("------------------INICIANDO MORTAL KOMBAT--------------------------", Log::LOG_DEB);
@@ -42,19 +37,14 @@ int main(int argc, char **argv) {
 
         config* configuracion = new config(jsonPath);
 
-        //TODO: Modificar los dos controladores para que devuelvan los nuevos inputs del struct Tinput
         ControladorTeclado controlador = ControladorTeclado();
         ControladorMouse controladorMouse = ControladorMouse();
         ControladorJoystick controladorJ = ControladorJoystick(configuracion->getBotones());
 
-
-
         loguer->loguear("Finaliza la creacion del controlador", Log::LOG_DEB);
         loguer->loguear("-------------- Iniciando el Juego -------------------", Log::LOG_DEB);
 
-
         Game* game = new Game(configuracion, frameRate);
-
 
         bool restart = false;
         do {
@@ -93,13 +83,9 @@ int main(int argc, char **argv) {
         } while (!restart && !endGame);
 
     }
-
     finalizarSDL();
 
     loguer->loguear("---------------------FIN DEL JUEGO--------------------------", Log::LOG_DEB);
-
-
-
 
     return 0;
 }
