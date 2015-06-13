@@ -10,7 +10,8 @@
  */
 VistaUtils::VistaUtils(SDL_Renderer* renderer, float ratio, float scales[2]) {
     mRenderer = renderer;
-    mRatio = (ratio > 0) ? ratio : 1;
+//    mRatio d= (ratio > 0) ? ratio : 1;
+    mRatio = 1;
     mScales[0] = scales[0];
     mScales[1] = scales[1];
     mColorChangeEnable = false;
@@ -238,17 +239,20 @@ Ttexture VistaUtils::loadTexture(std::string path) {
         }
 
         SDL_Texture* aux = SDL_CreateTextureFromSurface(mRenderer, surface);
-        mAuxTextures.push_back(aux);
+//        mAuxTextures.push_back(aux);
 
         SDL_FreeSurface(surface);
 
-        int w, h;
-        SDL_QueryTexture(aux, NULL, NULL, &w, &h);
-        SDL_Texture* t = createTexture({w, h});
-        copyTexture(aux, t);
+//        int w, h;
+//        SDL_QueryTexture(aux, NULL, NULL, &w, &h);
+//        SDL_Texture* t = createTexture({w, h});
+//        copyTexture(aux, t);
 
-        returnTexture.t = t;
-        returnTexture.d = getDimension(t);
+//        returnTexture.t = t;
+//        returnTexture.d = getDimension(t);
+
+        returnTexture.t = aux;
+        returnTexture.d = getDimension(aux);
     }
     return returnTexture;
 }
