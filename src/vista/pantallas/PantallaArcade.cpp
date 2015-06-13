@@ -1,7 +1,3 @@
-//
-// Created by fran on 07/06/15.
-//
-
 #include "PantallaArcade.h"
 #include "../capas/CapaInfoArcade.h"
 
@@ -41,6 +37,4 @@ void PantallaArcade::InicializarCapas(vector<Tcapa> capas, string personajes[2])
     capaInfo = new CapaInfoArcade(mUtils, mDimension, personajes,"99");
 }
 
-PantallaArcade::~PantallaArcade() {
-    delete capaInfo;
-}
+PantallaArcade::~PantallaArcade() {}

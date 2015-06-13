@@ -31,19 +31,14 @@ int main(int argc, char **argv) {
 
         config* configuracion = new config(jsonPath);
 
-        //TODO: Modificar los dos controladores para que devuelvan los nuevos inputs del struct Tinput
         ControladorTeclado controlador = ControladorTeclado();
         ControladorMouse controladorMouse = ControladorMouse();
         ControladorJoystick controladorJ = ControladorJoystick(configuracion->getBotones());
 
-
-
         loguer->loguear("Finaliza la creacion del controlador", Log::LOG_DEB);
         loguer->loguear("-------------- Iniciando el Juego -------------------", Log::LOG_DEB);
 
-
         Game* game = new Game(configuracion, frameRate);
-
 
         bool restart = false;
         do {
@@ -78,7 +73,7 @@ int main(int argc, char **argv) {
                     if(SDL_WasInit(SDL_INIT_AUDIO)!=0) SDL_QuitSubSystem(SDL_INIT_AUDIO);
                     if(SDL_WasInit(SDL_INIT_HAPTIC)!=0)SDL_QuitSubSystem(SDL_INIT_HAPTIC);
                     if(SDL_WasInit(SDL_INIT_NOPARACHUTE)!=0)SDL_QuitSubSystem(SDL_INIT_NOPARACHUTE);
-                    delete game;
+                    delete (game);
                     restart = true;
                     break;
                 default:

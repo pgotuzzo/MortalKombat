@@ -1,7 +1,3 @@
-//
-// Created by fran on 07/06/15.
-//
-
 #include "CapaInfoPractice.h"
 
 const int tamBuffer = 10;

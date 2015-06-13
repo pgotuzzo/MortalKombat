@@ -1,10 +1,9 @@
 #include "Musica.h"
 
-const string ruta = "/home/miguel/ClionProjects/MortalKombat/resources/musica/";
+const string ruta = "./resources/musica/";
 Musica::Musica() {
     for(size_t i = 0 ; i < 38 ; i++)
         contadores[i] = 0;
-    SDL_InitSubSystem(SDL_INIT_AUDIO);
     //abre SDL_mixer
     if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0 ){
         loguer->loguear("SDL_mixer error no se pudo iniciar",Log::Tlog::LOG_ERR );
@@ -149,83 +148,6 @@ Musica::Musica() {
             loguer->loguear("Error al cargar tiraFat",Log::Tlog::LOG_WAR);
     }
 
-}
-
-Musica::~Musica() {
-
-    Mix_FreeChunk( atrasBaja );
-    Mix_FreeChunk( atrasAlta );
-    Mix_FreeChunk( gancho );
-    Mix_FreeChunk( ganchoRisa );
-    Mix_FreeChunk( tiraCongela );
-    Mix_FreeChunk( saltaPinia );
-    Mix_FreeChunk( saltaPatada );
-    Mix_FreeChunk( salta );
-    Mix_FreeChunk( agarraYtira );
-    Mix_FreeChunk( golpe );
-    Mix_FreeChunk( golpeGrande );
-    Mix_FreeChunk( golpePequenio );
-    Mix_FreeChunk( patada );
-    Mix_FreeChunk( recibioGolpe );
-    Mix_FreeChunk( recibioGolpePatada );
-    Mix_FreeChunk( tiraPinia );
-    Mix_FreeChunk( congelado );
-    Mix_FreeChunk( dizzy );
-    Mix_FreeChunk( apreto );
-    Mix_FreeChunk( fatality );
-    Mix_FreeChunk( round1 );
-    Mix_FreeChunk( round2 );
-    Mix_FreeChunk( round3 );
-    Mix_FreeChunk( youNeverWin );
-    Mix_FreeChunk( reacGancho );
-    Mix_FreeChunk( caeAgarre );
-    Mix_FreeChunk( resbalada );
-    Mix_FreeChunk( quema );
-    Mix_FreeChunk( tiraFat );
-    Mix_FreeChunk(movimientoEntreseleccion);
-
-
-    tiraFat=NULL;
-    quema= NULL;
-    caeAgarre = NULL;
-    reacGancho = NULL;;
-    atrasBaja = NULL;
-    atrasAlta = NULL;
-    round3 = NULL;
-    round2 = NULL;
-    round1 = NULL;
-    fatality = NULL;
-    congelado = NULL;
-    dizzy = NULL;
-    apreto=NULL;
-    gancho = NULL;
-    youNeverWin = NULL;
-    tiraPinia=NULL;
-    agarraYtira = NULL;
-    golpe = NULL;
-    golpeGrande = NULL;
-    golpePequenio = NULL;
-    patada = NULL;
-    recibioGolpe = NULL;
-    recibioGolpePatada = NULL;
-    resbalada = NULL;
-    salta = NULL;
-    saltaPatada = NULL;
-    saltaPinia = NULL;
-    ganchoRisa = NULL;
-    resbalada=NULL;
-    movimientoEntreseleccion=NULL;
-
-    Mix_FreeMusic( musicaVersus );
-    Mix_FreeMusic( musicaPractica );
-    Mix_FreeMusic( seleccionPersonaje );
-    Mix_FreeMusic( musicaMenu );
-    musicaVersus = NULL;
-    musicaPractica = NULL;
-    seleccionPersonaje = NULL;
-    musicaMenu = NULL;
-    Mix_CloseAudio();
-    Mix_Quit();
 }
 
 void Musica::musicVs(){
@@ -443,7 +365,82 @@ void Musica::playFX(TestadoPersonaje estado, Tinput input){
 
 }
 
-
 void Musica::pararMusica() {
     Mix_HaltMusic();
+}
+
+Musica::~Musica() {
+
+    Mix_FreeChunk( atrasBaja );
+    Mix_FreeChunk( atrasAlta );
+    Mix_FreeChunk( gancho );
+    Mix_FreeChunk( ganchoRisa );
+    Mix_FreeChunk( tiraCongela );
+    Mix_FreeChunk( saltaPinia );
+    Mix_FreeChunk( saltaPatada );
+    Mix_FreeChunk( salta );
+    Mix_FreeChunk( agarraYtira );
+    Mix_FreeChunk( golpe );
+    Mix_FreeChunk( golpeGrande );
+    Mix_FreeChunk( golpePequenio );
+    Mix_FreeChunk( patada );
+    Mix_FreeChunk( recibioGolpe );
+    Mix_FreeChunk( recibioGolpePatada );
+    Mix_FreeChunk( tiraPinia );
+    Mix_FreeChunk( congelado );
+    Mix_FreeChunk( dizzy );
+    Mix_FreeChunk( apreto );
+    Mix_FreeChunk( fatality );
+    Mix_FreeChunk( round1 );
+    Mix_FreeChunk( round2 );
+    Mix_FreeChunk( round3 );
+    Mix_FreeChunk( youNeverWin );
+    Mix_FreeChunk( reacGancho );
+    Mix_FreeChunk( caeAgarre );
+    Mix_FreeChunk( resbalada );
+    Mix_FreeChunk( quema );
+    Mix_FreeChunk( tiraFat );
+    Mix_FreeChunk(movimientoEntreseleccion);
+
+//
+//    tiraFat=NULL;
+//    quema= NULL;
+//    caeAgarre = NULL;
+//    reacGancho = NULL;;
+//    atrasBaja = NULL;
+//    atrasAlta = NULL;
+//    round3 = NULL;
+//    round2 = NULL;
+//    round1 = NULL;
+//    fatality = NULL;
+//    congelado = NULL;
+//    dizzy = NULL;
+//    apreto=NULL;
+//    gancho = NULL;
+//    youNeverWin = NULL;
+//    tiraPinia=NULL;
+//    agarraYtira = NULL;
+//    golpe = NULL;
+//    golpeGrande = NULL;
+//    golpePequenio = NULL;
+//    patada = NULL;
+//    recibioGolpe = NULL;
+//    recibioGolpePatada = NULL;
+//    resbalada = NULL;
+//    salta = NULL;
+//    saltaPatada = NULL;
+//    saltaPinia = NULL;
+//    ganchoRisa = NULL;
+//    resbalada=NULL;
+//    movimientoEntreseleccion=NULL;
+
+    Mix_FreeMusic( musicaVersus );
+    Mix_FreeMusic( musicaPractica );
+    Mix_FreeMusic( seleccionPersonaje );
+    Mix_FreeMusic( musicaMenu );
+//    musicaVersus = NULL;
+//    musicaPractica = NULL;
+//    seleccionPersonaje = NULL;
+//    musicaMenu = NULL;
+    Mix_CloseAudio();
 }

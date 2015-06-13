@@ -6,6 +6,7 @@
 #include "vista/pantallas/menu/PantallaMenuPlayers.h"
 
 Game::Game(config* configuration, const int gameLoopPeriod) {
+    SDL_InitSubSystem(SDL_INIT_AUDIO);
     mConfiguration = configuration;
 
     mLoopPeriod = gameLoopPeriod;
@@ -28,22 +29,21 @@ Game::Game(config* configuration, const int gameLoopPeriod) {
 };
 
 void Game::clean(){
-
-    if (mPantalla != nullptr) {
+    if (mPantalla != NULL) {
         delete(mPantalla);
-        mPantalla = nullptr;
+        mPantalla = NULL;
     }
-    if (mMundo != nullptr) {
+    if (mMundo != NULL) {
         delete(mMundo);
-        mMundo = nullptr;
+        mMundo = NULL;
     }
-    if (mMenuGameMode != nullptr) {
+    if (mMenuGameMode != NULL) {
         delete(mMenuGameMode);
-        mMenuGameMode = nullptr;
+        mMenuGameMode = NULL;
     }
-    if (mMenuPlayers != nullptr){
+    if (mMenuPlayers != NULL){
         delete(mMenuPlayers);
-        mMenuPlayers = nullptr;
+        mMenuPlayers = NULL;
     }
 }
 
@@ -69,33 +69,32 @@ void Game::initialize() {
 
             mMenuGameMode = new MenuGameMode();
 
+            loguer->loguear("Finaliza la creacion del modelo", Log::LOG_DEB);
+            break;
+        };
+        case EgameState::MENU_PLAYERS:{
+            loguer->loguear("[--- MENU DE JUGADORES ---]", Log::LOG_DEB);
+            loguer->loguear("Creando la pantalla...", Log::LOG_DEB);
+
+            Tdimension dimPx = mConfiguration->getVentana().dimPx;
+            Tdimension dim = {
+                    mConfiguration->getVentana().ancho,
+                    mConfiguration->getEscenario().d.h,
+            };
+
+            mPantalla = new PantallaMenuPlayers(dimPx, dim);
+
+            musicaDelJuego->pararMusica();
+            musicaDelJuego->musicSeleccion();
+
+            loguer->loguear("Finaliza la creacion de la pantalla", Log::LOG_DEB);
+            loguer->loguear("Creando el modelo...", Log::LOG_DEB);
+
+            mMenuPlayers = new MenuPlayerSelection();
 
             loguer->loguear("Finaliza la creacion del modelo", Log::LOG_DEB);
             break;
         };
-            case EgameState::MENU_PLAYERS:{
-                loguer->loguear("[--- MENU DE JUGADORES ---]", Log::LOG_DEB);
-                loguer->loguear("Creando la pantalla...", Log::LOG_DEB);
-
-                Tdimension dimPx = mConfiguration->getVentana().dimPx;
-                Tdimension dim = {
-                        mConfiguration->getVentana().ancho,
-                        mConfiguration->getEscenario().d.h,
-                };
-
-                mPantalla = new PantallaMenuPlayers(dimPx, dim);
-
-                musicaDelJuego->pararMusica();
-                musicaDelJuego->musicSeleccion();
-
-                loguer->loguear("Finaliza la creacion de la pantalla", Log::LOG_DEB);
-                loguer->loguear("Creando el modelo...", Log::LOG_DEB);
-
-                mMenuPlayers = new MenuPlayerSelection();
-
-                loguer->loguear("Finaliza la creacion del modelo", Log::LOG_DEB);
-                break;
-            };
         case EgameState::MODE_MULTIPLAYER:
         case EgameState::MODE_ARCADE:{
             loguer->loguear("[--- MODO MULTIPLAYER/ARCADE ---]", Log::LOG_DEB);
@@ -152,7 +151,6 @@ void Game::initialize() {
             loguer->loguear("Finaliza la creacion del modelo", Log::LOG_DEB);
             break;
         };
-        default:;
     }
 }
 
@@ -229,7 +227,6 @@ void Game::play(vector<Tinput> inputs, Posicion coordenadasMouse) {
             }
             break;
         };
-        default: ;
     }
 
     t2 = clock();
@@ -307,10 +304,14 @@ Game::~Game() {
     delete sonidoPJ1;
     delete sonidoPJ2;
     delete(mPantalla);
-    delete(mMundo);
-    if(mMenuPlayers != nullptr) delete mMenuPlayers;
-    if(mMenuGameMode != nullptr) delete mMenuGameMode;
+    if (mMundo != nullptr)
+        delete(mMundo);
+    if(mMenuPlayers != nullptr)
+        delete mMenuPlayers;
+    if(mMenuGameMode != nullptr)
+        delete mMenuGameMode;
     delete(mConfiguration);
+    Mix_Quit();
 }
 
 void Game::setInformacionPersonajesElegidos(int jugador) {

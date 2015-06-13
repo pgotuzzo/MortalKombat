@@ -44,11 +44,6 @@ void PantallaMenuModoJuego::print() {
     SDL_RenderPresent(mRenderer);
 }
 
-PantallaMenuModoJuego::~PantallaMenuModoJuego() {
-    SDL_DestroyTexture(mTextBackground.t);
-    SDL_DestroyTexture(mTextSelector.t);
-}
-
 vector<Trect> PantallaMenuModoJuego::getCuadradoModos() {
     Trect primerModo, segundoModo, tercerModo;
 
@@ -71,4 +66,10 @@ vector<Trect> PantallaMenuModoJuego::getCuadradoModos() {
 
     return modos;
 
+}
+
+PantallaMenuModoJuego::~PantallaMenuModoJuego() {
+    loguer->loguear("Se eliminan las texturas de el menu de seleccion de modos", Log::LOG_DEB);
+    SDL_DestroyTexture(mTextBackground.t);
+    SDL_DestroyTexture(mTextSelector.t);
 }

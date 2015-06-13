@@ -50,22 +50,26 @@ void Pantalla::update(vector<Tcambio> changes,Tinput input) {}
 void Pantalla::update(EmodeSelection selection) {}
 void Pantalla::update(vector<Posicion> players) {}
 void Pantalla::initialize(vector<Tcapa> capas, string personajes[2]){}
+vector<Trect> Pantalla::getCuadradoModos() {
+    return std::vector<Trect>();
+}
 
 Pantalla::~Pantalla(){
     loguer->loguear("Destruccion de la pantalla", Log::LOG_DEB);
+
     mUtils->freeTextures();
     delete (mUtils);
     SDL_DestroyRenderer(mRenderer);
     SDL_DestroyWindow(mWindow);
+
     loguer->loguear("Cierra SDL", Log::LOG_DEB);
+
     IMG_Quit();
     TTF_Quit();
     if(SDL_WasInit(SDL_INIT_VIDEO)!=0) SDL_QuitSubSystem(SDL_INIT_VIDEO);
-    if(SDL_WasInit(SDL_INIT_HAPTIC)!=0)SDL_QuitSubSystem(SDL_INIT_HAPTIC);
-    if(SDL_WasInit(SDL_INIT_NOPARACHUTE)!=0)SDL_QuitSubSystem(SDL_INIT_NOPARACHUTE);
+    if(SDL_WasInit(SDL_INIT_HAPTIC)!=0) SDL_QuitSubSystem(SDL_INIT_HAPTIC);
+    if(SDL_WasInit(SDL_INIT_NOPARACHUTE)!=0) SDL_QuitSubSystem(SDL_INIT_NOPARACHUTE);
 
 }
 
-vector<Trect> Pantalla::getCuadradoModos() {
-    return std::vector<Trect>();
-}
+
