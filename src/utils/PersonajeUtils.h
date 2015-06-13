@@ -10,7 +10,7 @@
 
 static const string PODER_ACTIVADO_PATH = "pod_poder";
 static const string PODER_COLISION_PATH = "pod_colision";
-static const int TestadoPersonajeCount = 38;
+static const int TestadoPersonajeCount = 40;
 
 enum class EtipoPersonaje {
     SUBZERO,
@@ -93,6 +93,10 @@ enum TestadoPersonaje {
 
     FAT_FUEGO,
 
+    REA_FAT_LEVANTA,
+
+    FAT_LEVANTA
+
 
 };
 
@@ -140,6 +144,9 @@ static string TestadoPersonajeToString(TestadoPersonaje e){
 
         case TestadoPersonaje::REA_FAT_FUEGO: return"rea_fat_fuego";
         case TestadoPersonaje::FAT_FUEGO: return"fat_fuego";
+
+        case TestadoPersonaje::REA_FAT_LEVANTA: return"rea_fat_levanta";
+        case TestadoPersonaje::FAT_LEVANTA: return"fat_levanta";
 
 
 
@@ -231,6 +238,9 @@ static int loopsPara(TestadoPersonaje accion){
 
         case REA_FAT_FUEGO: return 30;
         case FAT_FUEGO: return 20;
+
+        case REA_FAT_LEVANTA: return 24;
+        case FAT_LEVANTA: return 24;
     }
 }
 
@@ -312,6 +322,10 @@ static int mostrarEstado(TestadoPersonaje accion){
         case REA_FAT_FUEGO:cout<<"REA_FAT_FUEGO"<<endl;
             break;
         case FAT_FUEGO:cout<<"FAT_FUEGO"<<endl;
+            break;
+        case REA_FAT_LEVANTA:cout<<"REA_FAT_LEVANTA"<<endl;
+            break;
+        case FAT_LEVANTA:cout<<"FAT_LEVANTA"<<endl;
             break;
     }
 }

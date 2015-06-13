@@ -13,15 +13,13 @@ Pantalla::Pantalla(Tdimension dimPixels, Tdimension dimUl) {
 
     loguer->loguear("Inicia SDL", Log::LOG_DEB);
 
-    if(SDL_WasInit(SDL_INIT_VIDEO)==0) SDL_InitSubSystem(SDL_INIT_VIDEO);
-    if(SDL_WasInit(SDL_INIT_HAPTIC)==0)SDL_InitSubSystem(SDL_INIT_HAPTIC);
-    if(SDL_WasInit(SDL_INIT_NOPARACHUTE)==0)SDL_InitSubSystem(SDL_INIT_NOPARACHUTE);
+    //SDL_InitSubSystem(SDL_INIT_VIDEO);
 
-    if (TTF_Init() < 0) {
+    /*if (TTF_Init() < 0) {
         loguer->loguear("Fallo la inicializacion de TTF.", Log::LOG_ERR);
         loguer->loguear(TTF_GetError(), Log::LOG_ERR);
         throw new exception();
-    }
+    }*/
 
     mWindow = SDL_CreateWindow("MortalKombat", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, (int) dimPixels.w, (int) dimPixels.h, SDL_WINDOW_SHOWN);
     if (mWindow == NULL){
@@ -58,11 +56,10 @@ Pantalla::~Pantalla(){
     SDL_DestroyRenderer(mRenderer);
     SDL_DestroyWindow(mWindow);
     loguer->loguear("Cierra SDL", Log::LOG_DEB);
-    IMG_Quit();
-    TTF_Quit();
-    if(SDL_WasInit(SDL_INIT_VIDEO)!=0) SDL_QuitSubSystem(SDL_INIT_VIDEO);
-    if(SDL_WasInit(SDL_INIT_HAPTIC)!=0)SDL_QuitSubSystem(SDL_INIT_HAPTIC);
-    if(SDL_WasInit(SDL_INIT_NOPARACHUTE)!=0)SDL_QuitSubSystem(SDL_INIT_NOPARACHUTE);
+    //IMG_Quit();
+    //TTF_Quit();
+    //SDL_QuitSubSystem(SDL_INIT_VIDEO);
+    //if(SDL_WasInit(SDL_INIT_NOPARACHUTE)!=0)SDL_QuitSubSystem(SDL_INIT_NOPARACHUTE);
 
 }
 

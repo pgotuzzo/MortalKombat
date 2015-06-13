@@ -9,9 +9,26 @@
 
 const int frameRate = 45;
 
+void inicializarSDL(){
+    loguer->loguear("Se inicializo los componentes necesarios de SDL",Log::LOG_DEB);
+    SDL_Init(SDL_INIT_EVERYTHING);
+    TTF_Init();
+}
+
+void finalizarSDL(){
+    loguer->loguear("Se finalizo los componentes utilizados de SDL",Log::LOG_DEB);
+    IMG_Quit();
+    Mix_Quit();
+    TTF_Quit();
+    SDL_Quit();
+}
+
+
 int main(int argc, char **argv) {
 
     loguer->borrar();
+
+    inicializarSDL();
 
     string jsonPath = (argv[1] == nullptr) ? string("") : argv[1];
 
@@ -19,12 +36,6 @@ int main(int argc, char **argv) {
 
     bool endGame = false;
     while (!endGame) {
-
-        if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
-            loguer->loguear("Fallo la inicializacion general de SDL.", Log::LOG_ERR);
-            loguer->loguear(SDL_GetError(), Log::LOG_ERR);
-            throw new exception();
-        }
 
         loguer->loguear("-------------- Cargando la configuracion -------------------", Log::LOG_DEB);
         loguer->loguear("Inicia la creacion del controlador", Log::LOG_DEB);
@@ -69,15 +80,10 @@ int main(int argc, char **argv) {
             }
             switch (inputs.at(0).game) {
                 case TinputGame::KEY_EXIT:
-                    SDL_Quit();
                     delete game;
                     endGame = true;
                     break;
                 case TinputGame::KEY_RESTART:
-                    if(SDL_WasInit(SDL_INIT_VIDEO)!=0) SDL_QuitSubSystem(SDL_INIT_VIDEO);
-                    if(SDL_WasInit(SDL_INIT_AUDIO)!=0) SDL_QuitSubSystem(SDL_INIT_AUDIO);
-                    if(SDL_WasInit(SDL_INIT_HAPTIC)!=0)SDL_QuitSubSystem(SDL_INIT_HAPTIC);
-                    if(SDL_WasInit(SDL_INIT_NOPARACHUTE)!=0)SDL_QuitSubSystem(SDL_INIT_NOPARACHUTE);
                     delete game;
                     restart = true;
                     break;
@@ -88,7 +94,12 @@ int main(int argc, char **argv) {
 
     }
 
+    finalizarSDL();
+
     loguer->loguear("---------------------FIN DEL JUEGO--------------------------", Log::LOG_DEB);
+
+
+
 
     return 0;
 }
