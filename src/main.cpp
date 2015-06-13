@@ -22,6 +22,39 @@ void finalizarSDL(){
     SDL_Quit();
 }
 
+vector<Tinput> getInputsTecladoYMouse(ControladorTeclado* controladorT,ControladorMouse* controladorM){
+    SDL_Event event;
+    while(SDL_PollEvent(&event) != 0){}
+    SDL_PollEvent(&event);
+
+    vector<Tinput> inputs = controladorT->getInputs(event);
+
+    TinputGame inputGame = controladorM->moverMouse(event);
+    if(inputGame == TinputGame::CLICK_IZQ_MOUSE) inputs[0].game = inputGame;
+
+    return inputs;
+}
+
+vector<Tinput> getInputsJoystickYMouse(Game* game,ControladorJoystick* controladorJ,ControladorMouse* controladorM){
+    vector<Tinput> inputs;
+    if(game->mState == EgameState::MENU_MODE || game->mState == EgameState::MENU_PLAYERS){
+        SDL_Event event;
+        while(SDL_PollEvent(&event) != 0){}
+        SDL_PollEvent(&event);
+
+        inputs = controladorJ->getInputs(event);
+
+        TinputGame inputGame = controladorM->moverMouse(event);
+        if(inputGame == TinputGame::CLICK_IZQ_MOUSE)inputs[0].game = inputGame;
+    }
+    else if (game->mState == EgameState::MODE_MULTIPLAYER || game->mState == EgameState::MODE_ARCADE || game->mState == EgameState::MODE_PRACTICE){
+        inputs = controladorJ->getInputs();
+    }
+
+    return inputs;
+}
+
+
 int main(int argc, char **argv) {
     loguer->borrar();
     inicializarSDL();
@@ -37,7 +70,7 @@ int main(int argc, char **argv) {
 
         config* configuracion = new config(jsonPath);
 
-        ControladorTeclado controlador = ControladorTeclado();
+        ControladorTeclado controladorT = ControladorTeclado();
         ControladorMouse controladorMouse = ControladorMouse();
         ControladorJoystick controladorJ = ControladorJoystick(configuracion->getBotones());
 
@@ -49,21 +82,10 @@ int main(int argc, char **argv) {
         bool restart = false;
         do {
             vector<Tinput> inputs;
-            //if(game.mState == EgameState::MENU_MODE || game.mState == EgameState::MENU_PLAYERS){
-                SDL_Event event;
-                while(SDL_PollEvent(&event) != 0){}
-                SDL_PollEvent(&event);
 
-                vector<Tinput> inputsT = controlador.getInputs(event);
-                vector<Tinput> inputsJ = controladorJ.getInputs(event);
-                inputs = inputsT;
-
-                TinputGame inputGame = controladorMouse.moverMouse(event);
-                if(inputGame == TinputGame::CLICK_IZQ_MOUSE)inputs[0].game = inputGame;
-            //}
-            /*else if (game.mState == EgameState::MODE_MULTIPLAYER || game.mState == EgameState::MODE_ARCADE || game.mState == EgameState::MODE_PRACTICE){
-                inputs = controladorJ.getInputs();
-            }*/
+            // Si se quiere jugar con el joystick se debe comentar getInputsTeclado y descomentar getInputsJoystick
+            inputs = getInputsTecladoYMouse(&controladorT,&controladorMouse);
+            //inputs = getInputsJoystickYMouse(game,&controladorJ,&controladorMouse);
             if(inputs[0].game == TinputGame::KEY_NADA) {
                 inputs[0].tiempo = SDL_GetTicks();
                 inputs[1].tiempo = SDL_GetTicks();
