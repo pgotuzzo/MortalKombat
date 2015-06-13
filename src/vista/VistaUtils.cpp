@@ -219,8 +219,8 @@ Ttexture VistaUtils::createTextureFromText(string fontPath, string text, int siz
  * size         tamanio del texto
  * texture      textura a cambiar
  */
-Ttexture VistaUtils::copyInTextureFromText(string fontPath, string text, int size,Ttexture texture) {
-    SDL_DestroyTexture(texture.t);
+void VistaUtils::copyInTextureFromText(string fontPath, string text, int size,Ttexture *texture) {
+    SDL_DestroyTexture(texture->t);
     TTF_Font* font = TTF_OpenFont(fontPath.c_str(), size);
     if (font == NULL) {
         loguer->loguear("No se pudo cargar la fuente.", Log::LOG_ERR);
@@ -234,10 +234,8 @@ Ttexture VistaUtils::copyInTextureFromText(string fontPath, string text, int siz
     SDL_Texture* textTexture = SDL_CreateTextureFromSurface(mRenderer, surface);
     SDL_FreeSurface(surface);
 
-    texture.t = textTexture;
-    texture.d = getDimension(texture.t);
-
-    return texture;
+    texture->t = textTexture;
+    texture->d = getDimension(texture->t);
 }
 
 /**

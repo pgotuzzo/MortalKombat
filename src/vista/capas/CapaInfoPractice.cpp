@@ -87,7 +87,7 @@ Ttexture crearTextDeInputMovimiento(TinputMovimiento input, VistaUtils* mUtils) 
 /*
  * Cambia la posicion de la capa ajustandola a la posicion del escenario
  */
-void CapaInfoPractice::update(float porcVida1,float porcVida2,Tinput input,string timer) {
+void CapaInfoPractice::update(Tinput input,TInfoExtra infoExtra) {
 
     if (!buffer.empty()) {
         if (SDL_GetTicks()-buffer.front().tiempoInicial >= tiempoMax || buffer.size() >= tamBuffer) {

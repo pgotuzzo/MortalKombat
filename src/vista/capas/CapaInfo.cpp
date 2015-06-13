@@ -34,7 +34,7 @@ void CapaInfo::getTexture(Ttexture texture) {}
 /*
  * Cambia la posicion de la capa ajustandola a la posicion del escenario
  */
-void CapaInfo::update(float porcVida1,float porcVida2,Tinput input,string timer) {}
+void CapaInfo::update(Tinput input,TInfoExtra infoExtra) {}
 
 void CapaInfo::freeTextures() {}
 

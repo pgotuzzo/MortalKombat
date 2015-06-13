@@ -35,7 +35,7 @@ public:
     /*
      * Cambia la posicion de la capa ajustandola a la posicion del escenario
      */
-    void update(float porcVida1,float porcVida2,Tinput input,string timer);
+    void update(Tinput input,TInfoExtra infoExtra);
 
     ~CapaInfoPractice();
 
