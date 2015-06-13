@@ -1,7 +1,3 @@
-//
-// Created by fran on 07/06/15.
-//
-
 #ifndef MORTALKOMBAT_PANTALLAARCADE_H
 #define MORTALKOMBAT_PANTALLAARCADE_H
 

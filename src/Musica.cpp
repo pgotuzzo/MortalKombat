@@ -1,6 +1,6 @@
 #include "Musica.h"
 
-const string ruta = "/home/miguel/ClionProjects/MortalKombat/resources/musica/";
+const string ruta = "./resources/musica/";
 Musica::Musica() {
     for(size_t i = 0 ; i < 38 ; i++)
         contadores[i] = 0;

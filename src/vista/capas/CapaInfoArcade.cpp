@@ -132,6 +132,7 @@ void CapaInfoArcade::freeTextures() {
     SDL_DestroyTexture(barraVidaParcialText.t);
     SDL_DestroyTexture(mNombre1.t);
     SDL_DestroyTexture(mNombre2.t);
+    SDL_DestroyTexture(mTimer.t);
     loguer->loguear("Elimina capa", Log::LOG_DEB);
 }
 
