@@ -122,10 +122,6 @@ void CapaInfoArcade::update(float porcVida1,float porcVida2,Tinput input,string 
     mTimer = mUtils->createTextureFromText(FONT_PATH, timer, FONT_SIZE_FOR_TIMER);
 }
 
-void CapaInfoArcade::update(float porcVida1,float porcVida2,Tinput input){
-
-}
-
 void CapaInfoArcade::freeTextures() {
     loguer->loguear("Elimina capa", Log::LOG_DEB);
     SDL_DestroyTexture(barraVidaCompletaText.t);

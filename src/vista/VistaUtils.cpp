@@ -209,6 +209,35 @@ Ttexture VistaUtils::createTextureFromText(string fontPath, string text, int siz
     return returnTexture;
 }
 
+/**
+ * Pone en la textura un string.
+ * (Caco way)
+ *
+ * fontPath     ruta a la font a utilizar
+ * text         texto a imprimir
+ * size         tamanio del texto
+ * texture      textura a cambiar
+ */
+Ttexture VistaUtils::copyInTextureFromText(string fontPath, string text, int size,Ttexture texture) {
+    SDL_DestroyTexture(texture.t);
+    TTF_Font* font = TTF_OpenFont(fontPath.c_str(), size);
+    if (font == NULL) {
+        loguer->loguear("No se pudo cargar la fuente.", Log::LOG_ERR);
+        loguer->loguear(TTF_GetError(), Log::LOG_ERR);
+        throw new exception();
+    }
+
+    SDL_Color white = {255, 255, 255, 0};
+    // No encontre una funcion q copie una textura de una surface, pro eso lo hice a lo caco
+    SDL_Surface* surface = TTF_RenderText_Blended(font, text.c_str(), white);
+    SDL_Texture* textTexture = SDL_CreateTextureFromSurface(mRenderer, surface);
+    SDL_FreeSurface(surface);
+
+    texture.t = textTexture;
+    texture.d = getDimension(texture.t);
+
+    return texture;
+}
 
 /**
  * Se crea una textura a partir de un path, respetando la relacion de aspecto.

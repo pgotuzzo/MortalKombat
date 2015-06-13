@@ -36,8 +36,6 @@ void CapaInfo::getTexture(Ttexture texture) {}
  */
 void CapaInfo::update(float porcVida1,float porcVida2,Tinput input,string timer) {}
 
-void CapaInfo::update(float porcVida1,float porcVida2,Tinput input){}
-
 void CapaInfo::freeTextures() {}
 
 CapaInfo::~CapaInfo() {}

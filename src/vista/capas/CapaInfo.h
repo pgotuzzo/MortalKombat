@@ -34,8 +34,6 @@ public:
      */
     virtual void update(float porcVida1,float porcVida2,Tinput input,string timer);
 
-    virtual void update(float porcVida1,float porcVida2,Tinput input);
-
     virtual void freeTextures();
 
     virtual ~CapaInfo();
