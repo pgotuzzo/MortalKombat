@@ -34,7 +34,6 @@ void PantallaFight::InicializarPersonajes(vector<Tpersonaje> personajes) {
         p = PersonajeVista(mUtils, personajes[1].sprites, personajes[1].d, personajes[1].orientacion);
     }
     mPersonajes.push_back(p);
-
 }
 
 
