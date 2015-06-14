@@ -136,7 +136,13 @@ vector<Posicion> MenuPlayerSelection::updateConAleatorio(vector<Tinput> inputs) 
         }
     }
     else if(mSelectionConfirmed[0] && !mSelectionConfirmed[1]){
-        mSelection[1] = Posicion(rand() % 4,rand() %3);
+        int y = rand() % 3;
+        if(y == mSelection[0].y){
+            if(y == 0) y++;
+            else if (y==1) y++;
+            else y--;
+        }
+        mSelection[1] = Posicion(rand() % 4,y);
         personajesElegidos[1] = this->getType(mSelection[1]);
         mSelectionConfirmed[1] = true;
     }
