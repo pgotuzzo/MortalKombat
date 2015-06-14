@@ -138,7 +138,12 @@ vector<Tcambio> Mundo::actualizarMundo(vector<Tinput> inputs,EgameState modoDeJu
 		tiempoRound--;
 	}
 
-
+	if(inputs[0].game == TinputGame::KEY_REDUCCION_VIDA){
+		personaje1->vida -= 5;
+	}
+	if(inputs[1].game == TinputGame::KEY_REDUCCION_VIDA){
+		personaje2->vida -= 5;
+	}
 	//Verifica y da vuelta la direccion de los personajes si se pasan
 	verificarDireccionDeLosPersonajes();
 

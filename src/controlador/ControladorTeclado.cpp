@@ -693,6 +693,7 @@ vector<Tinput> ControladorTeclado::getInputs(SDL_Event event) {
 				else if (state[SDL_SCANCODE_K]) inputAnterior1.accion = TinputAccion::KEY_PATADA_BAJA;
 				else if (state[SDL_SCANCODE_O]) inputAnterior1.accion= TinputAccion::KEY_PROTECCION;
 				else if (state[SDL_SCANCODE_L]) inputAnterior1.accion = TinputAccion::KEY_PODER;
+				else if (state[SDL_SCANCODE_F1]) inputAnterior1.game = TinputGame::KEY_REDUCCION_VIDA;
 				else if (state[SDL_SCANCODE_UP]&&state[SDL_SCANCODE_U]){
 					inputAnterior1.movimiento = TinputMovimiento::KEY_ARRIBA;
 					inputAnterior1.accion=TinputAccion::KEY_PINIA_ALTA;
@@ -756,6 +757,7 @@ vector<Tinput> ControladorTeclado::getInputs(SDL_Event event) {
 				else if (state[SDL_SCANCODE_B]) inputAnterior2.accion = TinputAccion::KEY_PATADA_BAJA;
 				else if (state[SDL_SCANCODE_H]) inputAnterior2.accion= TinputAccion::KEY_PROTECCION;
 				else if (state[SDL_SCANCODE_N]) inputAnterior2.accion = TinputAccion::KEY_PODER;
+				else if (state[SDL_SCANCODE_F2]) inputAnterior2.game = TinputGame::KEY_REDUCCION_VIDA;
 				else if (state[SDL_SCANCODE_W]&&state[SDL_SCANCODE_F]){
 					inputAnterior2.movimiento = TinputMovimiento::KEY_ARRIBA;
 					inputAnterior2.accion=TinputAccion::KEY_PINIA_ALTA;
