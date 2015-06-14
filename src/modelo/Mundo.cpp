@@ -267,7 +267,7 @@ void Mundo::verificarSiTerminoElRound() {
 }
 
 void Mundo::verificarGanadorDelRound() {
-	// Si el tiempo se termino me fijo quien tiene mas vida -------------------------
+	// Si el tiempo se termino me fijo quien tiene mas vida
 	if(tiempoRound == 0) {
 		verificarGanadorCuandoSeAcabaElTiempo();
 	} else if(!personaje1->estadoFatality || !personaje2->estadoFatality){
@@ -279,7 +279,7 @@ void Mundo::terminoLaPelea(){
 	if(roundsPJ1 == 2 && !personaje1->estadoFatality && roundsPJ2 <=1) {
 		personaje1->llevarACabo.resultado = GANO;
 		personaje2->llevarACabo.resultado = PERDIO;
-	}else if((roundsPJ1 == 2 && !personaje1->estadoFatality && roundsPJ2 <=1)){
+	}else if((roundsPJ2 == 2 && !personaje1->estadoFatality && roundsPJ1 <=1)){
 		personaje1->llevarACabo.resultado = PERDIO;
 		personaje2->llevarACabo.resultado = GANO;
 	}else if((roundsPJ1 == 2) &&(roundsPJ2 == 2)){
