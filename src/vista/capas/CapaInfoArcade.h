@@ -48,6 +48,8 @@ public:
      */
     void update(Tinput input, TInfoExtra infoExtra);
 
+    void update(float porcVida1,float porcVida2,Tinput input);
+
     void freeTextures();
 
     virtual ~CapaInfoArcade();

@@ -35,9 +35,8 @@ Personaje::Personaje(string nombre,Tdireccion direccionInicial,Trect cuerpo, flo
 
 void Personaje::crearCombosdelPersonaje(Tcombos combos) {
 
-	TComboData datosPoder, datosAgarre, datosFatality;
+	TComboData datosPoder,datosFatality,datosFatality2;
 
-	// TODO: Cambiar datos hardcodeados cuando se arregle la parte de combos del parser
 	datosPoder.nombre = "Poder";
 	datosPoder.teclas = combos.poder;
 	datosPoder.tiempoMaximo = (unsigned int) combos.tiempo * 1000;
@@ -48,8 +47,14 @@ void Personaje::crearCombosdelPersonaje(Tcombos combos) {
 	datosFatality.tiempoMaximo = (unsigned int) combos.tiempo * 1000;
 	datosFatality.tolerancia = combos.errores;
 
+	datosFatality2.nombre = "Fatality2";
+	datosFatality2.teclas = combos.fatality2;
+	datosFatality2.tiempoMaximo = (unsigned int) combos.tiempo * 1000;
+	datosFatality2.tolerancia = combos.errores;
+
 	comboPoder = new Combo(datosPoder);
 	comboFatality = new Combo(datosFatality);
+	comboFatality2 = new Combo(datosFatality2);
 
 }
 

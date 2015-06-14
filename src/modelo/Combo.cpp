@@ -5,6 +5,7 @@
 Combo::Combo(TComboData datosDelCombo) {
     this->datosDelCombo = datosDelCombo;
     this->inicializarCombo();
+    teclasAString();
 }
 
 void Combo::inicializarCombo() {
@@ -58,4 +59,46 @@ bool Combo::puedoRealizarCombo() {
 }
 
 
+void Combo::teclasAString() {
+    cadenaParaBuffer = datosDelCombo.nombre + " ";
 
+    for(int i=0; i<datosDelCombo.teclas.size();i++){
+
+        Tinput input = datosDelCombo.teclas[i];
+        switch(input.movimiento){
+
+            case TinputMovimiento::KEY_ARRIBA:
+                cadenaParaBuffer += "UP ";
+                break;
+            case TinputMovimiento::KEY_ABAJO:
+                cadenaParaBuffer += "DW ";
+                break;
+            case TinputMovimiento::KEY_DERECHA:
+                cadenaParaBuffer += "RG ";
+                break;
+            case TinputMovimiento::KEY_IZQUIERDA:
+                cadenaParaBuffer += "LF ";
+                break;
+            default:
+                switch(input.accion){
+
+                    case TinputAccion::KEY_PINIA_ALTA:
+                        cadenaParaBuffer += "PH ";
+                        break;
+                    case TinputAccion::KEY_PINIA_BAJA:
+                        cadenaParaBuffer += "PL ";
+                        break;
+                    case TinputAccion::KEY_PATADA_ALTA:
+                        cadenaParaBuffer += "KH ";
+                        break;
+                    case TinputAccion::KEY_PATADA_BAJA:
+                        cadenaParaBuffer += "KL ";
+                        break;
+                    case TinputAccion::KEY_PROTECCION:
+                        cadenaParaBuffer += "BK ";
+                        break;
+                }
+        }
+
+    }
+}

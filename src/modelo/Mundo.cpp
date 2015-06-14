@@ -95,6 +95,22 @@ Tcambio Mundo::actualizarPJ(Personaje *PJ) {
 
 	cambio.tiempoRound = tiempoRound;
 
+	if(PJ->comboPoder->puedoRealizarCombo()){
+		cambio.hayCombo = true;
+		cambio.nombreCombo = PJ->comboPoder->cadenaParaBuffer;
+	}
+
+	else if(PJ->comboFatality->puedoRealizarCombo()){
+		cambio.hayCombo = true;
+		cambio.nombreCombo = PJ->comboFatality->cadenaParaBuffer;
+	}
+
+	else if(PJ->comboPoder->puedoRealizarCombo()){
+		cambio.hayCombo = true;
+		cambio.nombreCombo = PJ->comboFatality2->cadenaParaBuffer;
+	}
+	else cambio.hayCombo = false;
+
 	return cambio;
 }
 

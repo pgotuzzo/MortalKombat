@@ -17,5 +17,3 @@ TinputGame ControladorMouse::moverMouse(SDL_Event event) {
     }
 }
 
-}
-

@@ -17,10 +17,14 @@ private:
     void inicializarCombo();
     bool teclaPresionada(Tinput input);
 
+    void teclasAString();
+
 public:
     Combo(TComboData datosDelCombo);
     void actualizar(Tinput input);
     bool puedoRealizarCombo();
+
+    string cadenaParaBuffer;
 };
 
 

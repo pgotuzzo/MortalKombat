@@ -36,6 +36,7 @@ public:
 
 	Combo* comboPoder;
 	Combo* comboFatality;
+	Combo* comboFatality2;
 
 	float vida;
 

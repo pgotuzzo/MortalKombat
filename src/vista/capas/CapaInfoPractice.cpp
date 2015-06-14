@@ -5,7 +5,7 @@ const float anchoBoton = 10;
 const float altoBoton = 10;
 const float posXBoton = 10;
 const float posYBoton = 10;
-const Uint32 tiempoMax = 2000;
+const Uint32 tiempoMax = 3000;
 
 const string FONT_PATH = "resources/font/mortalkombat2.ttf";
 const int FONT_SIZE = 18;
