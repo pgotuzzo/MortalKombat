@@ -156,10 +156,7 @@ void CapaInfoArcade::update(Tinput input,TInfoExtra infoExtra) {
         rectCombo2.d.w = 0;
         combo2Activo=false;
     }
-
-    // TODO: ESTO PIERDE MEMORIA
-    SDL_DestroyTexture(mTimer.t);
-    mTimer = mUtils->createTextureFromText(FONT_PATH, infoExtra.timer, FONT_SIZE_FOR_TIMER);
+    mUtils->copyInTextureFromText(FONT_PATH, infoExtra.timer, FONT_SIZE_FOR_TIMER, &mTimer);
 }
 
 void CapaInfoArcade::update(float porcVida1,float porcVida2,Tinput input){
