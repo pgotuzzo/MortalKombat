@@ -106,17 +106,16 @@ void Personaje::realizarAccion(Tinput orden) {
 		estadoAnterior = estadoActual;
 		if(nombre.compare("liukang") == 0) estadoActual = FAT_ARCADE;
 		if(nombre.compare("subzero") == 0) estadoActual = FAT_FUEGO;
-		if(nombre.compare("ermac") == 0) estadoActual = FAT_LEVANTA;
+		if(nombre.compare("ermac") == 0)   estadoActual = FAT_LEVANTA;
 		countLoops = 1;
 	}
+	//TODO: HACER 3 FATALITIES MAS
 	comboFatality2->actualizar(orden);
 	if(comboFatality2->puedoRealizarCombo() && estadoFatality){
 		estadoAnterior = estadoActual;
 		if(nombre.compare("liukang") == 0) estadoActual = FAT_ARCADE;
-		if(nombre.compare("subzero") == 0) {
-			if(colisionando) estadoActual = FAT_BRUTALITY_SUBZERO;
-		}
-		if(nombre.compare("ermac") == 0) estadoActual = FAT_LEVANTA;
+		if(nombre.compare("subzero") == 0) estadoActual = FAT_FUEGO;
+		if(nombre.compare("ermac") == 0)   estadoActual = FAT_LEVANTA;
 		countLoops = 1;
 	}
 	posicionAnterior = rectanguloPj.p;
@@ -238,7 +237,7 @@ TestadoPersonaje Personaje::generarEstado(Tinput orden) {
 				case TinputAccion::KEY_PROTECCION:
 					return ACC_PROTECCION;
 				case TinputAccion::KEY_PODER:
-					if(estadoFatality)return FAT_LEVANTA;
+					if(estadoFatality)return FAT_ARCADE;
 					return MOV_PARADO;
 			}
 			break;

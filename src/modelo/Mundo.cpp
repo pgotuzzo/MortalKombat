@@ -303,18 +303,27 @@ void Mundo::terminoLaPelea(){
 
 bool Mundo::huboGanador(){
 	if((personaje1->llevarACabo.resultado == GANO)&&
-	    personaje1->estadoActual != REA_VICTORIA && personaje1->estadoAnterior == REA_VICTORIA){
-		return true;
-	}else if((personaje2->llevarACabo.resultado == GANO)&&
-			  personaje2->estadoActual != REA_VICTORIA && personaje2->estadoAnterior == REA_VICTORIA){
+	   (personaje2->estadoActual != REA_FAT_FUEGO && personaje2->estadoAnterior == REA_FAT_FUEGO)||
+	   (personaje2->estadoActual != REA_FAT_ARCADE && personaje2->estadoAnterior == REA_FAT_ARCADE)||
+	   (personaje2->estadoActual != REA_FAT_LEVANTA&& personaje2->estadoAnterior == REA_FAT_LEVANTA)){
 		return true;
 	}
-	return false;
+	if((personaje2->llevarACabo.resultado == GANO)&&
+	   (personaje1->estadoActual != REA_FAT_FUEGO  && personaje1->estadoAnterior == REA_FAT_FUEGO)||
+	   (personaje1->estadoActual != REA_FAT_ARCADE && personaje1->estadoAnterior == REA_FAT_ARCADE)||
+	   (personaje1->estadoActual != REA_FAT_LEVANTA&& personaje1->estadoAnterior == REA_FAT_LEVANTA)){
+		return true;
+	}
+	if((personaje1->llevarACabo.resultado == GANO)&& personaje1->estadoActual != REA_VICTORIA && personaje1->estadoAnterior == REA_VICTORIA){
+		return true;
+	}
+
+	return ((personaje2->llevarACabo.resultado == GANO)&& (personaje2->estadoActual != REA_VICTORIA) && (personaje2->estadoAnterior == REA_VICTORIA));
 }
 
 string Mundo::quienGano() {
-	if(personaje1->llevarACabo.resultado == GANO) return personaje1->nombre;
-	if(personaje2->llevarACabo.resultado == GANO) return personaje2->nombre;
+	if (personaje1->llevarACabo.resultado == GANO) return personaje1->nombre;
+	if (personaje2->llevarACabo.resultado == GANO) return personaje2->nombre;
 }
 
 
@@ -325,22 +334,24 @@ Mundo::~Mundo() {
 }
 
 void Mundo::detectarRealiaccionesDeFatalities() {
+	//                       FATALITY ARCADE
 	if(personaje1->estadoActual == FAT_ARCADE && personaje1->countLoops == 13){
-		personaje1->llevarACabo.rectaDelPj.p.x = personaje2->llevarACabo.rectaDelPj.p.x;
-		personaje2->reinicializar(REA_FAT_ARCADE);
+	   personaje1->llevarACabo.rectaDelPj.p.x =  personaje2->llevarACabo.rectaDelPj.p.x;
+	   personaje2->reinicializar(REA_FAT_ARCADE);
 	}
 	if(personaje2->estadoActual == FAT_ARCADE && personaje2->countLoops == 13){
-	   personaje2->llevarACabo.rectaDelPj.p.x = personaje1->llevarACabo.rectaDelPj.p.x;
-		personaje2->reinicializar(REA_FAT_ARCADE);
+		cout<<personaje1->llevarACabo.rectaDelPj.p.x<<endl;
+		personaje2->llevarACabo.rectaDelPj.p.x =  personaje1->llevarACabo.rectaDelPj.p.x;
+		cout<<personaje2->llevarACabo.rectaDelPj.p.x<<endl;
+		personaje1->reinicializar(REA_FAT_ARCADE);
 	}
-	if(personaje2->estadoActual == FAT_ARCADE && personaje2->countLoops == 13) {
-		personaje1->llevarACabo.rectaDelPj.p.x = personaje1->rectanguloPj.p.y;
-	}
+	//                       FATALITY LEVANTA
 	if(personaje2->estadoActual == FAT_LEVANTA && personaje2->countLoops == 4) {
 		personaje1->reinicializar(REA_FAT_LEVANTA);
 	}else if(personaje1->estadoActual == FAT_LEVANTA && personaje1->countLoops == 4) {
 		personaje2->reinicializar(REA_FAT_LEVANTA);
 	}
+	//                       BRUTALITY SUBZERO
 	if(personaje1->estadoActual == FAT_BRUTALITY_SUBZERO) personaje2->reinicializar(REA_FAT_BRUTALITY_SUBZERO);
 	if(personaje2->estadoActual == FAT_BRUTALITY_SUBZERO) personaje1->reinicializar(REA_FAT_BRUTALITY_SUBZERO);
 }
