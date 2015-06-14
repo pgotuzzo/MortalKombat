@@ -2,7 +2,7 @@
 #include "../parser/config.h"
 #include "Mundo.h"
 
-const int tiempoInicialRound = 10;
+const int tiempoInicialRound = 99;
 const int tiempoDeFatality = 20;
 
 /* Constructor de Mundo.
@@ -152,6 +152,7 @@ vector<Tcambio> Mundo::actualizarMundo(vector<Tinput> inputs,EgameState modoDeJu
 		input.accion = TinputAccion::KEY_NADA;
 		personaje2->realizarAccion(input);
 		if(personaje2->vida <= 50) personaje2->vida += 50;
+		if(tiempoRound <= 50) tiempoRound += 50;
 		personaje1->estadoFatality = true;
 	}
 
@@ -166,14 +167,7 @@ vector<Tcambio> Mundo::actualizarMundo(vector<Tinput> inputs,EgameState modoDeJu
 	// COLISIONES
 	colisionador.resolverColisiones(personaje1,personaje2);
 	//Se actualizan a los personajes
-	if(personaje1->estadoActual == FAT_ARCADE && personaje1->countLoops == 13){
-		personaje1->llevarACabo.rectaDelPj.p.x = personaje2->llevarACabo.rectaDelPj.p.x;
-		personaje2->estadoActual = REA_FAT_ARCADE;
-		personaje2->countLoops = 0;
-	}
-	if(personaje2->estadoActual == FAT_ARCADE && personaje2->countLoops == 13) {
-		personaje1->llevarACabo.rectaDelPj.p.x = personaje1->rectanguloPj.p.y;
-	}
+	detectarRealiaccionesDeFatalities();
 
 	cambio1 = actualizarPJ(personaje1);
 	cambio2 = actualizarPJ(personaje2);
@@ -315,4 +309,25 @@ Mundo::~Mundo() {
 	delete personaje1;
 	delete personaje2;
 	loguer->loguear("Se libero a los personajes", Log::LOG_DEB);
+}
+
+void Mundo::detectarRealiaccionesDeFatalities() {
+	if(personaje1->estadoActual == FAT_ARCADE && personaje1->countLoops == 13){
+		personaje1->llevarACabo.rectaDelPj.p.x = personaje2->llevarACabo.rectaDelPj.p.x;
+		personaje2->reinicializar(REA_FAT_ARCADE);
+	}
+	if(personaje2->estadoActual == FAT_ARCADE && personaje2->countLoops == 13){
+	   personaje2->llevarACabo.rectaDelPj.p.x = personaje1->llevarACabo.rectaDelPj.p.x;
+		personaje2->reinicializar(REA_FAT_ARCADE);
+	}
+	if(personaje2->estadoActual == FAT_ARCADE && personaje2->countLoops == 13) {
+		personaje1->llevarACabo.rectaDelPj.p.x = personaje1->rectanguloPj.p.y;
+	}
+	if(personaje2->estadoActual == FAT_LEVANTA && personaje2->countLoops == 4) {
+		personaje1->reinicializar(REA_FAT_LEVANTA);
+	}else if(personaje1->estadoActual == FAT_LEVANTA && personaje1->countLoops == 4) {
+		personaje2->reinicializar(REA_FAT_LEVANTA);
+	}
+	if(personaje1->estadoActual == FAT_BRUTALITY_SUBZERO) personaje2->reinicializar(REA_FAT_BRUTALITY_SUBZERO);
+	if(personaje2->estadoActual == FAT_BRUTALITY_SUBZERO) personaje1->reinicializar(REA_FAT_BRUTALITY_SUBZERO);
 }

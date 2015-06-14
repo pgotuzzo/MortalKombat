@@ -34,6 +34,11 @@ void PersonajeVista::initializeSprites(float scales[2], string path) {
             case ACC_PODER:
             case REA_GOLPE_FUERTE:
             case REA_PATADA_BARRIDA:
+            case REA_FAT_LEVANTA:
+            case REA_FAT_FUEGO:
+            case REA_FAT_ARCADE:
+            case FAT_LEVANTA:
+            case FAT_ARCADE:
             case REA_GOLPE_ALTO:{
                 mSprites[s] = Sprite(mUtils, spritesPath, scales, false);
                 break;
@@ -131,6 +136,7 @@ void PersonajeVista::freeTextures() {
     for (int i = 0; i < mSprites.size(); i++) {
         mSprites[i].freeTextures();
     }
+    // TODO: FRAN ESTA LINEA TIRA SEGMENTATION FAULT AL ENTRAR A LA SELECCION DE PERSONAJES
     // TODO: FRAN ESTA LINEA TIRA SEGMENTATION FAULT AL ENTRAR A LA SELECCION DE PERSONAJES
     //SDL_DestroyTexture(mAuxTexture.t);
     loguer->loguear("Finaliza la eliminacion de los sprites del personaje", Log::LOG_DEB);

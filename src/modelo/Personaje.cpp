@@ -63,7 +63,8 @@ void Personaje::crearCombosdelPersonaje(Tcombos combos) {
 void Personaje::realizarAccion(Tinput orden) {
 
 	if((estadoActual != REA_FAT_FUEGO && estadoAnterior == REA_FAT_FUEGO)||
-	   (estadoActual != REA_FAT_ARCADE && estadoAnterior == REA_FAT_ARCADE)) vida--;
+	   (estadoActual != REA_FAT_ARCADE && estadoAnterior == REA_FAT_ARCADE)||
+	   (estadoActual != REA_FAT_LEVANTA && estadoAnterior == REA_FAT_LEVANTA)) vida--;
 
 	verificarEstadoFatality();
 	TestadoPersonaje estadoCompuesto = generarEstado(orden);
@@ -100,12 +101,12 @@ void Personaje::realizarAccion(Tinput orden) {
 	}
 	comboFatality->actualizar(orden);
 	if(comboFatality->puedoRealizarCombo() && estadoFatality){
-		estadoAnterior = MOV_PARADO;
+		estadoAnterior = estadoActual;
 		if(nombre.compare("liukang") == 0) estadoActual = FAT_ARCADE;
 		if(nombre.compare("subzero") == 0) estadoActual = FAT_FUEGO;
-		if(nombre.compare("ermac") == 0) estadoActual = FAT_FUEGO;
+		if(nombre.compare("ermac") == 0) estadoActual = FAT_LEVANTA;
+		countLoops = 1;
 	}
-
 	posicionAnterior = rectanguloPj.p;
 	if (poder->estado == ACTIVADO) poder->avanzar(velocidadDelPoder);
 	rectanguloPj = llevarACabo.laAccion(estadoActual, countLoops, rectanguloPj.p, sentidoPj, direccionPj);
@@ -225,7 +226,7 @@ TestadoPersonaje Personaje::generarEstado(Tinput orden) {
 				case TinputAccion::KEY_PROTECCION:
 					return ACC_PROTECCION;
 				case TinputAccion::KEY_PODER:
-					if(estadoFatality)return FAT_FUEGO;
+					if(estadoFatality)return FAT_LEVANTA;
 					return MOV_PARADO;
 			}
 			break;

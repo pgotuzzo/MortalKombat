@@ -80,6 +80,8 @@ public:
 
 
 	void verificarEstadoFatality();
+
+	bool bruta;
 };
 
 #endif /* PERSONAJE_H_ */

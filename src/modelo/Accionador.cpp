@@ -197,7 +197,20 @@ Trect Accionador::laAccion(TestadoPersonaje estadoPj, int loops, Posicion pos, T
                 rectaDelPj.p = rectaDelPj.p + Posicion(0,7);
             }
             break;
+        case REA_FAT_LEVANTA:
+            cout<<loops<<endl;
+            if(loops == 1 || loops == 2|| loops == 5|| loops == 6 || loops == 9|| loops == 10|| loops == 13|| loops == 14)
+                rectaDelPj.p.y -= 50;
+            if(loops == 3 || loops == 4|| loops == 7|| loops == 8 || loops == 11 || loops == 12|| loops == 15|| loops == 16)
+                rectaDelPj.p.y += 50;
+
+            break;
+        case REA_FAT_BRUTALITY_SUBZERO:
+            break;
+        case FAT_BRUTALITY_SUBZERO:
+            break;
     }
+
     return rectaDelPj;
 }
 Accionador::~Accionador() {

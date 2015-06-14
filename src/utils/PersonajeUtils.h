@@ -10,7 +10,7 @@
 
 static const string PODER_ACTIVADO_PATH = "pod_poder";
 static const string PODER_COLISION_PATH = "pod_colision";
-static const int TestadoPersonajeCount = 42;
+static const int TestadoPersonajeCount = 44;
 
 enum class EtipoPersonaje {
     SUBZERO,
@@ -92,10 +92,12 @@ enum TestadoPersonaje {
     REA_FAT_FUEGO,
     REA_FAT_LEVANTA,
     REA_FAT_ARCADE,
+    REA_FAT_BRUTALITY_SUBZERO,
 
     FAT_FUEGO,
     FAT_LEVANTA,
-    FAT_ARCADE
+    FAT_ARCADE,
+    FAT_BRUTALITY_SUBZERO
 
 };
 
@@ -149,6 +151,9 @@ static string TestadoPersonajeToString(TestadoPersonaje e){
 
         case TestadoPersonaje::REA_FAT_ARCADE: return"rea_fat_arcade";
         case TestadoPersonaje::FAT_ARCADE: return"fat_arcade";
+
+        case TestadoPersonaje::REA_FAT_BRUTALITY_SUBZERO: return "rea_fat_brutality_subzero";
+        case TestadoPersonaje::FAT_BRUTALITY_SUBZERO: return "fat_brutality_subzero";
 
 
 
@@ -236,11 +241,15 @@ static int loopsPara(TestadoPersonaje accion){
         case REA_FAT_FUEGO: return 30;
         case FAT_FUEGO: return 20;
 
-        case REA_FAT_LEVANTA: return 24;
-        case FAT_LEVANTA: return 24;
+        case REA_FAT_LEVANTA: return 40;
+        case FAT_LEVANTA: return 40;
 
         case REA_FAT_ARCADE: return 30;
         case FAT_ARCADE: return 25;
+
+        case FAT_BRUTALITY_SUBZERO: return 31;
+        case REA_FAT_BRUTALITY_SUBZERO: return 30;
+
     }
 }
 
@@ -327,6 +336,11 @@ static int mostrarEstado(TestadoPersonaje accion){
             break;
         case FAT_LEVANTA:cout<<"FAT_LEVANTA"<<endl;
             break;
+        case REA_FAT_BRUTALITY_SUBZERO:cout<<"REA_FAT_BRUTALITY_SUBZERO"<<endl;
+            break;
+        case FAT_BRUTALITY_SUBZERO:cout<<"FAT_BRUTALITY_SUBZERO"<<endl;
+            break;
+
     }
 }
 
