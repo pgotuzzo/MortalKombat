@@ -16,7 +16,7 @@ private:
     float anchoEscenario;
 
 
-    bool detectarColision(ObjetoColisionable *objeto1, ObjetoColisionable *objeto2);
+
     float distanciaColisionadaenX(ObjetoColisionable *objeto1, ObjetoColisionable *objeto2);
     bool detectarColisionenY(ObjetoColisionable* objeto1, ObjetoColisionable* objeto2);
     float distancia(ObjetoColisionable* objeto1, ObjetoColisionable* objeto2);
@@ -41,6 +41,7 @@ public:
     DetectorDeColisiones();
     DetectorDeColisiones(float anchoPantalla, float anchoEscenario);
     void resolverColisiones(Personaje* personaje1, Personaje* personaje2);
+    bool detectarColision(ObjetoColisionable *objeto1, ObjetoColisionable *objeto2);
 };
 
 

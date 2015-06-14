@@ -81,7 +81,7 @@ public:
 
 	void verificarEstadoFatality();
 
-	bool bruta;
+	bool colisionando;
 };
 
 #endif /* PERSONAJE_H_ */

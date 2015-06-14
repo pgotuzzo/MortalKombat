@@ -126,6 +126,13 @@ Tcambio Mundo::actualizarPJ(Personaje *PJ) {
  * Se asigna todos los datos pertinentes de personaje a Tcambio.
  */
 vector<Tcambio> Mundo::actualizarMundo(vector<Tinput> inputs,EgameState modoDeJuego) {
+	if(colisionador.detectarColision(personaje1,personaje2)){
+		personaje1->colisionando = true;
+		personaje2->colisionando = true;
+	}else {
+		personaje1->colisionando = false;
+		personaje2->colisionando = false;
+	}
 	vector<Tcambio> c;
 	Tcambio cambio1, cambio2;
 
