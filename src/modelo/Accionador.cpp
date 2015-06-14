@@ -180,6 +180,7 @@ Trect Accionador::laAccion(TestadoPersonaje estadoPj, int loops, Posicion pos, T
             if( loops == 1){
                 if(direccion == DERECHA) rectaDelPj.p = rectaDelPj.p + Posicion(-10,0);
                 else rectaDelPj.p = rectaDelPj.p + Posicion(10,0);
+                ajustarPiso();
             }
             break;
         case REA_FAT_ARCADE:

@@ -2,7 +2,8 @@
 #include "../parser/config.h"
 #include "Mundo.h"
 
-const int tiempoInicialRound = 99;
+const int tiempoInicialRound = 10;
+const int tiempoDeFatality = 20;
 
 /* Constructor de Mundo.
  * Recibe la configuracion que se devuelve del parser.
@@ -77,8 +78,14 @@ void Mundo::verificarDireccionDeLosPersonajes() {
 }
 
 Tcambio Mundo::actualizarPJ(Personaje *PJ) {
-	if(personaje1->estadoActual == REA_MAREADO) personaje2->estadoFatality = true;
-	if(personaje2->estadoActual == REA_MAREADO) personaje1->estadoFatality = true;
+	if(personaje1->estadoActual == REA_MAREADO) {
+		personaje1->vida = 1;
+		personaje2->estadoFatality = true;
+	}
+	if(personaje2->estadoActual == REA_MAREADO) {
+		personaje2->vida = 1;
+		personaje1->estadoFatality = true;
+	}
 
 	Tcambio cambio;
 	cambio.dPJ = PJ->rectanguloPj.d;
@@ -182,43 +189,43 @@ void Mundo::verificarGanadorCuandoSeAcabaElTiempo() {
 		if (roundsPJ1 == 1) {
 			personaje2->reinicializar(REA_MAREADO);
 			personaje2->vida = 1;
-			tiempoRound = 20;
+			tiempoRound = tiempoDeFatality;
 		} else {
 			personaje1->reinicializar(REA_VICTORIA);
 			personaje2->reinicializar(REA_DERROTA);
+			personaje1->vida = 100;
 			personaje2->vida = 100;
-			personaje2->vida = 100;
-			tiempoRound = 100;
+			tiempoRound = tiempoInicialRound;
 		}
 		roundsPJ1++;
 	} else if (personaje2->vida > personaje1->vida) {
 		if (roundsPJ2 == 1) {
 			personaje1->reinicializar(REA_MAREADO);
 			personaje1->vida = 1;
-			tiempoRound = 20;
+			tiempoRound = tiempoDeFatality;
 		} else {
 			personaje2->reinicializar(REA_VICTORIA);
 			personaje1->reinicializar(REA_DERROTA);
+			personaje1->vida = 100;
 			personaje2->vida = 100;
-			personaje2->vida = 100;
-			tiempoRound = 100;
+			tiempoRound = tiempoInicialRound;
 		}
 		roundsPJ2++;
 	} else {
 		if (roundsPJ2 == 1 && roundsPJ1 == 0) {
 			personaje1->estadoActual = REA_MAREADO;
-			tiempoRound = 20;
+			tiempoRound = tiempoDeFatality;
 		} else if (roundsPJ1 == 1 && roundsPJ2 == 0) {
 			personaje2->estadoActual = REA_MAREADO;
-			tiempoRound = 20;
+			tiempoRound = tiempoDeFatality;
 		} else if (roundsPJ1 == 1 && roundsPJ2 == 1) {
 			personaje1->estadoActual = REA_MAREADO;
 			personaje2->estadoActual = REA_MAREADO;
-			tiempoRound = 10;
+			tiempoRound = tiempoDeFatality;
 		} else if (roundsPJ1 == 0 && roundsPJ2 == 0) {
 			personaje1->estadoActual = REA_VICTORIA;
 			personaje2->estadoActual = REA_VICTORIA;
-			tiempoRound = 100;
+			tiempoRound = tiempoInicialRound;
 		}
 		roundsPJ1++;
 		roundsPJ2++;
@@ -231,7 +238,7 @@ void Mundo::verificarSiTerminoElRound() {
 			personaje1->reinicializar(REA_MAREADO);
 			personaje1->vida = 1;
 			roundsPJ2++;
-			tiempoRound = 20;
+			tiempoRound = tiempoDeFatality;
 		}
 		else{
 			personaje1->reinicializar(REA_DERROTA);
@@ -239,16 +246,14 @@ void Mundo::verificarSiTerminoElRound() {
 			roundsPJ2++;
 			personaje1->vida = 100;
 			personaje2->vida = 100;
-			tiempoRound = 100;
-			cout<<"1"<<endl;
+			tiempoRound = tiempoInicialRound;
 		}
-
 	}else if(personaje2->vida == 0) {
 		if (roundsPJ1 == 1) {
 			personaje2->reinicializar(REA_MAREADO);
 			personaje2->vida = 1;
 			roundsPJ1++;
-			tiempoRound = 20;
+			tiempoRound = tiempoDeFatality;
 		}
 		else {
 			personaje1->reinicializar(REA_VICTORIA);
@@ -256,8 +261,7 @@ void Mundo::verificarSiTerminoElRound() {
 			roundsPJ1++;
 			personaje1->vida = 100;
 			personaje2->vida = 100;
-			tiempoRound = 100;
-			cout<<"2"<<endl;
+			tiempoRound = tiempoInicialRound;
 		}
 	}
 }
