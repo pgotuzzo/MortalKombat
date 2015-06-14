@@ -31,6 +31,7 @@ Personaje::Personaje(string nombre,Tdireccion direccionInicial,Trect cuerpo, flo
 	countLoops = 0;
 	debuff = 0;
 	estadoFatality = false;
+	colisionando = false;
 }
 
 void Personaje::crearCombosdelPersonaje(Tcombos combos) {
@@ -64,7 +65,8 @@ void Personaje::realizarAccion(Tinput orden) {
 
 	if((estadoActual != REA_FAT_FUEGO && estadoAnterior == REA_FAT_FUEGO)||
 	   (estadoActual != REA_FAT_ARCADE && estadoAnterior == REA_FAT_ARCADE)||
-	   (estadoActual != REA_FAT_LEVANTA && estadoAnterior == REA_FAT_LEVANTA)) vida--;
+	   (estadoActual != REA_FAT_LEVANTA && estadoAnterior == REA_FAT_LEVANTA)||
+	   (estadoActual != REA_FAT_BRUTALITY_SUBZERO && estadoAnterior == REA_FAT_BRUTALITY_SUBZERO)) vida--;
 
 	verificarEstadoFatality();
 	TestadoPersonaje estadoCompuesto = generarEstado(orden);
@@ -104,6 +106,16 @@ void Personaje::realizarAccion(Tinput orden) {
 		estadoAnterior = estadoActual;
 		if(nombre.compare("liukang") == 0) estadoActual = FAT_ARCADE;
 		if(nombre.compare("subzero") == 0) estadoActual = FAT_FUEGO;
+		if(nombre.compare("ermac") == 0) estadoActual = FAT_LEVANTA;
+		countLoops = 1;
+	}
+	comboFatality2->actualizar(orden);
+	if(comboFatality2->puedoRealizarCombo() && estadoFatality){
+		estadoAnterior = estadoActual;
+		if(nombre.compare("liukang") == 0) estadoActual = FAT_ARCADE;
+		if(nombre.compare("subzero") == 0) {
+			if(colisionando) estadoActual = FAT_BRUTALITY_SUBZERO;
+		}
 		if(nombre.compare("ermac") == 0) estadoActual = FAT_LEVANTA;
 		countLoops = 1;
 	}

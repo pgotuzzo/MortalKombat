@@ -248,7 +248,7 @@ static int loopsPara(TestadoPersonaje accion){
         case FAT_ARCADE: return 25;
 
         case FAT_BRUTALITY_SUBZERO: return 31;
-        case REA_FAT_BRUTALITY_SUBZERO: return 30;
+        case REA_FAT_BRUTALITY_SUBZERO: return 50;
 
     }
 }
