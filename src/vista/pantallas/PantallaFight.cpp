@@ -34,7 +34,6 @@ void PantallaFight::InicializarPersonajes(vector<Tpersonaje> personajes) {
         p = PersonajeVista(mUtils, personajes[1].sprites, personajes[1].d, personajes[1].orientacion);
     }
     mPersonajes.push_back(p);
-
 }
 
 
@@ -121,8 +120,16 @@ void PantallaFight::update(vector<Tcambio> changes, Tinput input) {
     for (int i = 0; i < mCapas.size(); i++) {
         mCapas[i].ajustar(posEscenario);
     }
+    TInfoExtra infoExtra;
+    infoExtra.timer = to_string(changes[0].tiempoRound);
+    infoExtra.nombreCombo1 = changes[0].nombreCombo;
+    infoExtra.nombreCombo2 = changes[1].nombreCombo;
+    infoExtra.porcVida1 = changes[0].vida / 100;
+    infoExtra.porcVida2 = changes[1].vida / 100;
+    infoExtra.hayCombo1 = changes[0].hayCombo;
+    infoExtra.hayCombo2 = changes[1].hayCombo;
 
-    capaInfo->update(changes[0].vida / 100, changes[1].vida / 100, input,to_string(changes[0].tiempoRound));
+    capaInfo->update(input,infoExtra);
 }
 
 void PantallaFight::vibrar() {

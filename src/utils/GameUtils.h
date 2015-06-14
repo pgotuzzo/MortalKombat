@@ -63,6 +63,8 @@ struct Tcambio{
     Tdireccion direccion;
     Tsentido sentido;
     Tdimension dPJ;
+    bool hayCombo;
+    string nombreCombo;
 
     int tiempoRound;
     float vida;

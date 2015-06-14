@@ -14,6 +14,11 @@ protected:
     Ttexture mNombre1;
     Ttexture mNombre2;
     Ttexture mTimer;
+    Ttexture combo1;
+    Ttexture combo2;
+    Trect rectCombo1,rectCombo2;
+    Uint32 tcombo1, tcombo2;
+    bool combo1Activo,combo2Activo;
     float anchoBorde, anchoRelleno,anchoPantalla, distBorde;
     Trect barraVidaCompleta1, barraVidaCompleta2, barraVidaParcialPedazo1,
             barraVidaParcialPedazo2, barraVidaParcialPantalla1, barraVidaParcialPantalla2,
@@ -41,13 +46,12 @@ public:
     /*
      * Cambia la posicion de la capa ajustandola a la posicion del escenario
      */
-    void update(float porcVida1,float porcVida2,Tinput input);
+    void update(Tinput input, TInfoExtra infoExtra);
 
     void freeTextures();
 
     virtual ~CapaInfoArcade();
 
-    void update(float porcVida1, float porcVida2, Tinput input, string timer);
 };
 
 

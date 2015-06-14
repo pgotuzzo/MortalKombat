@@ -5,7 +5,7 @@ const float anchoBoton = 10;
 const float altoBoton = 10;
 const float posXBoton = 10;
 const float posYBoton = 10;
-const Uint32 tiempoMax = 1500;
+const Uint32 tiempoMax = 2000;
 
 const string FONT_PATH = "resources/font/mortalkombat2.ttf";
 const int FONT_SIZE = 18;
@@ -87,7 +87,7 @@ Ttexture crearTextDeInputMovimiento(TinputMovimiento input, VistaUtils* mUtils) 
 /*
  * Cambia la posicion de la capa ajustandola a la posicion del escenario
  */
-void CapaInfoPractice::update(float porcVida1,float porcVida2,Tinput input,string timer) {
+void CapaInfoPractice::update(Tinput input,TInfoExtra infoExtra) {
 
     if (!buffer.empty()) {
         if (SDL_GetTicks()-buffer.front().tiempoInicial >= tiempoMax || buffer.size() >= tamBuffer) {

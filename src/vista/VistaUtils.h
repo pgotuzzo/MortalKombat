@@ -38,6 +38,7 @@ public:
 
     Ttexture loadTexture(std::string path);
     Ttexture createTextureFromText(string fontPath, string string, int size);
+    void copyInTextureFromText(string fontPath, string text, int size,Ttexture *texture);
 
     void copyTexture(SDL_Texture* src, SDL_Texture* dst);
     void copyTexture(SDL_Texture* src, SDL_Texture* dst, bool flip);
