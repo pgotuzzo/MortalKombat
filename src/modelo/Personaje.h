@@ -78,9 +78,8 @@ public:
 
 	void verificarDebuff();
 
-	Tresultado getResultado();
 
-	void setResultado(Tresultado resultado);
+	void verificarEstadoFatality();
 };
 
 #endif /* PERSONAJE_H_ */

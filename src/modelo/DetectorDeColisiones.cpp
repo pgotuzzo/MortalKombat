@@ -247,6 +247,11 @@ void DetectorDeColisiones::colisionar(Personaje *PJ, Poder *poder) {
     if((distanciaPJPoder < velocidadDelPoder && detectarColisionenY(PJ,poder)) && !poder->primerLoop){
         poder->avanzar(distanciaPJPoder);
         poder->estado = COLISION;
-        PJ->reducirVida(poder->danio,poder->efecto);
+        //Hago esto para que cuando lanzo el poder en la fatality no lo mate y haga todos los sprites de rea_fat
+        if(PJ->estadoActual == REA_MAREADO){
+            PJ->reducirVida(0,poder->efecto);
+        }else{
+            PJ->reducirVida(poder->danio,poder->efecto);
+        }
     }
 }

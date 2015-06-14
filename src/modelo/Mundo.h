@@ -37,11 +37,15 @@ public:
 
 	Tcambio actualizarPJ(Personaje* PJ);
 
-	bool huboGanador();
-
 	string quienGano();
 
-	void validarAlGanador();
+	void verificarGanadorCuandoSeAcabaElTiempo();
+
+	void terminoLaPelea();
+
+	void verificarSiTerminoElRound();
+
+	bool huboGanador();
 };
 
 #endif /* SRC_MODELO_MUNDO_H_ */

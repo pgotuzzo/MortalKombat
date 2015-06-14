@@ -159,33 +159,42 @@ Trect Accionador::laAccion(TestadoPersonaje estadoPj, int loops, Posicion pos, T
             break;
         case REA_DERROTA:
             if(loops == 1) if(rectaDelPj.p.y != ydelPiso-rectaDelPj.d.h) ajustarPiso();
-            if(loops == 15){
+            if(loops == 14){
                 rectaDelPj.p = posInicial;
-                resultado = PERDIO;
             }
             break;
         case REA_VICTORIA:
             if(loops == 1) if(rectaDelPj.p.y != ydelPiso-rectaDelPj.d.h) ajustarPiso();
-            if(loops == 15){
+            if(loops == 14){
                 rectaDelPj.p = posInicial;
-                resultado = GANO;
             }
             break;
         case FAT_FUEGO:
             if(loops== 19) {
                 activarPoder(direccion,0);
-                resultado = GANO_MATCH;
             }
             break;
         case REA_FAT_FUEGO:
-            if(loops == 29) resultado = PERDIO_MATCH;
             break;
         case REA_MAREADO:
             if( loops == 1){
-                if(direccion == DERECHA) rectaDelPj.p = rectaDelPj.p + Posicion(-6,0);
-                else rectaDelPj.p = rectaDelPj.p + Posicion(6,0);
+                if(direccion == DERECHA) rectaDelPj.p = rectaDelPj.p + Posicion(-10,0);
+                else rectaDelPj.p = rectaDelPj.p + Posicion(10,0);
             }
-            if(loops == 199) resultado = PERDIO_MATCH;
+            break;
+        case REA_FAT_ARCADE:
+            rectaDelPj.p.y += 7;
+            rectaDelPj.d.h -= 7;
+            if(loops==30){
+                ponerseDePie();
+            }
+            break;
+        case FAT_ARCADE:
+            if(loops <=12){
+                rectaDelPj.p = rectaDelPj.p + Posicion(0,-7);
+            }else if(loops > 13){
+                rectaDelPj.p = rectaDelPj.p + Posicion(0,7);
+            }
             break;
     }
     return rectaDelPj;

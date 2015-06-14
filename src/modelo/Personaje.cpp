@@ -61,6 +61,11 @@ void Personaje::crearCombosdelPersonaje(Tcombos combos) {
 
 
 void Personaje::realizarAccion(Tinput orden) {
+
+	if((estadoActual != REA_FAT_FUEGO && estadoAnterior == REA_FAT_FUEGO)||
+	   (estadoActual != REA_FAT_ARCADE && estadoAnterior == REA_FAT_ARCADE)) vida--;
+
+	verificarEstadoFatality();
 	TestadoPersonaje estadoCompuesto = generarEstado(orden);
 	verificarDebuff();
 
@@ -96,7 +101,9 @@ void Personaje::realizarAccion(Tinput orden) {
 	comboFatality->actualizar(orden);
 	if(comboFatality->puedoRealizarCombo() && estadoFatality){
 		estadoAnterior = MOV_PARADO;
-		estadoActual = FAT_FUEGO;
+		if(nombre.compare("liukang") == 0) estadoActual = FAT_ARCADE;
+		if(nombre.compare("subzero") == 0) estadoActual = FAT_FUEGO;
+		if(nombre.compare("ermac") == 0) estadoActual = FAT_FUEGO;
 	}
 
 	posicionAnterior = rectanguloPj.p;
@@ -380,11 +387,10 @@ bool Personaje::realizarsegundaPinia() {
 }
 
 void Personaje::reinicializar(TestadoPersonaje nuevoEstado) {
-	vida = vidaInicial;
+//	vida = vidaInicial;
 	countLoops = 0;
 	estadoAnterior = estadoActual;
 	estadoActual = nuevoEstado;
-
 }
 
 void Personaje::verificarDebuff() {
@@ -398,9 +404,13 @@ void Personaje::verificarDebuff() {
 	}
 }
 
-Tresultado Personaje::getResultado(){
-	return llevarACabo.resultado;
-}
-void Personaje::setResultado(Tresultado resultado){
-	llevarACabo.resultado = resultado;
+void Personaje::verificarEstadoFatality() {
+	if(estadoFatality){
+		if((estadoActual!= FAT_FUEGO && estadoAnterior == FAT_FUEGO)||
+				estadoActual!= FAT_ARCADE && estadoAnterior == FAT_ARCADE){
+			if(llevarACabo.resultado == GANO){
+				estadoFatality = false;
+			}
+		}
+	}
 }

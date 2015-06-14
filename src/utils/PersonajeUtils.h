@@ -10,7 +10,7 @@
 
 static const string PODER_ACTIVADO_PATH = "pod_poder";
 static const string PODER_COLISION_PATH = "pod_colision";
-static const int TestadoPersonajeCount = 40;
+static const int TestadoPersonajeCount = 42;
 
 enum class EtipoPersonaje {
     SUBZERO,
@@ -75,7 +75,7 @@ enum TestadoPersonaje {
     ACC_PODER_SALTO,
 
     // Reaccion
-            REA_AGACHADO,
+    REA_AGACHADO,
     REA_GOLPE_ALTO, // patada alta y pinia en salto
     REA_GOLPE_BAJO,
     REA_GOLPE_FUERTE, // gancho y patada alta (+ atras)
@@ -90,13 +90,12 @@ enum TestadoPersonaje {
     REA_MAREADO,
 
     REA_FAT_FUEGO,
+    REA_FAT_LEVANTA,
+    REA_FAT_ARCADE,
 
     FAT_FUEGO,
-
-    REA_FAT_LEVANTA,
-
-    FAT_LEVANTA
-
+    FAT_LEVANTA,
+    FAT_ARCADE
 
 };
 
@@ -148,6 +147,9 @@ static string TestadoPersonajeToString(TestadoPersonaje e){
         case TestadoPersonaje::REA_FAT_LEVANTA: return"rea_fat_levanta";
         case TestadoPersonaje::FAT_LEVANTA: return"fat_levanta";
 
+        case TestadoPersonaje::REA_FAT_ARCADE: return"rea_fat_arcade";
+        case TestadoPersonaje::FAT_ARCADE: return"fat_arcade";
+
 
 
 
@@ -175,9 +177,8 @@ struct TcambioPoder{
 enum Tresultado{
     NADA,
     GANO,
-    GANO_MATCH,
     PERDIO,
-    PERDIO_MATCH
+    EMPATO,
 };
 static int mostrarResultado(Tresultado resultado){
     switch (resultado) {
@@ -185,11 +186,7 @@ static int mostrarResultado(Tresultado resultado){
                     break;
         case (GANO):cout<<"GANO"<<endl;
                     break;
-        case (GANO_MATCH):cout<<"GANO_MATCH"<<endl;
-                    break;
         case (PERDIO):cout<<"PERDIO"<<endl;
-                    break;
-        case (PERDIO_MATCH):cout<<"PERDIO_MATCH"<<endl;
                     break;
     }
 }
@@ -234,13 +231,16 @@ static int loopsPara(TestadoPersonaje accion){
         case REA_MALDITO:return 6;
         case REA_DERROTA:return 15;
         case REA_VICTORIA:return 15;
-        case REA_MAREADO:return 200;
+        case REA_MAREADO:return 1000;
 
         case REA_FAT_FUEGO: return 30;
         case FAT_FUEGO: return 20;
 
         case REA_FAT_LEVANTA: return 24;
         case FAT_LEVANTA: return 24;
+
+        case REA_FAT_ARCADE: return 30;
+        case FAT_ARCADE: return 25;
     }
 }
 

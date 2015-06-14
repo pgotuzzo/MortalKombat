@@ -123,7 +123,7 @@ vector<Tcambio> Mundo::actualizarMundo(vector<Tinput> inputs,EgameState modoDeJu
 	Tcambio cambio1, cambio2;
 
 	verificarGanadorDelRound();
-	validarAlGanador();
+	terminoLaPelea();
 	Uint32 tiempo = SDL_GetTicks();
 	//cout<<tiempoInicial<<"----"<<tiempo<<endl;d
 	if(SDL_TICKS_PASSED(tiempo, tiempoInicial + 1000)) {
@@ -159,6 +159,15 @@ vector<Tcambio> Mundo::actualizarMundo(vector<Tinput> inputs,EgameState modoDeJu
 	// COLISIONES
 	colisionador.resolverColisiones(personaje1,personaje2);
 	//Se actualizan a los personajes
+	if(personaje1->estadoActual == FAT_ARCADE && personaje1->countLoops == 13){
+		personaje1->llevarACabo.rectaDelPj.p.x = personaje2->llevarACabo.rectaDelPj.p.x;
+		personaje2->estadoActual = REA_FAT_ARCADE;
+		personaje2->countLoops = 0;
+	}
+	if(personaje2->estadoActual == FAT_ARCADE && personaje2->countLoops == 13) {
+		personaje1->llevarACabo.rectaDelPj.p.x = personaje1->rectanguloPj.p.y;
+	}
+
 	cambio1 = actualizarPJ(personaje1);
 	cambio2 = actualizarPJ(personaje2);
 
@@ -167,129 +176,139 @@ vector<Tcambio> Mundo::actualizarMundo(vector<Tinput> inputs,EgameState modoDeJu
 	return c;
 }
 
-bool Mundo::huboGanador() {
-	return ((personaje1->getResultado() == PERDIO_MATCH) &&  (personaje2->getResultado() == GANO_MATCH)||
-			((personaje2->getResultado() == PERDIO_MATCH) &&  (personaje1->getResultado() == GANO_MATCH)));
+
+void Mundo::verificarGanadorCuandoSeAcabaElTiempo() {
+	if (personaje1->vida > personaje2->vida) {
+		if (roundsPJ1 == 1) {
+			personaje2->reinicializar(REA_MAREADO);
+			personaje2->vida = 1;
+			tiempoRound = 20;
+		} else {
+			personaje1->reinicializar(REA_VICTORIA);
+			personaje2->reinicializar(REA_DERROTA);
+			personaje2->vida = 100;
+			personaje2->vida = 100;
+			tiempoRound = 100;
+		}
+		roundsPJ1++;
+	} else if (personaje2->vida > personaje1->vida) {
+		if (roundsPJ2 == 1) {
+			personaje1->reinicializar(REA_MAREADO);
+			personaje1->vida = 1;
+			tiempoRound = 20;
+		} else {
+			personaje2->reinicializar(REA_VICTORIA);
+			personaje1->reinicializar(REA_DERROTA);
+			personaje2->vida = 100;
+			personaje2->vida = 100;
+			tiempoRound = 100;
+		}
+		roundsPJ2++;
+	} else {
+		if (roundsPJ2 == 1 && roundsPJ1 == 0) {
+			personaje1->estadoActual = REA_MAREADO;
+			tiempoRound = 20;
+		} else if (roundsPJ1 == 1 && roundsPJ2 == 0) {
+			personaje2->estadoActual = REA_MAREADO;
+			tiempoRound = 20;
+		} else if (roundsPJ1 == 1 && roundsPJ2 == 1) {
+			personaje1->estadoActual = REA_MAREADO;
+			personaje2->estadoActual = REA_MAREADO;
+			tiempoRound = 10;
+		} else if (roundsPJ1 == 0 && roundsPJ2 == 0) {
+			personaje1->estadoActual = REA_VICTORIA;
+			personaje2->estadoActual = REA_VICTORIA;
+			tiempoRound = 100;
+		}
+		roundsPJ1++;
+		roundsPJ2++;
+	}
 }
+
+void Mundo::verificarSiTerminoElRound() {
+	if (personaje1->vida == 0) {
+		if(roundsPJ2 == 1) {
+			personaje1->reinicializar(REA_MAREADO);
+			personaje1->vida = 1;
+			roundsPJ2++;
+			tiempoRound = 20;
+		}
+		else{
+			personaje1->reinicializar(REA_DERROTA);
+			personaje2->reinicializar(REA_VICTORIA);
+			roundsPJ2++;
+			personaje1->vida = 100;
+			personaje2->vida = 100;
+			tiempoRound = 100;
+			cout<<"1"<<endl;
+		}
+
+	}else if(personaje2->vida == 0) {
+		if (roundsPJ1 == 1) {
+			personaje2->reinicializar(REA_MAREADO);
+			personaje2->vida = 1;
+			roundsPJ1++;
+			tiempoRound = 20;
+		}
+		else {
+			personaje1->reinicializar(REA_VICTORIA);
+			personaje2->reinicializar(REA_DERROTA);
+			roundsPJ1++;
+			personaje1->vida = 100;
+			personaje2->vida = 100;
+			tiempoRound = 100;
+			cout<<"2"<<endl;
+		}
+	}
+}
+
+void Mundo::verificarGanadorDelRound() {
+	// Si el tiempo se termino me fijo quien tiene mas vida -------------------------
+	if(tiempoRound == 0) {
+		verificarGanadorCuandoSeAcabaElTiempo();
+	} else if(!personaje1->estadoFatality || !personaje2->estadoFatality){
+		verificarSiTerminoElRound();
+		}
+}
+
+void Mundo::terminoLaPelea(){
+	if(roundsPJ1 == 2 && !personaje1->estadoFatality && roundsPJ2 <=1) {
+		personaje1->llevarACabo.resultado = GANO;
+		personaje2->llevarACabo.resultado = PERDIO;
+	}else if((roundsPJ1 == 2 && !personaje1->estadoFatality && roundsPJ2 <=1)){
+		personaje1->llevarACabo.resultado = PERDIO;
+		personaje2->llevarACabo.resultado = GANO;
+	}else if((roundsPJ1 == 2) &&(roundsPJ2 == 2)){
+		personaje1->llevarACabo.resultado = EMPATO;
+		personaje2->llevarACabo.resultado = EMPATO;
+	}else if(personaje1->estadoActual != REA_MAREADO && personaje1->estadoAnterior == REA_MAREADO){
+		personaje1->llevarACabo.resultado = PERDIO;
+		personaje2->llevarACabo.resultado = GANO;
+	}else if(personaje2->estadoActual != REA_MAREADO && personaje2->estadoAnterior == REA_MAREADO){
+		personaje1->llevarACabo.resultado = GANO;
+		personaje2->llevarACabo.resultado = PERDIO;
+	}
+}
+
+bool Mundo::huboGanador(){
+	if((personaje1->llevarACabo.resultado == GANO)&&
+	    personaje1->estadoActual != REA_VICTORIA && personaje1->estadoAnterior == REA_VICTORIA){
+		return true;
+	}else if((personaje2->llevarACabo.resultado == GANO)&&
+			  personaje2->estadoActual != REA_VICTORIA && personaje2->estadoAnterior == REA_VICTORIA){
+		return true;
+	}
+	return false;
+}
+
+string Mundo::quienGano() {
+	if(personaje1->llevarACabo.resultado == GANO) return personaje1->nombre;
+	if(personaje2->llevarACabo.resultado == GANO) return personaje2->nombre;
+}
+
 
 Mundo::~Mundo() {
 	delete personaje1;
 	delete personaje2;
 	loguer->loguear("Se libero a los personajes", Log::LOG_DEB);
 }
-
-void Mundo::verificarGanadorDelRound() {
-	string mensaje;
-	mensaje = "Ganador Round N°" + to_string(roundsPJ1 + roundsPJ2) + ": ";
-	// Si el tiempo se termino me fijo quien tiene mas vida -------------------------
-	if(tiempoRound == 0) {
-		if (personaje1->vida > personaje2->vida ) {
-			mensaje = mensaje + personaje1->nombre + " ---> Personaje 1";
-			loguer->loguear(mensaje.c_str(), Log::LOG_DEB);
-			if(roundsPJ1 == 1) {
-				personaje2->reinicializar(REA_MAREADO);
-			}else {
-				personaje1->reinicializar(REA_VICTORIA);
-				personaje2->reinicializar(REA_DERROTA);
-			}
-			tiempoRound = tiempoInicialRound;
-		}else if(personaje2->vida > personaje1->vida ){
-			mensaje = mensaje + personaje2->nombre + " ---> Personaje 2";
-			loguer->loguear(mensaje.c_str(), Log::LOG_DEB);
-			if(roundsPJ2 == 1) {
-				personaje1->reinicializar(REA_MAREADO);
-			}else{
-				personaje2->reinicializar(REA_VICTORIA);
-				personaje1->reinicializar(REA_DERROTA);
-			}
-			tiempoRound = tiempoInicialRound;
-		}else{
-			loguer->loguear("EMPATARONNNN", Log::LOG_DEB);
-			personaje1->reinicializar(REA_VICTORIA);
-			personaje2->reinicializar(REA_VICTORIA);
-			tiempoRound = tiempoInicialRound;
-		};
-	}
-	//-------------------------------------------------------
-	else{
-		if (personaje1->vida <= 0) {
-			mensaje = mensaje + personaje2->nombre + " ---> Personaje 2";
-			loguer->loguear(mensaje.c_str(), Log::LOG_DEB);
-			if(roundsPJ2 == 1) {
-				personaje1->reinicializar(REA_MAREADO);
-			}
-			else{
-				personaje1->reinicializar(REA_DERROTA);
-				personaje2->reinicializar(REA_VICTORIA);
-			}
-			tiempoRound = tiempoInicialRound;
-
-		}else if(personaje2->vida <= 0){
-			mensaje = mensaje + personaje2->nombre + " ---> Personaje 1";
-			loguer->loguear(mensaje.c_str(), Log::LOG_DEB);
-			if(roundsPJ1 == 1){
-				personaje2->reinicializar(REA_MAREADO);
-			}
-			else{
-				personaje1->reinicializar(REA_VICTORIA);
-				personaje2->reinicializar(REA_DERROTA);
-			}
-			tiempoRound = tiempoInicialRound;
-		}
-	}
-}
-
-
-
-void Mundo::validarAlGanador() {
-	if (personaje1->getResultado() == PERDIO) {
-		roundsPJ2++;
-		if(roundsPJ2 == 2 || roundsPJ1 == 2){
-			if(roundsPJ2 == 2){
-				personaje1->setResultado(PERDIO_MATCH);
-				personaje2->setResultado(GANO_MATCH);
-			}else{
-				personaje1->setResultado(GANO_MATCH);
-				personaje2->setResultado(PERDIO_MATCH);
-			}
-		}else{
-			personaje1->setResultado(NADA);
-			personaje2->setResultado(NADA);
-		}
-		tiempoRound = tiempoInicialRound;
-	} else if (personaje2->getResultado() == PERDIO) {
-		roundsPJ1++;
-		if(roundsPJ2 == 2 || roundsPJ1 == 2){
-			if(roundsPJ2 == 2){
-				personaje1->setResultado(PERDIO_MATCH);
-				personaje2->setResultado(GANO_MATCH);
-			}else{
-				personaje1->setResultado(GANO_MATCH);
-				personaje2->setResultado(PERDIO_MATCH);
-			}
-		}else{
-			personaje1->setResultado(NADA);
-			personaje2->setResultado(NADA);
-		}
-		tiempoRound = tiempoInicialRound;
-	}
-}
-
-
-string Mundo::quienGano(){
-	if(personaje1->getResultado() == GANO_MATCH) {
-		roundsPJ1 = 0;
-		roundsPJ2 = 0;
-		personaje1->setResultado(NADA);
-		personaje2->setResultado(NADA);
-		return personaje1->nombre;
-	}
-	if(personaje2->getResultado() == GANO_MATCH) {
-		roundsPJ1 = 0;
-		roundsPJ2 = 0;
-		personaje1->setResultado(NADA);
-		personaje2->setResultado(NADA);
-		return personaje2->nombre;
-	}
-}
-
