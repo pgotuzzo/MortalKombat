@@ -88,6 +88,7 @@ void config::setValores(Value partes){
 
 	if ( ! partes["fatalities"].isNull() ) {
 		obtiene(partes,"fatalities","fatal",Tparte::FATALITIE1,99,Tdato::STRING);
+		obtiene(partes,"fatalities","fatal2",Tparte::FATALITIE2,99,Tdato::STRING);
 
 	}else
 		fatalitiesDefecto();
@@ -101,6 +102,12 @@ void config::setValores(Value partes){
 	}else
 		globalDefecto();
 	cargaExitosa( "variables globales" );
+
+	if(tiempoCombo <= 0)
+		tiempoCombo = 10;
+
+	if(errorCombo < 0)
+		errorCombo = 10;
 
 	setPersonajeX(partes);
 
@@ -326,6 +333,9 @@ void config::original(Tparte tipoParte,Value partes){
 		case FATALITIE1: {
 			fata1.combo= partes["fatalities"].get("fatal","iddi").asString();
 			fata1.nombre="fatal1";break;}
+		case FATALITIE2:{
+			fata2.combo= partes["fatalities"].get("fatal2","ccdf").asString();
+			fata2.nombre="fatal2";break;}
 		case GLOBALE:errorCombo=partes["global"].get("errores",10).asInt();break;
 		case GLOBALT:tiempoCombo=partes["global"].get("tiempo",10).asInt();;break;
 
@@ -357,6 +367,9 @@ void config::defecto(Tparte tipoParte,int defecto){
 		case FATALITIE1:
 			fata1.nombre="fatal1";
 			fata1.combo="iddi";;break;
+		case FATALITIE2:
+			fata2.nombre="fatal2";
+			fata2.combo="ccdf";;break;
 		case GLOBALE:errorCombo=5;break;
 		case GLOBALT:tiempoCombo=10;break;
 	}
@@ -479,6 +492,8 @@ void config::fatalitiesDefecto() {
 	loguer->loguear(mensajeError.c_str(), Log::Tlog::LOG_WAR);
 	fata1.nombre="fatal1";
 	fata1.combo="iddi";
+	fata2.nombre="fatal2";
+	fata2.combo="ccdf";
 
 }
 
@@ -627,8 +642,8 @@ void config::validaCombos(){
 	vector<Tcombo> vectC;
 	std::transform(combo1.combo.begin(), combo1.combo.end(), combo1.combo.begin(), ::tolower);
 	std::transform(fata1.combo.begin(), fata1.combo.end(), fata1.combo.begin(), ::tolower);
-
-	vectC.push_back(combo1);vectC.push_back(fata1);
+	std::transform(fata2.combo.begin(), fata2.combo.end(), fata2.combo.begin(), ::tolower);
+	vectC.push_back(combo1);vectC.push_back(fata1);vectC.push_back(fata2);
 
 	bool letrasCorrectas = true;
 
@@ -647,10 +662,16 @@ void config::validaCombos(){
 
 	if ( letrasCorrectas ){
 
-		bool parecido4 = combo1.combo.find(fata1.combo) != string::npos;
-		bool parecido5 = fata1.combo.find(combo1.combo) != string::npos;
+		bool parecido1 = combo1.combo.find(fata1.combo) != string::npos;
+		bool parecido2 = combo1.combo.find(fata2.combo) != string::npos;
 
-		if(  parecido4 || parecido5  ){
+		bool parecido3 = fata1.combo.find(combo1.combo) != string::npos;
+		bool parecido4 = fata1.combo.find(fata2.combo) != string::npos;
+
+		bool parecido5 = fata2.combo.find(combo1.combo) != string::npos;
+		bool parecido6 = fata2.combo.find(fata1.combo) != string::npos;
+
+		if(  parecido1 || parecido2 || parecido3 || parecido4 || parecido5 || parecido6 ){
 			letrasCorrectas = false;
 		}
 	}
@@ -862,6 +883,7 @@ Tcombos config::getCombos(){
 	Tcombos combos;
 	combos.poder = letrasAinput(combo1.combo);
 	combos.fatality = letrasAinput(fata1.combo);
+	combos.fatality2 = letrasAinput(fata2.combo);
 	combos.errores = errorCombo;
 	combos.tiempo = tiempoCombo;
 	return  combos;

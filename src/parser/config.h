@@ -41,6 +41,7 @@ public:
 				COMBOP,
 		COMBOA,
 		FATALITIE1,
+		FATALITIE2,
 		GLOBALE,
 		GLOBALT,
 	};
@@ -72,6 +73,7 @@ private:
 	Tcapa capa;
 	Tcombo combo1;
 	Tcombo fata1;
+	Tcombo fata2;
 	int tiempoCombo;
 	int errorCombo;
 	vector<Tcapa> vectorCapas;

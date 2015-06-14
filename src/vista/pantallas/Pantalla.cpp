@@ -41,6 +41,9 @@ void Pantalla::initialize(vector<Tcapa> capas, string personajes[2]){}
 vector<Trect> Pantalla::getCuadradoModos() {
     return std::vector<Trect>();
 }
+vector<Trect> Pantalla::getCuadradoPlayers(){
+    return std::vector<Trect>();
+}
 
 Pantalla::~Pantalla(){
     loguer->loguear("Destruccion de la pantalla", Log::LOG_DEB);

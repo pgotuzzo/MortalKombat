@@ -387,6 +387,7 @@ struct Tinput{
 struct Tcombos{
     vector<Tinput> poder;
     vector<Tinput> fatality;
+    vector<Tinput> fatality2;
     int tiempo;
     int errores;
 };

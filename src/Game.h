@@ -6,7 +6,6 @@
 #include "vista/pantallas/Pantalla.h"
 #include "modelo/menu/MenuGameMode.h"
 #include "utils/GameUtils.h"
-#include "modelo/menu/MenuPlayers.h"
 #include "modelo/menu/MenuPlayerSelection.h"
 
 #include "Musica.h"
@@ -24,6 +23,7 @@ private:
     MenuGameMode* mMenuGameMode;
     MenuPlayerSelection* mMenuPlayers;
 
+    bool dentroDelCuadroDePjs(Posicion coordenadasMouse,vector<Trect> cuadroPlayers);
 
 
     // metodos privados
@@ -31,7 +31,7 @@ private:
     void initialize();
 
     EgameResult selectMode(Tinput input,Posicion coordenadasMouse);
-    EgameResult selectPlayers(vector<Tinput> inputs);
+    EgameResult selectPlayers(vector<Tinput> inputs,Posicion coordenadasMouse,bool seleccionOponenteAleatorio);
 
     EgameResult fight(vector<Tinput> inputs);
 

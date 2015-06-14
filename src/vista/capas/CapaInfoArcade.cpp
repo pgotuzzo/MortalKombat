@@ -118,6 +118,8 @@ void CapaInfoArcade::update(float porcVida1,float porcVida2,Tinput input,string 
     barraVidaParcialPedazo2.p.x = barraVidaCompleta1.d.w - barraVidaParcialPedazo2.d.w;
     barraVidaParcialPantalla2.p.x = anchoPantalla - barraVidaParcialPedazo2.d.w - distBorde;
 
+
+    // TODO: ESTO PIERDE MEMORIA
     SDL_DestroyTexture(mTimer.t);
     mTimer = mUtils->createTextureFromText(FONT_PATH, timer, FONT_SIZE_FOR_TIMER);
 }

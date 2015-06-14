@@ -17,19 +17,5 @@ TinputGame ControladorMouse::moverMouse(SDL_Event event) {
     }
 }
 
-bool ControladorMouse::dentroDeRectangulo(Trect rectangulo) {
-    float x = posicionMouse.getX();
-    float y = posicionMouse.getY();
-
-    float xRect = rectangulo.p.x;
-    float yRect = rectangulo.p.y;
-    float ancho = rectangulo.d.w;
-    float alto = rectangulo.d.h;
-
-    if (x < (xRect + ancho)) {
-        return x > xRect && y > yRect && y < (yRect + alto);
-    }
-    else {
-        return false;
-    }
 }
+

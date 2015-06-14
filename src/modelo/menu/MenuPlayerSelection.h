@@ -23,13 +23,15 @@ private:
      */
 
     Posicion mSelection[2];
-    bool mSelectionConfirmed[2];
+    bool seleccionandoConMouse[2];
 
     void updateSelection(TinputMovimiento movimiento, int jugador);
 
 public:
     MenuPlayerSelection();
     EtipoPersonaje getType(Posicion p);
+
+    bool mSelectionConfirmed[2];
 
     Musica* movimientoSelec;
     Musica* seleccion;
@@ -39,6 +41,16 @@ public:
     EtipoPersonaje personajesElegidos[2];
 
     vector<Posicion> update(vector<Tinput> inputs);
+    vector<Posicion> update(vector<Tinput> inputs,Posicion coordenadasMouse,vector<Trect> players);
+
+    vector<Posicion> updateConAleatorio(vector<Tinput> inputs);
+    vector<Posicion> updateConAleatorio(vector<Tinput> inputs,Posicion coordenadasMouse,vector<Trect> players);
+
+
+    void actualizarSeleccion(Posicion coordenadasMouse,vector<Trect> players,int jugador);
+
+    bool dentroDeUnPlayer(Posicion posMouse,Trect player,int jugador);
+
     bool selectionComplete();
 
 

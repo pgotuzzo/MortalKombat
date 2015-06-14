@@ -13,6 +13,7 @@ private:
 
 public:
     PantallaMenuPlayers(Tdimension dimPixels, Tdimension dimUl);
+    vector<Trect> getCuadradoPlayers();
     void update(vector<Posicion> players);
     void print();
 

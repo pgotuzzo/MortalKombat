@@ -13,8 +13,6 @@ public:
 
     TinputGame moverMouse(SDL_Event event);
 
-    bool dentroDeRectangulo(Trect rectangulo);
-
 
 
 

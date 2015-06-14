@@ -158,10 +158,9 @@ void Game::initialize() {
 void Game::play(vector<Tinput> inputs, Posicion coordenadasMouse) {
     clock_t t1, t2, deltaT;
     t1 = clock();
-
     switch (mState){
         case EgameState::MENU_MODE:{
-            if ( selectMode(inputs.front(),coordenadasMouse) == EgameResult::END ) {
+            if ( selectMode(inputs[0],coordenadasMouse) == EgameResult::END ) {
                 switch (mModeSelection){
                     case EmodeSelection::MULTIPLAYER: {
                         mState = EgameState::MENU_PLAYERS;
@@ -186,11 +185,37 @@ void Game::play(vector<Tinput> inputs, Posicion coordenadasMouse) {
             break;
         };
         case EgameState::MENU_PLAYERS:{
-            if ( selectPlayers(inputs) == EgameResult::END) {
+            switch(modoDeJuegoElegido){
+                case EmodeSelection::MULTIPLAYER:
+                    if ( selectPlayers(inputs,coordenadasMouse,false) == EgameResult::END) {
+                        mState = EgameState::MODE_MULTIPLAYER;
+                        musicaDelJuego->pararMusica();
+                        musicaDelJuego->musicVs();
+                        initialize();
+                    }
+                    break;
+                case EmodeSelection::ARCADE:
+                    if ( selectPlayers(inputs,coordenadasMouse,true) == EgameResult::END) {
+                        mState = EgameState::MODE_ARCADE;
+                        musicaDelJuego->pararMusica();
+                        musicaDelJuego->musicVs();
+                        initialize();
+                    }
+                    break;
+                case EmodeSelection::PRACTICE:
+                    if ( selectPlayers(inputs,coordenadasMouse,true) == EgameResult::END) {
+                        mState = EgameState::MODE_PRACTICE;
+                        musicaDelJuego->pararMusica();
+                        musicaDelJuego->musicPractica();
+                        initialize();
+                    }
+                    break;
+            }
+            break;
+            /*if ( selectPlayers(inputs,coordenadasMouse) == EgameResult::END) {
                 switch (modoDeJuegoElegido){
                     case EmodeSelection::MULTIPLAYER: {
                         mState = EgameState::MODE_MULTIPLAYER;
-                        modoDeJuegoElegido = EmodeSelection::MULTIPLAYER;
                         musicaDelJuego->pararMusica();
                         musicaDelJuego->musicVs();
                         initialize();
@@ -199,7 +224,6 @@ void Game::play(vector<Tinput> inputs, Posicion coordenadasMouse) {
                     };
                     case EmodeSelection::ARCADE: {
                         mState = EgameState::MODE_ARCADE;
-                        modoDeJuegoElegido = EmodeSelection::ARCADE;
                         musicaDelJuego->pararMusica();
                         musicaDelJuego->musicVs();
                         initialize();
@@ -207,7 +231,6 @@ void Game::play(vector<Tinput> inputs, Posicion coordenadasMouse) {
                     };
                     case EmodeSelection::PRACTICE: {
                         mState = EgameState::MODE_PRACTICE;
-                        modoDeJuegoElegido = EmodeSelection::PRACTICE;
                         musicaDelJuego->pararMusica();
                         musicaDelJuego->musicPractica();
                         initialize();
@@ -215,7 +238,7 @@ void Game::play(vector<Tinput> inputs, Posicion coordenadasMouse) {
                     };
                 }
             }
-            break;
+            break;*/
         };
         case EgameState::MODE_ARCADE:
         case EgameState::MODE_MULTIPLAYER:
@@ -254,7 +277,10 @@ EgameResult Game::selectMode(Tinput input,Posicion coordenadasMouse) {
     coordenadasMouse.x = coordenadasMouse.x / escalas[0];
     coordenadasMouse.y = coordenadasMouse.y / escalas[1];
 
-    EmodeSelection selection = mMenuGameMode->update(input,coordenadasMouse,mPantalla->getCuadradoModos());
+    EmodeSelection selection;
+    if(coordenadasMouse.x > 2 && coordenadasMouse.x < mConfiguration->getVentana().ancho-2) {
+        selection = mMenuGameMode->update(input, coordenadasMouse, mPantalla->getCuadradoModos());
+    }
     selection = mMenuGameMode->update(input);
     mPantalla->update(selection);
     mPantalla->print();
@@ -267,8 +293,26 @@ EgameResult Game::selectMode(Tinput input,Posicion coordenadasMouse) {
     return EgameResult::CONTINUE;
 }
 
-EgameResult Game::selectPlayers(vector<Tinput> inputs) {
-    vector<Posicion> players = mMenuPlayers->update(inputs);
+EgameResult Game::selectPlayers(vector<Tinput> inputs,Posicion coordenadasMouse,bool seleccionOponenteAleatorio) {
+    vector<float> escalas = mPantalla->getEscalas();
+
+    coordenadasMouse.x = coordenadasMouse.x / escalas[0];
+    coordenadasMouse.y = coordenadasMouse.y / escalas[1];
+
+    vector<Posicion> players;
+
+    if(!seleccionOponenteAleatorio) {
+        if (dentroDelCuadroDePjs(coordenadasMouse, mPantalla->getCuadradoPlayers())) {
+            players = mMenuPlayers->update(inputs, coordenadasMouse, mPantalla->getCuadradoPlayers());
+        }
+        players = mMenuPlayers->update(inputs);
+    }
+    else{
+        if (dentroDelCuadroDePjs(coordenadasMouse, mPantalla->getCuadradoPlayers())) {
+            players = mMenuPlayers->updateConAleatorio(inputs, coordenadasMouse, mPantalla->getCuadradoPlayers());
+        }
+        players = mMenuPlayers->updateConAleatorio(inputs);
+    }
     mPantalla->update(players);
     mPantalla->print();
 
@@ -277,6 +321,7 @@ EgameResult Game::selectPlayers(vector<Tinput> inputs) {
         personajesElegidos[1] = mMenuPlayers->personajesElegidos[1];
         return EgameResult::END;
     }
+
     return EgameResult::CONTINUE;
 }
 
@@ -366,4 +411,13 @@ void Game::setInformacionPersonajesElegidos(int jugador) {
             rutaSprites[jugador] = "./resources/sprites/liukang";
             break;
     }
+}
+
+bool Game::dentroDelCuadroDePjs(Posicion coordenadasMouse,vector<Trect> cuadroPlayers) {
+    if(coordenadasMouse.x > cuadroPlayers[0].p.x && coordenadasMouse.x < (cuadroPlayers[3].p.x + cuadroPlayers[3].d.w) ){
+        if(coordenadasMouse.y > cuadroPlayers[0].p.y && coordenadasMouse.y < (cuadroPlayers[11].p.y + cuadroPlayers[11].d.h)){
+            return true;
+        }
+    }
+    return false;
 }

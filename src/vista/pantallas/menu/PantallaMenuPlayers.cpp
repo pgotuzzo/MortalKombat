@@ -51,3 +51,18 @@ PantallaMenuPlayers::~PantallaMenuPlayers() {
     SDL_DestroyTexture(mTextSelector[0].t);
     SDL_DestroyTexture(mTextSelector[1].t);
 }
+
+vector<Trect> PantallaMenuPlayers::getCuadradoPlayers() {
+    vector<Trect> players;
+    for(int i = 0;i<3;i++){
+        for(int j = 0;j<4;j++){
+            Trect player;
+            player.d.w = mTextBackground.d.w * RELATIVE_WIDTH;
+            player.d.h = mTextBackground.d.h * RELATIVE_HEIGHT;
+            player.p.x = mRectSelector[0].d.w * j + mTextBackground.d.w * RELATIVE_HORIZONTAL_BOUND;
+            player.p.y = mRectSelector[0].d.h * i + mTextBackground.d.h * RELATIVE_VERTICAL_BOUND;
+            players.push_back(player);
+        }
+    }
+    return players;
+}

@@ -43,8 +43,6 @@ set(SOURCE_FILES
     src/modelo/InteligenciaArtificial.h
     src/modelo/menu/MenuGameMode.h
     src/modelo/menu/MenuGameMode.cpp
-    src/modelo/menu/MenuPlayers.cpp
-    src/modelo/menu/MenuPlayers.h
     src/modelo/menu/MenuPlayerSelection.cpp
     src/modelo/menu/MenuPlayerSelection.h
     src/modelo/Mundo.h

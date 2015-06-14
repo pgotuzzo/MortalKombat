@@ -38,6 +38,12 @@ public:
     virtual vector<Trect> getCuadradoModos();
 
     /**
+     * GET CUADRADO DE LOS PERSONAJES A ELEGIR
+     */
+
+    virtual vector<Trect> getCuadradoPlayers();
+
+    /**
      * GET ESCALAS DE PIXELES A LOGICAS
      */
 
