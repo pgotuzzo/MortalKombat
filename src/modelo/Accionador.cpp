@@ -209,6 +209,27 @@ Trect Accionador::laAccion(TestadoPersonaje estadoPj, int loops, Posicion pos, T
             break;
         case FAT_BRUTALITY_SUBZERO:
             break;
+        case ACC_BICICLETA:
+            if(loops == 2){
+                rectaDelPj.p = rectaDelPj.p + Posicion(0,-45);
+            }
+            if(loops>2){
+                if(direccion == DERECHA)rectaDelPj.p = rectaDelPj.p + Posicion(5,0);
+                else rectaDelPj.p = rectaDelPj.p + Posicion(-5,0);
+            }break;
+        case REA_BICICLETA:
+            if(loops>2){
+                if(direccion == DERECHA)rectaDelPj.p = rectaDelPj.p + Posicion(-5,0);
+                else rectaDelPj.p = rectaDelPj.p + Posicion(5,0);
+            }break;
+
+        case REA_CAIDA:break;
+        case REA_MALDITO:break;
+        case REA_FAT_GANCHO:break;
+        case REA_FAT_DRAGON:break;
+        case FAT_LEVANTA:break;
+        case FAT_GANCHO:break;
+        case FAT_DRAGON:break;
     }
 
     return rectaDelPj;

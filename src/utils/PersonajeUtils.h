@@ -10,7 +10,7 @@
 
 static const string PODER_ACTIVADO_PATH = "pod_poder";
 static const string PODER_COLISION_PATH = "pod_colision";
-static const int TestadoPersonajeCount = 48;
+static const int TestadoPersonajeCount = 50;
 
 enum class EtipoPersonaje {
     SUBZERO,
@@ -148,8 +148,10 @@ enum TestadoPersonaje {
     ACC_PROTECCION_AGACHADO,
     ACC_PODER,
     ACC_PODER_SALTO,
+    ACC_BICICLETA,
 
     // Reaccion
+    REA_BICICLETA,
     REA_AGACHADO,
     REA_GOLPE_ALTO, // patada alta y pinia en salto
     REA_GOLPE_BAJO,
@@ -163,6 +165,7 @@ enum TestadoPersonaje {
     REA_DERROTA,
     REA_VICTORIA,
     REA_MAREADO,
+
 
     REA_FAT_FUEGO,
     REA_FAT_LEVANTA,
@@ -197,7 +200,7 @@ static string TestadoPersonajeToString(TestadoPersonaje e){
         case TestadoPersonaje::ACC_PINIA_SALTO_VERTICAL: return "acc_pinia_salto";
         case TestadoPersonaje::ACC_PATADA_BAJA: return "acc_patada_baja";
         case TestadoPersonaje::ACC_PATADA_BAJA_ATRAS: return "acc_patada_baja_atras";
-        case TestadoPersonaje::ACC_PATADA_AGACHADO: return "acc_patada_agachado";
+        case TestadoPersonaje::ACC_PATADA_AGACHADO: return "acc_pactada_agachado";
         case TestadoPersonaje::ACC_PATADA_SALTO_VERTICAL: return "acc_patada_salto_vertical";
         case TestadoPersonaje::ACC_PATADA_SALTO: return "acc_patada_salto";
         case TestadoPersonaje::ACC_PATADA_ALTA: return "acc_patada_alta";
@@ -207,7 +210,9 @@ static string TestadoPersonajeToString(TestadoPersonaje e){
         case TestadoPersonaje::ACC_PODER: return "acc_poder";
         case TestadoPersonaje::ACC_PODER_SALTO: return "acc_poder";
         case TestadoPersonaje::ACC_AGARRE: return "acc_agarre";
+        case TestadoPersonaje::ACC_BICICLETA: return  "acc_bicicleta";
 
+        case TestadoPersonaje::REA_BICICLETA: return "rea_bicicleta";
         case TestadoPersonaje::REA_AGACHADO: return "rea_agachado";
         case TestadoPersonaje::REA_GOLPE_ALTO: return "rea_golpe_alto";
         case TestadoPersonaje::REA_GOLPE_BAJO: return "rea_golpe_bajo";
@@ -341,6 +346,9 @@ static int loopsPara(TestadoPersonaje accion){
 
         case REA_FAT_DRAGON:return 50;
         case FAT_DRAGON:return 23;
+
+        case REA_BICICLETA: return 20;
+        case ACC_BICICLETA: return 20;
     }
 }
 
@@ -442,6 +450,10 @@ static int mostrarEstado(TestadoPersonaje accion){
         case REA_FAT_DRAGON:cout<<"REA_FAT_DRAGON"<<endl;
             break;
         case FAT_DRAGON:cout<<"FAT_DRAGON"<<endl;
+            break;
+        case ACC_BICICLETA:cout<<"ACC_BICICLETA"<<endl;
+            break;
+        case REA_BICICLETA:cout<<"REA_BICICLETA"<<endl;
             break;
     }
 }

@@ -321,6 +321,12 @@ void Musica::playFX(TestadoPersonaje estado, Tinput input){
             case REA_AGARRE:
                 Mix_PlayChannel(-1, caeAgarre, 0);
                 break;
+            case ACC_BICICLETA:
+                Mix_PlayChannel(-1, saltaPinia, 0);
+                break;
+            case REA_BICICLETA:
+                Mix_PlayChannel(-1, golpe, 0);
+                break;
 
             case REA_CONGELADO:
                 Mix_PlayChannel(-1, congelado, 0);
@@ -491,10 +497,14 @@ bool Musica::sueno(TestadoPersonaje estado) {
                                      && (estado != REA_FAT_BRUTALITY_SUBZERO&& estado != FAT_BRUTALITY_SUBZERO)
                                      && (estado != REA_FAT_GANCHO&& estado != FAT_GANCHO)
                                      && (estado != REA_FAT_DRAGON&& estado != FAT_DRAGON)
-                                     && (estado != REA_AGARRE)||
+                                     && (estado != REA_AGARRE)
+                                     && (estado != REA_BICICLETA)&& (estado != ACC_BICICLETA)||
 
     //Si lo es me fijo si esta en el loop correcto
     ((estado == REA_AGARRE && contadores[REA_AGARRE] == loopsPara(REA_AGARRE))
+   ||(estado == REA_BICICLETA && (contadores[REA_BICICLETA]%4==0))
+   ||(estado == ACC_BICICLETA && ((1+contadores[ACC_BICICLETA])%4==0))
+
      // REA Y FAT FUEGO
    ||(estado == REA_FAT_FUEGO && contadores[REA_FAT_FUEGO] == 2)
    ||(estado == FAT_FUEGO && contadores[FAT_FUEGO] == 8 )

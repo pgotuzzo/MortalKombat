@@ -37,10 +37,18 @@ void DetectorDeColisiones::resolverColisionYAgarre(Personaje *personaje1, Person
     if(personaje1->llevarACabo.getGolpe()->estado){
         if(personaje1->estadoActual == ACC_PINIA_BAJA && distancia(personaje1,personaje2) <= 1){
             if(personaje2->estadoActual == MOV_PARADO || personaje2->estadoActual == MOV_CAMINANDO) {
-                personaje1->estadoAnterior = personaje1->estadoActual;
-                personaje1->estadoActual = ACC_AGARRE;
-                personaje2->estadoAnterior = personaje2->estadoActual;
-                personaje2->estadoActual = REA_AGARRE;
+
+                if(personaje1->nombre.compare("liukang") == 0){
+                    personaje1->estadoAnterior = personaje1->estadoActual;
+                    personaje1->estadoActual = ACC_BICICLETA;
+                    personaje2->estadoAnterior = personaje2->estadoActual;
+                    personaje2->estadoActual = REA_BICICLETA;
+                }else{
+                    personaje1->estadoAnterior = personaje1->estadoActual;
+                    personaje1->estadoActual = ACC_AGARRE;
+                    personaje2->estadoAnterior = personaje2->estadoActual;
+                    personaje2->estadoActual = REA_AGARRE;
+                }
                 if(personaje2->vida <= 5) personaje2->vida = 0;
                 else personaje2->vida -= 5;
             }
