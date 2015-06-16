@@ -39,6 +39,7 @@ void PersonajeVista::initializeSprites(float scales[2], string path) {
             case REA_FAT_FUEGO:
             case REA_FAT_ARCADE:
             case FAT_LEVANTA:
+            case REA_FAT_DRAGON:
             case FAT_ARCADE:
             case FAT_FUEGO:
             case FAT_GANCHO:

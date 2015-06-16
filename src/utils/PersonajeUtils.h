@@ -10,7 +10,7 @@
 
 static const string PODER_ACTIVADO_PATH = "pod_poder";
 static const string PODER_COLISION_PATH = "pod_colision";
-static const int TestadoPersonajeCount = 46;
+static const int TestadoPersonajeCount = 48;
 
 enum class EtipoPersonaje {
     SUBZERO,
@@ -169,12 +169,14 @@ enum TestadoPersonaje {
     REA_FAT_ARCADE,
     REA_FAT_BRUTALITY_SUBZERO,
     REA_FAT_GANCHO,
+    REA_FAT_DRAGON,
 
     FAT_FUEGO,
     FAT_LEVANTA,
     FAT_ARCADE,
     FAT_BRUTALITY_SUBZERO,
-    FAT_GANCHO
+    FAT_GANCHO,
+    FAT_DRAGON
 
 };
 
@@ -234,6 +236,9 @@ static string TestadoPersonajeToString(TestadoPersonaje e){
 
         case TestadoPersonaje::REA_FAT_GANCHO: return "rea_fat_gancho";
         case TestadoPersonaje::FAT_GANCHO: return "fat_gancho";
+
+        case TestadoPersonaje::REA_FAT_DRAGON: return "rea_fat_dragon";
+        case TestadoPersonaje::FAT_DRAGON: return "fat_dragon";
     }
     return NULL;
 }
@@ -263,13 +268,17 @@ enum Tresultado{
 };
 static int mostrarResultado(Tresultado resultado){
     switch (resultado) {
-        case (NADA):cout<<"NADA"<<endl;
+        case (NADA):
+            cout << "NADA" << endl;
             break;
-        case (GANO):cout<<"GANO"<<endl;
+        case (GANO):
+            cout << "GANO" << endl;
             break;
-        case (PERDIO):cout<<"PERDIO"<<endl;
+        case (PERDIO):
+            cout << "PERDIO" << endl;
             break;
-        case EMPATO:break;
+        case EMPATO:
+            break;
     }
 }
 //funcion que devuelve la cantidad de loops que se hacen para cada accion
@@ -329,6 +338,9 @@ static int loopsPara(TestadoPersonaje accion){
 
         case REA_FAT_GANCHO:return 50;
         case FAT_GANCHO:return 25;
+
+        case REA_FAT_DRAGON:return 50;
+        case FAT_DRAGON:return 23;
     }
 }
 
@@ -426,6 +438,10 @@ static int mostrarEstado(TestadoPersonaje accion){
         case FAT_ARCADE:cout<<"FAT_ARCADE"<<endl;
             break;
         case FAT_GANCHO:cout<<"FAT_GANCHO"<<endl;
+            break;
+        case REA_FAT_DRAGON:cout<<"REA_FAT_DRAGON"<<endl;
+            break;
+        case FAT_DRAGON:cout<<"FAT_DRAGON"<<endl;
             break;
     }
 }

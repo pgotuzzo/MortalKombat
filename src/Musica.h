@@ -84,6 +84,7 @@ public:
     void playFX(TestadoPersonaje, Tinput);
 
 
+    bool sueno(TestadoPersonaje estado);
 };
 
 

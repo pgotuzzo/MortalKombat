@@ -126,13 +126,22 @@ Tcambio Mundo::actualizarPJ(Personaje *PJ) {
  * Se asigna todos los datos pertinentes de personaje a Tcambio.
  */
 vector<Tcambio> Mundo::actualizarMundo(vector<Tinput> inputs,EgameState modoDeJuego) {
-	if(colisionador.detectarColision(personaje1,personaje2)){
+	if(fabs(personaje1->rectanguloPj.p.x - personaje2->rectanguloPj.p.x)<30){
 		personaje1->colisionando = true;
 		personaje2->colisionando = true;
-	}else {
+	}else{
 		personaje1->colisionando = false;
 		personaje2->colisionando = false;
 	}
+	//TODO: VER SI LO IMPLEMENTADOA ARRIBA ES MEJOR QUE ESTO O NO
+//	if(colisionador.detectarColision(personaje1,personaje2)){
+//		personaje1->colisionando = true;
+//		personaje2->colisionando = true;
+//	}
+//	else {
+//		personaje1->colisionando = false;
+//		personaje2->colisionando = false;
+//	}
 	vector<Tcambio> c;
 	Tcambio cambio1, cambio2;
 
@@ -307,6 +316,7 @@ bool Mundo::huboGanador(){
 	   (personaje2->estadoActual != REA_FAT_ARCADE && personaje2->estadoAnterior == REA_FAT_ARCADE)||
 	   (personaje2->estadoActual != REA_FAT_LEVANTA&& personaje2->estadoAnterior == REA_FAT_LEVANTA)||
 	   (personaje2->estadoActual != REA_FAT_GANCHO&& personaje2->estadoAnterior == REA_FAT_GANCHO)||
+	   (personaje2->estadoActual != REA_FAT_DRAGON&& personaje2->estadoAnterior == REA_FAT_DRAGON)||
 	   (personaje2->estadoActual != REA_FAT_BRUTALITY_SUBZERO&& personaje2->estadoAnterior == REA_FAT_BRUTALITY_SUBZERO)){
 		return true;
 	}
@@ -315,6 +325,7 @@ bool Mundo::huboGanador(){
 	   (personaje1->estadoActual != REA_FAT_ARCADE && personaje1->estadoAnterior == REA_FAT_ARCADE)||
 	   (personaje1->estadoActual != REA_FAT_LEVANTA&& personaje1->estadoAnterior == REA_FAT_LEVANTA)||
 	   (personaje1->estadoActual != REA_FAT_GANCHO && personaje1->estadoAnterior == REA_FAT_GANCHO)||
+	   (personaje1->estadoActual != REA_FAT_DRAGON && personaje1->estadoAnterior == REA_FAT_DRAGON)||
 	   (personaje1->estadoActual != REA_FAT_BRUTALITY_SUBZERO&& personaje1->estadoAnterior == REA_FAT_BRUTALITY_SUBZERO)){
 		return true;
 	}
@@ -359,6 +370,17 @@ void Mundo::detectarRealiaccionesDeFatalities() {
 	if((personaje1->estadoActual == FAT_GANCHO)&&(personaje1->countLoops == 4)) personaje2->reinicializar(REA_FAT_GANCHO);
 	if((personaje2->estadoActual == FAT_GANCHO)&&(personaje2->countLoops == 4)) personaje1->reinicializar(REA_FAT_GANCHO);
 	//                       BRUTALITY SUBZERO
-	if(personaje1->estadoActual == FAT_BRUTALITY_SUBZERO) personaje2->reinicializar(REA_FAT_BRUTALITY_SUBZERO);
-	if(personaje2->estadoActual == FAT_BRUTALITY_SUBZERO) personaje1->reinicializar(REA_FAT_BRUTALITY_SUBZERO);
+	if(personaje1->estadoActual == FAT_BRUTALITY_SUBZERO&&(personaje1->countLoops == 2)) personaje2->reinicializar(REA_FAT_BRUTALITY_SUBZERO);
+	if(personaje2->estadoActual == FAT_BRUTALITY_SUBZERO&&(personaje2->countLoops == 2)) personaje1->reinicializar(REA_FAT_BRUTALITY_SUBZERO);
+	//                       FATALITY DRAGON
+	if((personaje1->estadoActual == FAT_DRAGON)&&(personaje1->countLoops == 14)) {
+		if(personaje1->direccionPj == DERECHA)personaje1->llevarACabo.rectaDelPj.p.x = personaje2->llevarACabo.rectaDelPj.p.x -20;
+		else personaje1->llevarACabo.rectaDelPj.p.x = personaje2->llevarACabo.rectaDelPj.p.x +20;
+		personaje2->reinicializar(REA_FAT_DRAGON);
+	}
+	if((personaje2->estadoActual == FAT_DRAGON)&&(personaje2->countLoops == 14)) {
+		if(personaje2->direccionPj == DERECHA)personaje2->llevarACabo.rectaDelPj.p.x = personaje1->llevarACabo.rectaDelPj.p.x -20;
+		else personaje2->llevarACabo.rectaDelPj.p.x = personaje1->llevarACabo.rectaDelPj.p.x +20;
+		personaje1->reinicializar(REA_FAT_DRAGON);
+	}
 }
