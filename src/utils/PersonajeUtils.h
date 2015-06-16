@@ -10,7 +10,7 @@
 
 static const string PODER_ACTIVADO_PATH = "pod_poder";
 static const string PODER_COLISION_PATH = "pod_colision";
-static const int TestadoPersonajeCount = 44;
+static const int TestadoPersonajeCount = 46;
 
 enum class EtipoPersonaje {
     SUBZERO,
@@ -48,14 +48,14 @@ static Posicion getPosition(EtipoPersonaje type){
 
 enum TestadoPersonaje {
     // Movimient
-            MOV_PARADO,
+    MOV_PARADO,
     MOV_CAMINANDO,
     MOV_SALTANDO_VERTICAL,
     MOV_SALTANDO_OBLICUO,
     MOV_AGACHADO,
 
     // Accion
-            ACC_PINIA_BAJA,
+    ACC_PINIA_BAJA,
     ACC_PINIA_BAJA_AGACHADO,
     ACC_PINIA_ALTA,
     ACC_PINIA_ALTA_AGACHADO, //gancho
@@ -93,11 +93,13 @@ enum TestadoPersonaje {
     REA_FAT_LEVANTA,
     REA_FAT_ARCADE,
     REA_FAT_BRUTALITY_SUBZERO,
+    REA_FAT_GANCHO,
 
     FAT_FUEGO,
     FAT_LEVANTA,
     FAT_ARCADE,
-    FAT_BRUTALITY_SUBZERO
+    FAT_BRUTALITY_SUBZERO,
+    FAT_GANCHO
 
 };
 
@@ -155,9 +157,8 @@ static string TestadoPersonajeToString(TestadoPersonaje e){
         case TestadoPersonaje::REA_FAT_BRUTALITY_SUBZERO: return "rea_fat_brutality_subzero";
         case TestadoPersonaje::FAT_BRUTALITY_SUBZERO: return "fat_brutality_subzero";
 
-
-
-
+        case TestadoPersonaje::REA_FAT_GANCHO: return "rea_fat_gancho";
+        case TestadoPersonaje::FAT_GANCHO: return "fat_gancho";
     }
     return NULL;
 }
@@ -188,11 +189,12 @@ enum Tresultado{
 static int mostrarResultado(Tresultado resultado){
     switch (resultado) {
         case (NADA):cout<<"NADA"<<endl;
-                    break;
+            break;
         case (GANO):cout<<"GANO"<<endl;
-                    break;
+            break;
         case (PERDIO):cout<<"PERDIO"<<endl;
-                    break;
+            break;
+        case EMPATO:break;
     }
 }
 //funcion que devuelve la cantidad de loops que se hacen para cada accion
@@ -250,6 +252,8 @@ static int loopsPara(TestadoPersonaje accion){
         case FAT_BRUTALITY_SUBZERO: return 31;
         case REA_FAT_BRUTALITY_SUBZERO: return 50;
 
+        case REA_FAT_GANCHO:return 50;
+        case FAT_GANCHO:return 25;
     }
 }
 
@@ -340,7 +344,14 @@ static int mostrarEstado(TestadoPersonaje accion){
             break;
         case FAT_BRUTALITY_SUBZERO:cout<<"FAT_BRUTALITY_SUBZERO"<<endl;
             break;
-
+        case REA_FAT_ARCADE:cout<<"REA_FAT_ARCADE"<<endl;
+            break;
+        case REA_FAT_GANCHO:cout<<"REA_FAT_GANCHO"<<endl;
+            break;
+        case FAT_ARCADE:cout<<"FAT_ARCADE"<<endl;
+            break;
+        case FAT_GANCHO:cout<<"FAT_GANCHO"<<endl;
+            break;
     }
 }
 

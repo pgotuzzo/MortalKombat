@@ -39,6 +39,9 @@ void PersonajeVista::initializeSprites(float scales[2], string path) {
             case REA_FAT_ARCADE:
             case FAT_LEVANTA:
             case FAT_ARCADE:
+            case FAT_FUEGO:
+            case FAT_GANCHO:
+            case REA_FAT_GANCHO:
             case REA_FAT_BRUTALITY_SUBZERO:
             case REA_GOLPE_ALTO:{
                 mSprites[s] = Sprite(mUtils, spritesPath, scales, false);
@@ -56,7 +59,7 @@ void PersonajeVista::initializeSprites(float scales[2], string path) {
 }
 
 bool PersonajeVista::greatHit() {
-    return mState == REA_GOLPE_FUERTE;
+    return mState == REA_GOLPE_FUERTE || mState == FAT_GANCHO || mState == FAT_BRUTALITY_SUBZERO;
 }
 
 Trect PersonajeVista::getRect() {

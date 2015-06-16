@@ -260,21 +260,61 @@ void Musica::playFX(TestadoPersonaje estado, Tinput input){
 
     //mostrarEstado(estado);
     if ( ( contadores[estado] == 1 && estado != REA_FAT_FUEGO  && estado != REA_AGARRE && estado != FAT_FUEGO  ) ||
-        ( ( estado == REA_FAT_FUEGO && contadores[REA_FAT_FUEGO] == 2)
-         || ( estado == REA_AGARRE && contadores[REA_AGARRE] == loopsPara(REA_AGARRE) )
-         || ( estado == FAT_FUEGO && contadores[FAT_FUEGO] == 8 )))
+        (  ( estado == REA_AGARRE && contadores[REA_AGARRE] == loopsPara(REA_AGARRE) )
+         ||( estado == REA_FAT_FUEGO && contadores[REA_FAT_FUEGO] == 2)
+         ||( estado == FAT_FUEGO && contadores[FAT_FUEGO] == 8 )
+         ||( estado == FAT_LEVANTA && contadores[FAT_LEVANTA] == 8 )
+         ||( estado == REA_FAT_LEVANTA && contadores[REA_FAT_LEVANTA] == 2)
+         ||( estado == FAT_GANCHO && contadores[FAT_GANCHO] == 2 )
+         ||( estado == REA_FAT_GANCHO && (contadores[REA_FAT_GANCHO] == 5 ||contadores[REA_FAT_GANCHO] == 10))
+         ||( estado == FAT_BRUTALITY_SUBZERO && (contadores[FAT_BRUTALITY_SUBZERO] %  5 == 0 ) && contadores[FAT_BRUTALITY_SUBZERO] <30)
+         ||( estado == REA_FAT_BRUTALITY_SUBZERO && (contadores[REA_FAT_BRUTALITY_SUBZERO] %  5 == 0)&& contadores[REA_FAT_BRUTALITY_SUBZERO] <=30)
+         ||( estado == REA_FAT_ARCADE && contadores[REA_FAT_ARCADE] == 2)
+         ||( estado == FAT_ARCADE && contadores[FAT_ARCADE] == 2 )
+
+        ))
 
         switch( estado ){
 
-            case REA_AGARRE: Mix_PlayChannel( -1, caeAgarre, 0 );break;
-
+//FAT FUEGO ----------------------------------------------------------------------
             case FAT_FUEGO:Mix_PlayChannel( -1, tiraFat, 0 );break;
-
             case REA_FAT_FUEGO:
                 Mix_PlayChannel( -1, quema, 0 );
                 Mix_PlayChannel( -1, fatality, 0 );
-
                 break;
+//FAT LEVANTA----------------------------------------------------------------------
+            case FAT_LEVANTA:Mix_PlayChannel( -1, tiraFat, 0 );break;
+            case REA_FAT_LEVANTA:Mix_PlayChannel( -1, fatality, 0 );break;
+//FAT GANCHO----------------------------------------------------------------------
+//TODO: VER PQ NO SUENA FAT_GANCHO
+            case FAT_GANCHO:Mix_PlayChannel( -1, gancho, 0 );break;
+            case REA_FAT_GANCHO:
+                if(contadores[REA_FAT_GANCHO] == 5){
+                    Mix_PlayChannel(-1,quema,0);
+                }else if(contadores[REA_FAT_GANCHO] == 10){
+                    Mix_PlayChannel( -1, fatality, 0 );
+                }
+                break;
+//FAT BRUTALITY----------------------------------------------------------------------
+            case FAT_BRUTALITY_SUBZERO:Mix_PlayChannel( -1, golpe, 0 );break;
+            case REA_FAT_BRUTALITY_SUBZERO:
+                if(contadores[REA_FAT_BRUTALITY_SUBZERO] == 30){
+                    Mix_PlayChannel(-1,quema,0);
+                    Mix_PlayChannel( -1, fatality, 0 );
+                }else{
+                    Mix_PlayChannel( -1, reacGancho, 0 );
+                }
+                break;
+//FAT LEVANTA----------------------------------------------------------------------
+            case FAT_ARCADE:Mix_PlayChannel( -1,tiraFat, 0 );break;
+            case REA_FAT_ARCADE:
+                Mix_PlayChannel(-1,quema,0);
+                Mix_PlayChannel( -1, fatality, 0 );( -1, fatality, 0 );break;
+
+//---------------------------------------------------------------------------------
+
+
+            case REA_AGARRE: Mix_PlayChannel( -1, caeAgarre, 0 );break;
 
             case REA_CONGELADO: Mix_PlayChannel( -1, congelado, 0 );break;
 

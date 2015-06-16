@@ -199,9 +199,9 @@ Trect Accionador::laAccion(TestadoPersonaje estadoPj, int loops, Posicion pos, T
             break;
         case REA_FAT_LEVANTA:
             cout<<loops<<endl;
-            if(loops == 1 || loops == 2|| loops == 5|| loops == 6 || loops == 9|| loops == 10|| loops == 13|| loops == 14)
+            if(loops == 2 || loops == 3|| loops == 7|| loops == 6 || loops == 11|| loops == 10|| loops == 15|| loops == 14)
                 rectaDelPj.p.y -= 50;
-            if(loops == 3 || loops == 4|| loops == 7|| loops == 8 || loops == 11 || loops == 12|| loops == 15|| loops == 16)
+            if(loops == 5 || loops == 4|| loops == 9|| loops == 8 || loops == 13 || loops == 12|| loops == 17|| loops == 16)
                 rectaDelPj.p.y += 50;
 
             break;

@@ -305,13 +305,17 @@ bool Mundo::huboGanador(){
 	if((personaje1->llevarACabo.resultado == GANO)&&
 	   (personaje2->estadoActual != REA_FAT_FUEGO && personaje2->estadoAnterior == REA_FAT_FUEGO)||
 	   (personaje2->estadoActual != REA_FAT_ARCADE && personaje2->estadoAnterior == REA_FAT_ARCADE)||
-	   (personaje2->estadoActual != REA_FAT_LEVANTA&& personaje2->estadoAnterior == REA_FAT_LEVANTA)){
+	   (personaje2->estadoActual != REA_FAT_LEVANTA&& personaje2->estadoAnterior == REA_FAT_LEVANTA)||
+	   (personaje2->estadoActual != REA_FAT_GANCHO&& personaje2->estadoAnterior == REA_FAT_GANCHO)||
+	   (personaje2->estadoActual != REA_FAT_BRUTALITY_SUBZERO&& personaje2->estadoAnterior == REA_FAT_BRUTALITY_SUBZERO)){
 		return true;
 	}
 	if((personaje2->llevarACabo.resultado == GANO)&&
 	   (personaje1->estadoActual != REA_FAT_FUEGO  && personaje1->estadoAnterior == REA_FAT_FUEGO)||
 	   (personaje1->estadoActual != REA_FAT_ARCADE && personaje1->estadoAnterior == REA_FAT_ARCADE)||
-	   (personaje1->estadoActual != REA_FAT_LEVANTA&& personaje1->estadoAnterior == REA_FAT_LEVANTA)){
+	   (personaje1->estadoActual != REA_FAT_LEVANTA&& personaje1->estadoAnterior == REA_FAT_LEVANTA)||
+	   (personaje1->estadoActual != REA_FAT_GANCHO && personaje1->estadoAnterior == REA_FAT_GANCHO)||
+	   (personaje1->estadoActual != REA_FAT_BRUTALITY_SUBZERO&& personaje1->estadoAnterior == REA_FAT_BRUTALITY_SUBZERO)){
 		return true;
 	}
 	if((personaje1->llevarACabo.resultado == GANO)&& personaje1->estadoActual != REA_VICTORIA && personaje1->estadoAnterior == REA_VICTORIA){
@@ -351,6 +355,9 @@ void Mundo::detectarRealiaccionesDeFatalities() {
 	}else if(personaje1->estadoActual == FAT_LEVANTA && personaje1->countLoops == 4) {
 		personaje2->reinicializar(REA_FAT_LEVANTA);
 	}
+	//                       FATALITY GANCHO
+	if((personaje1->estadoActual == FAT_GANCHO)&&(personaje1->countLoops == 4)) personaje2->reinicializar(REA_FAT_GANCHO);
+	if((personaje2->estadoActual == FAT_GANCHO)&&(personaje2->countLoops == 4)) personaje1->reinicializar(REA_FAT_GANCHO);
 	//                       BRUTALITY SUBZERO
 	if(personaje1->estadoActual == FAT_BRUTALITY_SUBZERO) personaje2->reinicializar(REA_FAT_BRUTALITY_SUBZERO);
 	if(personaje2->estadoActual == FAT_BRUTALITY_SUBZERO) personaje1->reinicializar(REA_FAT_BRUTALITY_SUBZERO);
