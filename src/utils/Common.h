@@ -391,9 +391,9 @@ struct Tinput{
  * Informacion extra para los update de capasInfo
  */
 struct TInfoExtra{
-    string timer,nombreCombo1,nombreCombo2;
+    string timer,nombreCombo;
     float porcVida1, porcVida2;
-    bool hayCombo1,hayCombo2;
+    bool hayCombo;
 };
 
 struct Tcombos{

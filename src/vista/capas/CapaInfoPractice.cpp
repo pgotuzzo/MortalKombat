@@ -28,13 +28,10 @@ CapaInfoPractice::CapaInfoPractice(VistaUtils* utils, Tdimension dimPantalla, st
     float posYCombo = dimPantalla.w * porcDistComboY;
 
     //Combo
-    combo1 = mUtils->createTextureFromText(FONT_PATH, "", FONT_SIZE);
-    combo2 = mUtils->createTextureFromText(FONT_PATH, "", FONT_SIZE);
-    rectCombo1.p.x = posXCombo;
-    rectCombo1.p.y = posYCombo;
-    rectCombo2.p.y = posYCombo;
-    combo1Activo = false;
-    combo2Activo = false;
+    combo = mUtils->createTextureFromText(FONT_PATH, "", FONT_SIZE);
+    rectCombo.p.x = posXCombo;
+    rectCombo.p.y = posYCombo;
+    comboActivo = false;
 }
 
 
@@ -52,8 +49,7 @@ void CapaInfoPractice::getTexture(Ttexture texture) {
     }
 
     // Combos
-    if (combo1Activo) mUtils->copyTexture(combo1, texture, NULL, &rectCombo1);
-    if (combo2Activo) mUtils->copyTexture(combo2, texture, NULL, &rectCombo2);
+    if (comboActivo) mUtils->copyTexture(combo, texture, NULL, &rectCombo);
 
 }
 
@@ -137,28 +133,16 @@ void CapaInfoPractice::update(Tinput input,TInfoExtra infoExtra) {
         buffer.push(tecla);
     }
 
-    if (infoExtra.hayCombo1) {
-        mUtils->copyInTextureFromText(FONT_PATH, infoExtra.nombreCombo1, FONT_SIZE,&combo1);
-        rectCombo1.d = combo1.d;
-        tcombo1 = SDL_GetTicks();
-        combo1Activo=true;
+    if (infoExtra.hayCombo) {
+        mUtils->copyInTextureFromText(FONT_PATH, infoExtra.nombreCombo, FONT_SIZE,&combo);
+        rectCombo.d = combo.d;
+        tcombo = SDL_GetTicks();
+        comboActivo=true;
     }
-    if (infoExtra.hayCombo2) {
-        mUtils->copyInTextureFromText(FONT_PATH, infoExtra.nombreCombo2, FONT_SIZE,&combo2);
-        rectCombo2.d = combo2.d;
-        rectCombo2.p.x = anchoPantalla-rectCombo2.d.w-rectCombo1.p.x;
-        tcombo2 = SDL_GetTicks();
-        combo2Activo=true;
-    }
-    if (SDL_GetTicks()-tcombo1 >= tiempoMax && combo1Activo) {
-        mUtils->copyInTextureFromText(FONT_PATH, "", FONT_SIZE,&combo1);
-        rectCombo1.d.w = 0;
-        combo1Activo=false;
-    }
-    if (SDL_GetTicks()-tcombo2 >= tiempoMax && combo2Activo) {
-        mUtils->copyInTextureFromText(FONT_PATH, "", FONT_SIZE,&combo2);
-        rectCombo2.d.w = 0;
-        combo2Activo=false;
+    if (SDL_GetTicks()-tcombo >= tiempoMax && comboActivo) {
+        mUtils->copyInTextureFromText(FONT_PATH, "", FONT_SIZE,&combo);
+        rectCombo.d.w = 0;
+        comboActivo=false;
     }
 }
 
@@ -168,8 +152,7 @@ void CapaInfoPractice::freeTextures() {
         SDL_DestroyTexture(buffer.front().textura.t);
         buffer.pop();
     }
-    SDL_DestroyTexture(combo1.t);
-    SDL_DestroyTexture(combo2.t);
+    SDL_DestroyTexture(combo.t);
 }
 
 CapaInfoPractice::~CapaInfoPractice() {}

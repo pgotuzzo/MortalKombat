@@ -122,12 +122,10 @@ void PantallaFight::update(vector<Tcambio> changes, Tinput input) {
     }
     TInfoExtra infoExtra;
     infoExtra.timer = to_string(changes[0].tiempoRound);
-    infoExtra.nombreCombo1 = changes[0].nombreCombo;
-    infoExtra.nombreCombo2 = changes[1].nombreCombo;
+    infoExtra.nombreCombo = changes[0].nombreCombo;
     infoExtra.porcVida1 = changes[0].vida / 100;
     infoExtra.porcVida2 = changes[1].vida / 100;
-    infoExtra.hayCombo1 = changes[0].hayCombo;
-    infoExtra.hayCombo2 = changes[1].hayCombo;
+    infoExtra.hayCombo = changes[0].hayCombo;
 
     capaInfo->update(input,infoExtra);
 }

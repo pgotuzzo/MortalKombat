@@ -10,11 +10,10 @@ protected:
         Ttexture textura;
         Uint32 tiempoInicial;
     };
-    Ttexture combo1;
-    Ttexture combo2;
-    Trect rectCombo1,rectCombo2;
-    Uint32 tcombo1, tcombo2;
-    bool combo1Activo,combo2Activo;
+    Ttexture combo;
+    Trect rectCombo;
+    Uint32 tcombo;
+    bool comboActivo;
 
     VistaUtils* mUtils;
     float anchoBorde, anchoRelleno,anchoPantalla, distBorde;
