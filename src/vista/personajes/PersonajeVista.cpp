@@ -5,6 +5,7 @@ const std::string DEFAULT_SPRITE = "personaje" + SPRITES_FORMAT;
 PersonajeVista::PersonajeVista(VistaUtils* utils, std::string spritesPath, Tdimension dimension, Tdireccion direction) {
     mUtils = utils;
     mDirection = direction;
+    mState = MOV_PARADO;
 
     float scales[2];
 

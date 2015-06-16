@@ -17,8 +17,6 @@ const float ajusteXTimer = -5;
 const string dirPathVidaRoja = "resources/accesorios/barraVidaRoja.gif";
 const string dirPathVidaVerde = "resources/accesorios/barraVidaVerde.gif";
 
-const string FONT_PATH = "resources/font/mortalkombat2.ttf";
-const int FONT_SIZE = 18;
 const int FONT_SIZE_FOR_TIMER = 40;
 
 

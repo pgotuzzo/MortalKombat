@@ -14,22 +14,22 @@ private:
 
     void updateSelection(Tdireccion direction);
 
-    bool dentroDelModo(Posicion posMouse,Trect modo);
+    bool dentroDelModo(Posicion posMouse, Trect modo);
 
     Musica* select;
 
     Musica* click;
 
-
 public:
     MenuGameMode();
 
-    ~MenuGameMode();
+    void update(Tinput input);
+    void update(Tinput input,Posicion coordenadasMouse,vector<Trect> modos);
 
-    EmodeSelection update(Tinput input);
-    EmodeSelection update(Tinput input,Posicion coordenadasMouse,vector<Trect> modos);
-
+    EmodeSelection getSelection();
     bool selectionComplete();
+
+    ~MenuGameMode();
 };
 
 

@@ -22,7 +22,7 @@ void MenuGameMode::updateSelection(Tdireccion direction) {
     }
 }
 
-EmodeSelection MenuGameMode::update(Tinput input) {
+void MenuGameMode::update(Tinput input) {
     if(!mSelectionConfirmed) {
         switch (input.movimiento) {
             case TinputMovimiento::KEY_DERECHA:
@@ -43,12 +43,10 @@ EmodeSelection MenuGameMode::update(Tinput input) {
             mSelectionConfirmed = true;
         }
     }
-
-    return mSelection;
 }
 
 
-EmodeSelection MenuGameMode::update(Tinput input,Posicion coordenadasMouse,vector<Trect> modos) {
+void MenuGameMode::update(Tinput input,Posicion coordenadasMouse,vector<Trect> modos) {
 
     if(!mSelectionConfirmed) {
         if (dentroDelModo(coordenadasMouse, modos[0])) {
@@ -79,17 +77,18 @@ EmodeSelection MenuGameMode::update(Tinput input,Posicion coordenadasMouse,vecto
             mSelectionConfirmed = true;
         }
     }
-
-    return mSelection;
 }
 
+EmodeSelection MenuGameMode::getSelection() {
+    return mSelection;
+}
 
 bool MenuGameMode::selectionComplete() {
     return mSelectionConfirmed;
 }
 
 
-bool MenuGameMode::dentroDelModo(Posicion posMouse,Trect modo) {
+bool MenuGameMode::dentroDelModo(Posicion posMouse, Trect modo) {
     if (posMouse.x < (modo.p.x + modo.d.w) && (posMouse.x >= modo.p.x)) {
         if(posMouse.y >= modo.p.y){
             seleccionandoConMouse = true;

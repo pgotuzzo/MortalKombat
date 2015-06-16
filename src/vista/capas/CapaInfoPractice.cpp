@@ -7,9 +7,6 @@ const float posXBoton = 10;
 const float posYBoton = 10;
 const Uint32 tiempoMax = 3000;
 
-const string FONT_PATH = "resources/font/mortalkombat2.ttf";
-const int FONT_SIZE = 18;
-
 CapaInfoPractice::CapaInfoPractice(VistaUtils* utils, Tdimension dimPantalla, string nombres[2]) {
     mUtils = utils;
 

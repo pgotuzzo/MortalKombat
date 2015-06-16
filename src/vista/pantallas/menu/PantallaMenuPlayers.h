@@ -9,17 +9,26 @@
 class PantallaMenuPlayers : public Pantalla {
 private:
     Ttexture mTextBackground;
-    int filaPers1,filaPers2;
     Ttexture mTextSelector[2];
+    PersonajeVista mPlayerViews[2];
+    Ttexture mTextNames[2];
+
     Trect mRectSelector[2];
-    PersonajeVista mPersonajes[2];
+    Trect mRectName[2];
+
+    EtipoPersonaje mPlayers[2];
+    string mNames[2];
+    bool activateSecondPlayer;
 
 public:
-    void InicializarPersonaje(Tpersonaje personaje,int index);
     PantallaMenuPlayers(Tdimension dimPixels, Tdimension dimUl);
-    vector<Trect> getCuadradoPlayers();
-    void update(vector<Posicion> players);
+
+    void update(array<Posicion, 2> players, array<string, 2> names);
     void print();
+
+    Posicion getRelativePosition(Posicion p);
+
+    vector<Trect> getCuadradoPlayers();
 
     virtual ~PantallaMenuPlayers();
 };

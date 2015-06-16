@@ -163,82 +163,42 @@ void Game::play(vector<Tinput> inputs, Posicion coordenadasMouse) {
             if ( selectMode(inputs[0],coordenadasMouse) == EgameResult::END ) {
                 switch (mModeSelection){
                     case EmodeSelection::MULTIPLAYER: {
-                        mState = EgameState::MENU_PLAYERS;
                         modoDeJuegoElegido = EmodeSelection::MULTIPLAYER;
-                        initialize();
                         break;
                     };
                     case EmodeSelection::ARCADE: {
-                        mState = EgameState::MENU_PLAYERS;
                         modoDeJuegoElegido = EmodeSelection::ARCADE;
-                        initialize();
                         break;
                     };
                     case EmodeSelection::PRACTICE: {
-                        mState = EgameState::MENU_PLAYERS;
                         modoDeJuegoElegido = EmodeSelection::PRACTICE;
-                        initialize();
                         break;
                     };
                 }
+                mState = EgameState::MENU_PLAYERS;
+                initialize();
             }
             break;
         };
         case EgameState::MENU_PLAYERS:{
-            switch(modoDeJuegoElegido){
-                case EmodeSelection::MULTIPLAYER:
-                    if ( selectPlayers(inputs,coordenadasMouse,false) == EgameResult::END) {
+            bool aleatory = modoDeJuegoElegido != EmodeSelection::MULTIPLAYER;
+            if (selectPlayers(inputs,coordenadasMouse, aleatory) == EgameResult::END) {
+                switch (modoDeJuegoElegido) {
+                    case EmodeSelection::MULTIPLAYER:
                         mState = EgameState::MODE_MULTIPLAYER;
-                        musicaDelJuego->pararMusica();
-                        musicaDelJuego->musicVs();
-                        initialize();
-                    }
-                    break;
-                case EmodeSelection::ARCADE:
-                    if ( selectPlayers(inputs,coordenadasMouse,true) == EgameResult::END) {
+                        break;
+                    case EmodeSelection::ARCADE:
                         mState = EgameState::MODE_ARCADE;
-                        musicaDelJuego->pararMusica();
-                        musicaDelJuego->musicVs();
-                        initialize();
-                    }
-                    break;
-                case EmodeSelection::PRACTICE:
-                    if ( selectPlayers(inputs,coordenadasMouse,true) == EgameResult::END) {
+                        break;
+                    case EmodeSelection::PRACTICE:
                         mState = EgameState::MODE_PRACTICE;
-                        musicaDelJuego->pararMusica();
-                        musicaDelJuego->musicPractica();
-                        initialize();
-                    }
-                    break;
+                        break;
+                }
+                musicaDelJuego->pararMusica();
+                musicaDelJuego->musicVs();
+                initialize();
             }
             break;
-            /*if ( selectPlayers(inputs,coordenadasMouse) == EgameResult::END) {
-                switch (modoDeJuegoElegido){
-                    case EmodeSelection::MULTIPLAYER: {
-                        mState = EgameState::MODE_MULTIPLAYER;
-                        musicaDelJuego->pararMusica();
-                        musicaDelJuego->musicVs();
-                        initialize();
-
-                        break;
-                    };
-                    case EmodeSelection::ARCADE: {
-                        mState = EgameState::MODE_ARCADE;
-                        musicaDelJuego->pararMusica();
-                        musicaDelJuego->musicVs();
-                        initialize();
-                        break;
-                    };
-                    case EmodeSelection::PRACTICE: {
-                        mState = EgameState::MODE_PRACTICE;
-                        musicaDelJuego->pararMusica();
-                        musicaDelJuego->musicPractica();
-                        initialize();
-                        break;
-                    };
-                }
-            }
-            break;*/
         };
         case EgameState::MODE_ARCADE:
         case EgameState::MODE_MULTIPLAYER:
@@ -271,17 +231,17 @@ string Game::getWinner() {
     }
 }
 
-EgameResult Game::selectMode(Tinput input,Posicion coordenadasMouse) {
+EgameResult Game::selectMode(Tinput input, Posicion coordenadasMouse) {
     vector<float> escalas = mPantalla->getEscalas();
 
     coordenadasMouse.x = coordenadasMouse.x / escalas[0];
     coordenadasMouse.y = coordenadasMouse.y / escalas[1];
 
-    EmodeSelection selection;
     if(coordenadasMouse.x > 2 && coordenadasMouse.x < mConfiguration->getVentana().ancho-2) {
-        selection = mMenuGameMode->update(input, coordenadasMouse, mPantalla->getCuadradoModos());
+        mMenuGameMode->update(input, coordenadasMouse, mPantalla->getCuadradoModos());
     }
-    selection = mMenuGameMode->update(input);
+    mMenuGameMode->update(input);
+    EmodeSelection selection = mMenuGameMode->getSelection();
     mPantalla->update(selection);
     mPantalla->print();
 
@@ -293,12 +253,26 @@ EgameResult Game::selectMode(Tinput input,Posicion coordenadasMouse) {
     return EgameResult::CONTINUE;
 }
 
-EgameResult Game::selectPlayers(vector<Tinput> inputs,Posicion coordenadasMouse,bool seleccionOponenteAleatorio) {
+EgameResult Game::selectPlayers(vector<Tinput> inputs, Posicion coordenadasMouse, bool seleccionOponenteAleatorio) {
+    PantallaMenuPlayers* pantalla = (PantallaMenuPlayers*) mPantalla;
+
     vector<float> escalas = mPantalla->getEscalas();
 
     coordenadasMouse.x = coordenadasMouse.x / escalas[0];
     coordenadasMouse.y = coordenadasMouse.y / escalas[1];
 
+    Posicion p = pantalla->getRelativePosition(coordenadasMouse);
+
+    array<Posicion,2> players;
+    if (mMenuPlayers->firstPlayerSelected() && seleccionOponenteAleatorio){
+        Tinput i;
+        i.game = TinputGame::CLICK_IZQ_MOUSE;
+        i.movimiento = TinputMovimiento::KEY_NADA;
+        players = mMenuPlayers->update(i, Posicion(rand() % MenuPlayerSelection::COLUMNS, rand() % MenuPlayerSelection::ROWS) );
+    } else {
+        players = mMenuPlayers->update(inputs.at(0), p);
+    }
+/*
     vector<Posicion> players;
 
     if(!seleccionOponenteAleatorio) {
@@ -313,12 +287,14 @@ EgameResult Game::selectPlayers(vector<Tinput> inputs,Posicion coordenadasMouse,
         }
         players = mMenuPlayers->updateConAleatorio(inputs);
     }
-    mPantalla->update(players);
-    mPantalla->print();
+*/
+
+    pantalla->update(players, {"", ""});
+    pantalla->print();
 
     if ( mMenuPlayers->selectionComplete() ) {
-        personajesElegidos[0] = mMenuPlayers->personajesElegidos[0];
-        personajesElegidos[1] = mMenuPlayers->personajesElegidos[1];
+        personajesElegidos[0] = getType(players[0]);
+        personajesElegidos[1] = getType(players[1]);
         return EgameResult::END;
     }
 
@@ -330,9 +306,9 @@ EgameResult Game::fight(vector<Tinput> inputs) {
         case TinputGame::KEY_ESC:
             return EgameResult::END;
         default:{
-            vector<Tcambio> c = mMundo->actualizarMundo(inputs,mState);
+            vector<Tcambio> c = mMundo->actualizarMundo(inputs, mState);
 
-            sonidoPJ1->soundRounds(mState,mMundo->roundsPJ1, mMundo->roundsPJ2);
+            sonidoPJ1->soundRounds(mState, mMundo->roundsPJ1, mMundo->roundsPJ2);
 
             sonidoPJ1->playFX(c.at(0).estado,inputs[0]);
             sonidoPJ2->playFX(c.at(1).estado,inputs[1]);
@@ -342,21 +318,6 @@ EgameResult Game::fight(vector<Tinput> inputs) {
             return ( mMundo->huboGanador() && modoDeJuegoElegido != EmodeSelection::PRACTICE ) ? EgameResult::END : EgameResult::CONTINUE;
         }
     };
-}
-
-Game::~Game() {
-    delete musicaDelJuego;
-    delete sonidoPJ1;
-    delete sonidoPJ2;
-    delete(mPantalla);
-    if (mMundo != nullptr)
-        delete(mMundo);
-    if(mMenuPlayers != nullptr)
-        delete mMenuPlayers;
-    if(mMenuGameMode != nullptr)
-        delete mMenuGameMode;
-    delete(mConfiguration);
-    Mix_Quit();
 }
 
 void Game::setInformacionPersonajesElegidos(int jugador) {
@@ -420,4 +381,18 @@ bool Game::dentroDelCuadroDePjs(Posicion coordenadasMouse,vector<Trect> cuadroPl
         }
     }
     return false;
+}
+
+Game::~Game() {
+    delete musicaDelJuego;
+    delete sonidoPJ1;
+    delete sonidoPJ2;
+    delete(mPantalla);
+    if (mMundo != nullptr)
+        delete(mMundo);
+    if(mMenuPlayers != nullptr)
+        delete mMenuPlayers;
+    if(mMenuGameMode != nullptr)
+        delete mMenuGameMode;
+    delete(mConfiguration);
 }

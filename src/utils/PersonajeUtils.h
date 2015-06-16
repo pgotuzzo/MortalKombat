@@ -29,33 +29,108 @@ enum class EtipoPersonaje {
     LIUKANG_YELLOW
 };
 
-static Posicion getPosition(EtipoPersonaje type){
-    switch (type){
-        case EtipoPersonaje::SUBZERO: return Posicion(0,0);
-        case EtipoPersonaje::SUBZERO_GREEN: return Posicion(0,1);
-        case EtipoPersonaje::SUBZERO_RED: return Posicion(0,2);
-        case EtipoPersonaje::SUBZERO_YELLOW: return Posicion(0,3);
-        case EtipoPersonaje::ERMAC: return Posicion(1,0);
-        case EtipoPersonaje::ERMAC_BLUE: return Posicion(1,1);
-        case EtipoPersonaje::ERMAC_GREEN: return Posicion(1,2);
-        case EtipoPersonaje::ERMAC_YELLOW: return Posicion(1,3);
-        case EtipoPersonaje::LIUKANG: return Posicion(2,0);
-        case EtipoPersonaje::LIUKANG_BLUE: return Posicion(2,1);
-        case EtipoPersonaje::LIUKANG_GREEN: return Posicion(2,2);
-        case EtipoPersonaje::LIUKANG_YELLOW: return Posicion(2,3);
-    }
+static EtipoPersonaje getType(Posicion p){
+    if ( p == Posicion(0,0) ) return EtipoPersonaje::SUBZERO;
+    else if ( p == Posicion(1,0) ) return EtipoPersonaje::SUBZERO_GREEN;
+    else if ( p == Posicion(2,0) ) return EtipoPersonaje::SUBZERO_RED;
+    else if ( p == Posicion(3,0) ) return EtipoPersonaje::SUBZERO_YELLOW;
+    else if ( p == Posicion(0,1) ) return EtipoPersonaje::ERMAC;
+    else if ( p == Posicion(1,1) ) return EtipoPersonaje::ERMAC_BLUE;
+    else if ( p == Posicion(2,1) ) return EtipoPersonaje::ERMAC_GREEN;
+    else if ( p == Posicion(3,1) ) return EtipoPersonaje::ERMAC_YELLOW;
+    else if ( p == Posicion(0,2) ) return EtipoPersonaje::LIUKANG;
+    else if ( p == Posicion(1,2) ) return EtipoPersonaje::LIUKANG_BLUE;
+    else if ( p == Posicion(2,2) ) return EtipoPersonaje::LIUKANG_GREEN;
+    else if ( p == Posicion(3,2) ) return EtipoPersonaje::LIUKANG_YELLOW;
+    else return EtipoPersonaje::SUBZERO;
+}
+
+struct TinfoPersonaje{
+    string spritesPath;
+    string defaulName;
+    TcolorSettings colorSettings;
+    Tdimension dimension;
 };
+
+static TinfoPersonaje getInfoPersonaje(EtipoPersonaje type) {
+    TinfoPersonaje info;
+    info.dimension = Tdimension(25, 60);
+    switch(type){
+        case EtipoPersonaje::SUBZERO:
+            info.defaulName = "subzero";
+            info.spritesPath = "./resources/sprites/subzero";
+//            info.colorSettings;
+            break;
+        case EtipoPersonaje::SUBZERO_GREEN:
+            info.defaulName = "subzero";
+            info.spritesPath = "./resources/sprites/subzero";
+//            info.colorSettings;
+            break;
+        case EtipoPersonaje::SUBZERO_RED:
+            info.defaulName = "subzero";
+            info.spritesPath = "./resources/sprites/subzero";
+//            info.colorSettings;
+            break;
+        case EtipoPersonaje::SUBZERO_YELLOW:
+            info.defaulName = "subzero";
+            info.spritesPath = "./resources/sprites/subzero";
+//            info.colorSettings;
+            break;
+        case EtipoPersonaje::ERMAC:
+            info.defaulName = "ermac";
+            info.spritesPath = "./resources/sprites/ermac";
+//            info.colorSettings;
+            break;
+        case EtipoPersonaje::ERMAC_BLUE:
+            info.defaulName = "ermac";
+            info.spritesPath = "./resources/sprites/ermac";
+//            info.colorSettings;
+            break;
+        case EtipoPersonaje::ERMAC_GREEN:
+            info.defaulName = "ermac";
+            info.spritesPath = "./resources/sprites/ermac";
+//            info.colorSettings;
+            break;
+        case EtipoPersonaje::ERMAC_YELLOW:
+            info.defaulName = "ermac";
+            info.spritesPath = "./resources/sprites/ermac";
+//            info.colorSettings;
+            break;
+        case EtipoPersonaje::LIUKANG:
+            info.defaulName = "liukang";
+            info.spritesPath = "./resources/sprites/liukang";
+//            info.colorSettings;
+            break;
+        case EtipoPersonaje::LIUKANG_BLUE:
+            info.defaulName = "liukang";
+            info.spritesPath = "./resources/sprites/liukang";
+//            info.colorSettings;
+            break;
+        case EtipoPersonaje::LIUKANG_GREEN:
+            info.defaulName = "liukang";
+            info.spritesPath = "./resources/sprites/liukang";
+//            info.colorSettings;
+            break;
+        case EtipoPersonaje::LIUKANG_YELLOW:
+            info.defaulName = "liukang";
+            info.spritesPath = "./resources/sprites/liukang";
+//            info.colorSettings;
+            break;
+    }
+    return info;
+}
+
 
 enum TestadoPersonaje {
     // Movimient
-            MOV_PARADO,
+    MOV_PARADO,
     MOV_CAMINANDO,
     MOV_SALTANDO_VERTICAL,
     MOV_SALTANDO_OBLICUO,
     MOV_AGACHADO,
 
     // Accion
-            ACC_PINIA_BAJA,
+    ACC_PINIA_BAJA,
     ACC_PINIA_BAJA_AGACHADO,
     ACC_PINIA_ALTA,
     ACC_PINIA_ALTA_AGACHADO, //gancho
@@ -150,9 +225,6 @@ static string TestadoPersonajeToString(TestadoPersonaje e){
         case TestadoPersonaje::REA_FAT_ARCADE: return"rea_fat_arcade";
         case TestadoPersonaje::FAT_ARCADE: return"fat_arcade";
 
-
-
-
     }
     return NULL;
 }
@@ -180,6 +252,7 @@ enum Tresultado{
     PERDIO,
     EMPATO,
 };
+
 static int mostrarResultado(Tresultado resultado){
     switch (resultado) {
         case (NADA):cout<<"NADA"<<endl;

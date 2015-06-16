@@ -1,5 +1,4 @@
 #include "CapaInfo.h"
-#include "SDL2/SDL.h"
 
 const float porcBarraRelleno = (const float) (162.0/168.0);
 const float porcTamBarraPantallaX = 0.35;
@@ -8,10 +7,6 @@ const float porcDistBarraPantallaX = 0.05;
 const float porcDistBarraPantallaY = 0.04;
 const string dirPathVidaRoja = "resources/accesorios/barraVidaRoja.gif";
 const string dirPathVidaVerde = "resources/accesorios/barraVidaVerde.gif";
-
-const string FONT_PATH = "resources/font/mortalkombat2.ttf";
-const int FONT_SIZE = 18;
-
 
 CapaInfo::CapaInfo() {}
 

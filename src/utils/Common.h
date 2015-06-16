@@ -22,7 +22,9 @@
  */
 static const string SPRITES_FORMAT = ".png";
 static const float MIN_DISTANCE_FROM_BOUND = 20;
-const float velocidadDelPoder = 10;
+static const string FONT_PATH = "resources/font/mortalkombat2.ttf";
+static const int FONT_SIZE = 18;
+static const float velocidadDelPoder = 10;
 
 /**
  * Estas estructuras, pseudo-clases cruzan toda
@@ -62,7 +64,7 @@ struct Posicion{
         return Posicion(x - p.x, y - p.y);
     }
     bool operator==(Posicion p){
-        return (p.x == x) && (p.x == y);
+        return (p.x == x) && (p.y == y);
     }
 
     void setX(float pos_x){

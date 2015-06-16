@@ -1,79 +1,151 @@
 #include "MenuPlayerSelection.h"
-#include <cstdlib>
 
 MenuPlayerSelection::MenuPlayerSelection() {
-    mSelectionConfirmed[0] = false;
-    mSelectionConfirmed[1] = false;
-    seleccionandoConMouse[0] = false;
-    seleccionandoConMouse[1] = false;
+    mState = State::PLAYER_1_CHARACTER;
+    mMusic = new Musica();
     mSelection[0] = Posicion(0,0);
-    mSelection[1] = Posicion(3,0);
-    movimientoSelec = new Musica();
-    seleccion = new Musica();
+    mSelection[1] = Posicion(-1,-1);
+
+//    seleccionandoConMouse[0] = false;
+//    seleccionandoConMouse[1] = false;
+
 }
 
-EtipoPersonaje MenuPlayerSelection::getType(Posicion p) {
-    if (p.getX() == 0 && p.getY() == 0) return EtipoPersonaje::SUBZERO;
-    else if (p.getX() == 1 && p.getY() == 0) return EtipoPersonaje::SUBZERO_GREEN;
-    else if (p.getX() == 2 && p.getY() == 0) return EtipoPersonaje::SUBZERO_RED;
-    else if (p.getX() == 3 && p.getY() == 0) return EtipoPersonaje::SUBZERO_YELLOW;
-    else if (p.getX() == 0 && p.getY() == 1) return EtipoPersonaje::ERMAC;
-    else if (p.getX() == 1 && p.getY() == 1) return EtipoPersonaje::ERMAC_BLUE;
-    else if (p.getX() == 2 && p.getY() == 1) return EtipoPersonaje::ERMAC_GREEN;
-    else if (p.getX() == 3 && p.getY() == 1) return EtipoPersonaje::ERMAC_YELLOW;
-    else if (p.getX() == 0 && p.getY() == 2) return EtipoPersonaje::LIUKANG;
-    else if (p.getX() == 1 && p.getY() == 2) return EtipoPersonaje::LIUKANG_BLUE;
-    else if (p.getX() == 2 && p.getY() == 2) return EtipoPersonaje::LIUKANG_GREEN;
-    else if (p.getX() == 3 && p.getY() == 2) return EtipoPersonaje::LIUKANG_YELLOW;
-    else return EtipoPersonaje::SUBZERO;
+bool MenuPlayerSelection::selectionComplete() {
+    return mState == State::COMPLETE ;
 }
 
-void MenuPlayerSelection::updateSelection(TinputMovimiento movimiento,int jugador) {
+bool MenuPlayerSelection::firstPlayerSelected() {
+    return mState == State::PLAYER_2_CHARACTER;
+}
+
+array<Posicion, 2> MenuPlayerSelection::update(Tinput inputs, Posicion mouse) {
+    switch (mState){
+        case State::PLAYER_1_CHARACTER: {
+            // muevo el cuadro de seleccion
+            if ( updateSelectionKeyboard(inputs.movimiento, 0) || updateSelectionMouse(mouse, 0) )
+                mMusic->selecciona();
+
+            // verifico los clicks/enters
+            if (    inputs.game == TinputGame::KEY_ENTER ||
+                    ( inputs.game == TinputGame::CLICK_IZQ_MOUSE && mouse == mSelection[0] )
+                    ) {
+                mMusic->click();
+                mNames[0] = getInfoPersonaje(getType(mSelection[0])).defaulName;
+                mState = State::PLAYER_1_NAME;
+            }
+            break;
+        }
+        case State::PLAYER_1_NAME:
+//            switch (inputs.)
+//                mNames[0]
+            mState = State::PLAYER_2_CHARACTER;
+            mSelection[1] = Posicion(0, 0);
+            break;
+        case State::PLAYER_2_CHARACTER:{
+            // muevo el cuadro de seleccion
+            if (    updateSelectionKeyboard(inputs.movimiento, 1) || updateSelectionMouse(mouse, 1) )
+                mMusic->selecciona();
+
+            // verifico los clicks/enters
+            if (    inputs.game == TinputGame::KEY_ENTER ||
+                    ( inputs.game == TinputGame::CLICK_IZQ_MOUSE && mouse == mSelection[1] )
+                    ) {
+                mMusic->click();
+                mState = State::PLAYER_2_NAME;
+            }
+            break;
+        };
+        case State::PLAYER_2_NAME:
+            mState = State::COMPLETE;
+            break;
+        default:;
+    };
+    return mSelection;
+}
+
+bool MenuPlayerSelection::updateSelectionKeyboard(TinputMovimiento movimiento, int jugador) {
+    bool changed = false;
+
     switch ( movimiento ){
         case TinputMovimiento::KEY_ABAJO:{
-            movimientoSelec->selecciona();
-            if (mSelection[jugador].y < ROWS-1)
+            if (mSelection[jugador].y < ROWS-1){
                 mSelection[jugador].y++;
+                changed = true;
+            }
             break;
         };
         case TinputMovimiento::KEY_ARRIBA:{
-            movimientoSelec->selecciona();
-            if (mSelection[jugador].y > 0)
+            mMusic->selecciona();
+            if (mSelection[jugador].y > 0){
                 mSelection[jugador].y--;
+                changed = true;
+            }
             break;
         };
         case TinputMovimiento::KEY_DERECHA:{
-            movimientoSelec->selecciona();
-            if (mSelection[jugador].x < COLUMNS-1)
+            if (mSelection[jugador].x < COLUMNS-1){
                 mSelection[jugador].x++;
+                changed = true;
+            }
             break;
         };
         case TinputMovimiento::KEY_IZQUIERDA:{
-            movimientoSelec->selecciona();
-            if (mSelection[jugador].x > 0)
+            if (mSelection[jugador].x > 0){
                 mSelection[jugador].x--;
+                changed = true;
+            }
             break;
         };
         case TinputMovimiento::KEY_ARRIBA_DERECHA:{
-            movimientoSelec->selecciona();
-            if (mSelection[jugador].x < COLUMNS-1)
+            if (mSelection[jugador].x < COLUMNS-1) {
                 mSelection[jugador].x++;
-            if (mSelection[jugador].y > 0)
+                changed = true;
+            }
+            if (mSelection[jugador].y > 0){
                 mSelection[jugador].y--;
+                changed = true;
+            }
             break;
         };
         case TinputMovimiento::KEY_ARRIBA_IZQUIERDA:{
-            movimientoSelec->selecciona();
-            if (mSelection[jugador].x > 0)
+            if (mSelection[jugador].x > 0) {
                 mSelection[jugador].x--;
-            if (mSelection[jugador].y > 0)
+                changed = true;
+            }
+            if (mSelection[jugador].y > 0){
                 mSelection[jugador].y--;
+                changed = true;
+            }
             break;
         };
+        default:;
+    }
+    return changed;
+}
+
+bool MenuPlayerSelection::updateSelectionMouse(Posicion mousePosition, int jugador) {
+    if (    mousePosition.x < 0             ||
+            mousePosition.y < 0             ||
+            mousePosition.x > COLUMNS  - 1  ||
+            mousePosition.y > ROWS - 1      ||
+            mousePosition == mSelection[jugador]
+            )
+        return false;
+    else {
+        mSelection[jugador] = mousePosition;
+        return true;
     }
 }
 
-vector<Posicion> MenuPlayerSelection::update(vector<Tinput> inputs, Posicion coordenadasMouse,vector<Trect> players) {
+MenuPlayerSelection::~MenuPlayerSelection() {
+    delete mMusic;
+}
+
+
+/* SE COMENTA POR SI SE LLEGA A NECESITAR ALGO DE LA LOGICA QUE HAY...PERO EN LO QUE HICE NO SE USA
+
+vector<Posicion> MenuPlayerSelection::update(vector<Tinput> inputs, Posicion coordenadasMouse, vector<Trect> players) {
 
     if(!mSelectionConfirmed[0] && !mSelectionConfirmed[1]){
         actualizarSeleccion(coordenadasMouse,players,0);
@@ -99,21 +171,20 @@ vector<Posicion> MenuPlayerSelection::update(vector<Tinput> inputs) {
     TinputMovimiento movimiento1 = (mSelectionConfirmed[0]) ? TinputMovimiento::KEY_NADA : inputs.at(0).movimiento;
     TinputMovimiento movimiento2 = (mSelectionConfirmed[1]) ? TinputMovimiento::KEY_NADA : inputs.at(1).movimiento;
 
-
     if(!mSelectionConfirmed[0] && !mSelectionConfirmed[1]) {
-        updateSelection(movimiento1, 0);
+        updateSelectionKeyboard(movimiento1, 0);
 
         if (inputs[0].accion == TinputAccion::KEY_PINIA_ALTA) {
-            seleccion->click();
+            mMusic->click();
             mSelectionConfirmed[0] = true;
             personajesElegidos[0] = this->getType(mSelection[0]);
 
         }
     }
     else if(mSelectionConfirmed[0] && !mSelectionConfirmed[1]){
-        updateSelection(movimiento2,1);
+        updateSelectionKeyboard(movimiento2,1);
         if (inputs[1].accion == TinputAccion::KEY_PINIA_ALTA){
-            seleccion->click();
+            mMusic->click();
             mSelectionConfirmed[1] = true;
             personajesElegidos[1] = this->getType(mSelection[1]);
         }
@@ -127,10 +198,10 @@ vector<Posicion> MenuPlayerSelection::updateConAleatorio(vector<Tinput> inputs) 
     TinputMovimiento movimiento1 = (mSelectionConfirmed[0]) ? TinputMovimiento::KEY_NADA : inputs.at(0).movimiento;
 
     if(!mSelectionConfirmed[0] && !mSelectionConfirmed[1]) {
-        updateSelection(movimiento1, 0);
+        updateSelectionKeyboard(movimiento1, 0);
 
         if (inputs[0].accion == TinputAccion::KEY_PINIA_ALTA) {
-            seleccion->click();
+            mMusic->click();
             mSelectionConfirmed[0] = true;
             personajesElegidos[0] = this->getType(mSelection[0]);
         }
@@ -162,17 +233,7 @@ vector<Posicion> MenuPlayerSelection::updateConAleatorio(vector<Tinput> inputs, 
     return { mSelection[0], mSelection[1]};
 }
 
-bool MenuPlayerSelection::selectionComplete() {
-    return mSelectionConfirmed[0] && mSelectionConfirmed[1];
-}
-
-MenuPlayerSelection::~MenuPlayerSelection() {
-    delete movimientoSelec;
-    delete seleccion;
-}
-
 bool MenuPlayerSelection::dentroDeUnPlayer(Posicion posMouse,Trect player,int jugador) {
-
     if (posMouse.x < (player.p.x + player.d.w) && (posMouse.x >= player.p.x)) {
         if(posMouse.y >= player.p.y && posMouse.y < (player.p.y + player.d.h)){
             seleccionandoConMouse[jugador] = true;
@@ -181,6 +242,7 @@ bool MenuPlayerSelection::dentroDeUnPlayer(Posicion posMouse,Trect player,int ju
     }
     return false;
 }
+
 
 void MenuPlayerSelection::actualizarSeleccion(Posicion coordenadasMouse, vector<Trect> players, int jugador) {
 
@@ -199,4 +261,4 @@ void MenuPlayerSelection::actualizarSeleccion(Posicion coordenadasMouse, vector<
 
     else seleccionandoConMouse[jugador] = false;
 }
-
+*/
