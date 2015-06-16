@@ -367,6 +367,7 @@ enum class TinputGame{
     KEY_RESTART,
     KEY_ESC,
     KEY_ENTER,
+    KEY_REDUCCION_VIDA,
     KEY_EXIT
 };
 

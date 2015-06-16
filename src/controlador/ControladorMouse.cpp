@@ -12,7 +12,7 @@ TinputGame ControladorMouse::moverMouse(SDL_Event event) {
         posicionMouse.x = event.button.x;
         posicionMouse.y = event.button.y;
     }
-    if(event.type == SDL_MOUSEBUTTONDOWN){
+    if(event.type == SDL_MOUSEBUTTONUP){
         if(event.button.button == SDL_BUTTON_LEFT) return TinputGame::CLICK_IZQ_MOUSE;
     }
 }

@@ -3,6 +3,7 @@
 #include "Mundo.h"
 
 const int tiempoInicialRound = 99;
+const int tiempoDeFatality = 20;
 
 /* Constructor de Mundo.
  * Recibe la configuracion que se devuelve del parser.
@@ -77,8 +78,14 @@ void Mundo::verificarDireccionDeLosPersonajes() {
 }
 
 Tcambio Mundo::actualizarPJ(Personaje *PJ) {
-	if(personaje1->estadoActual == REA_MAREADO) personaje2->estadoFatality = true;
-	if(personaje2->estadoActual == REA_MAREADO) personaje1->estadoFatality = true;
+	if(personaje1->estadoActual == REA_MAREADO) {
+		personaje1->vida = 1;
+		personaje2->estadoFatality = true;
+	}
+	if(personaje2->estadoActual == REA_MAREADO) {
+		personaje2->vida = 1;
+		personaje1->estadoFatality = true;
+	}
 
 	Tcambio cambio;
 	cambio.dPJ = PJ->rectanguloPj.d;
@@ -119,6 +126,13 @@ Tcambio Mundo::actualizarPJ(Personaje *PJ) {
  * Se asigna todos los datos pertinentes de personaje a Tcambio.
  */
 vector<Tcambio> Mundo::actualizarMundo(vector<Tinput> inputs,EgameState modoDeJuego) {
+	if(colisionador.detectarColision(personaje1,personaje2)){
+		personaje1->colisionando = true;
+		personaje2->colisionando = true;
+	}else {
+		personaje1->colisionando = false;
+		personaje2->colisionando = false;
+	}
 	vector<Tcambio> c;
 	Tcambio cambio1, cambio2;
 
@@ -131,6 +145,12 @@ vector<Tcambio> Mundo::actualizarMundo(vector<Tinput> inputs,EgameState modoDeJu
 		tiempoRound--;
 	}
 
+	if(inputs[0].game == TinputGame::KEY_REDUCCION_VIDA){
+		personaje1->vida -= 5;
+	}
+	if(inputs[1].game == TinputGame::KEY_REDUCCION_VIDA){
+		personaje2->vida -= 5;
+	}
 
 	//Verifica y da vuelta la direccion de los personajes si se pasan
 	verificarDireccionDeLosPersonajes();
@@ -145,6 +165,7 @@ vector<Tcambio> Mundo::actualizarMundo(vector<Tinput> inputs,EgameState modoDeJu
 		input.accion = TinputAccion::KEY_NADA;
 		personaje2->realizarAccion(input);
 		if(personaje2->vida <= 50) personaje2->vida += 50;
+		if(tiempoRound <= 50) tiempoRound += 50;
 		personaje1->estadoFatality = true;
 	}
 
@@ -159,14 +180,7 @@ vector<Tcambio> Mundo::actualizarMundo(vector<Tinput> inputs,EgameState modoDeJu
 	// COLISIONES
 	colisionador.resolverColisiones(personaje1,personaje2);
 	//Se actualizan a los personajes
-	if(personaje1->estadoActual == FAT_ARCADE && personaje1->countLoops == 13){
-		personaje1->llevarACabo.rectaDelPj.p.x = personaje2->llevarACabo.rectaDelPj.p.x;
-		personaje2->estadoActual = REA_FAT_ARCADE;
-		personaje2->countLoops = 0;
-	}
-	if(personaje2->estadoActual == FAT_ARCADE && personaje2->countLoops == 13) {
-		personaje1->llevarACabo.rectaDelPj.p.x = personaje1->rectanguloPj.p.y;
-	}
+	detectarRealiaccionesDeFatalities();
 
 	cambio1 = actualizarPJ(personaje1);
 	cambio2 = actualizarPJ(personaje2);
@@ -182,43 +196,43 @@ void Mundo::verificarGanadorCuandoSeAcabaElTiempo() {
 		if (roundsPJ1 == 1) {
 			personaje2->reinicializar(REA_MAREADO);
 			personaje2->vida = 1;
-			tiempoRound = 20;
+			tiempoRound = tiempoDeFatality;
 		} else {
 			personaje1->reinicializar(REA_VICTORIA);
 			personaje2->reinicializar(REA_DERROTA);
+			personaje1->vida = 100;
 			personaje2->vida = 100;
-			personaje2->vida = 100;
-			tiempoRound = 100;
+			tiempoRound = tiempoInicialRound;
 		}
 		roundsPJ1++;
 	} else if (personaje2->vida > personaje1->vida) {
 		if (roundsPJ2 == 1) {
 			personaje1->reinicializar(REA_MAREADO);
 			personaje1->vida = 1;
-			tiempoRound = 20;
+			tiempoRound = tiempoDeFatality;
 		} else {
 			personaje2->reinicializar(REA_VICTORIA);
 			personaje1->reinicializar(REA_DERROTA);
+			personaje1->vida = 100;
 			personaje2->vida = 100;
-			personaje2->vida = 100;
-			tiempoRound = 100;
+			tiempoRound = tiempoInicialRound;
 		}
 		roundsPJ2++;
 	} else {
 		if (roundsPJ2 == 1 && roundsPJ1 == 0) {
 			personaje1->estadoActual = REA_MAREADO;
-			tiempoRound = 20;
+			tiempoRound = tiempoDeFatality;
 		} else if (roundsPJ1 == 1 && roundsPJ2 == 0) {
 			personaje2->estadoActual = REA_MAREADO;
-			tiempoRound = 20;
+			tiempoRound = tiempoDeFatality;
 		} else if (roundsPJ1 == 1 && roundsPJ2 == 1) {
 			personaje1->estadoActual = REA_MAREADO;
 			personaje2->estadoActual = REA_MAREADO;
-			tiempoRound = 10;
+			tiempoRound = tiempoDeFatality;
 		} else if (roundsPJ1 == 0 && roundsPJ2 == 0) {
 			personaje1->estadoActual = REA_VICTORIA;
 			personaje2->estadoActual = REA_VICTORIA;
-			tiempoRound = 100;
+			tiempoRound = tiempoInicialRound;
 		}
 		roundsPJ1++;
 		roundsPJ2++;
@@ -231,7 +245,7 @@ void Mundo::verificarSiTerminoElRound() {
 			personaje1->reinicializar(REA_MAREADO);
 			personaje1->vida = 1;
 			roundsPJ2++;
-			tiempoRound = 20;
+			tiempoRound = tiempoDeFatality;
 		}
 		else{
 			personaje1->reinicializar(REA_DERROTA);
@@ -239,16 +253,14 @@ void Mundo::verificarSiTerminoElRound() {
 			roundsPJ2++;
 			personaje1->vida = 100;
 			personaje2->vida = 100;
-			tiempoRound = 100;
-			cout<<"1"<<endl;
+			tiempoRound = tiempoInicialRound;
 		}
-
 	}else if(personaje2->vida == 0) {
 		if (roundsPJ1 == 1) {
 			personaje2->reinicializar(REA_MAREADO);
 			personaje2->vida = 1;
 			roundsPJ1++;
-			tiempoRound = 20;
+			tiempoRound = tiempoDeFatality;
 		}
 		else {
 			personaje1->reinicializar(REA_VICTORIA);
@@ -256,14 +268,13 @@ void Mundo::verificarSiTerminoElRound() {
 			roundsPJ1++;
 			personaje1->vida = 100;
 			personaje2->vida = 100;
-			tiempoRound = 100;
-			cout<<"2"<<endl;
+			tiempoRound = tiempoInicialRound;
 		}
 	}
 }
 
 void Mundo::verificarGanadorDelRound() {
-	// Si el tiempo se termino me fijo quien tiene mas vida -------------------------
+	// Si el tiempo se termino me fijo quien tiene mas vida
 	if(tiempoRound == 0) {
 		verificarGanadorCuandoSeAcabaElTiempo();
 	} else if(!personaje1->estadoFatality || !personaje2->estadoFatality){
@@ -275,7 +286,7 @@ void Mundo::terminoLaPelea(){
 	if(roundsPJ1 == 2 && !personaje1->estadoFatality && roundsPJ2 <=1) {
 		personaje1->llevarACabo.resultado = GANO;
 		personaje2->llevarACabo.resultado = PERDIO;
-	}else if((roundsPJ1 == 2 && !personaje1->estadoFatality && roundsPJ2 <=1)){
+	}else if((roundsPJ2 == 2 && !personaje1->estadoFatality && roundsPJ1 <=1)){
 		personaje1->llevarACabo.resultado = PERDIO;
 		personaje2->llevarACabo.resultado = GANO;
 	}else if((roundsPJ1 == 2) &&(roundsPJ2 == 2)){
@@ -292,18 +303,31 @@ void Mundo::terminoLaPelea(){
 
 bool Mundo::huboGanador(){
 	if((personaje1->llevarACabo.resultado == GANO)&&
-	    personaje1->estadoActual != REA_VICTORIA && personaje1->estadoAnterior == REA_VICTORIA){
-		return true;
-	}else if((personaje2->llevarACabo.resultado == GANO)&&
-			  personaje2->estadoActual != REA_VICTORIA && personaje2->estadoAnterior == REA_VICTORIA){
+	   (personaje2->estadoActual != REA_FAT_FUEGO && personaje2->estadoAnterior == REA_FAT_FUEGO)||
+	   (personaje2->estadoActual != REA_FAT_ARCADE && personaje2->estadoAnterior == REA_FAT_ARCADE)||
+	   (personaje2->estadoActual != REA_FAT_LEVANTA&& personaje2->estadoAnterior == REA_FAT_LEVANTA)||
+	   (personaje2->estadoActual != REA_FAT_GANCHO&& personaje2->estadoAnterior == REA_FAT_GANCHO)||
+	   (personaje2->estadoActual != REA_FAT_BRUTALITY_SUBZERO&& personaje2->estadoAnterior == REA_FAT_BRUTALITY_SUBZERO)){
 		return true;
 	}
-	return false;
+	if((personaje2->llevarACabo.resultado == GANO)&&
+	   (personaje1->estadoActual != REA_FAT_FUEGO  && personaje1->estadoAnterior == REA_FAT_FUEGO)||
+	   (personaje1->estadoActual != REA_FAT_ARCADE && personaje1->estadoAnterior == REA_FAT_ARCADE)||
+	   (personaje1->estadoActual != REA_FAT_LEVANTA&& personaje1->estadoAnterior == REA_FAT_LEVANTA)||
+	   (personaje1->estadoActual != REA_FAT_GANCHO && personaje1->estadoAnterior == REA_FAT_GANCHO)||
+	   (personaje1->estadoActual != REA_FAT_BRUTALITY_SUBZERO&& personaje1->estadoAnterior == REA_FAT_BRUTALITY_SUBZERO)){
+		return true;
+	}
+	if((personaje1->llevarACabo.resultado == GANO)&& personaje1->estadoActual != REA_VICTORIA && personaje1->estadoAnterior == REA_VICTORIA){
+		return true;
+	}
+
+	return ((personaje2->llevarACabo.resultado == GANO)&& (personaje2->estadoActual != REA_VICTORIA) && (personaje2->estadoAnterior == REA_VICTORIA));
 }
 
 string Mundo::quienGano() {
-	if(personaje1->llevarACabo.resultado == GANO) return personaje1->nombre;
-	if(personaje2->llevarACabo.resultado == GANO) return personaje2->nombre;
+	if (personaje1->llevarACabo.resultado == GANO) return personaje1->nombre;
+	if (personaje2->llevarACabo.resultado == GANO) return personaje2->nombre;
 }
 
 
@@ -311,4 +335,30 @@ Mundo::~Mundo() {
 	delete personaje1;
 	delete personaje2;
 	loguer->loguear("Se libero a los personajes", Log::LOG_DEB);
+}
+
+void Mundo::detectarRealiaccionesDeFatalities() {
+	//                       FATALITY ARCADE
+	if(personaje1->estadoActual == FAT_ARCADE && personaje1->countLoops == 13){
+	   personaje1->llevarACabo.rectaDelPj.p.x =  personaje2->llevarACabo.rectaDelPj.p.x;
+	   personaje2->reinicializar(REA_FAT_ARCADE);
+	}
+	if(personaje2->estadoActual == FAT_ARCADE && personaje2->countLoops == 13){
+		cout<<personaje1->llevarACabo.rectaDelPj.p.x<<endl;
+		personaje2->llevarACabo.rectaDelPj.p.x =  personaje1->llevarACabo.rectaDelPj.p.x;
+		cout<<personaje2->llevarACabo.rectaDelPj.p.x<<endl;
+		personaje1->reinicializar(REA_FAT_ARCADE);
+	}
+	//                       FATALITY LEVANTA
+	if(personaje2->estadoActual == FAT_LEVANTA && personaje2->countLoops == 4) {
+		personaje1->reinicializar(REA_FAT_LEVANTA);
+	}else if(personaje1->estadoActual == FAT_LEVANTA && personaje1->countLoops == 4) {
+		personaje2->reinicializar(REA_FAT_LEVANTA);
+	}
+	//                       FATALITY GANCHO
+	if((personaje1->estadoActual == FAT_GANCHO)&&(personaje1->countLoops == 4)) personaje2->reinicializar(REA_FAT_GANCHO);
+	if((personaje2->estadoActual == FAT_GANCHO)&&(personaje2->countLoops == 4)) personaje1->reinicializar(REA_FAT_GANCHO);
+	//                       BRUTALITY SUBZERO
+	if(personaje1->estadoActual == FAT_BRUTALITY_SUBZERO) personaje2->reinicializar(REA_FAT_BRUTALITY_SUBZERO);
+	if(personaje2->estadoActual == FAT_BRUTALITY_SUBZERO) personaje1->reinicializar(REA_FAT_BRUTALITY_SUBZERO);
 }

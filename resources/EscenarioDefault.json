@@ -56,8 +56,10 @@
     },
 
    "fatalities":{
-	"fatal":"acef",
-    "fatal2":"ccda"
+       //
+	"fatal2":"cacd",
+       // DW -> PH KH
+    "fatal":"acef"
 },
 
    "global":{

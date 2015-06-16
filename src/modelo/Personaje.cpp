@@ -31,6 +31,7 @@ Personaje::Personaje(string nombre,Tdireccion direccionInicial,Trect cuerpo, flo
 	countLoops = 0;
 	debuff = 0;
 	estadoFatality = false;
+	colisionando = false;
 }
 
 void Personaje::crearCombosdelPersonaje(Tcombos combos) {
@@ -63,7 +64,10 @@ void Personaje::crearCombosdelPersonaje(Tcombos combos) {
 void Personaje::realizarAccion(Tinput orden) {
 
 	if((estadoActual != REA_FAT_FUEGO && estadoAnterior == REA_FAT_FUEGO)||
-	   (estadoActual != REA_FAT_ARCADE && estadoAnterior == REA_FAT_ARCADE)) vida--;
+	   (estadoActual != REA_FAT_ARCADE && estadoAnterior == REA_FAT_ARCADE)||
+	   (estadoActual != REA_FAT_LEVANTA && estadoAnterior == REA_FAT_LEVANTA)||
+	   (estadoActual != REA_FAT_GANCHO && estadoAnterior == REA_FAT_GANCHO)||
+	   (estadoActual != REA_FAT_BRUTALITY_SUBZERO && estadoAnterior == REA_FAT_BRUTALITY_SUBZERO)) vida--;
 
 	verificarEstadoFatality();
 	TestadoPersonaje estadoCompuesto = generarEstado(orden);
@@ -100,12 +104,21 @@ void Personaje::realizarAccion(Tinput orden) {
 	}
 	comboFatality->actualizar(orden);
 	if(comboFatality->puedoRealizarCombo() && estadoFatality){
-		estadoAnterior = MOV_PARADO;
+		estadoAnterior = estadoActual;
 		if(nombre.compare("liukang") == 0) estadoActual = FAT_ARCADE;
 		if(nombre.compare("subzero") == 0) estadoActual = FAT_FUEGO;
-		if(nombre.compare("ermac") == 0) estadoActual = FAT_FUEGO;
+		if(nombre.compare("ermac") == 0)   estadoActual = FAT_LEVANTA;
+		countLoops = 1;
 	}
-
+	//TODO: LIUKANG NECESITA UNA FATALITY MAS
+	comboFatality2->actualizar(orden);
+	if(comboFatality2->puedoRealizarCombo() && estadoFatality){
+		estadoAnterior = estadoActual;
+		if(nombre.compare("liukang") == 0) estadoActual = FAT_FUEGO;
+		if(nombre.compare("subzero") == 0) if(colisionando) estadoActual = FAT_BRUTALITY_SUBZERO;
+		if(nombre.compare("ermac") == 0)   if(colisionando) estadoActual = FAT_GANCHO;
+		countLoops = 1;
+	}
 	posicionAnterior = rectanguloPj.p;
 	if (poder->estado == ACTIVADO) poder->avanzar(velocidadDelPoder);
 	rectanguloPj = llevarACabo.laAccion(estadoActual, countLoops, rectanguloPj.p, sentidoPj, direccionPj);
@@ -225,7 +238,7 @@ TestadoPersonaje Personaje::generarEstado(Tinput orden) {
 				case TinputAccion::KEY_PROTECCION:
 					return ACC_PROTECCION;
 				case TinputAccion::KEY_PODER:
-					if(estadoFatality)return FAT_FUEGO;
+					if(estadoFatality)return FAT_GANCHO;
 					return MOV_PARADO;
 			}
 			break;
@@ -387,8 +400,7 @@ bool Personaje::realizarsegundaPinia() {
 }
 
 void Personaje::reinicializar(TestadoPersonaje nuevoEstado) {
-//	vida = vidaInicial;
-	countLoops = 0;
+	countLoops = 1;
 	estadoAnterior = estadoActual;
 	estadoActual = nuevoEstado;
 }
@@ -406,8 +418,11 @@ void Personaje::verificarDebuff() {
 
 void Personaje::verificarEstadoFatality() {
 	if(estadoFatality){
-		if((estadoActual!= FAT_FUEGO && estadoAnterior == FAT_FUEGO)||
-				estadoActual!= FAT_ARCADE && estadoAnterior == FAT_ARCADE){
+		if((estadoActual!= FAT_FUEGO  && estadoAnterior == FAT_FUEGO)||
+		   (estadoActual!= FAT_ARCADE && estadoAnterior == FAT_ARCADE)||
+		   (estadoActual!= FAT_LEVANTA&& estadoAnterior == FAT_LEVANTA)||
+		   (estadoActual!= FAT_GANCHO && estadoAnterior == FAT_GANCHO)||
+		   (estadoActual!= FAT_BRUTALITY_SUBZERO && estadoAnterior == FAT_BRUTALITY_SUBZERO)){
 			if(llevarACabo.resultado == GANO){
 				estadoFatality = false;
 			}

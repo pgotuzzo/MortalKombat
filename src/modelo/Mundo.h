@@ -46,6 +46,8 @@ public:
 	void verificarSiTerminoElRound();
 
 	bool huboGanador();
+
+	void detectarRealiaccionesDeFatalities();
 };
 
 #endif /* SRC_MODELO_MUNDO_H_ */

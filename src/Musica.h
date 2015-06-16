@@ -54,7 +54,7 @@ private:
     //vector<int> contadores;
     int anteriorRound=0;
 
-    int contadores[38];
+    int contadores[TestadoPersonajeCount];
 
     bool uno= true;
 
