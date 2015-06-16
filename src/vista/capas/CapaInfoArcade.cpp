@@ -8,9 +8,6 @@ const float porcTamBarraPantallaY = 0.05;
 const float porcDistBarraPantallaX = 0.05;
 const float porcDistBarraPantallaY = 0.04;
 
-const float posYCombo = 18;
-const Uint32 tiempoMax = 2500;
-
 const float ajusteYTimer = -2;
 const float ajusteXTimer = -5;
 
@@ -87,14 +84,6 @@ CapaInfoArcade::CapaInfoArcade(VistaUtils* utils, Tdimension dimPantalla, string
     mTimerRect.p.x = dimPantalla.w / 2 + ajusteXTimer;
     mTimerRect.p.y = barraVidaCompleta1.p.y + ajusteYTimer;
 
-    //Combo
-    combo1 = mUtils->createTextureFromText(FONT_PATH, "", FONT_SIZE);
-    combo2 = mUtils->createTextureFromText(FONT_PATH, "", FONT_SIZE);
-    rectCombo1.p.x = posX1;
-    rectCombo1.p.y = posYCombo;
-    rectCombo2.p.y = posYCombo;
-    combo1Activo = false;
-    combo2Activo = false;
 }
 
 /*
@@ -112,10 +101,6 @@ void CapaInfoArcade::getTexture(Ttexture texture) {
     mUtils->copyTexture(mNombre1, texture, NULL, &mNombre1Rect);
     mUtils->copyTexture(mNombre2, texture, NULL, &mNombre2Rect);
 
-    // Combos
-    if (combo1Activo) mUtils->copyTexture(combo1, texture, NULL, &rectCombo1);
-    if (combo2Activo) mUtils->copyTexture(combo2, texture, NULL, &rectCombo2);
-
     //Timer
     mUtils->copyTexture(mTimer, texture, NULL, &mTimerRect);
 }
@@ -131,29 +116,6 @@ void CapaInfoArcade::update(Tinput input,TInfoExtra infoExtra) {
     barraVidaParcialPedazo2.p.x = barraVidaCompleta1.d.w - barraVidaParcialPedazo2.d.w;
     barraVidaParcialPantalla2.p.x = anchoPantalla - barraVidaParcialPedazo2.d.w - distBorde;
 
-    if (infoExtra.hayCombo1) {
-        mUtils->copyInTextureFromText(FONT_PATH, infoExtra.nombreCombo1, FONT_SIZE,&combo1);
-        rectCombo1.d = combo1.d;
-        tcombo1 = SDL_GetTicks();
-        combo1Activo=true;
-    }
-    if (infoExtra.hayCombo2) {
-        mUtils->copyInTextureFromText(FONT_PATH, infoExtra.nombreCombo2, FONT_SIZE,&combo2);
-        rectCombo2.d = combo2.d;
-        rectCombo2.p.x = anchoPantalla-rectCombo2.d.w-rectCombo1.p.x;
-        tcombo2 = SDL_GetTicks();
-        combo2Activo=true;
-    }
-    if (SDL_GetTicks()-tcombo1 >= tiempoMax && combo1Activo) {
-        mUtils->copyInTextureFromText(FONT_PATH, "", FONT_SIZE,&combo1);
-        rectCombo1.d.w = 0;
-        combo1Activo=false;
-    }
-    if (SDL_GetTicks()-tcombo2 >= tiempoMax && combo2Activo) {
-        mUtils->copyInTextureFromText(FONT_PATH, "", FONT_SIZE,&combo2);
-        rectCombo2.d.w = 0;
-        combo2Activo=false;
-    }
     mUtils->copyInTextureFromText(FONT_PATH, infoExtra.timer, FONT_SIZE_FOR_TIMER, &mTimer);
 }
 
@@ -168,8 +130,6 @@ void CapaInfoArcade::freeTextures() {
     SDL_DestroyTexture(barraVidaParcialText.t);
     SDL_DestroyTexture(mNombre1.t);
     SDL_DestroyTexture(mNombre2.t);
-    SDL_DestroyTexture(combo1.t);
-    SDL_DestroyTexture(combo2.t);
     SDL_DestroyTexture(mTimer.t);
     loguer->loguear("Elimina capa", Log::LOG_DEB);
 }

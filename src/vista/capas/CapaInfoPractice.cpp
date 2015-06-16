@@ -1,23 +1,40 @@
 #include "CapaInfoPractice.h"
 
 const int tamBuffer = 10;
-const float anchoBoton = 10;
-const float altoBoton = 10;
-const float posXBoton = 10;
-const float posYBoton = 10;
+const float porcAnchoBoton = 0.05;
+const float porcAltoBoton = 0.05;
+const float porcPosXBoton = 0.05;
+const float porcPosYBoton = 0.05;
 const Uint32 tiempoMax = 3000;
+
+const float porcDistComboX = 0.05;
+const float porcDistComboY = 18;
+const Uint32 tiempoMaxCombo = 2500;
+
 
 CapaInfoPractice::CapaInfoPractice(VistaUtils* utils, Tdimension dimPantalla, string nombres[2]) {
     mUtils = utils;
 
     for(int i=0;i<=tamBuffer;i++) {
         Trect rect;
-        rect.d.w = anchoBoton;
-        rect.d.h = altoBoton;
-        rect.p.x = posXBoton+i*3*anchoBoton/2;
-        rect.p.y = posYBoton;
+        rect.d.w = dimPantalla.w *porcAnchoBoton;
+        rect.d.h = dimPantalla.w *porcAltoBoton;
+        rect.p.x = dimPantalla.w *(porcPosXBoton+i*3*porcAnchoBoton/2);
+        rect.p.y = dimPantalla.w *porcPosYBoton;
         rectBotones.push_back(rect);
     }
+
+    float posXCombo = dimPantalla.w * porcDistComboX;
+    float posYCombo = dimPantalla.w * porcDistComboY;
+
+    //Combo
+    combo1 = mUtils->createTextureFromText(FONT_PATH, "", FONT_SIZE);
+    combo2 = mUtils->createTextureFromText(FONT_PATH, "", FONT_SIZE);
+    rectCombo1.p.x = posXCombo;
+    rectCombo1.p.y = posYCombo;
+    rectCombo2.p.y = posYCombo;
+    combo1Activo = false;
+    combo2Activo = false;
 }
 
 
@@ -33,6 +50,11 @@ void CapaInfoPractice::getTexture(Ttexture texture) {
         buffer.pop();
         buffer.push(aux);
     }
+
+    // Combos
+    if (combo1Activo) mUtils->copyTexture(combo1, texture, NULL, &rectCombo1);
+    if (combo2Activo) mUtils->copyTexture(combo2, texture, NULL, &rectCombo2);
+
 }
 
 Ttexture crearTextDeInputAccion(TinputAccion input, VistaUtils* mUtils) {
@@ -114,6 +136,30 @@ void CapaInfoPractice::update(Tinput input,TInfoExtra infoExtra) {
         tecla.textura = crearTextDeInputMovimiento(input.movimiento,mUtils);
         buffer.push(tecla);
     }
+
+    if (infoExtra.hayCombo1) {
+        mUtils->copyInTextureFromText(FONT_PATH, infoExtra.nombreCombo1, FONT_SIZE,&combo1);
+        rectCombo1.d = combo1.d;
+        tcombo1 = SDL_GetTicks();
+        combo1Activo=true;
+    }
+    if (infoExtra.hayCombo2) {
+        mUtils->copyInTextureFromText(FONT_PATH, infoExtra.nombreCombo2, FONT_SIZE,&combo2);
+        rectCombo2.d = combo2.d;
+        rectCombo2.p.x = anchoPantalla-rectCombo2.d.w-rectCombo1.p.x;
+        tcombo2 = SDL_GetTicks();
+        combo2Activo=true;
+    }
+    if (SDL_GetTicks()-tcombo1 >= tiempoMax && combo1Activo) {
+        mUtils->copyInTextureFromText(FONT_PATH, "", FONT_SIZE,&combo1);
+        rectCombo1.d.w = 0;
+        combo1Activo=false;
+    }
+    if (SDL_GetTicks()-tcombo2 >= tiempoMax && combo2Activo) {
+        mUtils->copyInTextureFromText(FONT_PATH, "", FONT_SIZE,&combo2);
+        rectCombo2.d.w = 0;
+        combo2Activo=false;
+    }
 }
 
 void CapaInfoPractice::freeTextures() {
@@ -122,6 +168,8 @@ void CapaInfoPractice::freeTextures() {
         SDL_DestroyTexture(buffer.front().textura.t);
         buffer.pop();
     }
+    SDL_DestroyTexture(combo1.t);
+    SDL_DestroyTexture(combo2.t);
 }
 
 CapaInfoPractice::~CapaInfoPractice() {}
