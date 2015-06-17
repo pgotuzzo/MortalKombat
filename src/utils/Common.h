@@ -16,7 +16,6 @@
 #include <vector>
 #include "SDL2/SDL.h"
 #include "../parser/log/DebugLog.h"
-#include "PersonajeUtils.h"
 
 /**
  * Constantes
@@ -247,6 +246,11 @@ struct Tventana {
 struct Tescenario {
     Tdimension d;
     float yPiso;
+};
+
+enum Tsentido{
+    ADELANTE,
+    ATRAS
 };
 
 enum Tdireccion{

@@ -10,7 +10,6 @@
 
 static const string PODER_ACTIVADO_PATH = "pod_poder";
 static const string PODER_COLISION_PATH = "pod_colision";
-static const int TestadoPersonajeCount = 50;
 
 enum class EtipoPersonaje {
     SUBZERO,
@@ -120,6 +119,7 @@ static TinfoPersonaje getInfoPersonaje(EtipoPersonaje type) {
     return info;
 }
 
+static const int TestadoPersonajeCount = 50;
 
 enum TestadoPersonaje {
     // Movimient
@@ -200,7 +200,7 @@ static string TestadoPersonajeToString(TestadoPersonaje e){
         case TestadoPersonaje::ACC_PINIA_SALTO_VERTICAL: return "acc_pinia_salto";
         case TestadoPersonaje::ACC_PATADA_BAJA: return "acc_patada_baja";
         case TestadoPersonaje::ACC_PATADA_BAJA_ATRAS: return "acc_patada_baja_atras";
-        case TestadoPersonaje::ACC_PATADA_AGACHADO: return "acc_pactada_agachado";
+        case TestadoPersonaje::ACC_PATADA_AGACHADO: return "acc_patada_agachado";
         case TestadoPersonaje::ACC_PATADA_SALTO_VERTICAL: return "acc_patada_salto_vertical";
         case TestadoPersonaje::ACC_PATADA_SALTO: return "acc_patada_salto";
         case TestadoPersonaje::ACC_PATADA_ALTA: return "acc_patada_alta";
@@ -247,11 +247,6 @@ static string TestadoPersonajeToString(TestadoPersonaje e){
     }
     return NULL;
 }
-
-enum Tsentido{
-    ADELANTE,
-    ATRAS
-};
 
 enum TestadoPoder{
     ACTIVADO,
