@@ -4,6 +4,7 @@
 #include <string>
 #include <SDL2/SDL_render.h>
 #include "../VistaUtils.h"
+#include "../../utils/PersonajeUtils.h"
 #include <queue>
 
 using namespace std;

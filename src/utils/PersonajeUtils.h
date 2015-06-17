@@ -453,4 +453,14 @@ static int mostrarEstado(TestadoPersonaje accion){
     }
 }
 
+/**
+ * Informacion extra para los update de capasInfo
+ */
+struct TInfoExtra{
+    string timer,nombreCombo;
+    float porcVida1, porcVida2;
+    bool hayCombo;
+    Tsentido sentido;
+};
+
 #endif //MORTALKOMBAT_PERSONAJEUTILS_H

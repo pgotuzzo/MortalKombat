@@ -391,17 +391,6 @@ struct Tinput{
         return (input.movimiento == movimiento) && (input.accion == accion);
     }
 };
-
-/**
- * Informacion extra para los update de capasInfo
- */
-struct TInfoExtra{
-    string timer,nombreCombo;
-    float porcVida1, porcVida2;
-    bool hayCombo;
-    Tsentido sentido;
-};
-
 struct Tcombos{
     vector<Tinput> poder;
     vector<Tinput> fatality;
