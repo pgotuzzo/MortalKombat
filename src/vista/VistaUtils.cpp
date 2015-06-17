@@ -129,27 +129,24 @@ void VistaUtils::changeColor(SDL_Surface* surface) {
     for(int i = 0; i < pixelNum; i++){
         Uint32 pixel = getPixel(surface, i);
 
-        if (pixel != transparentPixel) {
+        // obtengo el RGB del pixel y lo transformo en HSL
+        Uint8 r, g, b, a;
+        SDL_GetRGBA(pixel, surface->format, &r, &g, &b, &a);
 
-            // obtengo el RGB del pixel y lo transformo en HSL
-            Uint8 r, g, b;
-            SDL_GetRGB(pixel, surface->format, &r, &g, &b);
-
-            TcolorHSL hsl = TcolorHSL::fromRGB(r, g, b);
+        TcolorHSL hsl = TcolorHSL::fromRGB(r, g, b);
 
 
-            // Si se encuentra dentro del rango a modificar
-            if ((hsl.h >= mColorSettings.hmin) &&
-                (hsl.h <= mColorSettings.hmax)) {
+        // Si se encuentra dentro del rango a modificar
+        if ((hsl.h >= mColorSettings.hmin) &&
+            (hsl.h <= mColorSettings.hmax)) {
 
-                // modifico el hue
-                hsl.h = fmod(hsl.h + mColorSettings.delta, 360);
+            // modifico el hue
+            hsl.h = fmod(hsl.h + mColorSettings.delta, 360);
 
-                // creo un pixel con el nuevo color y reemplazo el existente
-                TcolorRGB rgb = TcolorRGB::fromHSL(hsl.h, hsl.s, hsl.l);
-                pixel = SDL_MapRGB(surface->format, rgb.r, rgb.g, rgb.b);
-                putPixel(surface, i, pixel);
-            }
+            // creo un pixel con el nuevo color y reemplazo el existente
+            TcolorRGB rgb = TcolorRGB::fromHSL(hsl.h, hsl.s, hsl.l);
+            pixel = SDL_MapRGBA(surface->format, rgb.r, rgb.g, rgb.b, a);
+            putPixel(surface, i, pixel);
         }
     }
 
@@ -250,7 +247,7 @@ Ttexture VistaUtils::loadTexture(std::string path) {
         loguer->loguear(message.c_str(), Log::LOG_DEB);
 
         if (mColorChangeEnable) {
-            SDL_Surface *aux = SDL_ConvertSurfaceFormat(surface, SDL_PIXELFORMAT_RGB888, 0);
+            SDL_Surface *aux = SDL_ConvertSurfaceFormat(surface, SDL_PIXELFORMAT_RGBA8888, 0);
             if (aux == NULL){
                 loguer->loguear("No se pudo convertir la Surface al formato RGB", Log::LOG_ERR);
                 loguer->loguear(SDL_GetError(), Log::LOG_ERR);

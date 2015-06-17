@@ -104,7 +104,8 @@ void PantallaMenuPlayers::update(array<Posicion, 2> players, array<string, 2> na
             mPlayerViews[i].update(cambio);
 
             // actualizo el texto
-            if (names[i] != mNames[i]){
+            if (names[i].compare(mNames[i]) != 0){
+                mNames[i] = names[i];
                 SDL_DestroyTexture(mTextNames[i].t);
                 string s = (names[i].length() > MAX_CHARACTER_SHOWN) ?
                            names[i].substr(names[i].length() - MAX_CHARACTER_SHOWN, MAX_CHARACTER_SHOWN) :

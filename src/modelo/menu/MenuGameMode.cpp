@@ -37,7 +37,7 @@ void MenuGameMode::update(Tinput input) {
             default:;
         }
 
-        if (input.game == TinputGame::KEY_ENTER || input.accion == TinputAccion::KEY_PINIA_ALTA) {
+        if (input.game == TinputGame::KEY_ENTER) {
             musica->clickConDelay();
             mSelectionConfirmed = true;
         }
@@ -45,7 +45,7 @@ void MenuGameMode::update(Tinput input) {
 }
 
 
-void MenuGameMode::update(Tinput input,Posicion coordenadasMouse,vector<Trect> modos) {
+void MenuGameMode::update(Tinput input, Posicion coordenadasMouse, vector<Trect> modos) {
 
     if(!mSelectionConfirmed) {
         if (dentroDelModo(coordenadasMouse, modos[0])) {
