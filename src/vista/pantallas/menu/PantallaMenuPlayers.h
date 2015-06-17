@@ -23,12 +23,10 @@ private:
 public:
     PantallaMenuPlayers(Tdimension dimPixels, Tdimension dimUl);
 
-    void update(array<Posicion, 2> players, array<string, 2> names);
     void print();
 
+    void update(array<Posicion, 2> players, array<string, 2> names);
     Posicion getRelativePosition(Posicion p);
-
-    vector<Trect> getCuadradoPlayers();
 
     virtual ~PantallaMenuPlayers();
 };

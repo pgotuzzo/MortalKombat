@@ -11,7 +11,7 @@ class ControladorTexto {
 public:
     string caracter;
 
-    void generarCaracter();
+    Tletras generarCaracter(SDL_Event &e);
 
 };
 

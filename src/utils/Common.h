@@ -376,6 +376,12 @@ enum class TinputGame{
     KEY_EXIT
 };
 
+struct Tletras{
+    char letra;
+    bool recibe=false;
+    bool borrado = false;
+};
+
 /**
  * Struct con todos los posibles inputs que el
  *  juego debe ser capaz de manejar.
@@ -384,6 +390,7 @@ struct Tinput{
     TinputMovimiento movimiento = TinputMovimiento::KEY_NADA;
     TinputAccion accion = TinputAccion::KEY_NADA;
     TinputGame game = TinputGame::KEY_NADA;
+    Tletras letras;
 
     unsigned int tiempo;
 

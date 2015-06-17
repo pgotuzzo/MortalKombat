@@ -2,6 +2,7 @@
 #define MORTALKOMBAT_GAMEUTILS_H
 
 #include <string>
+#include <array>
 #include "PersonajeUtils.h"
 
 enum class EmodeSelection {
@@ -35,20 +36,14 @@ enum class EgameResult {
     END
 };
 
-enum class EcharacterType {
-    SUBZERO,
-    ERMAC
+struct Tplayer{
+    string name;
+    EtipoPersonaje type;
 };
 
-// TODO - Hay que editar los structs que venimos manejado hasta ahora!!
-struct Tpersonaje2{
-    std::string name;
-    EcharacterType type;
-};
-
-struct TmenuPersonajeChange{
-    Tpersonaje2 p1;
-    Tpersonaje2 p2;
+struct TmenuPlayerChanges{
+    array<Posicion, 2> positions;
+    array<string, 2> names;
 };
 
 /**

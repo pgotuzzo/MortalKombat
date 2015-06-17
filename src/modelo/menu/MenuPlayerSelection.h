@@ -39,30 +39,17 @@ private:
     array<Posicion, 2> mSelection;
     array<string, 2> mNames;
 
-//    bool seleccionandoConMouse[2];
-
     bool updateSelectionKeyboard(TinputMovimiento movimiento, int jugador);
     bool updateSelectionMouse(Posicion mousePosition, int jugador);
 
 public:
     MenuPlayerSelection();
 
-    array<Posicion, 2> update(Tinput inputs, Posicion mouse);
+    TmenuPlayerChanges update(Tinput inputs, Posicion mouse);
     bool selectionComplete();
     bool firstPlayerSelected();
 
     ~MenuPlayerSelection();
-
-/*
-    EtipoPersonaje personajesElegidos[2];
-    vector<Posicion> update(vector<Tinput> inputs);
-    vector<Posicion> update(vector<Tinput> inputs, Posicion coordenadasMouse, vector<Trect> players);
-    vector<Posicion> updateConAleatorio(vector<Tinput> inputs);
-    vector<Posicion> updateConAleatorio(vector<Tinput> inputs, Posicion coordenadasMouse, vector<Trect> players);
-    void actualizarSeleccion(Posicion coordenadasMouse, vector<Trect> players, int jugador);
-    bool dentroDeUnPlayer(Posicion posMouse,Trect player,int jugador);
- */
-
 };
 
 

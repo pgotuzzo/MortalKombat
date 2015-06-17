@@ -16,9 +16,7 @@ private:
 
     bool dentroDelModo(Posicion posMouse, Trect modo);
 
-    Musica* select;
-
-    Musica* click;
+    Musica* musica;
 
 public:
     MenuGameMode();

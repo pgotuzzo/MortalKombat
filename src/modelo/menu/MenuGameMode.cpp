@@ -4,8 +4,7 @@ MenuGameMode::MenuGameMode() {
     mSelection = EmodeSelection::MULTIPLAYER;
     mSelectionConfirmed = false;
     seleccionandoConMouse = false;
-    select = new Musica();
-    click = new Musica();
+    musica = new Musica();
 }
 
 void MenuGameMode::updateSelection(Tdireccion direction) {
@@ -27,19 +26,19 @@ void MenuGameMode::update(Tinput input) {
         switch (input.movimiento) {
             case TinputMovimiento::KEY_DERECHA:
             case TinputMovimiento::KEY_ARRIBA_DERECHA:
-                select->selecciona();
+                musica->selecciona();
                 updateSelection(DERECHA);
                 break;
             case TinputMovimiento::KEY_IZQUIERDA:
             case TinputMovimiento::KEY_ARRIBA_IZQUIERDA:
-                select->selecciona();
+                musica->selecciona();
                 updateSelection(IZQUIERDA);
                 break;
             default:;
         }
 
         if (input.game == TinputGame::KEY_ENTER || input.accion == TinputAccion::KEY_PINIA_ALTA) {
-            click->clickConDelay();
+            musica->clickConDelay();
             mSelectionConfirmed = true;
         }
     }
@@ -51,20 +50,20 @@ void MenuGameMode::update(Tinput input,Posicion coordenadasMouse,vector<Trect> m
     if(!mSelectionConfirmed) {
         if (dentroDelModo(coordenadasMouse, modos[0])) {
             if (mSelection != EmodeSelection::MULTIPLAYER)
-                select->selecciona();
+                musica->selecciona();
             mSelection = EmodeSelection::MULTIPLAYER;
 
         }
         else if (dentroDelModo(coordenadasMouse, modos[1])) {
             if (mSelection != EmodeSelection::ARCADE)
-                select->selecciona();
+                musica->selecciona();
             mSelection = EmodeSelection::ARCADE;
 
         }
         else if (dentroDelModo(coordenadasMouse, modos[2])) {
 
             if (mSelection != EmodeSelection::PRACTICE)
-                select->selecciona();
+                musica->selecciona();
 
             mSelection = EmodeSelection::PRACTICE;
 
@@ -73,7 +72,7 @@ void MenuGameMode::update(Tinput input,Posicion coordenadasMouse,vector<Trect> m
         else seleccionandoConMouse = false;
 
         if (input.game == TinputGame::CLICK_IZQ_MOUSE && seleccionandoConMouse) {
-            click->clickConDelay();
+            musica->clickConDelay();
             mSelectionConfirmed = true;
         }
     }
@@ -99,6 +98,5 @@ bool MenuGameMode::dentroDelModo(Posicion posMouse, Trect modo) {
 }
 
 MenuGameMode::~MenuGameMode() {
-    delete select;
-    delete click;
+    delete musica;
 }

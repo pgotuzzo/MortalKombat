@@ -73,8 +73,9 @@ void PantallaMenuPlayers::update(array<Posicion, 2> players, array<string, 2> na
                 mPlayers[i] = type;
                 TinfoPersonaje info = getInfoPersonaje(type);
 
-                mPlayerViews[i] = PersonajeVista(mUtils, info.spritesPath, info.dimension, (i == 0) ? DERECHA : IZQUIERDA);
                 mTextNames[i] = mUtils->createTextureFromText(FONT_PATH, info.defaulName, FONT_SIZE);
+                mRectName[i].d = mTextNames[i].d;
+                mPlayerViews[i] = PersonajeVista(mUtils, info.spritesPath, info.dimension, (i == 0) ? DERECHA : IZQUIERDA);
             }
             // actualizo el estado del personaje para darle movimiento
             Tcambio cambio;
@@ -96,14 +97,14 @@ void PantallaMenuPlayers::update(array<Posicion, 2> players, array<string, 2> na
                         );
                 cambio.direccion = IZQUIERDA;
             }
+            mPlayerViews[i].update(cambio);
 
             // actualizo el texto
-            if (names[i] != "" && names[i] != mNames[i]){
+            if (names[i] != mNames[i]){
                 SDL_DestroyTexture(mTextNames[i].t);
                 mTextNames[i] = mUtils->createTextureFromText(FONT_PATH, names[i], FONT_SIZE);
+                mRectName[i].d = mTextNames[i].d;
             }
-
-            mPlayerViews[i].update(cambio);
         }
     }
 }
@@ -125,21 +126,6 @@ void PantallaMenuPlayers::print() {
     }
 
     SDL_RenderPresent(mRenderer);
-}
-
-vector<Trect> PantallaMenuPlayers::getCuadradoPlayers() {
-    vector<Trect> players;
-    for(int i = 0;i<3;i++){
-        for(int j = 0;j<4;j++){
-            Trect player;
-            player.d.w = mTextBackground.d.w * RELATIVE_WIDTH;
-            player.d.h = mTextBackground.d.h * RELATIVE_HEIGHT;
-            player.p.x = mRectSelector[0].d.w * j + mTextBackground.d.w * RELATIVE_HORIZONTAL_BOUND;
-            player.p.y = mRectSelector[0].d.h * i + mTextBackground.d.h * RELATIVE_VERTICAL_BOUND;
-            players.push_back(player);
-        }
-    }
-    return players;
 }
 
 Posicion PantallaMenuPlayers::getRelativePosition(Posicion p) {

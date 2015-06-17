@@ -37,19 +37,9 @@ public:
     virtual vector<Trect> getCuadradoModos();
 
     /**
-     * GET CUADRADO DE LOS PERSONAJES A ELEGIR
-     */
-    virtual vector<Trect> getCuadradoPlayers();
-
-    /**
      * GET ESCALAS DE PIXELES A LOGICAS
      */
     virtual vector<float> getEscalas();
-
-    /**
-     * MENU DE SELECCION DE PERSONAJES
-     */
-    virtual void update(vector<Posicion> players);
 
     virtual ~Pantalla();
 };

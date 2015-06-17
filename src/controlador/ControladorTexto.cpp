@@ -1,15 +1,19 @@
 
 #include "ControladorTexto.h"
 
-void ControladorTexto::generarCaracter() {
+Tletras ControladorTexto::generarCaracter(SDL_Event &e) {
 
-    SDL_Event e;
+	Tletras input;
+	if(e.type == SDL_TEXTINPUT){
+		input.letra = e.text.text[0];
+		cout << e.text.text << endl;
+		input.recibe = true;
 
-    while(SDL_PollEvent(&e) != 0){
+	}else if(e.key.keysym.sym == SDLK_BACKSPACE){
+		input.borrado = true;
+		input.recibe = true;
+	}
 
-        if(e.type == SDL_TEXTINPUT){
-            cout<<e.text.text<<endl;
-        }
-    }
+	return input;
 
 }

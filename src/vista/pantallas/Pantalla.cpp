@@ -36,12 +36,8 @@ vector<float> Pantalla::getEscalas(){
 
 void Pantalla::update(vector<Tcambio> changes,Tinput input) {}
 void Pantalla::update(EmodeSelection selection) {}
-void Pantalla::update(vector<Posicion> players) {}
 void Pantalla::initialize(vector<Tcapa> capas, string personajes[2]){}
 vector<Trect> Pantalla::getCuadradoModos() {
-    return std::vector<Trect>();
-}
-vector<Trect> Pantalla::getCuadradoPlayers(){
     return std::vector<Trect>();
 }
 

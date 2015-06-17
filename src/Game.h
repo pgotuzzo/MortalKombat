@@ -16,15 +16,21 @@ private:
     int mLoopPeriod;
 
     EmodeSelection mModeSelection;
+    array<Tplayer, 2> mPlayers;
 
+    // configuracion
     config* mConfiguration;
+
+    // pantalla
     Pantalla* mPantalla;
+
+    // modelos
     Mundo* mMundo;
     MenuGameMode* mMenuGameMode;
     MenuPlayerSelection* mMenuPlayers;
 
-    bool dentroDelCuadroDePjs(Posicion coordenadasMouse,vector<Trect> cuadroPlayers);
-
+    // musica
+    Musica* mMusic;
 
     // metodos privados
     void clean();
@@ -35,28 +41,12 @@ private:
 
     EgameResult fight(vector<Tinput> inputs);
 
-    Musica* sonidoPJ1;
-    Musica* sonidoPJ2;
-
-    Musica* musicaDelJuego;
-
 public:
-
     EgameState mState;
-
-    EmodeSelection modoDeJuegoElegido;
-
-    EtipoPersonaje personajesElegidos[2];
-
-    string nombrePjs[2];
-    string rutaSprites[2];
-
-    void setInformacionPersonajesElegidos(int jugador);
 
     Game(config* configuration, const int gameloop);
 
     void play(vector<Tinput> inputs,Posicion coordenandasMouse);
-    string getWinner();
 
     virtual ~Game();
 };

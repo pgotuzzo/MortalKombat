@@ -2,6 +2,7 @@
 #include <SDL2/SDL_image.h>
 #include "parser/config.h"
 #include "controlador/ControladorTeclado.h"
+#include "controlador/ControladorTexto.h"
 #include "controlador/ControladorMouse.h"
 #include "Game.h"
 #include "controlador/ControladorJoystick.h"
@@ -22,12 +23,14 @@ void finalizarSDL(){
     SDL_Quit();
 }
 
-vector<Tinput> getInputsTecladoYMouse(ControladorTeclado* controladorT,ControladorMouse* controladorM){
+vector<Tinput> getInputsTecladoYMouse(ControladorTeclado* controladorT,ControladorMouse* controladorM, ControladorTexto* controladorTxt){
     SDL_Event event;
     while(SDL_PollEvent(&event) != 0){}
     SDL_PollEvent(&event);
 
     vector<Tinput> inputs = controladorT->getInputs(event);
+
+ 	inputs[0].letras = controladorTxt->generarCaracter(event);
 
     TinputGame inputGame = controladorM->moverMouse(event);
     if(inputGame == TinputGame::CLICK_IZQ_MOUSE) inputs[0].game = inputGame;
@@ -35,7 +38,7 @@ vector<Tinput> getInputsTecladoYMouse(ControladorTeclado* controladorT,Controlad
     return inputs;
 }
 
-vector<Tinput> getInputsJoystickYMouse(Game* game,ControladorJoystick* controladorJ,ControladorMouse* controladorM){
+vector<Tinput> getInputsJoystickYMouse(Game* game,ControladorJoystick* controladorJ,ControladorMouse* controladorM,ControladorTexto * controladorTxt){
     vector<Tinput> inputs;
     if(game->mState == EgameState::MENU_MODE || game->mState == EgameState::MENU_PLAYERS){
         SDL_Event event;
@@ -43,6 +46,9 @@ vector<Tinput> getInputsJoystickYMouse(Game* game,ControladorJoystick* controlad
         SDL_PollEvent(&event);
 
         inputs = controladorJ->getInputs(event);
+
+       	inputs[0].letras = controladorTxt->generarCaracter(event);
+
 
         TinputGame inputGame = controladorM->moverMouse(event);
         if(inputGame == TinputGame::CLICK_IZQ_MOUSE)inputs[0].game = inputGame;
@@ -72,6 +78,7 @@ int main(int argc, char **argv) {
 
         ControladorTeclado controladorT = ControladorTeclado();
         ControladorMouse controladorMouse = ControladorMouse();
+        ControladorTexto controladorTxt = ControladorTexto();
         ControladorJoystick controladorJ = ControladorJoystick(configuracion->getBotones());
 
         loguer->loguear("Finaliza la creacion del controlador", Log::LOG_DEB);
@@ -84,8 +91,8 @@ int main(int argc, char **argv) {
             vector<Tinput> inputs;
 
             // Si se quiere jugar con el joystick se debe comentar getInputsTeclado y descomentar getInputsJoystick
-            inputs = getInputsTecladoYMouse(&controladorT,&controladorMouse);
-            //inputs = getInputsJoystickYMouse(game,&controladorJ,&controladorMouse);
+            inputs = getInputsTecladoYMouse(&controladorT,&controladorMouse,&controladorTxt);
+           // inputs = getInputsJoystickYMouse(game,&controladorJ,&controladorMouse,&controladorTxt);
             if(inputs[0].game == TinputGame::KEY_NADA) {
                 inputs[0].tiempo = SDL_GetTicks();
                 inputs[1].tiempo = SDL_GetTicks();

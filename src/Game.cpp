@@ -13,27 +13,22 @@ Game::Game(config* configuration, const int gameLoopPeriod) {
     mState = EgameState::MENU_MODE;
     mModeSelection = EmodeSelection::MULTIPLAYER;
 
-    modoDeJuegoElegido = EmodeSelection::MULTIPLAYER;
-
     mPantalla = nullptr;
     mMundo = nullptr;
     mMenuGameMode = nullptr;
     mMenuPlayers = nullptr;
 
-    sonidoPJ1 = new Musica();
-    sonidoPJ2 = new Musica();
-
-    musicaDelJuego = new Musica();
+    mMusic = new Musica();
 
     initialize();
 };
 
 void Game::clean(){
-    if (mPantalla != NULL) {
+    if (mPantalla != NULL){
         delete(mPantalla);
         mPantalla = NULL;
     }
-    if (mMundo != NULL) {
+    if (mMundo != NULL){
         delete(mMundo);
         mMundo = NULL;
     }
@@ -41,7 +36,7 @@ void Game::clean(){
         delete(mMenuGameMode);
         mMenuGameMode = NULL;
     }
-    if (mMenuPlayers != NULL){
+    if (mMenuPlayers != NULL) {
         delete(mMenuPlayers);
         mMenuPlayers = NULL;
     }
@@ -62,7 +57,7 @@ void Game::initialize() {
 
             mPantalla = new PantallaMenuModoJuego(dimPx, dim);
 
-            musicaDelJuego->musicMenu();
+            mMusic->musicMenu();
 
             loguer->loguear("Finaliza la creacion de la pantalla", Log::LOG_DEB);
             loguer->loguear("Creando el modelo...", Log::LOG_DEB);
@@ -84,8 +79,8 @@ void Game::initialize() {
 
             mPantalla = new PantallaMenuPlayers(dimPx, dim);
 
-            musicaDelJuego->pararMusica();
-            musicaDelJuego->musicSeleccion();
+            mMusic->pararMusica();
+            mMusic->musicSeleccion();
 
             loguer->loguear("Finaliza la creacion de la pantalla", Log::LOG_DEB);
             loguer->loguear("Creando el modelo...", Log::LOG_DEB);
@@ -105,21 +100,27 @@ void Game::initialize() {
             Tventana ventana = mConfiguration->getVentana();
             Tescenario escenario = mConfiguration->getEscenario();
 
-            setInformacionPersonajesElegidos(0);
-            setInformacionPersonajesElegidos(1);
-            personajes[0].nombre = nombrePjs[0];
-            personajes[1].nombre = nombrePjs[1];
-            personajes[0].sprites = rutaSprites[0];
-            personajes[1].sprites = rutaSprites[1];
+            for (int i = 0; i < 2; i++){
+                personajes[i].nombre = mPlayers[i].name;
+                personajes[i].zIndex = 2;
+                personajes[i].orientacion = (i == 0) ? DERECHA : IZQUIERDA;
+
+                TinfoPersonaje info = getInfoPersonaje(mPlayers[i].type);
+                personajes[i].d = info.dimension;
+                personajes[i].sprites = info.spritesPath;
+                personajes[i].colorSettings = info.colorSettings;
+
+            }
 
             mPantalla = new PantallaArcade(capas, ventana, escenario, personajes);// Capas
 
-            mPantalla->initialize(capas, nombrePjs);
+            string names[2] = {mPlayers[0].name, mPlayers[1].name};
+            mPantalla->initialize(capas, names);
 
             loguer->loguear("Finaliza la creacion de la pantalla", Log::LOG_DEB);
             loguer->loguear("Creando el modelo...", Log::LOG_DEB);
 
-            mMundo = new Mundo(*mConfiguration,nombrePjs);
+            mMundo = new Mundo(*mConfiguration, names);
             loguer->loguear("Finaliza la creacion del modelo", Log::LOG_DEB);
             break;
         };
@@ -131,22 +132,28 @@ void Game::initialize() {
             Tventana ventana = mConfiguration->getVentana();
             Tescenario escenario = mConfiguration->getEscenario();
 
-            setInformacionPersonajesElegidos(0);
-            setInformacionPersonajesElegidos(1);
-            personajes[0].nombre = nombrePjs[0];
-            personajes[1].nombre = nombrePjs[1];
-            personajes[0].sprites = rutaSprites[0];
-            personajes[1].sprites = rutaSprites[1];
+            for (int i = 0; i < 2; i++){
+                personajes[i].nombre = mPlayers[i].name;
+                personajes[i].zIndex = 2;
+                personajes[i].orientacion = (i == 0) ? DERECHA : IZQUIERDA;
+
+                TinfoPersonaje info = getInfoPersonaje(mPlayers[i].type);
+                personajes[i].d = info.dimension;
+                personajes[i].sprites = info.spritesPath;
+                personajes[i].colorSettings = info.colorSettings;
+
+            }
 
             mPantalla = new PantallaPractice(capas, ventana, escenario, personajes);
 
             // Capas
-            mPantalla->initialize(capas, nombrePjs);
+            string names[2] = {mPlayers[0].name, mPlayers[1].name};
+            mPantalla->initialize(capas, names);
 
             loguer->loguear("Finaliza la creacion de la pantalla", Log::LOG_DEB);
             loguer->loguear("Creando el modelo...", Log::LOG_DEB);
 
-            mMundo = new Mundo(*mConfiguration,nombrePjs);
+            mMundo = new Mundo(*mConfiguration, names);
 
             loguer->loguear("Finaliza la creacion del modelo", Log::LOG_DEB);
             break;
@@ -163,15 +170,15 @@ void Game::play(vector<Tinput> inputs, Posicion coordenadasMouse) {
             if ( selectMode(inputs[0],coordenadasMouse) == EgameResult::END ) {
                 switch (mModeSelection){
                     case EmodeSelection::MULTIPLAYER: {
-                        modoDeJuegoElegido = EmodeSelection::MULTIPLAYER;
+                        mModeSelection = EmodeSelection::MULTIPLAYER;
                         break;
                     };
                     case EmodeSelection::ARCADE: {
-                        modoDeJuegoElegido = EmodeSelection::ARCADE;
+                        mModeSelection = EmodeSelection::ARCADE;
                         break;
                     };
                     case EmodeSelection::PRACTICE: {
-                        modoDeJuegoElegido = EmodeSelection::PRACTICE;
+                        mModeSelection = EmodeSelection::PRACTICE;
                         break;
                     };
                 }
@@ -181,9 +188,9 @@ void Game::play(vector<Tinput> inputs, Posicion coordenadasMouse) {
             break;
         };
         case EgameState::MENU_PLAYERS:{
-            bool aleatory = modoDeJuegoElegido != EmodeSelection::MULTIPLAYER;
+            bool aleatory = mModeSelection != EmodeSelection::MULTIPLAYER;
             if (selectPlayers(inputs,coordenadasMouse, aleatory) == EgameResult::END) {
-                switch (modoDeJuegoElegido) {
+                switch (mModeSelection) {
                     case EmodeSelection::MULTIPLAYER:
                         mState = EgameState::MODE_MULTIPLAYER;
                         break;
@@ -194,8 +201,8 @@ void Game::play(vector<Tinput> inputs, Posicion coordenadasMouse) {
                         mState = EgameState::MODE_PRACTICE;
                         break;
                 }
-                musicaDelJuego->pararMusica();
-                musicaDelJuego->musicVs();
+                mMusic->pararMusica();
+                mMusic->musicVs();
                 initialize();
             }
             break;
@@ -205,7 +212,7 @@ void Game::play(vector<Tinput> inputs, Posicion coordenadasMouse) {
         case EgameState::MODE_PRACTICE:{
             if ( fight(inputs) == EgameResult::END){
                 mState = EgameState::MENU_MODE;
-                musicaDelJuego->pararMusica();
+                mMusic->pararMusica();
                 initialize();
             }
             break;
@@ -216,19 +223,6 @@ void Game::play(vector<Tinput> inputs, Posicion coordenadasMouse) {
     deltaT = (clock_t) ( ( (t2 - t1) / 1000.0F ) );
     if (deltaT < mLoopPeriod)
         SDL_Delay((Uint32) (mLoopPeriod - deltaT));
-}
-
-string Game::getWinner() {
-    switch (mState){
-        case EgameState::MODE_ARCADE:
-        case EgameState::MODE_MULTIPLAYER:{
-            if (mMundo->huboGanador())
-                return mMundo->quienGano();
-            return "Empate";
-        };
-        default:
-            return "";
-    }
 }
 
 EgameResult Game::selectMode(Tinput input, Posicion coordenadasMouse) {
@@ -263,38 +257,24 @@ EgameResult Game::selectPlayers(vector<Tinput> inputs, Posicion coordenadasMouse
 
     Posicion p = pantalla->getRelativePosition(coordenadasMouse);
 
-    array<Posicion,2> players;
+    TmenuPlayerChanges changes;
     if (mMenuPlayers->firstPlayerSelected() && seleccionOponenteAleatorio){
         Tinput i;
         i.game = TinputGame::CLICK_IZQ_MOUSE;
         i.movimiento = TinputMovimiento::KEY_NADA;
-        players = mMenuPlayers->update(i, Posicion(rand() % MenuPlayerSelection::COLUMNS, rand() % MenuPlayerSelection::ROWS) );
+        changes = mMenuPlayers->update(i, Posicion(rand() % MenuPlayerSelection::COLUMNS, rand() % MenuPlayerSelection::ROWS) );
     } else {
-        players = mMenuPlayers->update(inputs.at(0), p);
+        changes = mMenuPlayers->update(inputs.at(0), p);
     }
-/*
-    vector<Posicion> players;
 
-    if(!seleccionOponenteAleatorio) {
-        if (dentroDelCuadroDePjs(coordenadasMouse, mPantalla->getCuadradoPlayers())) {
-            players = mMenuPlayers->update(inputs, coordenadasMouse, mPantalla->getCuadradoPlayers());
-        }
-        players = mMenuPlayers->update(inputs);
-    }
-    else{
-        if (dentroDelCuadroDePjs(coordenadasMouse, mPantalla->getCuadradoPlayers())) {
-            players = mMenuPlayers->updateConAleatorio(inputs, coordenadasMouse, mPantalla->getCuadradoPlayers());
-        }
-        players = mMenuPlayers->updateConAleatorio(inputs);
-    }
-*/
-
-    pantalla->update(players, {"", ""});
+    pantalla->update(changes.positions, changes.names);
     pantalla->print();
 
     if ( mMenuPlayers->selectionComplete() ) {
-        personajesElegidos[0] = getType(players[0]);
-        personajesElegidos[1] = getType(players[1]);
+        mPlayers[0].name = changes.names[0];
+        mPlayers[0].type = getType(changes.positions[0]);
+        mPlayers[1].name = changes.names[1];
+        mPlayers[1].type = getType(changes.positions[1]);
         return EgameResult::END;
     }
 
@@ -308,91 +288,20 @@ EgameResult Game::fight(vector<Tinput> inputs) {
         default:{
             vector<Tcambio> c = mMundo->actualizarMundo(inputs, mState);
 
-            sonidoPJ1->soundRounds(mState, mMundo->roundsPJ1, mMundo->roundsPJ2);
+            mMusic->soundRounds(mState, mMundo->roundsPJ1, mMundo->roundsPJ2);
 
-            sonidoPJ1->playFX(c.at(0).estado,inputs[0]);
-            sonidoPJ2->playFX(c.at(1).estado,inputs[1]);
+            mMusic->playFX(c.at(0).estado,inputs[0]);
+            mMusic->playFX(c.at(1).estado,inputs[1]);
 
             mPantalla->update(c,inputs[0]);
             mPantalla->print();
-            return ( mMundo->huboGanador() && modoDeJuegoElegido != EmodeSelection::PRACTICE ) ? EgameResult::END : EgameResult::CONTINUE;
+            return ( mMundo->huboGanador() && mModeSelection != EmodeSelection::PRACTICE ) ? EgameResult::END : EgameResult::CONTINUE;
         }
     };
 }
 
-void Game::setInformacionPersonajesElegidos(int jugador) {
-    switch(personajesElegidos[jugador]){
-
-        case EtipoPersonaje::SUBZERO:
-            nombrePjs[jugador] = "subzero";
-            rutaSprites[jugador] = "./resources/sprites/subzero";
-            break;
-        case EtipoPersonaje::SUBZERO_GREEN:
-            nombrePjs[jugador] = "subzero";
-            rutaSprites[jugador] = "./resources/sprites/subzero";
-            break;
-        case EtipoPersonaje::SUBZERO_RED:
-            nombrePjs[jugador] = "subzero";
-            rutaSprites[jugador] = "./resources/sprites/subzero";
-            break;
-        case EtipoPersonaje::SUBZERO_YELLOW:
-            nombrePjs[jugador] = "subzero";
-            rutaSprites[jugador] = "./resources/sprites/subzero";
-            break;
-        case EtipoPersonaje::ERMAC:
-            nombrePjs[jugador] = "ermac";
-            rutaSprites[jugador] = "./resources/sprites/ermac";
-            break;
-        case EtipoPersonaje::ERMAC_BLUE:
-            nombrePjs[jugador] = "ermac";
-            rutaSprites[jugador] = "./resources/sprites/ermac";
-            break;
-        case EtipoPersonaje::ERMAC_GREEN:
-            nombrePjs[jugador] = "ermac";
-            rutaSprites[jugador] = "./resources/sprites/ermac";
-            break;
-        case EtipoPersonaje::ERMAC_YELLOW:
-            nombrePjs[jugador] = "ermac";
-            rutaSprites[jugador] = "./resources/sprites/ermac";
-            break;
-        case EtipoPersonaje::LIUKANG:
-            nombrePjs[jugador] = "liukang";
-            rutaSprites[jugador] = "./resources/sprites/liukang";
-            break;
-        case EtipoPersonaje::LIUKANG_BLUE:
-            nombrePjs[jugador] = "liukang";
-            rutaSprites[jugador] = "./resources/sprites/liukang";
-            break;
-        case EtipoPersonaje::LIUKANG_GREEN:
-            nombrePjs[jugador] = "liukang";
-            rutaSprites[jugador] = "./resources/sprites/liukang";
-            break;
-        case EtipoPersonaje::LIUKANG_YELLOW:
-            nombrePjs[jugador] = "liukang";
-            rutaSprites[jugador] = "./resources/sprites/liukang";
-            break;
-    }
-}
-
-bool Game::dentroDelCuadroDePjs(Posicion coordenadasMouse,vector<Trect> cuadroPlayers) {
-    if(coordenadasMouse.x > cuadroPlayers[0].p.x && coordenadasMouse.x < (cuadroPlayers[3].p.x + cuadroPlayers[3].d.w) ){
-        if(coordenadasMouse.y > cuadroPlayers[0].p.y && coordenadasMouse.y < (cuadroPlayers[11].p.y + cuadroPlayers[11].d.h)){
-            return true;
-        }
-    }
-    return false;
-}
-
 Game::~Game() {
-    delete musicaDelJuego;
-    delete sonidoPJ1;
-    delete sonidoPJ2;
-    delete(mPantalla);
-    if (mMundo != nullptr)
-        delete(mMundo);
-    if(mMenuPlayers != nullptr)
-        delete mMenuPlayers;
-    if(mMenuGameMode != nullptr)
-        delete mMenuGameMode;
+    clean();
+    delete mMusic;
     delete(mConfiguration);
 }

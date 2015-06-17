@@ -77,7 +77,6 @@ CapaInfoArcade::CapaInfoArcade(VistaUtils* utils, Tdimension dimPantalla, string
     mNombre2Rect.p.y = barraVidaCompleta2.p.y + barraVidaCompleta2.d.h;
 
     // Timer
-
     mTimer = mUtils->createTextureFromText(FONT_PATH, timer, FONT_SIZE_FOR_TIMER);
 
     mTimerRect.d = mTimer.d;
@@ -116,12 +115,11 @@ void CapaInfoArcade::update(Tinput input,TInfoExtra infoExtra) {
     barraVidaParcialPedazo2.p.x = barraVidaCompleta1.d.w - barraVidaParcialPedazo2.d.w;
     barraVidaParcialPantalla2.p.x = anchoPantalla - barraVidaParcialPedazo2.d.w - distBorde;
 
-    mUtils->copyInTextureFromText(FONT_PATH, infoExtra.timer, FONT_SIZE_FOR_TIMER, &mTimer);
+    SDL_DestroyTexture(mTimer.t);
+    mTimer = mUtils->createTextureFromText(FONT_PATH, infoExtra.timer, FONT_SIZE_FOR_TIMER);
 }
 
-void CapaInfoArcade::update(float porcVida1,float porcVida2,Tinput input){
-
-}
+void CapaInfoArcade::update(float porcVida1,float porcVida2,Tinput input){}
 
 
 void CapaInfoArcade::freeTextures() {
