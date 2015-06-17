@@ -9,6 +9,8 @@ const float RELATIVE_HEIGHT = 0.30;
 const float RELATIVE_HORIZONTAL_BOUND = 0.21;
 const float RELATIVE_VERTICAL_BOUND = 0.09;
 
+const int MAX_CHARACTER_SHOWN = 12;
+
 PantallaMenuPlayers::PantallaMenuPlayers(Tdimension dimPixels, Tdimension dimUl) : Pantalla(dimPixels, dimUl) {
     mTextBackground = mUtils->loadTexture(PATH_BACKGROUND);
     mTextBackground.d = dimUl;
@@ -36,16 +38,14 @@ PantallaMenuPlayers::PantallaMenuPlayers(Tdimension dimPixels, Tdimension dimUl)
     }
 
     mRectName[0].d = mTextNames[0].d;
-    mRectName[0].p.x = 5;
+    mRectName[0].p.x = 1;
     mRectName[0].p.y = mTextBackground.d.h - mTextNames[0].d.h;
 
     mRectName[1].d = mTextNames[1].d;
-    mRectName[1].p.x = mTextBackground.d.w - mTextNames[1].d.w - 5;
+    mRectName[1].p.x = mTextBackground.d.w - RELATIVE_HORIZONTAL_BOUND * mTextBackground.d.w + 6;
     mRectName[1].p.y = mTextBackground.d.h - mTextNames[0].d.h;
 
     activateSecondPlayer = false;
-
-
 }
 
 void PantallaMenuPlayers::update(array<Posicion, 2> players, array<string, 2> names) {
@@ -91,13 +91,13 @@ void PantallaMenuPlayers::update(array<Posicion, 2> players, array<string, 2> na
             cambio.poder = (poder);
 
             if (i == 0){
-                cambio.posicion = Posicion(5, mTextBackground.d.h - 60 -5);
+                cambio.posicion = Posicion(5, mTextBackground.d.h - 60 - 10);
                 cambio.direccion = DERECHA;
             } else {
                 cambio.posicion =
                         Posicion(
                                 mTextBackground.d.w - mPlayerViews[0].getRect().d.w - 5,
-                                mTextBackground.d.h - 60 - 5
+                                mTextBackground.d.h - 60 - 10
                         );
                 cambio.direccion = IZQUIERDA;
             }
@@ -106,7 +106,10 @@ void PantallaMenuPlayers::update(array<Posicion, 2> players, array<string, 2> na
             // actualizo el texto
             if (names[i] != mNames[i]){
                 SDL_DestroyTexture(mTextNames[i].t);
-                mTextNames[i] = mUtils->createTextureFromText(FONT_PATH, names[i], FONT_SIZE);
+                string s = (names[i].length() > MAX_CHARACTER_SHOWN) ?
+                           names[i].substr(names[i].length() - MAX_CHARACTER_SHOWN, MAX_CHARACTER_SHOWN) :
+                           names[i];
+                mTextNames[i] = mUtils->createTextureFromText(FONT_PATH, s, FONT_SIZE);
                 mRectName[i].d = mTextNames[i].d;
             }
         }

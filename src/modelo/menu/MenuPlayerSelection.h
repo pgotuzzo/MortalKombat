@@ -23,7 +23,7 @@ private:
      *  \\==========================//
      */
 
-    static const int MAX_LENGTH = 15;
+    static const int MAX_LENGTH = 20;
 
     enum class State {
         PLAYER_1_CHARACTER,
