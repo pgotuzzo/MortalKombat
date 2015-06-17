@@ -20,20 +20,31 @@ void PantallaFight::InicializarPersonajes(vector<Tpersonaje> personajes) {
     // zIndex y igual para ambos personajes
     zIndex = personajes[0].zIndex;
 
+    // activo el cambio de color
+    mUtils->enableColorChange(true);
+
     // Personaje 1
+    mUtils->setColorSetting(personajes.at(0).colorSettings);
     PersonajeVista p = PersonajeVista(mUtils, personajes[0].sprites, personajes[0].d, personajes[0].orientacion);
     mPersonajes.push_back(p);
 
     // Personaje 2
-    if (personajes[1].sprites == personajes[0].sprites) {
-        mUtils->setColorSetting(personajes.at(1).colorSettings);
-        mUtils->enableColorChange(true);
-        p = PersonajeVista(mUtils, personajes[1].sprites, personajes[1].d, personajes[1].orientacion);
-        mUtils->enableColorChange(false);
+    if (personajes[1].sprites == personajes[0].sprites && personajes[1].colorSettings == personajes[0].colorSettings){
+        TcolorSettings cs;
+        cs.hmin = 1;
+        cs.hmax = 259;
+        cs.delta = 20;
+        mUtils->setColorSetting(cs);
     } else {
-        p = PersonajeVista(mUtils, personajes[1].sprites, personajes[1].d, personajes[1].orientacion);
+        mUtils->setColorSetting(personajes.at(1).colorSettings);
+
     }
+    p = PersonajeVista(mUtils, personajes[1].sprites, personajes[1].d, personajes[1].orientacion);
+
     mPersonajes.push_back(p);
+
+    // desactivo el cambio de color
+    mUtils->enableColorChange(false);
 }
 
 

@@ -11,6 +11,23 @@
 static const string PODER_ACTIVADO_PATH = "pod_poder";
 static const string PODER_COLISION_PATH = "pod_colision";
 
+static const int HUE_SUBZERO = 180;
+static const int HUE_SUBZERO_GREEN = 120;
+static const int HUE_SUBZERO_YELLOW = 60;
+static const int HUE_SUBZERO_RED = 0;
+
+static const int HUE_ERMAC = 10;
+static const int HUE_ERMAC_BLUE = 180;
+static const int HUE_ERMAC_GREEN = 120;
+static const int HUE_ERMAC_YELLOW = 60;
+
+static const int HUE_LIUKANG = 60;
+static const int HUE_LIUKANG_BLUE = 300;
+static const int HUE_LIUKANG_GREEN = 180;
+static const int HUE_LIUKANG_YELLOW = 120;
+
+static const int HUE_DELTA = 1;
+
 enum class EtipoPersonaje {
     SUBZERO,
     SUBZERO_GREEN,
@@ -54,68 +71,70 @@ struct TinfoPersonaje{
 static TinfoPersonaje getInfoPersonaje(EtipoPersonaje type) {
     TinfoPersonaje info;
     info.dimension = Tdimension(25, 60);
-    switch(type){
+    switch (type){
         case EtipoPersonaje::SUBZERO:
-            info.defaulName = "subzero";
-            info.spritesPath = "./resources/sprites/subzero";
-//            info.colorSettings;
-            break;
+        case EtipoPersonaje::SUBZERO_RED:
         case EtipoPersonaje::SUBZERO_GREEN:
+        case EtipoPersonaje::SUBZERO_YELLOW:{
             info.defaulName = "subzero";
             info.spritesPath = "./resources/sprites/subzero";
-//            info.colorSettings;
+            info.colorSettings.hmin = HUE_SUBZERO - HUE_DELTA;
+            info.colorSettings.hmax = HUE_SUBZERO + HUE_DELTA;
+            break;
+        };
+        case EtipoPersonaje::ERMAC:
+        case EtipoPersonaje::ERMAC_BLUE:
+        case EtipoPersonaje::ERMAC_GREEN:
+        case EtipoPersonaje::ERMAC_YELLOW:{
+            info.defaulName = "ermac";
+            info.spritesPath = "./resources/sprites/ermac";
+            info.colorSettings.hmin = HUE_ERMAC - HUE_DELTA;
+            info.colorSettings.hmax = HUE_ERMAC + HUE_DELTA;
+            break;
+        };
+        case EtipoPersonaje::LIUKANG:
+        case EtipoPersonaje::LIUKANG_BLUE:
+        case EtipoPersonaje::LIUKANG_GREEN:
+        case EtipoPersonaje::LIUKANG_YELLOW:{
+            info.defaulName = "liukang";
+            info.spritesPath = "./resources/sprites/liukang";
+            info.colorSettings.hmin = HUE_LIUKANG - HUE_DELTA;
+            info.colorSettings.hmax = HUE_LIUKANG + HUE_DELTA;
+            break;
+        };
+    }
+
+    switch(type){
+        case EtipoPersonaje::SUBZERO_GREEN:
+            info.colorSettings.delta = HUE_SUBZERO_GREEN - HUE_SUBZERO;
             break;
         case EtipoPersonaje::SUBZERO_RED:
-            info.defaulName = "subzero";
-            info.spritesPath = "./resources/sprites/subzero";
-//            info.colorSettings;
+            info.colorSettings.delta = HUE_SUBZERO_RED - HUE_SUBZERO;
             break;
         case EtipoPersonaje::SUBZERO_YELLOW:
-            info.defaulName = "subzero";
-            info.spritesPath = "./resources/sprites/subzero";
-//            info.colorSettings;
-            break;
-        case EtipoPersonaje::ERMAC:
-            info.defaulName = "ermac";
-            info.spritesPath = "./resources/sprites/ermac";
-//            info.colorSettings;
+            info.colorSettings.delta = HUE_SUBZERO_YELLOW - HUE_SUBZERO;
             break;
         case EtipoPersonaje::ERMAC_BLUE:
-            info.defaulName = "ermac";
-            info.spritesPath = "./resources/sprites/ermac";
-//            info.colorSettings;
+            info.colorSettings.delta = HUE_ERMAC_BLUE - HUE_ERMAC;
             break;
         case EtipoPersonaje::ERMAC_GREEN:
-            info.defaulName = "ermac";
-            info.spritesPath = "./resources/sprites/ermac";
-//            info.colorSettings;
+            info.colorSettings.delta = HUE_ERMAC_GREEN - HUE_ERMAC;;
             break;
         case EtipoPersonaje::ERMAC_YELLOW:
-            info.defaulName = "ermac";
-            info.spritesPath = "./resources/sprites/ermac";
-//            info.colorSettings;
-            break;
-        case EtipoPersonaje::LIUKANG:
-            info.defaulName = "liukang";
-            info.spritesPath = "./resources/sprites/liukang";
-//            info.colorSettings;
+            info.colorSettings.delta = HUE_ERMAC_YELLOW - HUE_ERMAC;;
             break;
         case EtipoPersonaje::LIUKANG_BLUE:
-            info.defaulName = "liukang";
-            info.spritesPath = "./resources/sprites/liukang";
-//            info.colorSettings;
+            info.colorSettings.delta = HUE_LIUKANG_BLUE - HUE_LIUKANG;;
             break;
         case EtipoPersonaje::LIUKANG_GREEN:
-            info.defaulName = "liukang";
-            info.spritesPath = "./resources/sprites/liukang";
-//            info.colorSettings;
+            info.colorSettings.delta = HUE_LIUKANG_GREEN - HUE_LIUKANG;;
             break;
         case EtipoPersonaje::LIUKANG_YELLOW:
-            info.defaulName = "liukang";
-            info.spritesPath = "./resources/sprites/liukang";
-//            info.colorSettings;
+            info.colorSettings.delta = HUE_LIUKANG_YELLOW - HUE_LIUKANG;;
             break;
     }
+    info.colorSettings.initialize();
+
     return info;
 }
 

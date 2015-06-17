@@ -109,7 +109,6 @@ void Game::initialize() {
                 personajes[i].d = info.dimension;
                 personajes[i].sprites = info.spritesPath;
                 personajes[i].colorSettings = info.colorSettings;
-
             }
 
             mPantalla = new PantallaArcade(capas, ventana, escenario, personajes);// Capas

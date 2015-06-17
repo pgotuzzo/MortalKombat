@@ -75,7 +75,11 @@ void PantallaMenuPlayers::update(array<Posicion, 2> players, array<string, 2> na
 
                 mTextNames[i] = mUtils->createTextureFromText(FONT_PATH, info.defaulName, FONT_SIZE);
                 mRectName[i].d = mTextNames[i].d;
+
+                mUtils->setColorSetting(info.colorSettings);
+                mUtils->enableColorChange(true);
                 mPlayerViews[i] = PersonajeVista(mUtils, info.spritesPath, info.dimension, (i == 0) ? DERECHA : IZQUIERDA);
+                mUtils->enableColorChange(false);
             }
             // actualizo el estado del personaje para darle movimiento
             Tcambio cambio;

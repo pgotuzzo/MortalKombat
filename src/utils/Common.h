@@ -219,9 +219,14 @@ struct TcolorSettings{
     }
 
     void initialize(){
-        hmin = (hmin < 0) ? - fmod(-hmin, 360) + 360 : fmod(hmin, 360);
-        hmax = (hmax < 0) ? - fmod(-hmax, 360) + 360 : fmod(hmax, 360);
+//        hmin = (hmin < 0) ? - fmod(-hmin, 360) + 360 : fmod(hmin, 360);
+//        hmax = (hmax < 0) ? - fmod(-hmax, 360) + 360 : fmod(hmax, 360);
+        hmin = (hmin <= 0) ? 1 : hmin;
+        hmax = (hmax < 359) ? 359 : hmax;
         delta = (delta < 0) ? - fmod(-delta, 360) + 360 : fmod(delta, 360);
+    }
+    bool operator==(TcolorSettings cs){
+        return (cs.hmin == hmin) && (cs.hmax == hmax) && (cs.delta == delta);
     }
 
 };
