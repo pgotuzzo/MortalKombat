@@ -3,7 +3,7 @@
 
 const float vidaInicial = 100;
 
-Personaje::Personaje(string nombre,Tdireccion direccionInicial,Trect cuerpo, float anchoPantalla,Tcombos combos) {
+Personaje::Personaje(string nombre,Tdireccion direccionInicial,Trect cuerpo, float anchoPantalla,Tcombos combos,EtipoPersonaje tipo) {
 
 	this->nombre = nombre;
 
@@ -32,6 +32,7 @@ Personaje::Personaje(string nombre,Tdireccion direccionInicial,Trect cuerpo, flo
 	debuff = 0;
 	estadoFatality = false;
 	colisionando = false;
+	this->tipo = tipo;
 }
 
 void Personaje::crearCombosdelPersonaje(Tcombos combos) {
@@ -106,18 +107,18 @@ void Personaje::realizarAccion(Tinput orden) {
 	comboFatality->actualizar(orden);
 	if(comboFatality->puedoRealizarCombo() && estadoFatality){
 		estadoAnterior = estadoActual;
-		if(nombre.compare("liukang") == 0) estadoActual = FAT_ARCADE;
-		if(nombre.compare("subzero") == 0) estadoActual = FAT_FUEGO;
-		if(nombre.compare("ermac") == 0)   estadoActual = FAT_LEVANTA;
+		if(tipo == EtipoPersonaje::LIUKANG) estadoActual = FAT_ARCADE;
+		if(tipo == EtipoPersonaje::SUBZERO) estadoActual = FAT_FUEGO;
+		if(tipo == EtipoPersonaje::ERMAC)   estadoActual = FAT_LEVANTA;
 		countLoops = 1;
 	}
 	//TODO: LIUKANG NECESITA UNA FATALITY MAS
 	comboFatality2->actualizar(orden);
 	if(comboFatality2->puedoRealizarCombo() && estadoFatality){
 		estadoAnterior = estadoActual;
-		if(nombre.compare("liukang") == 0) if(colisionando) estadoActual = FAT_DRAGON;
-		if(nombre.compare("subzero") == 0) if(colisionando) estadoActual = FAT_BRUTALITY_SUBZERO;
-		if(nombre.compare("ermac") == 0)   if(colisionando) estadoActual = FAT_GANCHO;
+		if(tipo == EtipoPersonaje::LIUKANG) if(colisionando) estadoActual = FAT_DRAGON;
+		if(tipo == EtipoPersonaje::SUBZERO) if(colisionando) estadoActual = FAT_BRUTALITY_SUBZERO;
+		if(tipo == EtipoPersonaje::ERMAC)   if(colisionando) estadoActual = FAT_GANCHO;
 		countLoops = 1;
 	}
 	posicionAnterior = rectanguloPj.p;

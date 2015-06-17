@@ -46,6 +46,8 @@ public:
 
 	Accionador llevarACabo;
 
+	EtipoPersonaje tipo;
+
 	int debuff;
 
 	Poder* poder;
@@ -55,7 +57,7 @@ public:
 	//-----------------------------------------------------------------------------
 	bool puedoRealizarAccion(TestadoPersonaje accion);
 	TestadoPersonaje generarEstado(Tinput orden);
-	Personaje(string nombre,Tdireccion direccionInicial,Trect cuerpo,float anchoPantalla,Tcombos combos);
+	Personaje(string nombre,Tdireccion direccionInicial,Trect cuerpo,float anchoPantalla,Tcombos combos,EtipoPersonaje tipo);
 
 	Trect getRectangulo();
 	void modificarPosicion(Posicion nuevaPosicion);
