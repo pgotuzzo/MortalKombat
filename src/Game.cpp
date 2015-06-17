@@ -259,7 +259,7 @@ EgameResult Game::selectPlayers(vector<Tinput> inputs, Posicion coordenadasMouse
     TmenuPlayerChanges changes;
     if (mMenuPlayers->firstPlayerSelected() && seleccionOponenteAleatorio){
         Tinput i;
-        i.game = TinputGame::CLICK_IZQ_MOUSE;
+        i.game = TinputGame::KEY_ENTER;
         i.movimiento = TinputMovimiento::KEY_NADA;
         changes = mMenuPlayers->update(i, Posicion(rand() % MenuPlayerSelection::COLUMNS, rand() % MenuPlayerSelection::ROWS) );
     } else {

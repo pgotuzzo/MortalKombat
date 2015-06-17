@@ -12,7 +12,7 @@ bool MenuPlayerSelection::selectionComplete() {
 }
 
 bool MenuPlayerSelection::firstPlayerSelected() {
-    return mState == State::PLAYER_2_CHARACTER;
+    return mState == State::PLAYER_2_CHARACTER || mState == State::PLAYER_2_NAME;
 }
 
 TmenuPlayerChanges MenuPlayerSelection::update(Tinput inputs, Posicion mouse) {
