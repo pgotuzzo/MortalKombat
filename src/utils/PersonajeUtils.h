@@ -479,7 +479,7 @@ struct TInfoExtra{
     string timer,nombreCombo;
     float porcVida1, porcVida2;
     bool hayCombo;
-    Tsentido sentido;
+    Tdireccion direccion;
 };
 
 #endif //MORTALKOMBAT_PERSONAJEUTILS_H

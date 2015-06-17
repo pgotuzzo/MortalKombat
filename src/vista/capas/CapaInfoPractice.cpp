@@ -76,7 +76,7 @@ Ttexture crearTextDeInputAccion(TinputAccion input, VistaUtils* mUtils) {
     }
 }
 
-Ttexture crearTextDeInputMovimiento(TinputMovimiento input, VistaUtils* mUtils, Tsentido sentido) {
+Ttexture crearTextDeInputMovimiento(TinputMovimiento input, VistaUtils* mUtils, Tdireccion direccion) {
     switch (input) {
         case TinputMovimiento::KEY_ARRIBA: {
             return mUtils->createTextureFromText(FONT_PATH, "UP", FONT_SIZE);
@@ -85,28 +85,28 @@ Ttexture crearTextDeInputMovimiento(TinputMovimiento input, VistaUtils* mUtils, 
             return mUtils->createTextureFromText(FONT_PATH, "DW", FONT_SIZE);
         };
         case TinputMovimiento::KEY_DERECHA: {
-            if (sentido == ADELANTE) {
+            if (direccion == DERECHA) {
                 return mUtils->createTextureFromText(FONT_PATH, "FR", FONT_SIZE);
             } else {
                 return mUtils->createTextureFromText(FONT_PATH, "BC", FONT_SIZE);
             }
         };
         case TinputMovimiento::KEY_IZQUIERDA: {
-            if (sentido == ADELANTE) {
+            if (direccion == IZQUIERDA) {
                 return mUtils->createTextureFromText(FONT_PATH, "FR", FONT_SIZE);
             } else {
                 return mUtils->createTextureFromText(FONT_PATH, "BC", FONT_SIZE);
             }
         };
         case TinputMovimiento::KEY_ARRIBA_DERECHA: {
-            if (sentido == ADELANTE) {
+            if (direccion == DERECHA) {
                 return mUtils->createTextureFromText(FONT_PATH, "FR", FONT_SIZE);
             } else {
                 return mUtils->createTextureFromText(FONT_PATH, "BC", FONT_SIZE);
             }
         };
         case TinputMovimiento::KEY_ARRIBA_IZQUIERDA: {
-            if (sentido == ADELANTE) {
+            if (direccion == IZQUIERDA) {
                 return mUtils->createTextureFromText(FONT_PATH, "FR", FONT_SIZE);
             } else {
                 return mUtils->createTextureFromText(FONT_PATH, "BC", FONT_SIZE);
@@ -145,7 +145,7 @@ void CapaInfoPractice::update(Tinput input,TInfoExtra infoExtra) {
     if (input.movimiento != TinputMovimiento::KEY_NADA) {
         TeclaBuffer tecla;
         tecla.tiempoInicial = SDL_GetTicks();
-        tecla.textura = crearTextDeInputMovimiento(input.movimiento,mUtils,infoExtra.sentido);
+        tecla.textura = crearTextDeInputMovimiento(input.movimiento,mUtils,infoExtra.direccion);
         buffer.push(tecla);
     }/*
     if (true) {

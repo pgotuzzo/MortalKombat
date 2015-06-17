@@ -21,7 +21,7 @@ private:
 
 public:
     Combo(TComboData datosDelCombo);
-    void actualizar(Tinput input);
+    void actualizar(Tinput input,Tdireccion direccionPJ);
     bool puedoRealizarCombo();
 
     bool seRealizoCombo;

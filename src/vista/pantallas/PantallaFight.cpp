@@ -137,7 +137,7 @@ void PantallaFight::update(vector<Tcambio> changes, Tinput input) {
     infoExtra.porcVida1 = changes[0].vida / 100;
     infoExtra.porcVida2 = changes[1].vida / 100;
     infoExtra.hayCombo = changes[0].hayCombo;
-    infoExtra.sentido = changes[0].sentido;
+    infoExtra.direccion = changes[0].direccion;
 
     capaInfo->update(input,infoExtra);
 }

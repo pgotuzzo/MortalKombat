@@ -20,7 +20,7 @@ bool Combo::teclaPresionada(Tinput input) {
     return (input.accion != TinputAccion::KEY_NADA || input.movimiento != TinputMovimiento::KEY_NADA);
 }
 
-void Combo::actualizar(Tinput input) {
+void Combo::actualizar(Tinput input,Tdireccion direccionPJ) {
 
 //    cout<<errores<<endl;
     // El tiempo se comienza a contar luego de la primer tecla correcta
@@ -35,13 +35,45 @@ void Combo::actualizar(Tinput input) {
         inicializarCombo();
     }
 
-    // Cuando la tecla presionada coincide con la tecla del combo
-    if(datosDelCombo.teclas[ocurrencias] == input){
-        if(ocurrencias == 0){
-            tiempoInicial = input.tiempo;
-            tiempoFinal = input.tiempo;
+    // Para que tome los inputs de atras
+    if(datosDelCombo.teclas[ocurrencias].movimiento == TinputMovimiento::KEY_IZQUIERDA){
+        if ((direccionPJ ==  DERECHA && input.movimiento == TinputMovimiento::KEY_IZQUIERDA)
+                || (direccionPJ == IZQUIERDA && input.movimiento == TinputMovimiento::KEY_DERECHA)){
+            if(ocurrencias == 0){
+                tiempoInicial = input.tiempo;
+                tiempoFinal = input.tiempo;
+            }
+            ocurrencias++;
         }
-        ocurrencias++;
+        else{
+            errores++;
+        }
+    }
+
+    // Para que tome los inputs de adelante
+    else if(datosDelCombo.teclas[ocurrencias].movimiento == TinputMovimiento::KEY_DERECHA){
+        if ((direccionPJ ==  DERECHA && input.movimiento == TinputMovimiento::KEY_DERECHA)
+            || (direccionPJ == IZQUIERDA && input.movimiento == TinputMovimiento::KEY_IZQUIERDA)){
+            if(ocurrencias == 0){
+                tiempoInicial = input.tiempo;
+                tiempoFinal = input.tiempo;
+            }
+            ocurrencias++;
+        }
+        else{
+            errores++;
+        }
+    }
+
+    else {
+        // Cuando la tecla presionada coincide con la tecla del combo
+        if (datosDelCombo.teclas[ocurrencias] == input) {
+            if (ocurrencias == 0) {
+                tiempoInicial = input.tiempo;
+                tiempoFinal = input.tiempo;
+            }
+            ocurrencias++;
+        }
     }
 
     // Cuando la tecla presionada no coincide con la tecla del combo
@@ -63,7 +95,7 @@ bool Combo::puedoRealizarCombo() {
 
 
 void Combo::teclasAString() {
-    cadenaParaBuffer = datosDelCombo.nombre + " ";
+    cadenaParaBuffer = datosDelCombo.nombre + ": ";
 
     for(int i=0; i<datosDelCombo.teclas.size();i++){
 
@@ -77,10 +109,11 @@ void Combo::teclasAString() {
                 cadenaParaBuffer += "DW ";
                 break;
             case TinputMovimiento::KEY_DERECHA:
-                cadenaParaBuffer += "RG ";
+
+                cadenaParaBuffer += "FR ";
                 break;
             case TinputMovimiento::KEY_IZQUIERDA:
-                cadenaParaBuffer += "LF ";
+                cadenaParaBuffer += "BC ";
                 break;
             default:
                 switch(input.accion){

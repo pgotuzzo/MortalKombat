@@ -100,12 +100,12 @@ void Personaje::realizarAccion(Tinput orden) {
 		}
 	}
 
-	comboPoder->actualizar(orden);
+	comboPoder->actualizar(orden,direccionPj);
 	if(comboPoder->puedoRealizarCombo()){
 		estadoAnterior = MOV_PARADO;
 		estadoActual = ACC_PODER;
 	}
-	comboFatality->actualizar(orden);
+	comboFatality->actualizar(orden,direccionPj);
 	if(comboFatality->puedoRealizarCombo() && estadoFatality){
 		estadoAnterior = estadoActual;
 		if((tipo == EtipoPersonaje::LIUKANG) ||
@@ -124,7 +124,7 @@ void Personaje::realizarAccion(Tinput orden) {
 		   (tipo == EtipoPersonaje::ERMAC_YELLOW))estadoActual = FAT_LEVANTA;
 		countLoops = 1;
 	}
-	comboFatality2->actualizar(orden);
+	comboFatality2->actualizar(orden,direccionPj);
 	if(comboFatality2->puedoRealizarCombo() && estadoFatality){
 		estadoAnterior = estadoActual;
 		estadoAnterior = estadoActual;
