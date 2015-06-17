@@ -10,10 +10,11 @@ class PantallaMenuPlayers : public Pantalla {
 private:
     Ttexture mTextBackground;
     Ttexture mTextSelector[2];
-    PersonajeVista mPlayerViews[2];
+    Ttexture mTextPlayer[2];
     Ttexture mTextNames[2];
 
     Trect mRectSelector[2];
+    Trect mRectPlayers[2];
     Trect mRectName[2];
 
     EtipoPersonaje mPlayers[2];

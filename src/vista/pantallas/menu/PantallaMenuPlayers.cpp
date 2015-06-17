@@ -33,7 +33,7 @@ PantallaMenuPlayers::PantallaMenuPlayers(Tdimension dimPixels, Tdimension dimUl)
     for (int i = 0; i < 2; i++) {
         mPlayers[i] = type;
         mNames[i] = info.defaulName;
-        mPlayerViews[i] = PersonajeVista(mUtils, info.spritesPath, info.dimension, (i == 0) ? DERECHA : IZQUIERDA);
+        mTextPlayer[i] = mUtils->loadTexture(info.spritesPath + "/personaje.png");
         mTextNames[i] = mUtils->createTextureFromText(FONT_PATH, mNames[i], FONT_SIZE);
     }
 
@@ -67,41 +67,31 @@ void PantallaMenuPlayers::update(array<Posicion, 2> players, array<string, 2> na
             EtipoPersonaje type = getType(p);
             if (type != mPlayers[i]) {
                 // si se eligio otro personaje, lo vuelvo a crear
-                mPlayerViews[i].freeTextures();
-                SDL_DestroyTexture(mTextNames[i].t);
-
                 mPlayers[i] = type;
                 TinfoPersonaje info = getInfoPersonaje(type);
 
+                SDL_DestroyTexture(mTextNames[i].t);
                 mTextNames[i] = mUtils->createTextureFromText(FONT_PATH, info.defaulName, FONT_SIZE);
                 mRectName[i].d = mTextNames[i].d;
 
                 mUtils->setColorSetting(info.colorSettings);
                 mUtils->enableColorChange(true);
-                mPlayerViews[i] = PersonajeVista(mUtils, info.spritesPath, info.dimension, (i == 0) ? DERECHA : IZQUIERDA);
-                mUtils->enableColorChange(false);
-            }
-            // actualizo el estado del personaje para darle movimiento
-            Tcambio cambio;
-            cambio.dPJ = Tdimension(25, 60);
-            cambio.estado = MOV_PARADO;
-            cambio.sentido = ADELANTE;
-            TcambioPoder poder;
-            poder.e = DESACTIVADO;
-            cambio.poder = (poder);
 
-            if (i == 0){
-                cambio.posicion = Posicion(5, mTextBackground.d.h - 60 - 10);
-                cambio.direccion = DERECHA;
-            } else {
-                cambio.posicion =
-                        Posicion(
-                                mTextBackground.d.w - mPlayerViews[0].getRect().d.w - 5,
-                                mTextBackground.d.h - 60 - 10
-                        );
-                cambio.direccion = IZQUIERDA;
+                SDL_DestroyTexture(mTextPlayer[i].t);
+                mTextPlayer[i] = mUtils->loadTexture(info.spritesPath + "/personaje.png");
+
+                mUtils->enableColorChange(false);
+
+                mRectPlayers[i].d = info.dimension;
+                if (i == 0){
+                    mRectPlayers[0].p = Posicion(5, mTextBackground.d.h - 60 - 10);
+                } else {
+                    mRectPlayers[1].p =Posicion(
+                            mTextBackground.d.w - info.dimension.w - 5,
+                            mTextBackground.d.h - 60 - 10
+                    );
+                }
             }
-            mPlayerViews[i].update(cambio);
 
             // actualizo el texto
             if (names[i].compare(mNames[i]) != 0){
@@ -126,10 +116,10 @@ void PantallaMenuPlayers::print() {
     mUtils->copyTexture(mTextSelector[0], ventana, NULL, &mRectSelector[0]);
     mUtils->copyTexture(mTextSelector[1], ventana, NULL, &mRectSelector[1]);
 
-    mPlayerViews[0].getTexture(ventana, 0);
+    mUtils->copyTexture(mTextPlayer[0], ventana, NULL, &mRectPlayers[0]);
     mUtils->copyTexture(mTextNames[0], ventana, NULL, &mRectName[0]);
     if (activateSecondPlayer) {
-        mPlayerViews[1].getTexture(ventana, 0);
+        mUtils->copyTexture(mTextPlayer[1], ventana, NULL, &mRectPlayers[1], true);
         mUtils->copyTexture(mTextNames[1], ventana, NULL, &mRectName[1]);
     }
 
@@ -160,5 +150,5 @@ PantallaMenuPlayers::~PantallaMenuPlayers() {
     SDL_DestroyTexture(mTextSelector[0].t);
     SDL_DestroyTexture(mTextSelector[1].t);
     for (int i = 0; i < 2; i++)
-        mPlayerViews[i].freeTextures();
+        SDL_DestroyTexture(mTextPlayer[i].t);
 }
