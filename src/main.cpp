@@ -34,7 +34,10 @@ vector<Tinput> getInputsTecladoYMouse(ControladorTeclado* controladorT,Controlad
  	inputs[1].letras = controladorTxt->generarCaracter(event);
 
     TinputGame inputGame = controladorM->moverMouse(event);
-    if(inputGame == TinputGame::CLICK_IZQ_MOUSE) inputs[0].game = inputGame;
+    if(inputGame == TinputGame::CLICK_IZQ_MOUSE){
+        inputs[0].game = inputGame;
+        inputs[1].game = inputGame;
+    }
 
     return inputs;
 }
