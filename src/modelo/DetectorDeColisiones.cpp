@@ -38,7 +38,7 @@ void DetectorDeColisiones::resolverColisionYAgarre(Personaje *personaje1, Person
         if(personaje1->estadoActual == ACC_PINIA_BAJA && distancia(personaje1,personaje2) <= 1){
             if(personaje2->estadoActual == MOV_PARADO || personaje2->estadoActual == MOV_CAMINANDO) {
 
-                if(personaje1->nombre.compare("liukang") == 0){
+                if(personaje1->tipo == EtipoPersonaje::LIUKANG){
                     personaje1->estadoAnterior = personaje1->estadoActual;
                     personaje1->estadoActual = ACC_BICICLETA;
                     personaje2->estadoAnterior = personaje2->estadoActual;

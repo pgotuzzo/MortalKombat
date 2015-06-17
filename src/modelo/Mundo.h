@@ -25,7 +25,7 @@ public:
 
 	InteligenciaArtificial inteligencia;
 	DetectorDeColisiones colisionador;
-	Mundo(config configuracion,string nombrePjs[2]);
+	Mundo(config configuracion,string nombrePjs[2],EtipoPersonaje tipo1,EtipoPersonaje tipo2);
 
 	vector<Tcambio> actualizarMundo(vector<Tinput> inputs,EgameState modoDeJuego);
 

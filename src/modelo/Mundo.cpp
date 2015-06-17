@@ -11,7 +11,7 @@ const int tiempoDeFatality = 20;
  * Tambien se inicializa el alto, ancho y yPiso del escenario.
 
  */
-Mundo::Mundo(config configuracion,string nombrePjs[2]) {
+Mundo::Mundo(config configuracion,string nombrePjs[2],EtipoPersonaje tipo1, EtipoPersonaje tipo2) {
 	Tescenario escenario = configuracion.getEscenario();
 	vector<Tpersonaje> personajes = configuracion.getPersonajes();
 	float anchoVentana = configuracion.getVentana().ancho;
@@ -40,8 +40,8 @@ Mundo::Mundo(config configuracion,string nombrePjs[2]) {
 
 	// TODO: Cuando se seleccionan los personajes hay que pasarles los nombres
 
-	personaje1 = new Personaje(nombrePjs[0],direccion1,rectanguloPj1,anchoVentana,configuracion.getCombos());
-	personaje2 = new Personaje(nombrePjs[1],direccion2,rectanguloPj2,anchoVentana,configuracion.getCombos());
+	personaje1 = new Personaje(nombrePjs[0],direccion1,rectanguloPj1,anchoVentana,configuracion.getCombos(),tipo1);
+	personaje2 = new Personaje(nombrePjs[1],direccion2,rectanguloPj2,anchoVentana,configuracion.getCombos(),tipo2);
 
 	colisionador = DetectorDeColisiones(anchoVentana,anchoEscenario);
 

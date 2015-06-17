@@ -120,7 +120,7 @@ void Game::initialize() {
             loguer->loguear("Finaliza la creacion de la pantalla", Log::LOG_DEB);
             loguer->loguear("Creando el modelo...", Log::LOG_DEB);
 
-            mMundo = new Mundo(*mConfiguration, names);
+            mMundo = new Mundo(*mConfiguration, names,mPlayers[0].type,mPlayers[1].type);
             loguer->loguear("Finaliza la creacion del modelo", Log::LOG_DEB);
             break;
         };
@@ -153,7 +153,7 @@ void Game::initialize() {
             loguer->loguear("Finaliza la creacion de la pantalla", Log::LOG_DEB);
             loguer->loguear("Creando el modelo...", Log::LOG_DEB);
 
-            mMundo = new Mundo(*mConfiguration, names);
+            mMundo = new Mundo(*mConfiguration, names,mPlayers[0].type,mPlayers[1].type);
 
             loguer->loguear("Finaliza la creacion del modelo", Log::LOG_DEB);
             break;
