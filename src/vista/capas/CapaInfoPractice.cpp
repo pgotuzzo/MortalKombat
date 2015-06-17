@@ -8,7 +8,7 @@ const float porcPosYBoton = 0.05;
 const Uint32 tiempoMax = 3000;
 
 const float porcDistComboX = 0.05;
-const float porcDistComboY = 18;
+const float porcDistComboY = 0.11;
 const Uint32 tiempoMaxCombo = 2500;
 
 
@@ -147,16 +147,24 @@ void CapaInfoPractice::update(Tinput input,TInfoExtra infoExtra) {
         tecla.tiempoInicial = SDL_GetTicks();
         tecla.textura = crearTextDeInputMovimiento(input.movimiento,mUtils,infoExtra.sentido);
         buffer.push(tecla);
-    }
-
+    }/*
+    if (true) {
+        SDL_DestroyTexture(combo.t);
+        combo = mUtils->createTextureFromText(FONT_PATH, "asd", FONT_SIZE);
+        rectCombo.d = combo.d;
+        tcombo = SDL_GetTicks();
+        comboActivo=true;
+    }*/
     if (infoExtra.hayCombo) {
-        mUtils->copyInTextureFromText(FONT_PATH, infoExtra.nombreCombo, FONT_SIZE,&combo);
+        SDL_DestroyTexture(combo.t);
+        combo = mUtils->createTextureFromText(FONT_PATH, infoExtra.nombreCombo, FONT_SIZE);
         rectCombo.d = combo.d;
         tcombo = SDL_GetTicks();
         comboActivo=true;
     }
     if (SDL_GetTicks()-tcombo >= tiempoMax && comboActivo) {
-        mUtils->copyInTextureFromText(FONT_PATH, "", FONT_SIZE,&combo);
+        SDL_DestroyTexture(combo.t);
+        combo = mUtils->createTextureFromText(FONT_PATH, "", FONT_SIZE);
         rectCombo.d.w = 0;
         comboActivo=false;
     }
