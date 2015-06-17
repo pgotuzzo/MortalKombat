@@ -6,6 +6,7 @@ Combo::Combo(TComboData datosDelCombo) {
     this->datosDelCombo = datosDelCombo;
     this->inicializarCombo();
     teclasAString();
+    seRealizoCombo = false;
 }
 
 void Combo::inicializarCombo() {
@@ -53,8 +54,10 @@ void Combo::actualizar(Tinput input) {
 bool Combo::puedoRealizarCombo() {
     if(ocurrencias == datosDelCombo.teclas.size()){
         inicializarCombo();
+        seRealizoCombo = true;
         return true;
     }
+    seRealizoCombo = false;
     return false;
 }
 

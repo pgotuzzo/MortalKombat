@@ -69,6 +69,7 @@ void Personaje::realizarAccion(Tinput orden) {
 	   (estadoActual != REA_FAT_LEVANTA && estadoAnterior == REA_FAT_LEVANTA)||
 	   (estadoActual != REA_FAT_GANCHO && estadoAnterior == REA_FAT_GANCHO)||
 	   (estadoActual != REA_FAT_DRAGON && estadoAnterior == REA_FAT_DRAGON)||
+	   (estadoActual != REA_MALDITO && estadoAnterior == REA_MALDITO)||
 	   (estadoActual != REA_FAT_BRUTALITY_SUBZERO && estadoAnterior == REA_FAT_BRUTALITY_SUBZERO)) vida--;
 
 	verificarEstadoFatality();
@@ -107,18 +108,40 @@ void Personaje::realizarAccion(Tinput orden) {
 	comboFatality->actualizar(orden);
 	if(comboFatality->puedoRealizarCombo() && estadoFatality){
 		estadoAnterior = estadoActual;
-		if(tipo == EtipoPersonaje::LIUKANG) estadoActual = FAT_ARCADE;
-		if(tipo == EtipoPersonaje::SUBZERO) estadoActual = FAT_FUEGO;
-		if(tipo == EtipoPersonaje::ERMAC)   estadoActual = FAT_LEVANTA;
+		if((tipo == EtipoPersonaje::LIUKANG) ||
+		   (tipo == EtipoPersonaje::LIUKANG_BLUE)||
+		   (tipo == EtipoPersonaje::LIUKANG_GREEN)||
+		   (tipo == EtipoPersonaje::LIUKANG_YELLOW)) estadoActual = FAT_ARCADE;
+
+		if((tipo == EtipoPersonaje::SUBZERO)||
+		   (tipo == EtipoPersonaje::SUBZERO_GREEN)||
+		   (tipo == EtipoPersonaje::SUBZERO_RED)||
+		   (tipo == EtipoPersonaje::SUBZERO_YELLOW))estadoActual = FAT_FUEGO;
+
+		if((tipo == EtipoPersonaje::ERMAC)||
+     	   (tipo == EtipoPersonaje::ERMAC_BLUE)||
+		   (tipo == EtipoPersonaje::ERMAC_GREEN)||
+		   (tipo == EtipoPersonaje::ERMAC_YELLOW))estadoActual = FAT_LEVANTA;
 		countLoops = 1;
 	}
-	//TODO: LIUKANG NECESITA UNA FATALITY MAS
 	comboFatality2->actualizar(orden);
 	if(comboFatality2->puedoRealizarCombo() && estadoFatality){
 		estadoAnterior = estadoActual;
-		if(tipo == EtipoPersonaje::LIUKANG) if(colisionando) estadoActual = FAT_DRAGON;
-		if(tipo == EtipoPersonaje::SUBZERO) if(colisionando) estadoActual = FAT_BRUTALITY_SUBZERO;
-		if(tipo == EtipoPersonaje::ERMAC)   if(colisionando) estadoActual = FAT_GANCHO;
+		estadoAnterior = estadoActual;
+		if((tipo == EtipoPersonaje::LIUKANG) ||
+		   (tipo == EtipoPersonaje::LIUKANG_BLUE)||
+		   (tipo == EtipoPersonaje::LIUKANG_GREEN)||
+		   (tipo == EtipoPersonaje::LIUKANG_YELLOW))if(colisionando) estadoActual = FAT_DRAGON;
+
+		if((tipo == EtipoPersonaje::SUBZERO)||
+		   (tipo == EtipoPersonaje::SUBZERO_GREEN)||
+		   (tipo == EtipoPersonaje::SUBZERO_RED)||
+		   (tipo == EtipoPersonaje::SUBZERO_YELLOW))if(colisionando) estadoActual = FAT_BRUTALITY_SUBZERO;
+
+		if((tipo == EtipoPersonaje::ERMAC)||
+		   (tipo == EtipoPersonaje::ERMAC_BLUE)||
+		   (tipo == EtipoPersonaje::ERMAC_GREEN)||
+		   (tipo == EtipoPersonaje::ERMAC_YELLOW)) if(colisionando) estadoActual = FAT_GANCHO;
 		countLoops = 1;
 	}
 	posicionAnterior = rectanguloPj.p;

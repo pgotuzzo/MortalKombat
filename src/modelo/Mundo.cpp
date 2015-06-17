@@ -102,17 +102,17 @@ Tcambio Mundo::actualizarPJ(Personaje *PJ) {
 
 	cambio.tiempoRound = tiempoRound;
 
-	if(PJ->comboPoder->puedoRealizarCombo()){
+	if(PJ->comboPoder->seRealizoCombo){
 		cambio.hayCombo = true;
 		cambio.nombreCombo = PJ->comboPoder->cadenaParaBuffer;
 	}
 
-	else if(PJ->comboFatality->puedoRealizarCombo()){
+	else if(PJ->comboFatality->seRealizoCombo && PJ->estadoFatality){
 		cambio.hayCombo = true;
 		cambio.nombreCombo = PJ->comboFatality->cadenaParaBuffer;
 	}
 
-	else if(PJ->comboPoder->puedoRealizarCombo()){
+	else if(PJ->comboFatality2->seRealizoCombo && PJ->colisionando && PJ->estadoFatality){
 		cambio.hayCombo = true;
 		cambio.nombreCombo = PJ->comboFatality2->cadenaParaBuffer;
 	}
@@ -126,7 +126,7 @@ Tcambio Mundo::actualizarPJ(Personaje *PJ) {
  * Se asigna todos los datos pertinentes de personaje a Tcambio.
  */
 vector<Tcambio> Mundo::actualizarMundo(vector<Tinput> inputs,EgameState modoDeJuego) {
-	if(fabs(personaje1->rectanguloPj.p.x - personaje2->rectanguloPj.p.x)<30){
+	if(fabs(personaje1->rectanguloPj.p.x - personaje2->rectanguloPj.p.x)<50){
 		personaje1->colisionando = true;
 		personaje2->colisionando = true;
 	}else{
@@ -355,9 +355,7 @@ void Mundo::detectarRealiaccionesDeFatalities() {
 	   personaje2->reinicializar(REA_FAT_ARCADE);
 	}
 	if(personaje2->estadoActual == FAT_ARCADE && personaje2->countLoops == 13){
-		cout<<personaje1->llevarACabo.rectaDelPj.p.x<<endl;
 		personaje2->llevarACabo.rectaDelPj.p.x =  personaje1->llevarACabo.rectaDelPj.p.x;
-		cout<<personaje2->llevarACabo.rectaDelPj.p.x<<endl;
 		personaje1->reinicializar(REA_FAT_ARCADE);
 	}
 	//                       FATALITY LEVANTA

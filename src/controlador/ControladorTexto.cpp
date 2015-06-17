@@ -6,7 +6,6 @@ Tletras ControladorTexto::generarCaracter(SDL_Event &e) {
 	Tletras input;
 	if(e.type == SDL_TEXTINPUT){
 		input.letra = e.text.text[0];
-		cout << e.text.text << endl;
 		input.recibe = true;
 
 	}else if(e.key.keysym.sym == SDLK_BACKSPACE){

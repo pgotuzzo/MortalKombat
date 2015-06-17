@@ -24,6 +24,7 @@ public:
     void actualizar(Tinput input);
     bool puedoRealizarCombo();
 
+    bool seRealizoCombo;
     string cadenaParaBuffer;
 };
 

@@ -254,7 +254,6 @@ void Musica::soundRounds(EgameState mState, int roundP1 , int roundP2){
 
 void Musica::playFX(TestadoPersonaje estado, Tinput input){
     contadores[estado]++;
-    if(estado == REA_FAT_BRUTALITY_SUBZERO) cout<<contadores[REA_FAT_BRUTALITY_SUBZERO]<<endl;
 
     if (sueno(estado)){
         switch (estado) {
@@ -305,7 +304,6 @@ void Musica::playFX(TestadoPersonaje estado, Tinput input){
                     Mix_PlayChannel(-1, reacGancho, 0);
                 }
 
-//                cout << contadores[REA_FAT_BRUTALITY_SUBZERO] << endl;
                 break;
 //FAT LEVANTA----------------------------------------------------------------------
             case FAT_ARCADE:
