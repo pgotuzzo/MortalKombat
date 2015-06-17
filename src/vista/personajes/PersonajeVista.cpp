@@ -142,9 +142,7 @@ void PersonajeVista::freeTextures() {
     for (int i = 0; i < mSprites.size(); i++) {
         mSprites[i].freeTextures();
     }
-    // TODO: FRAN ESTA LINEA TIRA SEGMENTATION FAULT AL ENTRAR A LA SELECCION DE PERSONAJES
-    // TODO: FRAN ESTA LINEA TIRA SEGMENTATION FAULT AL ENTRAR A LA SELECCION DE PERSONAJES
-    //SDL_DestroyTexture(mAuxTexture.t);
+    SDL_DestroyTexture(mAuxTexture.t);
     loguer->loguear("Finaliza la eliminacion de los sprites del personaje", Log::LOG_DEB);
     mPower.freeTextures();
 }

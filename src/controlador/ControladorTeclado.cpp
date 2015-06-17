@@ -483,13 +483,12 @@ vector<Tinput> ControladorTeclado::getInputs(SDL_Event event) {
 
 			// Solo captura el evento cuando suelta R
 		case SDL_KEYUP: {
-			if (event.key.keysym.sym == SDLK_r) {
+			if (event.key.keysym.sym == SDLK_ESCAPE) {
 				aux.game=TinputGame::KEY_RESTART;
 				inputs.clear();
 				inputs.push_back(aux);
 				return inputs;
-			} else if (event.key.keysym.sym == SDLK_SPACE) {
-				// TODO - SEBASTIAN. Deberia capturar el enter...no se fijate que onda. Esto se puede (y debe) cambiar
+			} else if (event.key.keysym.sym == SDLK_RETURN) {
 				aux.game = TinputGame::KEY_ENTER;
 				inputs.clear();
 				inputs.push_back(aux);
